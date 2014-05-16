@@ -9,11 +9,12 @@ import com.tgco.animalBook.AnimalBookGame;
 
 abstract class ButtonScreenAdapter {
 
-	private Texture backgroundTexture;
+
+	protected Texture backgroundTexture;
 	protected Skin buttonSkin;
 	protected Stage buttonStage;
-	private AnimalBookGame gameInstance;
-	
+	protected AnimalBookGame gameInstance;
+
 	//Button texture initialization
 	protected TextureAtlas atlas;
 

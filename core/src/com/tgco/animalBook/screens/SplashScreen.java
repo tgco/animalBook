@@ -84,7 +84,7 @@ public class SplashScreen implements Screen {
 				fadingOut = false;
 				timeCounter = 0;
 				//SET MENU SCREEN HERE
-				//gameInstance.setScreen(new MainMenu(gameInstance,true));
+				gameInstance.setScreen(new MainMenuScreen(gameInstance));
 			}
 		}
 

@@ -7,7 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 
-public abstract class ButtonScreenAdapter {
+abstract class ButtonScreenAdapter {
+
 
 	protected Texture backgroundTexture;
 	protected Skin buttonSkin;

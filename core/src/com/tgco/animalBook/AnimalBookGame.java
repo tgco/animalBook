@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.tgco.animalBook.screens.GameScreen;
+import com.tgco.animalBook.screens.MarketScreen;
 import com.tgco.animalBook.screens.SplashScreen;
 
 public class AnimalBookGame extends Game {
@@ -17,7 +18,7 @@ public class AnimalBookGame extends Game {
 	@Override
 	public void create () {
 		//Set the initial screen
-		setScreen(new GameScreen(this));
+		setScreen(new MarketScreen(this));
 
 		if (debugMode)
 			fpsLogger = new FPSLogger();

@@ -87,11 +87,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//LISTENERS
 		marketButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return false;
+				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-			
+				gameInstance.setScreen(new MarketScreen(gameInstance));
 			}
 		});
 		

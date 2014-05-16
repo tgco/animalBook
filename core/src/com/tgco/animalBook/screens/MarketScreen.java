@@ -71,11 +71,11 @@ private void initializeButtons() {
 		//LISTENERS
 		leaveButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return false;
+				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-			
+				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});
 		

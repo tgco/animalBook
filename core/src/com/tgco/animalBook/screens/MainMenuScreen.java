@@ -3,6 +3,7 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,6 +24,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	Button playButton;
 	private Button optionsButton;
 	private BitmapFont font;
+	private Sound buttonClick;
 	
 	private InputMultiplexer inputMultiplexer;
 	
@@ -31,6 +33,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		buttonClick = Gdx.audio.newSound(Gdx.files.internal("buttonclick2.wav"));
 		
 	}
 
@@ -126,7 +129,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				//SoundHandler.playSelectSound();
+				buttonClick.play();
 				//Change the screen when the button is let go
 				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
@@ -138,7 +141,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				//SoundHandler.playSelectSound();
+				buttonClick.play();
 				//Change the screen when the button is let go
 				gameInstance.setScreen(new OptionsScreen(gameInstance));
 			}

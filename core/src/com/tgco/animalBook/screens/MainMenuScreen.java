@@ -59,12 +59,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void show() {
-		//init button creation variables
-				/*atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/button.atlas"));
-				buttonSkin = new Skin();
-				buttonSkin.addRegions(atlas);
-				*/
-				//font = new BitmapFont(Gdx.files.internal("data/fonts/font.fnt"));
+		
 	}
 
 	@Override
@@ -87,7 +82,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		super.dispose();
 		
 	}
 	

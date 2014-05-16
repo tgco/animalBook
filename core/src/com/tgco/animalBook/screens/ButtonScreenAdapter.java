@@ -9,13 +9,13 @@ import com.tgco.animalBook.AnimalBookGame;
 
 public abstract class ButtonScreenAdapter {
 
-	private Texture backgroundTexture;
-	private Skin buttonSkin;
-	private Stage buttonStage;
-	private AnimalBookGame gameInstance;
+	protected Texture backgroundTexture;
+	protected Skin buttonSkin;
+	protected Stage buttonStage;
+	protected AnimalBookGame gameInstance;
 	
 	//Button texture initialization
-	private TextureAtlas atlas;
+	protected TextureAtlas atlas;
 
 	public ButtonScreenAdapter(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;

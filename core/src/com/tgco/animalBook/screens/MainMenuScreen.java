@@ -1,6 +1,7 @@
 package com.tgco.animalBook.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -22,8 +24,13 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	private Button optionsButton;
 	private BitmapFont font;
 	
+	private InputMultiplexer inputMultiplexer;
+	
 	public MainMenuScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
+		
+		inputMultiplexer = new InputMultiplexer();
+		Gdx.input.setInputProcessor(inputMultiplexer);
 		
 	}
 
@@ -39,10 +46,6 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 				//draw button stage on top of images in the batch
 				buttonStage.draw();
 
-			
-				//setup the menu buttons now
-				initializeButtons();
-
 
 	}
 
@@ -56,12 +59,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void show() {
-		//init button creation variables
-				/*atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/button.atlas"));
-				buttonSkin = new Skin();
-				buttonSkin.addRegions(atlas);
-				*/
-				//font = new BitmapFont(Gdx.files.internal("data/fonts/font.fnt"));
+		
 	}
 
 	@Override
@@ -84,7 +82,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		super.dispose();
 		
 	}
 	
@@ -94,7 +92,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 		//Design button style
-		TextButtonStyle style = new TextButtonStyle();
+		ButtonStyle style = new ButtonStyle();
 		style.up = buttonSkin.getDrawable("buttonUnpressed");
 		style.down = buttonSkin.getDrawable("buttonPressed");
 		//style.font = font;
@@ -111,7 +109,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/buttonO.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		style = new TextButtonStyle();
+		style = new ButtonStyle();
 		style.up = buttonSkin.getDrawable("buttonUnpressed");
 		style.down = buttonSkin.getDrawable("buttonPressed");
 		
@@ -151,7 +149,9 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.addActor(optionsButton);
 
 		//set as input listener
-		Gdx.input.setInputProcessor(buttonStage);
+		//Gdx.input.setInputProcessor(buttonStage);
+		
+		inputMultiplexer.addProcessor(buttonStage);
 	}
 	
 }

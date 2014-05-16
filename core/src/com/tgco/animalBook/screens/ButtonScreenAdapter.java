@@ -13,7 +13,7 @@ public abstract class ButtonScreenAdapter {
 	protected Skin buttonSkin;
 	protected Stage buttonStage;
 	protected AnimalBookGame gameInstance;
-	
+
 	//Button texture initialization
 	protected TextureAtlas atlas;
 

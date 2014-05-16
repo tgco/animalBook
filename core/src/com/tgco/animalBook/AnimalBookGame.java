@@ -9,6 +9,8 @@ import com.tgco.animalBook.screens.MainMenuScreen;
 
 import com.tgco.animalBook.screens.GameScreen;
 
+import com.tgco.animalBook.screens.MarketScreen;
+
 import com.tgco.animalBook.screens.SplashScreen;
 import com.tgco.animalBook.screens.OptionsScreen;
 

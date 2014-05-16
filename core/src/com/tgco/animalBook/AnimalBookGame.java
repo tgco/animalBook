@@ -5,14 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 
-import com.tgco.animalBook.screens.MainMenuScreen;
-
-import com.tgco.animalBook.screens.GameScreen;
-
-import com.tgco.animalBook.screens.MarketScreen;
-
-import com.tgco.animalBook.screens.SplashScreen;
-import com.tgco.animalBook.screens.OptionsScreen;
+import com.tgco.animalBook.screens.*;
 
 public class AnimalBookGame extends Game {
 

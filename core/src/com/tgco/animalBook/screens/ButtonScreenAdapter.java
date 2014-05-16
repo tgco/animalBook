@@ -7,15 +7,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 
-public abstract class ButtonScreenAdapter {
+abstract class ButtonScreenAdapter {
 
 	private Texture backgroundTexture;
-	private Skin buttonSkin;
-	private Stage buttonStage;
+	protected Skin buttonSkin;
+	protected Stage buttonStage;
 	private AnimalBookGame gameInstance;
 	
 	//Button texture initialization
-	private TextureAtlas atlas;
+	protected TextureAtlas atlas;
 
 	public ButtonScreenAdapter(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;

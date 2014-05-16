@@ -17,7 +17,7 @@ public class AnimalBookGame extends Game {
 	@Override
 	public void create () {
 		//Set the initial screen
-		setScreen(new MainMenuScreen(this));
+		setScreen(new SplashScreen(this));
 
 		if (debugMode)
 			fpsLogger = new FPSLogger();

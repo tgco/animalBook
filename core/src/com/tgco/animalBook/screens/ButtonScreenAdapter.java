@@ -20,5 +20,13 @@ public abstract class ButtonScreenAdapter {
 	public ButtonScreenAdapter(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;
 	}
+	
+	public void dispose() {
+		atlas.dispose();
+		backgroundTexture.dispose();
+		buttonSkin.dispose();
+		buttonStage.dispose();
+		gameInstance.dispose();
+	}
 
 }

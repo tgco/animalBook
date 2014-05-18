@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -21,12 +23,19 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	//dimensions
 	private final float BUTTON_WIDTH = 100;
 	private final float BUTTON_HEIGHT = 100;
+	
+	//Rendering objects
+	private SpriteBatch batch;
 
 	//Input handler
 	private InputMultiplexer inputMultiplexer;
 
 	public MarketScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
+		
+		//Background rendering
+		batch = new SpriteBatch();
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
 
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -38,6 +47,13 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		buttonStage.act(delta);
+		
+		//render background
+		batch.begin();
+		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.end();
+		
+		//Draw buttons
 		buttonStage.draw();
 	}
 

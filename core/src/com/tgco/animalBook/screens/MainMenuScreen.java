@@ -21,33 +21,34 @@ import com.tgco.animalBook.AnimalBookGame;
 public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	private static final float BUTTON_WIDTH = 100;
 	private static final float BUTTON_HEIGHT = 100;
-	Button playButton;
+
+	private Button playButton;
 	private Button optionsButton;
-	private BitmapFont font;
+
 	private Sound buttonClick;
-	
+
 	private InputMultiplexer inputMultiplexer;
-	
+
 	public MainMenuScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
-		
+
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		buttonClick = Gdx.audio.newSound(Gdx.files.internal("buttonclick2.wav"));
-		
+
 	}
 
 	@Override
 	public void render(float delta) {
 		//clear screen
-				Gdx.gl.glClearColor(0, 0, 0, 1);
-				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-				//process button input
-				buttonStage.act(delta);
+		//process button input
+		buttonStage.act(delta);
 
-				//draw button stage on top of images in the batch
-				buttonStage.draw();
+		//draw button stage on top of images in the batch
+		buttonStage.draw();
 
 
 	}
@@ -62,33 +63,33 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void show() {
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		
+		buttonClick.dispose();
 	}
-	
+
 	//Sets up the menu buttons and adds them to the stage to be rendered
 	public void initializeButtons() {
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/button.atlas"));
@@ -98,28 +99,26 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		ButtonStyle style = new ButtonStyle();
 		style.up = buttonSkin.getDrawable("buttonUnpressed");
 		style.down = buttonSkin.getDrawable("buttonPressed");
-		//style.font = font;
-		//style.fontColor = Color.BLACK;
 
 		//Create buttons from style
 		playButton = new Button(style);
 		playButton.setWidth(BUTTON_WIDTH);
 		playButton.setHeight(BUTTON_HEIGHT);
-		playButton.setX(Gdx.graphics.getWidth()/2);
+		playButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
 		playButton.setY(Gdx.graphics.getHeight()/2);
 
-		
+
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/buttonO.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 		style = new ButtonStyle();
 		style.up = buttonSkin.getDrawable("buttonUnpressed");
 		style.down = buttonSkin.getDrawable("buttonPressed");
-		
+
 		optionsButton = new Button(style);
 		optionsButton.setWidth(BUTTON_WIDTH);
 		optionsButton.setHeight(BUTTON_HEIGHT);
-		optionsButton.setX(Gdx.graphics.getWidth()/2);
+		optionsButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
 		optionsButton.setY(Gdx.graphics.getHeight()/2 - 2*BUTTON_HEIGHT - 40);
 
 		//Create listeners
@@ -151,10 +150,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.addActor(playButton);
 		buttonStage.addActor(optionsButton);
 
-		//set as input listener
-		//Gdx.input.setInputProcessor(buttonStage);
-		
 		inputMultiplexer.addProcessor(buttonStage);
 	}
-	
+
 }

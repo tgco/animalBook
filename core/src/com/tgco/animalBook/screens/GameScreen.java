@@ -3,14 +3,11 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -40,10 +37,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	//Rendering objects
 	private SpriteBatch batch;
 
-	//Camera and touch motion
-	private OrthographicCamera camera;
-	private Vector3 cameraTarget;
-
 	//Input handler
 	private InputMultiplexer inputMultiplexer;
 
@@ -51,18 +44,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public GameScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 
-		//Camera initialization
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
-		camera.update();
+		//Initialize game world
+		gameWorld = new World();
 		
-		//touch variable
-		cameraTarget = new Vector3(camera.position);
-
 		//Initialize rendering objects
 		batch = new SpriteBatch();
-		batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(gameWorld.getCamera().combined);
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass.jpg"));
 
 		//Setup input processing
@@ -79,14 +66,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		//Process button presses
 		buttonStage.act(delta);
-
-		//move the camera if necessary
-		moveCameraToTouch(cameraTarget);
 		
 		//render background
-		batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(gameWorld.getCamera().combined);
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		gameWorld.render(batch);
 		batch.end();
 
 		//Draw buttons
@@ -100,12 +85,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.clear();
 		//reinit buttons
 		initializeButtons();
-	}
-
-	//Finds the newest touch and interpolates the camera to its position
-	public void moveCameraToTouch(Vector3 lastTouch) {
-			camera.position.lerp(lastTouch.cpy(),Gdx.graphics.getDeltaTime());
-			camera.update();
 	}
 
 	private void initializeButtons() {
@@ -197,12 +176,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		super.dispose();
 	}
 	
-	public void setCameraTarget(Vector3 cameraTarget) {
-		this.cameraTarget = cameraTarget;
+	public World getWorld() {
+		return gameWorld;
 	}
 	
-	public OrthographicCamera getCamera() {
-		return camera;
-	}
 
 }

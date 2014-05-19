@@ -43,8 +43,8 @@ public class GameScreenInputHandler implements InputProcessor {
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		Vector3 touch = new Vector3(screenX,screenY,0);
 		//unproject touch to world coordinates
-		gameScreen.getCamera().unproject(touch);
-		gameScreen.setCameraTarget(touch);
+		gameScreen.getWorld().getCamera().unproject(touch);
+		gameScreen.getWorld().setCameraTarget(touch);
 		return false;
 	}
 

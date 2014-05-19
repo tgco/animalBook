@@ -28,7 +28,6 @@ public class World {
 		
 		drawables = new Array<Drawable>();
 		
-		//Replace null with the correct texture
 		player = new Player();
 
 		//Camera initialization

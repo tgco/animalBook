@@ -1,11 +1,18 @@
 package com.tgco.animalBook.InputHandlers;
 
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector3;
+import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.screens.GameScreen;
 
 public class GameScreenInputHandler implements InputProcessor {
 
-	public GameScreenInputHandler() {
-		// TODO Auto-generated constructor stub
+	private AnimalBookGame gameInstance;
+	private GameScreen gameScreen;
+	
+	public GameScreenInputHandler(AnimalBookGame gameInstance, GameScreen gameScreen) {
+		this.gameInstance = gameInstance;
+		this.gameScreen = gameScreen;
 	}
 
 	@Override
@@ -34,7 +41,10 @@ public class GameScreenInputHandler implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
+		Vector3 touch = new Vector3(screenX,screenY,0);
+		//unproject touch to world coordinates
+		gameScreen.getCamera().unproject(touch);
+		gameScreen.setCameraTarget(touch);
 		return false;
 	}
 

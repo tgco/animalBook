@@ -19,9 +19,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.InputHandlers.GameScreenInputHandler;
+import com.tgco.animalBook.view.World;
 
 public class GameScreen extends ButtonScreenAdapter implements Screen {
 
+	//World of objects
+	private World gameWorld;
+	
 	//buttons
 	private Button inventoryButton;
 	private Button marketButton;
@@ -33,26 +38,25 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	//Rendering objects
 	private SpriteBatch batch;
 
-	//Camera and one finger touch motion variables
+	//Camera and touch motion
 	private OrthographicCamera camera;
-	private Vector3 lastTouch;
+	private Vector3 cameraTarget;
 
 	//Input handler
 	private InputMultiplexer inputMultiplexer;
-	
-	//DEBUGGING SHAPE RENDERER
-	private ShapeRenderer sr;
 
 
 	public GameScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 
 		//Camera initialization
-		lastTouch = new Vector3(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
+		
+		//touch variable
+		cameraTarget = new Vector3(camera.position);
 
 		//Initialize rendering objects
 		batch = new SpriteBatch();
@@ -61,11 +65,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		//Setup input processing
 		inputMultiplexer = new InputMultiplexer();
+		GameScreenInputHandler touchControls = new GameScreenInputHandler(gameInstance,this);
+		inputMultiplexer.addProcessor(touchControls);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		
-		//DEBUGGING SHAPE RENDERER
-		sr = new ShapeRenderer();
-		sr.setColor(Color.BLACK);
 	}
 
 	@Override
@@ -75,21 +77,15 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		//Process button presses
 		buttonStage.act(delta);
-		//Process camera motion
-		moveCameraToTouch();
 
+		//move the camera if necessary
+		moveCameraToTouch(cameraTarget);
+		
 		//render background
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.end();
-		
-		//DEBUGGING CIRCLES FOR TOUCH
-		sr.setProjectionMatrix(camera.combined);
-		sr.begin(ShapeType.Line);
-		sr.circle(camera.position.x, camera.position.y, 30);
-		sr.circle(lastTouch.x, lastTouch.y, 30);
-		sr.end();
 
 		//Draw buttons
 		buttonStage.draw();
@@ -105,14 +101,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	//Finds the newest touch and interpolates the camera to its position
-	private void moveCameraToTouch() {
-		if(Gdx.input.isTouched()) {
-			lastTouch = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
-			camera.unproject(lastTouch);
-		}
-
-		camera.position.lerp(lastTouch.cpy(),Gdx.graphics.getDeltaTime());
-		camera.update();
+	public void moveCameraToTouch(Vector3 lastTouch) {
+			camera.position.lerp(lastTouch.cpy(),Gdx.graphics.getDeltaTime());
+			camera.update();
 	}
 
 	private void initializeButtons() {
@@ -200,7 +191,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
-		sr.dispose();
+	}
+	
+	public void setCameraTarget(Vector3 cameraTarget) {
+		this.cameraTarget = cameraTarget;
+	}
+	
+	public OrthographicCamera getCamera() {
+		return camera;
 	}
 
 }

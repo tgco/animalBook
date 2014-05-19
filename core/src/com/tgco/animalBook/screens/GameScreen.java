@@ -67,14 +67,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//Process button presses
 		buttonStage.act(delta);
 		
-		//render background
+		//render background and world
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		gameWorld.render(batch);
 		batch.end();
 
-		//Draw buttons
+		//Draw buttons over the screen
 		buttonStage.draw();
 	}
 

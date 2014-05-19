@@ -34,6 +34,7 @@ public class World {
 		//move the camera if necessary
 		moveCameraToTouch(cameraTarget);
 
+		//draw objects
 		worldRender.render(camera, batch);
 	}
 

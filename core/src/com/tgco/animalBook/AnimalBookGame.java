@@ -4,13 +4,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
-
+import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.*;
 
 public class AnimalBookGame extends Game {
 
 	//Version string, debug variables
-	public static final String version = "0.0.1";
+	public static final String version = "0.0.5";
 	public static final Boolean debugMode = true;
 	private FPSLogger fpsLogger;
 
@@ -35,6 +35,7 @@ public class AnimalBookGame extends Game {
 	public void dispose() {
 		super.dispose();
 		getScreen().dispose();
+		SoundHandler.dispose();
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
+import com.tgco.animalBook.gameObjects.Drawable;
 
 //Generates game objects and handles game logic between them
 public class World {
@@ -14,8 +16,13 @@ public class World {
 
 	//Rendering object
 	private WorldRenderer worldRender;
+	
+	//All game objects to be drawn
+	private Array<Drawable> drawables;
 
 	public World() {
+		
+		drawables = new Array<Drawable>();
 
 		//Camera initialization
 		camera = new OrthographicCamera();
@@ -30,12 +37,11 @@ public class World {
 	}
 
 	public void render(SpriteBatch batch) {
-
 		//move the camera if necessary
 		moveCameraToTouch(cameraTarget);
 
 		//draw objects
-		worldRender.render(camera, batch);
+		worldRender.render(batch, drawables);
 	}
 
 	//Finds the newest touch and interpolates the camera to its position

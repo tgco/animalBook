@@ -15,30 +15,36 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
+import com.tgco.animalBook.view.World;
 
 public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
+	//reference to maintain player position
+	private GameScreen gameScreen;
+
 	//buttons
 	private Button leaveButton;
-	
+
 	//dimensions
 	private final float BUTTON_WIDTH = 100;
 	private final float BUTTON_HEIGHT = 100;
-	
+
 	//Input handler
 	private InputMultiplexer inputMultiplexer;
-	
+
 	//Background
 	private SpriteBatch batch;
-	
-	
-	public InventoryScreen(AnimalBookGame gameInstance) {
+
+
+	public InventoryScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
-		
+
+		this.gameScreen = gameScreen;
+
 		//Background Rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/inventoryBackground.jpg"));
-		
+
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
@@ -52,7 +58,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.end();
-		
+
 		buttonStage.act(delta);
 		buttonStage.draw();
 	}
@@ -67,22 +73,22 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	private void initializeButtons() {
-		
+
 		//LEAVE BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/inventoryScreen/leaveButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		
+
 		ButtonStyle leaveButtonStyle = new ButtonStyle();
 		leaveButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		leaveButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		
+
 		leaveButton = new Button(leaveButtonStyle);
 		leaveButton.setWidth(BUTTON_WIDTH);
 		leaveButton.setHeight(BUTTON_HEIGHT);
 		leaveButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 20);
 		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
-		
+
 		//LISTENERS
 		leaveButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -92,42 +98,46 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .5);
-				gameInstance.setScreen(new GameScreen(gameInstance));
+				gameScreen.resetInputProcessors();
+				//Grab the world
+				World world = gameScreen.getWorld();
+				world.setCameraTarget(world.getCamera().position);
+				gameInstance.setScreen(gameScreen);
 			}
 		});
-		
+
 		buttonStage.addActor(leaveButton);
-		
+
 		inputMultiplexer.addProcessor(buttonStage);
 	}
-	
+
 	@Override
 	public void show() {
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		
+
 	}
 
 }

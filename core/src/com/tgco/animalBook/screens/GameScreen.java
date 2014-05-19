@@ -16,9 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
-import com.tgco.animalBook.Handlers.GameScreenInputHandler;
+import com.tgco.animalBook.handlers.GameScreenInputHandler;
+import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
-import com.tgco.animalBook.Handlers.SoundHandler;
 
 
 public class GameScreen extends ButtonScreenAdapter implements Screen {

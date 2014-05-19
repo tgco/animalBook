@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tgco.animalBook.AnimalBookGame;
-import com.tgco.animalBook.Handlers.SoundHandler;
+import com.tgco.animalBook.handlers.SoundHandler;
 
 public class SplashScreen implements Screen {
 

@@ -1,4 +1,4 @@
-package com.tgco.animalBook.Handlers;
+package com.tgco.animalBook.handlers;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;

@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.tgco.animalBook.AnimalBookGame;
-import com.tgco.animalBook.Handlers.SoundHandler;
+import com.tgco.animalBook.handlers.SoundHandler;
 
 public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	private static final float BUTTON_WIDTH = 200;

@@ -1,4 +1,4 @@
-package com.tgco.animalBook.Handlers;
+package com.tgco.animalBook.handlers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;

@@ -41,6 +41,10 @@ public class SoundHandler {
 		marketBackgroundMusic.pause();
 	}
 	
+	public static void changeBackgroundVolume(float level) {
+		backgroundMusic.setVolume(level);
+	}
+	
 	public static void playButtonClick() {
 		buttonClick.play();
 	}

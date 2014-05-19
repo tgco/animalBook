@@ -26,6 +26,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 	private Button playButton;
 	private Button optionsButton;
+	private Button testButton;
 
 	private InputMultiplexer inputMultiplexer;
 	private SpriteBatch batch;
@@ -128,6 +129,21 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton.setHeight(BUTTON_HEIGHT);
 		optionsButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
 		optionsButton.setY(Gdx.graphics.getHeight()/2 - BUTTON_HEIGHT - 20);
+		
+		//Test
+		//This button is just to test the story screen
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/button.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+		style = new ButtonStyle();
+		style.up = buttonSkin.getDrawable("buttonUnpressed");
+		style.down = buttonSkin.getDrawable("buttonPressed");
+
+		testButton = new Button(style);
+		testButton.setWidth(BUTTON_WIDTH);
+		testButton.setHeight(BUTTON_HEIGHT);
+		testButton.setX(0);
+		testButton.setY(0);
 
 		//Create listeners
 		playButton.addListener(new InputListener() {
@@ -153,10 +169,24 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 				gameInstance.setScreen(new OptionsScreen(gameInstance));
 			}
 		});
+		
+		testButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				SoundHandler.pauseBackgroundMusic();
+				//Change the screen when the button is let go
+				gameInstance.setScreen(new StoryScreen(gameInstance));
+			}
+		});
 
 		//Add to stage
 		buttonStage.addActor(playButton);
 		buttonStage.addActor(optionsButton);
+		buttonStage.addActor(testButton);
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}

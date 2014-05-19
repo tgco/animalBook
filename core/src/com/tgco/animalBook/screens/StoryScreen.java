@@ -25,6 +25,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 	
 	public StoryScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
+		SoundHandler.playStoryBackgroundMusic(true);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -59,11 +60,13 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		continueButton.setPosition(Gdx.graphics.getWidth() - BUTTON_WIDTH - 20, Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20 );
 		continueButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return false;
+				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
+				SoundHandler.stopStoryBackgroundMusic();
+				SoundHandler.playBackgroundMusic(true);
 				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});

@@ -27,7 +27,6 @@ abstract class ButtonScreenAdapter {
 		backgroundTexture.dispose();
 		buttonSkin.dispose();
 		buttonStage.dispose();
-		gameInstance.dispose();
 	}
 
 }

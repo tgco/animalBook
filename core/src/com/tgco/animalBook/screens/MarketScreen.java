@@ -44,6 +44,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
 
+		SoundHandler.playMarketBackgroundMusic(true);
+		
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
@@ -99,6 +101,8 @@ private void initializeButtons() {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
+				SoundHandler.pauseMarketBackgroundMusic();
+				SoundHandler.playBackgroundMusic(true);
 				gameScreen.resetInputProcessors();
 				//Grab the world
 				World world = gameScreen.getWorld();

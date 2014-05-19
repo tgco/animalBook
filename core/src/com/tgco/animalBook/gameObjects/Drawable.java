@@ -11,8 +11,8 @@ public abstract class Drawable {
 	
 	protected Vector2 position;
 
-	public Drawable() {
-		// TODO Auto-generated constructor stub
+	public Drawable(Texture texture) {
+		this.texture = texture;
 	}
 	
 	public void draw(SpriteBatch batch) {

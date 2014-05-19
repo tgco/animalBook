@@ -28,7 +28,8 @@ public class World {
 		
 		drawables = new Array<Drawable>();
 		
-		player = new Player();
+		//Replace null with the correct texture
+		player = new Player(null);
 
 		//Camera initialization
 		camera = new OrthographicCamera();

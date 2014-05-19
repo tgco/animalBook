@@ -1,5 +1,6 @@
 package com.tgco.animalBook.gameObjects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 //Objects that will move on screen
@@ -9,8 +10,8 @@ public abstract class Movable extends Drawable {
 	protected Vector2 previousTarget;
 	protected Vector2 currentTarget;
 	
-	public Movable() {
-		// TODO Auto-generated constructor stub
+	public Movable(Texture texture) {
+		super(texture);
 	}
 	
 	public void move() {

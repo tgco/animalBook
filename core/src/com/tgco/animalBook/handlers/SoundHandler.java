@@ -25,7 +25,7 @@ public class SoundHandler {
 	
 	public static void playMarketBackgroundMusic(boolean isLooping) {
 		marketBackgroundMusic.setLooping(isLooping);
-		marketBackgroundMusic.setVolume((float) 0.5);
+		marketBackgroundMusic.setVolume((float) 0.2);
 		marketBackgroundMusic.play();
 	}
 	

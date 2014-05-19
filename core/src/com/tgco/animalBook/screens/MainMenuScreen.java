@@ -6,7 +6,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -19,8 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.tgco.animalBook.AnimalBookGame;
 
 public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
-	private static final float BUTTON_WIDTH = 100;
-	private static final float BUTTON_HEIGHT = 100;
+	private static final float BUTTON_WIDTH = 200;
+	private static final float BUTTON_HEIGHT = 200;
 
 	private Button playButton;
 	private Button optionsButton;
@@ -28,10 +30,15 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	private Sound buttonClick;
 
 	private InputMultiplexer inputMultiplexer;
+	private SpriteBatch batch;
 
 	public MainMenuScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
-
+		
+		//Background rendering
+		batch = new SpriteBatch();
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/mainback.png"));
+		
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		buttonClick = Gdx.audio.newSound(Gdx.files.internal("buttonclick2.wav"));
@@ -43,7 +50,12 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		//clear screen
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+		
+		//render background
+		batch.begin();
+		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.end();
+				
 		//process button input
 		buttonStage.act(delta);
 
@@ -119,7 +131,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton.setWidth(BUTTON_WIDTH);
 		optionsButton.setHeight(BUTTON_HEIGHT);
 		optionsButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
-		optionsButton.setY(Gdx.graphics.getHeight()/2 - 2*BUTTON_HEIGHT - 40);
+		optionsButton.setY(Gdx.graphics.getHeight()/2 - 2*BUTTON_HEIGHT);
 
 		//Create listeners
 		playButton.addListener(new InputListener() {

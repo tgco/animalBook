@@ -21,8 +21,9 @@ import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
 public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
-	private static final float BUTTON_WIDTH = 200;
-	private static final float BUTTON_HEIGHT = 200;
+	
+	private static final float BUTTON_WIDTH = (1f/3f)*Gdx.graphics.getWidth();
+	private static final float BUTTON_HEIGHT = (1f/5f)*Gdx.graphics.getHeight();
 
 	private Button playButton;
 	private Button optionsButton;

@@ -31,8 +31,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Button marketButton;
 
 	//dimensions
-	private final float BUTTON_WIDTH = 100;
-	private final float BUTTON_HEIGHT = 100;
+	private final float BUTTON_WIDTH = (1f/6f)*Gdx.graphics.getWidth();
+	private final float BUTTON_HEIGHT = (1f/5f)*Gdx.graphics.getHeight();
 
 	//Rendering objects
 	private SpriteBatch batch;

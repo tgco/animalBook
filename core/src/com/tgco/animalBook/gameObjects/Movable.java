@@ -16,5 +16,10 @@ public abstract class Movable extends Drawable {
 	public void move() {
 		
 	}
+	
+	@Override
+	public boolean isMovable() {
+		return true;
+	}
 
 }

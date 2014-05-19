@@ -14,6 +14,11 @@ public abstract class Drawable {
 		// TODO Auto-generated constructor stub
 	}
 	
+	//determines if this object can be moved
+	public boolean isMovable() {
+		return false;
+	}
+	
 	public void dispose() {
 		texture.dispose();
 	}

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.Handlers.SoundHandler;
 
 public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
@@ -89,6 +90,7 @@ private void initializeButtons() {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
 				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});

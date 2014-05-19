@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.Handlers.SoundHandler;
 
 public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
@@ -62,7 +63,8 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-			
+				SoundHandler.playButtonClick();
+				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});
 		buttonStage.addActor(continueButton);

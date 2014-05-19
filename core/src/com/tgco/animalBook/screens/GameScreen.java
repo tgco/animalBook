@@ -19,8 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
-import com.tgco.animalBook.InputHandlers.GameScreenInputHandler;
+import com.tgco.animalBook.Handlers.GameScreenInputHandler;
 import com.tgco.animalBook.view.World;
+import com.tgco.animalBook.Handlers.SoundHandler;
+
 
 public class GameScreen extends ButtonScreenAdapter implements Screen {
 
@@ -145,6 +147,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
 				gameInstance.setScreen(new MarketScreen(gameInstance));
 			}
 		});
@@ -155,6 +158,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
 				gameInstance.setScreen(new InventoryScreen(gameInstance));
 			}
 		});

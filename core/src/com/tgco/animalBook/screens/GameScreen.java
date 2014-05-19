@@ -3,14 +3,11 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -19,9 +16,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.Handlers.GameScreenInputHandler;
+import com.tgco.animalBook.view.World;
+import com.tgco.animalBook.Handlers.SoundHandler;
+
 
 public class GameScreen extends ButtonScreenAdapter implements Screen {
 
+	//World of objects
+	private World gameWorld;
+	
 	//buttons
 	private Button inventoryButton;
 	private Button marketButton;
@@ -33,39 +37,26 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	//Rendering objects
 	private SpriteBatch batch;
 
-	//Camera and one finger touch motion variables
-	private OrthographicCamera camera;
-	private Vector3 lastTouch;
-
 	//Input handler
 	private InputMultiplexer inputMultiplexer;
-	
-	//DEBUGGING SHAPE RENDERER
-	private ShapeRenderer sr;
 
 
 	public GameScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 
-		//Camera initialization
-		lastTouch = new Vector3(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
-		camera.update();
-
+		//Initialize game world
+		gameWorld = new World();
+		
 		//Initialize rendering objects
 		batch = new SpriteBatch();
-		batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(gameWorld.getCamera().combined);
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass.jpg"));
 
 		//Setup input processing
 		inputMultiplexer = new InputMultiplexer();
+		GameScreenInputHandler touchControls = new GameScreenInputHandler(gameInstance,this);
+		inputMultiplexer.addProcessor(touchControls);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		
-		//DEBUGGING SHAPE RENDERER
-		sr = new ShapeRenderer();
-		sr.setColor(Color.BLACK);
 	}
 
 	@Override
@@ -75,21 +66,13 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		//Process button presses
 		buttonStage.act(delta);
-		//Process camera motion
-		moveCameraToTouch();
-
+		
 		//render background
-		batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(gameWorld.getCamera().combined);
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		gameWorld.render(batch);
 		batch.end();
-		
-		//DEBUGGING CIRCLES FOR TOUCH
-		sr.setProjectionMatrix(camera.combined);
-		sr.begin(ShapeType.Line);
-		sr.circle(camera.position.x, camera.position.y, 30);
-		sr.circle(lastTouch.x, lastTouch.y, 30);
-		sr.end();
 
 		//Draw buttons
 		buttonStage.draw();
@@ -102,17 +85,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.clear();
 		//reinit buttons
 		initializeButtons();
-	}
-
-	//Finds the newest touch and interpolates the camera to its position
-	private void moveCameraToTouch() {
-		if(Gdx.input.isTouched()) {
-			lastTouch = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
-			camera.unproject(lastTouch);
-		}
-
-		camera.position.lerp(lastTouch.cpy(),Gdx.graphics.getDeltaTime());
-		camera.update();
 	}
 
 	private void initializeButtons() {
@@ -154,6 +126,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
 				gameInstance.setScreen(new MarketScreen(gameInstance));
 			}
 		});
@@ -164,6 +137,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
 				gameInstance.setScreen(new InventoryScreen(gameInstance));
 			}
 		});
@@ -200,7 +174,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
-		sr.dispose();
 	}
+	
+	public World getWorld() {
+		return gameWorld;
+	}
+	
 
 }

@@ -8,6 +8,7 @@ public class SoundHandler {
 	
 	private static final Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/farmNoise.wav"));
 	private static final Music storyBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/storyNoise.wav"));
+	private static final Music marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
 	private static final Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
 	
 	public static void playBackgroundMusic(boolean isLooping) {
@@ -22,6 +23,12 @@ public class SoundHandler {
 		storyBackgroundMusic.play();
 	}
 	
+	public static void playMarketBackgroundMusic(boolean isLooping) {
+		marketBackgroundMusic.setLooping(isLooping);
+		marketBackgroundMusic.setVolume((float) 0.5);
+		marketBackgroundMusic.play();
+	}
+	
 	public static void pauseBackgroundMusic() {
 		backgroundMusic.pause();
 	}
@@ -30,8 +37,8 @@ public class SoundHandler {
 		storyBackgroundMusic.pause();
 	}
 	
-	public static void stopStoryBackgroundMusic() {
-		storyBackgroundMusic.stop();
+	public static void pauseMarketBackgroundMusic() {
+		marketBackgroundMusic.pause();
 	}
 	
 	public static void playButtonClick() {

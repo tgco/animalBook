@@ -19,10 +19,6 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 	private final float BUTTON_WIDTH = 100;
 	private final float BUTTON_HEIGHT = 100;
 	
-	
-	
-	
-	
 	public StoryScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 		SoundHandler.playStoryBackgroundMusic(true);
@@ -65,7 +61,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				SoundHandler.stopStoryBackgroundMusic();
+				SoundHandler.pauseStoryBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);
 				gameInstance.setScreen(new GameScreen(gameInstance));
 			}

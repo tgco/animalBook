@@ -131,7 +131,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton.setWidth(BUTTON_WIDTH);
 		optionsButton.setHeight(BUTTON_HEIGHT);
 		optionsButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
-		optionsButton.setY(Gdx.graphics.getHeight()/2 - 2*BUTTON_HEIGHT);
+		optionsButton.setY(Gdx.graphics.getHeight()/2 - BUTTON_HEIGHT - 20);
 
 		//Create listeners
 		playButton.addListener(new InputListener() {

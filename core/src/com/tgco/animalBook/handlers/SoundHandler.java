@@ -12,13 +12,13 @@ public class SoundHandler {
 	
 	public static void playBackgroundMusic(boolean isLooping) {
 		backgroundMusic.setLooping(isLooping);
-		backgroundMusic.setVolume((float) 0.1);
+		backgroundMusic.setVolume((float) 0.5);
 		backgroundMusic.play();
 	}
 	
 	public static void playStoryBackgroundMusic(boolean isLooping) {
 		storyBackgroundMusic.setLooping(isLooping);
-		storyBackgroundMusic.setVolume((float) 0.1);
+		storyBackgroundMusic.setVolume((float) 0.5);
 		storyBackgroundMusic.play();
 	}
 	

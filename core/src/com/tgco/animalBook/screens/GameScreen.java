@@ -127,7 +127,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				gameInstance.setScreen(new MarketScreen(gameInstance));
+				gameInstance.setScreen(new MarketScreen(gameInstance,GameScreen.this));
 			}
 		});
 
@@ -178,6 +178,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	
 	public World getWorld() {
 		return gameWorld;
+	}
+	
+	public void resetInputProcessors() {
+		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 	
 

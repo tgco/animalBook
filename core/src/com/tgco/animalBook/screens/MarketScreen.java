@@ -15,8 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
+import com.tgco.animalBook.view.World;
 
 public class MarketScreen extends ButtonScreenAdapter implements Screen {
+	
+	//reference to the game screen
+	private GameScreen gameScreen;
 
 	//buttons
 	private Button leaveButton;
@@ -31,8 +35,10 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	//Input handler
 	private InputMultiplexer inputMultiplexer;
 
-	public MarketScreen(AnimalBookGame gameInstance) {
+	public MarketScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
+		
+		this.gameScreen = gameScreen;
 		
 		//Background rendering
 		batch = new SpriteBatch();
@@ -93,7 +99,11 @@ private void initializeButtons() {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				gameInstance.setScreen(new GameScreen(gameInstance));
+				gameScreen.resetInputProcessors();
+				//Grab the world
+				World world = gameScreen.getWorld();
+				world.setCameraTarget(world.getCamera().position);
+				gameInstance.setScreen(gameScreen);
 			}
 		});
 		

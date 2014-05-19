@@ -24,10 +24,6 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	private Button mainMenuButton;
 	private Button helpButton;
 	
-	//dimensions
-	private final float BUTTON_WIDTH = 100;
-	private final float BUTTON_HEIGHT = 100;
-	
 	//Input handler
 	private InputMultiplexer inputMultiplexer;
 	

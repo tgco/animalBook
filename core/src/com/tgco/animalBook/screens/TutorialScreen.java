@@ -21,10 +21,6 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	//buttons
 	private Button tutorialButton;
 
-	//dimensions
-	private final float BUTTON_WIDTH = 100;
-	private final float BUTTON_HEIGHT = 100;
-
 	//Input handler
 	private InputMultiplexer inputMultiplexer;
 

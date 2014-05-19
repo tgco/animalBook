@@ -16,9 +16,6 @@ import com.tgco.animalBook.handlers.SoundHandler;
 public class LoseScreen extends ButtonScreenAdapter implements Screen {
 
 	private Button mainMenuButton, retryButton;
-	//dimensions
-	private final float BUTTON_WIDTH = 100;
-	private final float BUTTON_HEIGHT = 100;
 	
 	public LoseScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);

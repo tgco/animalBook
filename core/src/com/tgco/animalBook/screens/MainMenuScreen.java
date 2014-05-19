@@ -22,8 +22,7 @@ import com.tgco.animalBook.handlers.SoundHandler;
 
 public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	
-	private static final float BUTTON_WIDTH = (1f/3f)*Gdx.graphics.getWidth();
-	private static final float BUTTON_HEIGHT = (1f/5f)*Gdx.graphics.getHeight();
+	
 
 	private Button playButton;
 	private Button optionsButton;
@@ -112,9 +111,9 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 		//Create buttons from style
 		playButton = new Button(style);
-		playButton.setWidth(BUTTON_WIDTH);
-		playButton.setHeight(BUTTON_HEIGHT);
-		playButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
+		playButton.setWidth(MENU_BUTTON_WIDTH);
+		playButton.setHeight(MENU_BUTTON_HEIGHT);
+		playButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
 		playButton.setY(Gdx.graphics.getHeight()/2);
 
 
@@ -126,10 +125,10 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		style.down = buttonSkin.getDrawable("buttonPressed");
 
 		optionsButton = new Button(style);
-		optionsButton.setWidth(BUTTON_WIDTH);
-		optionsButton.setHeight(BUTTON_HEIGHT);
-		optionsButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
-		optionsButton.setY(Gdx.graphics.getHeight()/2 - BUTTON_HEIGHT - 20);
+		optionsButton.setWidth(MENU_BUTTON_WIDTH);
+		optionsButton.setHeight(MENU_BUTTON_HEIGHT);
+		optionsButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
+		optionsButton.setY(Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - 20);
 		
 		//Test
 		//This button is just to test the story screen
@@ -141,8 +140,8 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		style.down = buttonSkin.getDrawable("buttonPressed");
 
 		testButton = new Button(style);
-		testButton.setWidth(BUTTON_WIDTH);
-		testButton.setHeight(BUTTON_HEIGHT);
+		testButton.setWidth(MENU_BUTTON_WIDTH);
+		testButton.setHeight(MENU_BUTTON_HEIGHT);
 		testButton.setX(0);
 		testButton.setY(0);
 

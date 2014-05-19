@@ -25,10 +25,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	//buttons
 	private Button leaveButton;
 
-	//dimensions
-	private final float BUTTON_WIDTH = 100;
-	private final float BUTTON_HEIGHT = 100;
-
 	//Input handler
 	private InputMultiplexer inputMultiplexer;
 

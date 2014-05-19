@@ -18,17 +18,13 @@ import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
 public class MarketScreen extends ButtonScreenAdapter implements Screen {
-	
+
 	//reference to the game screen
 	private GameScreen gameScreen;
 
 	//buttons
 	private Button leaveButton;
 
-	//dimensions
-	private final float BUTTON_WIDTH = 100;
-	private final float BUTTON_HEIGHT = 100;
-	
 	//Rendering objects
 	private SpriteBatch batch;
 
@@ -37,15 +33,15 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 	public MarketScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
-		
+
 		this.gameScreen = gameScreen;
-		
+
 		//Background rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
 
 		SoundHandler.playMarketBackgroundMusic(true);
-		
+
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
@@ -56,12 +52,12 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		buttonStage.act(delta);
-		
+
 		//render background
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.end();
-		
+
 		//Draw buttons
 		buttonStage.draw();
 	}
@@ -74,25 +70,25 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		//reinit buttons
 		initializeButtons();
 	}
-	
-private void initializeButtons() {
-		
+
+	private void initializeButtons() {
+
 		//MARKET BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/leaveButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		
+
 		ButtonStyle leaveButtonStyle = new ButtonStyle();
 		leaveButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		leaveButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		
+
 		leaveButton = new Button(leaveButtonStyle);
 		leaveButton.setWidth(BUTTON_WIDTH);
 		leaveButton.setHeight(BUTTON_HEIGHT);
 		leaveButton.setX(20);
 		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
-		
-		
+
+
 		//LISTENERS
 		leaveButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -110,10 +106,10 @@ private void initializeButtons() {
 				gameInstance.setScreen(gameScreen);
 			}
 		});
-		
-		
+
+
 		buttonStage.addActor(leaveButton);
-		
+
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 

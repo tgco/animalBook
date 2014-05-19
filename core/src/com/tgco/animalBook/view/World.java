@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.gameObjects.Drawable;
+import com.tgco.animalBook.gameObjects.Player;
 
 //Generates game objects and handles game logic between them
 public class World {
@@ -19,10 +20,15 @@ public class World {
 	
 	//All game objects to be drawn
 	private Array<Drawable> drawables;
+	
+	//The player character
+	private Player player;
 
 	public World() {
 		
 		drawables = new Array<Drawable>();
+		
+		player = new Player();
 
 		//Camera initialization
 		camera = new OrthographicCamera();

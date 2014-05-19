@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.Handlers.SoundHandler;
 
 public class SplashScreen implements Screen {
 
@@ -40,6 +41,8 @@ public class SplashScreen implements Screen {
 		displaying = false;
 
 		batch = new SpriteBatch();
+		
+		SoundHandler.playBackgroundMusic(true);
 
 	}
 

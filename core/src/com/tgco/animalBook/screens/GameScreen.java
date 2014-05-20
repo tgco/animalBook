@@ -88,8 +88,22 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	//Finds which "node" is visible on screen and draws four grass tiles around it
 	public Vector2 findTileNodeOnScreen() {
 		
-		int xCoordinate = ((int) gameWorld.getCamera().position.x) / (Gdx.graphics.getWidth());
-		int yCoordinate = ((int) gameWorld.getCamera().position.y) / (Gdx.graphics.getHeight());
+		//If camera is in the negative quadrant
+		boolean flipX = false;
+		boolean flipY = false;
+		
+		if (gameWorld.getCamera().position.x < 0)
+			flipX = true;
+		if (gameWorld.getCamera().position.y < 0)
+			flipY = true;
+		
+		int xCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.x / Gdx.graphics.getWidth()) + .5);
+		int yCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.y / Gdx.graphics.getHeight()) + .5);
+		
+		if (flipX)
+			xCoordinate *= -1;
+		if (flipY)
+			yCoordinate *= -1;
 		
 		return new Vector2(xCoordinate,yCoordinate);
 	}

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -46,7 +47,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//Initialize rendering objects
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
-		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass.jpg"));
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass2.jpg"));
 
 		//Setup input processing
 		inputMultiplexer = new InputMultiplexer();
@@ -65,13 +66,46 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		
 		//render background and world
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
+		
+		//Find the node on screen to draw grass around
+		Vector2 tileNode = findTileNodeOnScreen();
+		
 		batch.begin();
-		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
+		//Draw four grass textures around the node on screen
+		batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		//Draw world over background
 		gameWorld.render(batch);
 		batch.end();
 
 		//Draw buttons over the screen
 		buttonStage.draw();
+	}
+	
+	//Finds which "node" is visible on screen and draws four grass tiles around it
+	public Vector2 findTileNodeOnScreen() {
+		
+		//If camera is in the negative quadrant
+		boolean flipX = false;
+		boolean flipY = false;
+		
+		if (gameWorld.getCamera().position.x < 0)
+			flipX = true;
+		if (gameWorld.getCamera().position.y < 0)
+			flipY = true;
+		
+		int xCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.x / Gdx.graphics.getWidth()) + .5);
+		int yCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.y / Gdx.graphics.getHeight()) + .5);
+		
+		if (flipX)
+			xCoordinate *= -1;
+		if (flipY)
+			yCoordinate *= -1;
+		
+		return new Vector2(xCoordinate,yCoordinate);
 	}
 
 	@Override

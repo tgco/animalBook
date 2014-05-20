@@ -11,22 +11,37 @@ public class SoundHandler {
 	private static final Music marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
 	private static final Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
 	
+	private static boolean soundMuted = false;
+	private static boolean musicMuted = false;
+	
 	public static void playBackgroundMusic(boolean isLooping) {
-		backgroundMusic.setLooping(isLooping);
-		backgroundMusic.setVolume((float) 0);
-		backgroundMusic.play();
+		if (musicMuted) {
+			return;
+		} else {
+			backgroundMusic.setLooping(isLooping);
+			backgroundMusic.setVolume((float) 0.5);
+			backgroundMusic.play();
+		}
 	}
 	
 	public static void playStoryBackgroundMusic(boolean isLooping) {
-		storyBackgroundMusic.setLooping(isLooping);
-		storyBackgroundMusic.setVolume((float) 0.5);
-		storyBackgroundMusic.play();
+		if (musicMuted) {
+			return;
+		} else {
+			storyBackgroundMusic.setLooping(isLooping);
+			storyBackgroundMusic.setVolume((float) 0.5);
+			storyBackgroundMusic.play();
+		}
 	}
 	
 	public static void playMarketBackgroundMusic(boolean isLooping) {
-		marketBackgroundMusic.setLooping(isLooping);
-		marketBackgroundMusic.setVolume((float) 0.2);
-		marketBackgroundMusic.play();
+		if (musicMuted) {
+			return;
+		} else {
+			marketBackgroundMusic.setLooping(isLooping);
+			marketBackgroundMusic.setVolume((float) 0.5);
+			marketBackgroundMusic.play();
+		}
 	}
 	
 	public static void pauseBackgroundMusic() {
@@ -42,15 +57,41 @@ public class SoundHandler {
 	}
 	
 	public static void changeBackgroundVolume(float level) {
-		backgroundMusic.setVolume(level);
+		if (musicMuted) {
+			return;
+		} else {
+			backgroundMusic.setVolume(level);
+		}
 	}
 	
 	public static void playButtonClick() {
-		buttonClick.play();
+		if (soundMuted) {
+			return;
+		} else {
+			buttonClick.play();
+		}
 	}
 	
 	public static void muteSounds() {
-		backgroundMusic.setVolume(0);
+		if (soundMuted) {
+			soundMuted = false;
+		} else {
+			soundMuted = true;
+		}
+	}
+	
+	public static void muteMusic() {
+		if (musicMuted) {
+			backgroundMusic.setVolume((float) 0.5);
+			storyBackgroundMusic.setVolume((float) 0.3);
+			marketBackgroundMusic.setVolume((float) 0.2);
+			musicMuted = false;
+		} else {
+			backgroundMusic.setVolume(0);
+			storyBackgroundMusic.setVolume(0);
+			marketBackgroundMusic.setVolume(0);
+			musicMuted = true;
+		}
 	}
 	
 	public static void dispose() {

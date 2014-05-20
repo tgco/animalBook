@@ -34,7 +34,7 @@ public class World {
 		
 		drawables = new Array<Drawable>();
 		
-		player = new Player(camera);
+		player = new Player();
 		//Camera initialization
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

@@ -9,9 +9,8 @@ public class Player extends Movable {
 	
 	private static final Texture texture = new Texture(Gdx.files.internal("objectTextures/player.png"));
 
-	public Player(OrthographicCamera camera) {
+	public Player() {
 		super(texture);
-		super.position = new Vector2(camera.position.x, camera.position.y);
 	}
 	
 	@Override

@@ -139,7 +139,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		testButton = new Button(style);
 		testButton.setWidth(MENU_BUTTON_WIDTH);
 		testButton.setHeight(MENU_BUTTON_HEIGHT);
-		testButton.setX(EDGE_TOLERANCE);
+		testButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
 		testButton.setY(EDGE_TOLERANCE);
 
 		//Create listeners

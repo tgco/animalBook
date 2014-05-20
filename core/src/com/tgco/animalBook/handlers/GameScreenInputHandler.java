@@ -11,13 +11,13 @@ public class GameScreenInputHandler implements InputProcessor {
 
 	private AnimalBookGame gameInstance;
 	private GameScreen gameScreen;
-	
+
 	//For creating barrier nodes
 	private Vector3 lastTouch;
-	
+
 	//Distinguishes distance the finger must move to register a drag instead of a touch
 	private static float touchToDragTolerance = 50f;
-	
+
 	public GameScreenInputHandler(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		this.gameInstance = gameInstance;
 		this.gameScreen = gameScreen;
@@ -56,15 +56,17 @@ public class GameScreenInputHandler implements InputProcessor {
 		Vector3 touch = new Vector3(screenX,screenY,0);
 		//unproject touch to world coordinates
 		gameScreen.getWorld().getCamera().unproject(touch);
-		
+
 		//Determine if drag is registered
-		if ( touch.cpy().sub(lastTouch.cpy()).len() < touchToDragTolerance )
-			gameScreen.getWorld().setCameraTarget(touch);
-		else {
-			//Drag gesture is detected, draw a barrier between touch and last touch
-			Gdx.app.log("InputHandler", "Drag captured");
+		if (lastTouch != null) {
+			if ( touch.cpy().sub(lastTouch.cpy()).len() < touchToDragTolerance )
+				gameScreen.getWorld().setCameraTarget(touch);
+			else {
+				//Drag gesture is detected, draw a barrier between touch and last touch
+				Gdx.app.log("InputHandler", "Drag captured");
+			}
 		}
-		
+
 		//Rest the lastTouch so touchDown will grab a new touch next time
 		lastTouch = null;
 		return false;

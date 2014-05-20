@@ -135,6 +135,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
+				SoundHandler.muteSounds();
 			
 			}
 		});
@@ -146,6 +147,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
+				SoundHandler.muteMusic();
 			
 			}
 		});

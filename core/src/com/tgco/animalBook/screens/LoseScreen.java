@@ -58,7 +58,8 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 
 	}
 
-	private void initializeButtons() {
+	@Override
+	protected void initializeButtons() {
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/loseScreen/retryButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);

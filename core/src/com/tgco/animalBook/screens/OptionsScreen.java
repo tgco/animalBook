@@ -65,7 +65,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
-	private void initializeButtons() {
+	@Override
+	protected void initializeButtons() {
 		
 		//SOUND BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/soundButton.atlas"));
@@ -110,7 +111,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		mainMenuButton.setWidth(BUTTON_WIDTH);
 		mainMenuButton.setHeight(BUTTON_HEIGHT);
 		mainMenuButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
-		mainMenuButton.setY(BUTTON_HEIGHT - EDGE_TOLERANCE);
+		mainMenuButton.setY(EDGE_TOLERANCE);
 		
 		//HELP BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/helpButton.atlas"));
@@ -125,7 +126,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		helpButton.setWidth(BUTTON_WIDTH);
 		helpButton.setHeight(BUTTON_HEIGHT);
 		helpButton.setX(EDGE_TOLERANCE);
-		helpButton.setY(BUTTON_HEIGHT - EDGE_TOLERANCE);
+		helpButton.setY(EDGE_TOLERANCE);
 		
 		//LISTENERS
 		soundButton.addListener(new InputListener() {

@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 
-abstract class ButtonScreenAdapter {
+public abstract class ButtonScreenAdapter {
 
 
 	protected Texture backgroundTexture;
@@ -40,5 +40,7 @@ abstract class ButtonScreenAdapter {
 		buttonSkin.dispose();
 		buttonStage.dispose();
 	}
+	
+	protected abstract void initializeButtons();
 
 }

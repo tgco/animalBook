@@ -22,7 +22,7 @@ public abstract class Animal extends Movable {
 	@Override
 	public void draw(SpriteBatch batch) {
 		
-		batch.draw(texture, position.x, position.y, 75,75);
+		batch.draw(texture, position.x, position.y, 125,125);
 		move();
 		if(moveRate % 120 == 0 && rand.nextInt(100) <20){
 			

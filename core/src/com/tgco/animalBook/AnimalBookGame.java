@@ -1,8 +1,10 @@
 package com.tgco.animalBook;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.tgco.animalBook.handlers.SoundHandler;
+import com.tgco.animalBook.screens.MainMenuScreen;
 import com.tgco.animalBook.screens.SplashScreen;
 
 public class AnimalBookGame extends Game {
@@ -49,5 +51,13 @@ public class AnimalBookGame extends Game {
 	@Override
 	public void resume() {
 		super.resume();
+	}
+
+	public Screen getGScreen(){
+		return getScreen();
+	}
+	public void setMMScreen() {
+		setScreen(new MainMenuScreen(this));
+		
 	}
 }

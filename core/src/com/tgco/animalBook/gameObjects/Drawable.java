@@ -16,7 +16,7 @@ public abstract class Drawable {
 	}
 	
 	public void draw(SpriteBatch batch) {
-		
+		batch.draw(texture, position.x, position.y);
 	}
 	
 	//determines if this object can be moved

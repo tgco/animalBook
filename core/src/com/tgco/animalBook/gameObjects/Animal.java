@@ -24,13 +24,14 @@ public abstract class Animal extends Movable {
 		
 		batch.draw(texture, position.x, position.y, 75,75);
 		move();
-		if(moveRate % 60 == 0){
+		if(moveRate % 120 == 0 && rand.nextInt(100) <20){
+			
 			changeTarget();	
 		}
 		moveRate++;
 	}
 	public void changeTarget(){
-		currentTarget = new Vector2(position.x + rand.nextInt(100) -50, position.y +rand.nextInt(100)-50);
+		currentTarget = new Vector2(position.x + rand.nextInt(400) -200, position.y +rand.nextInt(400)-200);
 	}
 	//Create a consumable or new animal
 	public void drop() {

@@ -19,7 +19,7 @@ public abstract class Movable extends Drawable {
 	}
 	
 	 public void move(){
-		 previousTarget.lerp(currentTarget, Gdx.graphics.getDeltaTime()*(1/4f));
+		 previousTarget.lerp(currentTarget, Gdx.graphics.getDeltaTime()*(1/8f));
 		 position = previousTarget;
 	 }
 	

@@ -3,6 +3,8 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -15,14 +17,17 @@ import com.tgco.animalBook.handlers.SoundHandler;
 
 public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
-	private Button continueButton;
-	private String[][] storyFilepaths;
+	private Button skipButton, continueButton;
+	private static final String[][] storyFilepaths = new String[1][2];
+	private SpriteBatch batch;
 	
 	public StoryScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 		SoundHandler.playStoryBackgroundMusic(true);
+		batch = new SpriteBatch();
 		storyFilepaths[0][0] = "story/story1.png";
 		storyFilepaths[0][1] = "story/story2.jpg";
+		backgroundTexture =  new Texture(Gdx.files.internal(storyFilepaths[0][0]));
 		// TODO Auto-generated constructor stub
 	}
 
@@ -31,6 +36,10 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		batch.begin();
+		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.end();
+		
 		buttonStage.act(delta);
 		buttonStage.draw();
 	}
@@ -52,11 +61,11 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		ButtonStyle buttonStyle = new ButtonStyle();
 		buttonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		buttonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		continueButton = new Button(buttonStyle);
-		continueButton.setWidth(BUTTON_WIDTH);
-		continueButton.setHeight(BUTTON_HEIGHT);
-		continueButton.setPosition(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE, Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE );
-		continueButton.addListener(new InputListener(){
+		skipButton = new Button(buttonStyle);
+		skipButton.setWidth(BUTTON_WIDTH);
+		skipButton.setHeight(BUTTON_HEIGHT);
+		skipButton.setPosition(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE, Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE );
+		skipButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
@@ -68,7 +77,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});
-		buttonStage.addActor(continueButton);
+		buttonStage.addActor(skipButton);
 		Gdx.input.setInputProcessor(buttonStage);
 	}
 	

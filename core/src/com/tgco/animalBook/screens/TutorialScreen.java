@@ -75,8 +75,8 @@ private void initializeButtons() {
 		tutorialButton = new Button(leaveButtonStyle);
 		tutorialButton.setWidth(BUTTON_WIDTH);
 		tutorialButton.setHeight(BUTTON_HEIGHT);
-		tutorialButton.setX(20);
-		tutorialButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
+		tutorialButton.setX(EDGE_TOLERANCE);
+		tutorialButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 		
 		
 		//LISTENERS

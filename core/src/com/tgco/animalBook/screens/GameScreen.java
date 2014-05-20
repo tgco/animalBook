@@ -130,8 +130,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		marketButton = new Button(marketButtonStyle);
 		marketButton.setWidth(BUTTON_WIDTH);
 		marketButton.setHeight(BUTTON_HEIGHT);
-		marketButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 20);
-		marketButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
+		marketButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
+		marketButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//INVENTORY BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/inventoryButton.atlas"));
@@ -145,8 +145,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryButton = new Button(inventoryButtonStyle);
 		inventoryButton.setWidth(BUTTON_WIDTH);
 		inventoryButton.setHeight(BUTTON_HEIGHT);
-		inventoryButton.setX(20);
-		inventoryButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
+		inventoryButton.setX(EDGE_TOLERANCE);
+		inventoryButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//LISTENERS
 		marketButton.addListener(new InputListener() {

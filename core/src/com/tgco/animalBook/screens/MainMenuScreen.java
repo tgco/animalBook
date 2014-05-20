@@ -128,7 +128,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton.setWidth(MENU_BUTTON_WIDTH);
 		optionsButton.setHeight(MENU_BUTTON_HEIGHT);
 		optionsButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
-		optionsButton.setY(Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - 20);
+		optionsButton.setY(Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - EDGE_TOLERANCE);
 		
 		//Test
 		//This button is just to test the story screen
@@ -142,8 +142,8 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		testButton = new Button(style);
 		testButton.setWidth(MENU_BUTTON_WIDTH);
 		testButton.setHeight(MENU_BUTTON_HEIGHT);
-		testButton.setX(0);
-		testButton.setY(0);
+		testButton.setX(EDGE_TOLERANCE);
+		testButton.setY(EDGE_TOLERANCE);
 
 		//Create listeners
 		playButton.addListener(new InputListener() {

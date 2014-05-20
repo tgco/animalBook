@@ -68,7 +68,7 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 		retryButton = new Button(buttonStyle);
 		retryButton.setWidth(BUTTON_WIDTH);
 		retryButton.setHeight(BUTTON_HEIGHT);
-		retryButton.setPosition(Gdx.graphics.getWidth() - BUTTON_WIDTH - 20, Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20 );
+		retryButton.setPosition(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE, Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE );
 		retryButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -92,7 +92,7 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 		mainMenuButton = new Button(buttonStyle);
 		mainMenuButton.setWidth(BUTTON_WIDTH);
 		mainMenuButton.setHeight(BUTTON_HEIGHT);
-		mainMenuButton.setPosition(20, Gdx.graphics.getHeight() -  BUTTON_HEIGHT - 20 );
+		mainMenuButton.setPosition(EDGE_TOLERANCE, Gdx.graphics.getHeight() -  BUTTON_HEIGHT - EDGE_TOLERANCE );
 		mainMenuButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;

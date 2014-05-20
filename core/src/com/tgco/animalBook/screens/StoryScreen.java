@@ -51,7 +51,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		continueButton = new Button(buttonStyle);
 		continueButton.setWidth(BUTTON_WIDTH);
 		continueButton.setHeight(BUTTON_HEIGHT);
-		continueButton.setPosition(Gdx.graphics.getWidth() - BUTTON_WIDTH - 20, Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20 );
+		continueButton.setPosition(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE, Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE );
 		continueButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;

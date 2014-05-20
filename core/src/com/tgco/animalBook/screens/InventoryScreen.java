@@ -82,8 +82,8 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		leaveButton = new Button(leaveButtonStyle);
 		leaveButton.setWidth(BUTTON_WIDTH);
 		leaveButton.setHeight(BUTTON_HEIGHT);
-		leaveButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 20);
-		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
+		leaveButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
+		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//LISTENERS
 		leaveButton.addListener(new InputListener() {

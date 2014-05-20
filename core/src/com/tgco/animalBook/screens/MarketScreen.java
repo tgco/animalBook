@@ -85,8 +85,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		leaveButton = new Button(leaveButtonStyle);
 		leaveButton.setWidth(BUTTON_WIDTH);
 		leaveButton.setHeight(BUTTON_HEIGHT);
-		leaveButton.setX(20);
-		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
+		leaveButton.setX(EDGE_TOLERANCE);
+		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 
 		//LISTENERS

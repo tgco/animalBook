@@ -20,11 +20,13 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 	private Button skipButton, continueButton;
 	private static final String[][] storyFilepaths = new String[1][2];
 	private SpriteBatch batch;
+	private int pageNumber;
 	
 	public StoryScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 		SoundHandler.playStoryBackgroundMusic(true);
 		batch = new SpriteBatch();
+		pageNumber = 0;
 		storyFilepaths[0][0] = "story/story1.png";
 		storyFilepaths[0][1] = "story/story2.jpg";
 		backgroundTexture =  new Texture(Gdx.files.internal(storyFilepaths[0][0]));
@@ -55,7 +57,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	protected void initializeButtons() {
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/continueButton.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/skipButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 		ButtonStyle buttonStyle = new ButtonStyle();
@@ -78,6 +80,44 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 		buttonStage.addActor(skipButton);
+		//Gdx.input.setInputProcessor(buttonStage);
+		
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/continueButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+		buttonStyle = new ButtonStyle();
+		buttonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		buttonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		continueButton = new Button(buttonStyle);
+		continueButton.setWidth(BUTTON_WIDTH);
+		continueButton.setHeight(BUTTON_HEIGHT);
+		continueButton.setPosition(BUTTON_WIDTH + EDGE_TOLERANCE,  BUTTON_HEIGHT + EDGE_TOLERANCE );
+		continueButton.addListener(new InputListener(){
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				//next background
+				/*
+				    if (pageNumber < storyFilepaths[gameInstance.getLevel()].length){
+					backgroundTexture =  new Texture(Gdx.files.internal(storyFilepaths[gameInstance.getLevel()][pageNumber]));
+				}
+				 */
+				pageNumber++;
+				if (pageNumber < storyFilepaths[0].length){
+					backgroundTexture =  new Texture(Gdx.files.internal(storyFilepaths[0][pageNumber]));
+				}
+				else{
+					SoundHandler.playButtonClick();
+					SoundHandler.pauseStoryBackgroundMusic();
+					SoundHandler.playBackgroundMusic(true);
+					gameInstance.setScreen(new GameScreen(gameInstance));
+				}
+			}
+		});
+		buttonStage.addActor(continueButton);
+		
 		Gdx.input.setInputProcessor(buttonStage);
 	}
 	

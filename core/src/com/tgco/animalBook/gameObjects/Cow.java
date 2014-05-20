@@ -14,4 +14,6 @@ public class Cow extends Animal {
 		super(texture);
 	}
 
+
+
 }

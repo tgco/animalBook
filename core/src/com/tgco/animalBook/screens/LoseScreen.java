@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
@@ -58,7 +58,8 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 
 	}
 
-	private void initializeButtons() {
+	@Override
+	protected void initializeButtons() {
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/loseScreen/retryButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);

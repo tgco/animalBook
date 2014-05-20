@@ -1,9 +1,7 @@
 package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Movable {
 	
@@ -14,7 +12,7 @@ public class Player extends Movable {
 	}
 	
 	@Override
-	public void move(Vector2 target, Vector2 prevTarget) {
+	public void move() {
 		
 	}
 

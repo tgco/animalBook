@@ -16,10 +16,13 @@ import com.tgco.animalBook.handlers.SoundHandler;
 public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
 	private Button continueButton;
+	private String[][] storyFilepaths;
 	
 	public StoryScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 		SoundHandler.playStoryBackgroundMusic(true);
+		storyFilepaths[0][0] = "story/story1.png";
+		storyFilepaths[0][1] = "story/story2.jpg";
 		// TODO Auto-generated constructor stub
 	}
 
@@ -41,7 +44,8 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
-	private void initializeButtons() {
+	@Override
+	protected void initializeButtons() {
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/continueButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);

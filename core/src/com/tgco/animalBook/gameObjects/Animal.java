@@ -11,6 +11,7 @@ public abstract class Animal extends Movable {
 	
 	//interval between drop chances
 	private float dropInterval;
+	private int moveRate =0;
 	
 
 	public Animal(Texture texture) {
@@ -21,7 +22,16 @@ public abstract class Animal extends Movable {
 	@Override
 	public void draw(SpriteBatch batch) {
 		
-		batch.draw(texture, position.x, position.y, 50,50);
+		batch.draw(texture, position.x, position.y, 75,75);
+		move();
+		if(moveRate % 120 == 0 && rand.nextInt(100) <20){
+			
+			changeTarget();	
+		}
+		moveRate++;
+	}
+	public void changeTarget(){
+		currentTarget = new Vector2(position.x + rand.nextInt(400) -200, position.y +rand.nextInt(400)-200);
 	}
 	//Create a consumable or new animal
 	public void drop() {

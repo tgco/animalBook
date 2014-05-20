@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
@@ -71,7 +71,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
-	private void initializeButtons() {
+	@Override
+	protected void initializeButtons() {
 
 		//MARKET BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/leaveButton.atlas"));

@@ -16,10 +16,13 @@ import com.tgco.animalBook.handlers.SoundHandler;
 public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
 	private Button continueButton;
+	private String[][] storyFilepaths;
 	
 	public StoryScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 		SoundHandler.playStoryBackgroundMusic(true);
+		storyFilepaths[0][0] = "story/story1.png";
+		storyFilepaths[0][1] = "story/story2.jpg";
 		// TODO Auto-generated constructor stub
 	}
 

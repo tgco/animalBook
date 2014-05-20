@@ -1,8 +1,11 @@
 package com.tgco.animalBook.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -16,13 +19,18 @@ import com.tgco.animalBook.handlers.SoundHandler;
 public class LoseScreen extends ButtonScreenAdapter implements Screen {
 
 	private Button mainMenuButton, retryButton;
-	//dimensions
-	private final float BUTTON_WIDTH = 100;
-	private final float BUTTON_HEIGHT = 100;
+	SpriteBatch batch;
+	private InputMultiplexer inputMultiplexer;
 	
 	public LoseScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
-		// TODO Auto-generated constructor stub
+
+		//Background rendering
+		batch = new SpriteBatch();
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass2.jpg"));
+		
+		inputMultiplexer = new InputMultiplexer();
+		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
 	@Override
@@ -30,6 +38,11 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		//render background
+		batch.begin();
+		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.end();
 
 		buttonStage.act(delta);
 		buttonStage.draw();
@@ -58,10 +71,11 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 		retryButton.setPosition(Gdx.graphics.getWidth() - BUTTON_WIDTH - 20, Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20 );
 		retryButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return false;
+				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				//TODO add if statement to determine if we should be going to market or to game
 				gameInstance.setScreen(new MarketScreen(gameInstance, new GameScreen(gameInstance)));
 			}
 		});
@@ -81,7 +95,7 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 		mainMenuButton.setPosition(20, Gdx.graphics.getHeight() -  BUTTON_HEIGHT - 20 );
 		mainMenuButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return false;
+				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
@@ -90,7 +104,8 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 		buttonStage.addActor(mainMenuButton);
-		Gdx.input.setInputProcessor(buttonStage);
+
+		inputMultiplexer.addProcessor(buttonStage);
 	}
 
 	@Override
@@ -119,7 +134,7 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		super.dispose();
 
 	}
 

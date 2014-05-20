@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.gameObjects.Drawable;
+import com.tgco.animalBook.gameObjects.Goat;
+import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Player;
 
 //Generates game objects and handles game logic between them
@@ -23,19 +25,26 @@ public class World {
 	
 	//The player character
 	private Player player;
-
+	
+	private static int level = 0;
+	private static final int NUM_ANIMALS = 5;
+	
 	public World() {
 		
 		drawables = new Array<Drawable>();
 		
-		player = new Player();
-
+		player = new Player(camera);
 		//Camera initialization
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 
+		if(level == 0){
+			for(int i = 0; i < NUM_ANIMALS; i++){
+				drawables.add(new Goose(camera));
+			}
+		}
 		//touch variable
 		cameraTarget = new Vector3(camera.position);
 		

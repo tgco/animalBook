@@ -16,8 +16,6 @@ import com.tgco.animalBook.handlers.SoundHandler;
 public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
 	private Button continueButton;
-	private final float BUTTON_WIDTH = 100;
-	private final float BUTTON_HEIGHT = 100;
 	
 	public StoryScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
@@ -97,7 +95,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		super.dispose();
 
 	}
 

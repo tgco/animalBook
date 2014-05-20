@@ -14,7 +14,7 @@ public abstract class Movable extends Drawable {
 		super(texture);
 	}
 	
-	public void move() {
+	public void move(Vector2 target, Vector2 prevTarget) {
 		
 	}
 	

@@ -31,7 +31,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		
 		//Background rendering
 		batch = new SpriteBatch();
-		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass.jpg"));
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass2.jpg"));
 
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -123,7 +123,7 @@ private void initializeButtons() {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		super.dispose();
 
 	}
 

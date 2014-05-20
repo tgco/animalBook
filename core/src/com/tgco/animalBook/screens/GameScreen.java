@@ -47,7 +47,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//Initialize rendering objects
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
-		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass.jpg"));
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass2.jpg"));
 
 		//Setup input processing
 		inputMultiplexer = new InputMultiplexer();

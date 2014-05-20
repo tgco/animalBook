@@ -15,6 +15,9 @@ public class Goose extends Animal {
 	public Goose(OrthographicCamera camera) {
 		super(texture);
 		super.position = new Vector2(camera.position.x, camera.position.y);
+		super.currentTarget = position;
+		previousTarget = position;
 	}
+	
 
 }

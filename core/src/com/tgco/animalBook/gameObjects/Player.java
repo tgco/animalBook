@@ -13,7 +13,7 @@ public class Player extends Movable {
 	}
 	
 	@Override
-	public void move(Vector2 target, Vector2 prevTarget) {
+	public void move() {
 		
 	}
 

@@ -2,6 +2,7 @@ package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
 public class Sheep extends Animal {
@@ -13,5 +14,7 @@ public class Sheep extends Animal {
 	public Sheep() {
 		super(texture);
 	}
+
+	
 
 }

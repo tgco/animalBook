@@ -16,6 +16,7 @@ public class Goat extends Animal{
 		super(texture);
 		super.position = new Vector2(camera.position.x, camera.position.y);
 	}
+
 	
 	
 

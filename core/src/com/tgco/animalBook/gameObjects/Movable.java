@@ -1,5 +1,8 @@
 package com.tgco.animalBook.gameObjects;
 
+import java.util.Random;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
@@ -9,14 +12,16 @@ public abstract class Movable extends Drawable {
 	protected float speed;
 	protected Vector2 previousTarget;
 	protected Vector2 currentTarget;
+	protected Random rand= new Random();
 	
 	public Movable(Texture texture) {
 		super(texture);
 	}
 	
-	public void move(Vector2 target, Vector2 prevTarget) {
-		
-	}
+	 public void move(){
+		 previousTarget.lerp(currentTarget, Gdx.graphics.getDeltaTime()*(1/4f));
+		 position = previousTarget;
+	 }
 	
 	@Override
 	public boolean isMovable() {

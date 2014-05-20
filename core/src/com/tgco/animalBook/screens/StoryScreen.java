@@ -41,7 +41,8 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
-	private void initializeButtons() {
+	@Override
+	protected void initializeButtons() {
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/continueButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);

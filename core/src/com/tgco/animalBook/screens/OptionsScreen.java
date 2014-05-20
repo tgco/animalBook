@@ -65,7 +65,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
-	private void initializeButtons() {
+	@Override
+	protected void initializeButtons() {
 		
 		//SOUND BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/soundButton.atlas"));
@@ -79,8 +80,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		soundButton = new Button(soundButtonStyle);
 		soundButton.setWidth(BUTTON_WIDTH);
 		soundButton.setHeight(BUTTON_HEIGHT);
-		soundButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 20);
-		soundButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
+		soundButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
+		soundButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 		
 		//MUSIC BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/musicButton.atlas"));
@@ -94,8 +95,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		musicButton = new Button(musicButtonStyle);
 		musicButton.setWidth(BUTTON_WIDTH);
 		musicButton.setHeight(BUTTON_HEIGHT);
-		musicButton.setX(20);
-		musicButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
+		musicButton.setX(EDGE_TOLERANCE);
+		musicButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 		
 		//MAIN MENU BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/mainMenuButton.atlas"));
@@ -109,8 +110,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		mainMenuButton = new Button(mainMenuButtonStyle);
 		mainMenuButton.setWidth(BUTTON_WIDTH);
 		mainMenuButton.setHeight(BUTTON_HEIGHT);
-		mainMenuButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 20);
-		mainMenuButton.setY(0 + BUTTON_HEIGHT - 20);
+		mainMenuButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
+		mainMenuButton.setY(EDGE_TOLERANCE);
 		
 		//HELP BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/helpButton.atlas"));
@@ -124,8 +125,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		helpButton = new Button(helpButtonStyle);
 		helpButton.setWidth(BUTTON_WIDTH);
 		helpButton.setHeight(BUTTON_HEIGHT);
-		helpButton.setX(20);
-		helpButton.setY(0 + BUTTON_HEIGHT - 20);
+		helpButton.setX(EDGE_TOLERANCE);
+		helpButton.setY(EDGE_TOLERANCE);
 		
 		//LISTENERS
 		soundButton.addListener(new InputListener() {

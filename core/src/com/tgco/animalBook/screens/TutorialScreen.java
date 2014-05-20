@@ -28,7 +28,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 	public TutorialScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
-		
+
 		//Background rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass2.jpg"));
@@ -41,13 +41,13 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			
-		
+
+
 		//render background
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.end();
-		
+
 		buttonStage.act(delta);
 		buttonStage.draw();
 	}
@@ -60,25 +60,26 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		//reinit buttons
 		initializeButtons();
 	}
-	
-private void initializeButtons() {
-		
+
+	@Override
+	protected void initializeButtons() {
+
 		//MARKET BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/tutorialScreen/ButtonSkip.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		
+
 		ButtonStyle leaveButtonStyle = new ButtonStyle();
 		leaveButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		leaveButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		
+
 		tutorialButton = new Button(leaveButtonStyle);
 		tutorialButton.setWidth(BUTTON_WIDTH);
 		tutorialButton.setHeight(BUTTON_HEIGHT);
-		tutorialButton.setX(20);
-		tutorialButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
-		
-		
+		tutorialButton.setX(EDGE_TOLERANCE);
+		tutorialButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
+
+
 		//LISTENERS
 		tutorialButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -90,10 +91,10 @@ private void initializeButtons() {
 				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});
-		
-		
+
+
 		buttonStage.addActor(tutorialButton);
-		
+
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 

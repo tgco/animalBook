@@ -3,10 +3,8 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -15,8 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
@@ -100,7 +96,8 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	//Sets up the menu buttons and adds them to the stage to be rendered
-	public void initializeButtons() {
+	@Override
+	protected void initializeButtons() {
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/button.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
@@ -128,7 +125,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton.setWidth(MENU_BUTTON_WIDTH);
 		optionsButton.setHeight(MENU_BUTTON_HEIGHT);
 		optionsButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
-		optionsButton.setY(Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - 20);
+		optionsButton.setY(Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - EDGE_TOLERANCE);
 		
 		//Test
 		//This button is just to test the story screen
@@ -142,8 +139,8 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		testButton = new Button(style);
 		testButton.setWidth(MENU_BUTTON_WIDTH);
 		testButton.setHeight(MENU_BUTTON_HEIGHT);
-		testButton.setX(0);
-		testButton.setY(0);
+		testButton.setX(EDGE_TOLERANCE);
+		testButton.setY(EDGE_TOLERANCE);
 
 		//Create listeners
 		playButton.addListener(new InputListener() {

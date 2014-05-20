@@ -4,12 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -100,6 +98,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		int xCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.x / Gdx.graphics.getWidth()) + .5);
 		int yCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.y / Gdx.graphics.getHeight()) + .5);
 		
+		//Provides correct float truncation for tiling in the negative x/y direction
 		if (flipX)
 			xCoordinate *= -1;
 		if (flipY)
@@ -117,7 +116,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
-	private void initializeButtons() {
+	@Override
+	protected void initializeButtons() {
 
 		//MARKET BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/marketButton.atlas"));
@@ -131,8 +131,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		marketButton = new Button(marketButtonStyle);
 		marketButton.setWidth(BUTTON_WIDTH);
 		marketButton.setHeight(BUTTON_HEIGHT);
-		marketButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 20);
-		marketButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
+		marketButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
+		marketButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//INVENTORY BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/inventoryButton.atlas"));
@@ -146,8 +146,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryButton = new Button(inventoryButtonStyle);
 		inventoryButton.setWidth(BUTTON_WIDTH);
 		inventoryButton.setHeight(BUTTON_HEIGHT);
-		inventoryButton.setX(20);
-		inventoryButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
+		inventoryButton.setX(EDGE_TOLERANCE);
+		inventoryButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//LISTENERS
 		marketButton.addListener(new InputListener() {

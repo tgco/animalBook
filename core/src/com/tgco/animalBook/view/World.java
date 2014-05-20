@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.gameObjects.Drawable;
 import com.tgco.animalBook.gameObjects.Goat;
 import com.tgco.animalBook.gameObjects.Goose;
+import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Player;
 
 //Generates game objects and handles game logic between them
@@ -26,7 +27,7 @@ public class World {
 	//The player character
 	private Player player;
 	
-	private static int level =0;
+	private static int level = 0;
 	private static final int NUM_ANIMALS = 5;
 	
 	public World() {
@@ -40,8 +41,8 @@ public class World {
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 
-		if(level ==0){
-			for(int i =0; i < NUM_ANIMALS; i++){
+		if(level == 0){
+			for(int i = 0; i < NUM_ANIMALS; i++){
 				drawables.add(new Goose(camera));
 			}
 		}
@@ -57,6 +58,10 @@ public class World {
 
 		//draw objects
 		worldRender.render(batch, drawables);
+	}
+	
+	public void move(Movable mover) {
+		
 	}
 
 	//Finds the newest touch and interpolates the camera to its position

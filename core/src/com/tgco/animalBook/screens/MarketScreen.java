@@ -71,7 +71,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
-	private void initializeButtons() {
+	@Override
+	protected void initializeButtons() {
 
 		//MARKET BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/leaveButton.atlas"));
@@ -85,8 +86,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		leaveButton = new Button(leaveButtonStyle);
 		leaveButton.setWidth(BUTTON_WIDTH);
 		leaveButton.setHeight(BUTTON_HEIGHT);
-		leaveButton.setX(20);
-		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 20);
+		leaveButton.setX(EDGE_TOLERANCE);
+		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 
 		//LISTENERS

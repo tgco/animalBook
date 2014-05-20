@@ -13,7 +13,7 @@ public class SoundHandler {
 	
 	public static void playBackgroundMusic(boolean isLooping) {
 		backgroundMusic.setLooping(isLooping);
-		backgroundMusic.setVolume((float) 0.5);
+		backgroundMusic.setVolume((float) 0);
 		backgroundMusic.play();
 	}
 	
@@ -47,6 +47,10 @@ public class SoundHandler {
 	
 	public static void playButtonClick() {
 		buttonClick.play();
+	}
+	
+	public static void muteSounds() {
+		backgroundMusic.setVolume(0);
 	}
 	
 	public static void dispose() {

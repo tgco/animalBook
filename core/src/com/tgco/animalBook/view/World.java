@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.gameObjects.Drawable;
 import com.tgco.animalBook.gameObjects.Goat;
 import com.tgco.animalBook.gameObjects.Goose;
+import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Player;
 
 //Generates game objects and handles game logic between them
@@ -57,6 +58,10 @@ public class World {
 
 		//draw objects
 		worldRender.render(batch, drawables);
+	}
+	
+	public void move(Movable mover) {
+		
 	}
 
 	//Finds the newest touch and interpolates the camera to its position

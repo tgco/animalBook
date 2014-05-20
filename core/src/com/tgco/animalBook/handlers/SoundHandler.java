@@ -52,11 +52,7 @@ public class SoundHandler {
 	public static void dispose() {
 		backgroundMusic.dispose();
 		storyBackgroundMusic.dispose();
+		marketBackgroundMusic.dispose();
 		buttonClick.dispose();
 	}
-	
-	public static Music getBackgroundMusic() {
-		return backgroundMusic;
-	}
-
 }

@@ -3,7 +3,6 @@ package com.tgco.animalBook.gameObjects;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 //Objects that will move on screen
@@ -20,12 +19,13 @@ public abstract class Movable extends Drawable {
 	}
 	
 	 public void move() {
-		 //Lerp the position to the target //previousTarget.len2()/currentTarget.len2()*
-		 position.lerp(previousTarget, 1.5f*speed*Gdx.graphics.getDeltaTime());
+		 //Lerp the position to the target //previousTarget.len2()/currentTarget.len2()*1.5f
+		 position.lerp(previousTarget, speed*Gdx.graphics.getDeltaTime());
 		 
 		 //Lerp the previous target to the current
 		 //currentTarget, previousTarget.len2()/currentTarget.len2()
-		 previousTarget.lerp(currentTarget,speed*Gdx.graphics.getDeltaTime());
+		 previousTarget.lerp(currentTarget,30*speed*Gdx.graphics.getDeltaTime());
+
 	 }
 	 
 	 public void addToCurrentTarget(Vector2 addition) {
@@ -33,7 +33,7 @@ public abstract class Movable extends Drawable {
 	 }
 	
 	 public void setCurrentTarget(Vector2 target) {
-		 currentTarget = target;
+		 currentTarget = target.cpy();
 	 }
 	 
 	@Override

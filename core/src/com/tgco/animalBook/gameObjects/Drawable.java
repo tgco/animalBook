@@ -14,10 +14,15 @@ public abstract class Drawable {
 
 	public Drawable(String texturePath) {
 		this.texture = new Texture(Gdx.files.internal(texturePath));
+		position = new Vector2();
 	}
 	
 	public void draw(SpriteBatch batch) {
 		batch.draw(texture, position.x, position.y);
+	}
+	
+	public Vector2 getPosition() {
+		return position;
 	}
 	
 	//determines if this object can be moved

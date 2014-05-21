@@ -61,4 +61,8 @@ public class AnimalBookGame extends Game {
 		setScreen(new MainMenuScreen(this));
 		
 	}
+
+	public void reset() {
+		SoundHandler.resetAudio();
+	}
 }

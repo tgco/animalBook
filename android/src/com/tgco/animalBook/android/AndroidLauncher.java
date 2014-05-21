@@ -21,12 +21,10 @@ public class AndroidLauncher extends AndroidApplication {
 	}
 	
 	
-	/* @Override
-		public void onBackPressed(){
-	    	
-	     if(ABGame.getGScreen() instanceof MainMenuScreen){
-	    		super.onBackPressed();
-	     }
+	 @Override
+		public void onResume(){
+		 super.onResume();
+		 ABGame.reset();
 		}	
-		*/	
+			
 }

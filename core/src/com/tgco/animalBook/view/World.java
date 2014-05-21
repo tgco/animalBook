@@ -33,7 +33,6 @@ public class World {
 		
 		drawables = new Array<Drawable>();
 		
-		player = new Player();
 		//Camera initialization
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -42,9 +41,11 @@ public class World {
 
 		if(level == 0){
 			for(int i = 0; i < NUM_ANIMALS; i++){
-				drawables.add(new Goose(camera));
+				drawables.add(new Goose());
 			}
 		}
+		
+		player = new Player(camera);
 		//touch variable
 		cameraTarget = new Vector3(camera.position);
 		
@@ -56,7 +57,7 @@ public class World {
 		moveCameraToTouch(cameraTarget);
 
 		//draw objects
-		worldRender.render(batch, drawables);
+		worldRender.render(batch, drawables, player);
 	}
 	
 	public void move(Movable mover) {

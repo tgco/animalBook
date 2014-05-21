@@ -40,11 +40,19 @@ public class World {
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
-
+		int x;
 		if(level == 0){
 			for(int i = 0; i < NUM_ANIMALS; i++){
-				drawables.add(new Goose());
+				if(i < .5*NUM_ANIMALS){
+					x = -i;
+				drawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*20, (float) (Gdx.graphics.getHeight()/2 -x*x*20 + 10*x))));
+				}
+				else {
+					x =(int) (i - .5*NUM_ANIMALS);
+					drawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*20, (float) (Gdx.graphics.getHeight()/2 -x*x*20 + 10*x))));
+				}
 			}
+			
 		}
 		
 		player = new Player(camera);
@@ -101,6 +109,15 @@ public class World {
 		for (Drawable drawable : drawables) {
 			drawable.dispose();
 		}
+	}
+	
+	public Array<Movable> getMovables() {
+		Array<Movable> movables = new Array<Movable>();
+		for (Drawable drawable : drawables) {
+			if (drawable.isMovable())
+				movables.add((Movable) drawable);
+		}
+		return movables;
 	}
 
 }

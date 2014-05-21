@@ -17,10 +17,10 @@ public abstract class Animal extends Movable {
 	
 	protected Random rand;
 
-	public Animal(String texturePath) {
+	public Animal(String texturePath, Vector2 position) {
 		super(texturePath);
 		//Animals start in the middle of the screen
-		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
+		this.position = position;
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
 		
@@ -33,7 +33,7 @@ public abstract class Animal extends Movable {
 		batch.draw(texture, position.x, position.y, 75,75);
 		
 		
-		if(changeTargetCount % 60 == 0 && rand.nextInt(100) < 30){
+		if(changeTargetCount % 120 == 0 && rand.nextInt(100) < 20){
 
 			changeTarget();	
 		}

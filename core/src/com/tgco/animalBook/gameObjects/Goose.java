@@ -12,8 +12,8 @@ public class Goose extends Animal {
 	
 	private static final String texturePath = "objectTextures/goose.png";
 	
-	public Goose() {
-		super(texturePath);
+	public Goose(Vector2 pos) {
+		super(texturePath, pos);
 		
 		speed = 1/6f;
 	}

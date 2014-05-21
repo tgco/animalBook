@@ -26,7 +26,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	private Button leaveButton;
 
 	//Input handler
-	private InputMultiplexer inputMultiplexer;
+	//private InputMultiplexer inputMultiplexer;
 
 	//Background
 	private SpriteBatch batch;

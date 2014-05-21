@@ -29,13 +29,13 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	private SpriteBatch batch;
 
 	//Input handler
-	private InputMultiplexer inputMultiplexer;
+	//private InputMultiplexer inputMultiplexer;
 
 	public MarketScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
 
 		this.gameScreen = gameScreen;
-
+		
 		//Background rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));

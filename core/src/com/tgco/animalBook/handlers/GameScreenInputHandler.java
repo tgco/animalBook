@@ -1,10 +1,12 @@
 package com.tgco.animalBook.handlers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.screens.GameScreen;
+import com.tgco.animalBook.screens.MainMenuScreen;
 
 public class GameScreenInputHandler implements InputProcessor {
 
@@ -24,10 +26,12 @@ public class GameScreenInputHandler implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
+        if(keycode == Keys.BACK){
+        	gameInstance.setScreen(new MainMenuScreen(gameInstance));
+        }
+        return false;
 	}
-
+	
 	@Override
 	public boolean keyUp(int keycode) {
 		// TODO Auto-generated method stub

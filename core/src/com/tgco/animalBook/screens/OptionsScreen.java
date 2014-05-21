@@ -25,7 +25,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	private Button helpButton;
 	
 	//Input handler
-	private InputMultiplexer inputMultiplexer;
+	//private InputMultiplexer inputMultiplexer;
 	
 	//Background
 	private SpriteBatch batch;

@@ -77,4 +77,11 @@ public class World {
 		this.cameraTarget = cameraTarget;
 	}
 
+	public void dispose() {
+		for (Drawable drawable : drawables) {
+			drawable.dispose();
+		}
+		
+	}
+
 }

@@ -57,6 +57,7 @@ public class AnimalBookGame extends Game {
 		return getScreen();
 	}
 	public void setMMScreen() {
+		
 		setScreen(new MainMenuScreen(this));
 		
 	}

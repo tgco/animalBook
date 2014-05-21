@@ -24,7 +24,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	private Button optionsButton;
 	private Button testButton;
 
-	private InputMultiplexer inputMultiplexer;
+	//private InputMultiplexer inputMultiplexer;
 	private SpriteBatch batch;
 
 	public MainMenuScreen(AnimalBookGame gameInstance) {
@@ -33,7 +33,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		//Background rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/mainback.png"));
-		
+		Gdx.input.setCatchBackKey(false);
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
@@ -163,6 +163,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				//Change the screen when the button is let go
+				Gdx.input.setCatchBackKey(true);
 				gameInstance.setScreen(new OptionsScreen(gameInstance));
 			}
 		});

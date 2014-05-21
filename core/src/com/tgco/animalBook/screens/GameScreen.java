@@ -33,7 +33,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private SpriteBatch batch;
 
 	//Input handler
-	private InputMultiplexer inputMultiplexer;
+	//private InputMultiplexer inputMultiplexer;
 
 
 	public GameScreen(AnimalBookGame gameInstance) {
@@ -52,6 +52,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		GameScreenInputHandler touchControls = new GameScreenInputHandler(gameInstance,this);
 		inputMultiplexer.addProcessor(touchControls);
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		Gdx.input.setCatchBackKey(true);
 	}
 
 	@Override
@@ -206,6 +207,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
+		gameWorld.dispose();
 	}
 	
 	public World getWorld() {

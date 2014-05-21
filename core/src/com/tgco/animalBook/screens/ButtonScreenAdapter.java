@@ -1,6 +1,7 @@
 package com.tgco.animalBook.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,6 +15,7 @@ public abstract class ButtonScreenAdapter {
 	protected Skin buttonSkin;
 	protected Stage buttonStage;
 	protected AnimalBookGame gameInstance;
+	protected InputMultiplexer inputMultiplexer;
 
 	//dimensions for buttons
 	protected static final float BUTTON_WIDTH = (1f/6f)*Gdx.graphics.getWidth();
@@ -38,6 +40,8 @@ public abstract class ButtonScreenAdapter {
 		backgroundTexture.dispose();
 		buttonSkin.dispose();
 		buttonStage.dispose();
+		inputMultiplexer.clear();
+		
 	}
 	
 	protected abstract void initializeButtons();

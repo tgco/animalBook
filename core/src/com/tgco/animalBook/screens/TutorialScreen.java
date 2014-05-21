@@ -22,7 +22,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	private Button tutorialButton;
 
 	//Input handler
-	private InputMultiplexer inputMultiplexer;
+	//private InputMultiplexer inputMultiplexer;
 
 	private SpriteBatch batch;
 

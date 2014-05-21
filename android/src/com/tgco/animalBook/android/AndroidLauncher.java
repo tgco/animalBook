@@ -23,13 +23,10 @@ public class AndroidLauncher extends AndroidApplication {
 	
 	/* @Override
 		public void onBackPressed(){
-	    	if(ABGame.getGScreen() instanceof GameScreen){
-	    		ABGame.setMMScreen();
-	    	}
-	    	else if(ABGame.getScreen() instanceof MainMenuScreen){
+	    	
+	     if(ABGame.getGScreen() instanceof MainMenuScreen){
 	    		super.onBackPressed();
-	    	}
-		}
-		*/
-		
+	     }
+		}	
+		*/	
 }

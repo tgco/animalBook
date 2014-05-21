@@ -89,5 +89,14 @@ public class World {
 			drawable.dispose();
 		}
 	}
+	
+	public Array<Movable> getMovables() {
+		Array<Movable> movables = new Array<Movable>();
+		for (Drawable drawable : drawables) {
+			if (drawable.isMovable())
+				movables.add((Movable) drawable);
+		}
+		return movables;
+	}
 
 }

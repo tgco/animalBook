@@ -26,6 +26,10 @@ public abstract class Movable extends Drawable {
 		 //Lerp the previous target to the current
 		 previousTarget.lerp(currentTarget, 2f*speed*Gdx.graphics.getDeltaTime());
 	 }
+	 
+	 public void addToCurrentTarget(Vector2 addition) {
+		 currentTarget.add(addition);
+	 }
 	
 	 public void setCurrentTarget(Vector2 target) {
 		 currentTarget = target;

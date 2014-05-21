@@ -3,8 +3,11 @@ package com.tgco.animalBook.handlers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.screens.GameScreen;
 import com.tgco.animalBook.screens.MainMenuScreen;
 
@@ -67,12 +70,40 @@ public class GameScreenInputHandler implements InputProcessor {
 			else {
 				//Drag gesture is detected, draw a barrier between touch and last touch
 				Gdx.app.log("InputHandler", "Drag captured");
+				herdWithDrag(lastTouch, touch, gameScreen.getWorld().getMovables());
 			}
 		}
 
 		//Rest the lastTouch so touchDown will grab a new touch next time
 		lastTouch = null;
 		return false;
+	}
+	
+	//Uses the ends of a drag line to influence all animals motion
+	public void herdWithDrag(Vector3 startTouch, Vector3 endTouch, Array<Movable> movables) {
+		//Find a unit vector representing the drag direction
+		Vector2 dragUnitVector = new Vector2(startTouch.x - endTouch.x, startTouch.y - endTouch.y);
+		dragUnitVector.nor();
+		
+		Vector2 perpProjection;
+
+		for (Movable movable : movables) {
+			//find perpendicular projection of position onto unit vector
+			perpProjection = movable.getPosition().cpy().sub(dragUnitVector.cpy().scl(movable.getPosition().cpy().dot(dragUnitVector.cpy())));
+			//Amount to move over the currentTarget of the animal
+			if (perpProjection.cpy().len() != 0) {
+				
+				Vector2 dragAveragePosition = new Vector2((startTouch.x + endTouch.x)/2,(startTouch.y + endTouch.y)/2);
+				float reactionScale = 1/(movable.getPosition().cpy().dst(dragAveragePosition));
+				float flip = 1;
+				//if touch is closer to origin, change direction of influence
+				if (movable.getPosition().cpy().len() < dragAveragePosition.cpy().len())
+					flip = -1;
+				
+				movable.addToCurrentTarget(perpProjection.cpy().nor().scl(flip*reactionScale));
+			}
+		}
+		
 	}
 
 	@Override

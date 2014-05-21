@@ -18,8 +18,18 @@ public class Player extends Movable {
 	}
 	
 	public void draw(SpriteBatch batch) {
-		batch.draw(texture, position.x, position.y, 56, 114);
+		batch.draw(texture, position.x, position.y - 114, 56, 114);
 		move();
+	}
+	
+	public void changeTarget(Vector2 target) {
+		previousTarget = currentTarget;
+		currentTarget = target;
+	}
+	
+	@Override
+	public void move() {
+		previousTarget.lerp(currentTarget, Gdx.graphics.getDeltaTime()*(1/4f));
 	}
 
 }

@@ -6,10 +6,10 @@ import com.badlogic.gdx.audio.Sound;
 
 public class SoundHandler {
 	
-	private static final Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/farmNoise.wav"));
-	private static final Music storyBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/storyNoise.wav"));
-	private static final Music marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
-	private static final Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
+	private static Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/farmNoise.wav"));
+	private static Music storyBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/storyNoise.wav"));
+	private static Music marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
+	private static Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
 	
 	private static boolean soundMuted = false;
 	private static boolean musicMuted = false;
@@ -94,8 +94,13 @@ public class SoundHandler {
 		}
 	}
 	
-	public static void loadAudio() {
-		
+	public static void resetAudio() {
+		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/farmNoise.wav"));
+		 storyBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/storyNoise.wav"));
+		 marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
+		buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
+		//soundMuted = true;
+		//musicMuted = true;
 	}
 	
 	public static void dispose() {

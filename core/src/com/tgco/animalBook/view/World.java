@@ -44,11 +44,12 @@ public class World {
 			for(int i = 0; i < NUM_ANIMALS; i++){
 				if(i < .5*NUM_ANIMALS){
 					x = -i;
-				drawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*20, (float) (Gdx.graphics.getHeight()/2 -x*x*20 + 10*x))));
+				drawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40 -50, (float) (Gdx.graphics.getHeight()/2 -x*x*25 + 10*x -50))));
 				}
 				else {
-					x =(int) (i - .5*NUM_ANIMALS);
-					drawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*20, (float) (Gdx.graphics.getHeight()/2 -x*x*20 + 10*x))));
+					x = (i - (int)Math.floor(.5*NUM_ANIMALS));
+					Gdx.app.log("aasdf", "x is " + x);
+					drawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
 				}
 			}
 			

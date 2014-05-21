@@ -19,11 +19,13 @@ public abstract class Movable extends Drawable {
 	}
 	
 	 public void move() {
-		 //Lerp the position to the target
+		 //Lerp the position to the target //previousTarget.len2()/currentTarget.len2()*1.5f
 		 position.lerp(previousTarget, speed*Gdx.graphics.getDeltaTime());
 		 
 		 //Lerp the previous target to the current
-		 previousTarget.lerp(currentTarget, 30*speed*Gdx.graphics.getDeltaTime());
+		 //currentTarget, previousTarget.len2()/currentTarget.len2()
+		 previousTarget.lerp(currentTarget,30*speed*Gdx.graphics.getDeltaTime());
+
 	 }
 	 
 	 public void addToCurrentTarget(Vector2 addition) {

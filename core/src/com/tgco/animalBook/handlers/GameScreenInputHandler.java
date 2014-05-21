@@ -97,7 +97,7 @@ public class GameScreenInputHandler implements InputProcessor {
 			if (perpProjection.cpy().len() != 0) {
 				
 				Vector2 dragAveragePosition = new Vector2((startTouch.x + endTouch.x)/2,(startTouch.y + endTouch.y)/2);
-				float reactionScale = 1/(movable.getPosition().cpy().dst(dragAveragePosition));
+				float reactionScale = 250;
 				float flip = 1;
 				//if touch is closer to origin, change direction of influence
 				if (movable.getPosition().cpy().len() < dragAveragePosition.cpy().len())

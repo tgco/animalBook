@@ -21,6 +21,10 @@ public abstract class Drawable {
 		batch.draw(texture, position.x, position.y);
 	}
 	
+	public Vector2 getPosition() {
+		return position;
+	}
+	
 	//determines if this object can be moved
 	public boolean isMovable() {
 		return false;

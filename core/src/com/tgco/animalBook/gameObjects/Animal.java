@@ -34,7 +34,7 @@ public abstract class Animal extends Movable {
 		batch.draw(texture, position.x, position.y, 125,125);
 		
 		
-		if(changeTargetCount % 120 == 0 && rand.nextInt(100) < 20){
+		if(changeTargetCount % 60 == 0 && rand.nextInt(100) < 30){
 
 			changeTarget();	
 		}
@@ -44,6 +44,8 @@ public abstract class Animal extends Movable {
 	public void changeTarget(){
 		currentTarget = new Vector2(position.x + rand.nextInt(400) -200, position.y +rand.nextInt(400)-200);
 	}
+	
+	
 	//Create a consumable or new animal
 	public void drop() {
 		

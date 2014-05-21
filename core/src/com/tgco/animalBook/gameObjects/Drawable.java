@@ -14,6 +14,7 @@ public abstract class Drawable {
 
 	public Drawable(String texturePath) {
 		this.texture = new Texture(Gdx.files.internal(texturePath));
+		position = new Vector2();
 	}
 	
 	public void draw(SpriteBatch batch) {

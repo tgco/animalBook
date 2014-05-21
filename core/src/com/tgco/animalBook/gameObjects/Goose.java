@@ -15,7 +15,7 @@ public class Goose extends Animal {
 	public Goose(Vector2 pos) {
 		super(texturePath, pos);
 		
-		speed = 1/6f;
+		speed = 1/14f;
 	}
 	
 

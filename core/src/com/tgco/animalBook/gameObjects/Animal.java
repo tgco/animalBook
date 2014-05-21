@@ -30,7 +30,7 @@ public abstract class Animal extends Movable {
 	@Override
 	public void draw(SpriteBatch batch) {
 		
-		batch.draw(texture, position.x, position.y, 75,75);
+		batch.draw(texture, position.x, position.y, 100,100);
 		
 		
 		if(changeTargetCount % 120 == 0 && rand.nextInt(100) < 20){

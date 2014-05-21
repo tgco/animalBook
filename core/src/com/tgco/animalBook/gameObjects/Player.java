@@ -20,7 +20,7 @@ public class Player extends Movable {
 	}
 	
 	public void draw(SpriteBatch batch) {
-		batch.draw(texture, position.x, position.y, 56,114);
+		batch.draw(texture, position.x, position.y, 70, 143);
 	}
 
 }

@@ -26,7 +26,6 @@ public class World {
 	
 	//The player character
 	private Player player;
-	private Vector2 playerTarget;
 	
 	private static int level = 0;
 	private static final int NUM_ANIMALS = 5;
@@ -55,10 +54,9 @@ public class World {
 			
 		}
 		
-		player = new Player(camera);
+		player = new Player();
 		//touch variable
 		cameraTarget = new Vector3(camera.position);
-		playerTarget = new Vector2(camera.position.x, camera.position.y);
 		
 		worldRender = new WorldRenderer();
 	}
@@ -66,7 +64,6 @@ public class World {
 	public void render(SpriteBatch batch) {
 		//move the camera if necessary
 		moveCameraToTouch(cameraTarget);
-		player.setCurrentTarget(playerTarget);
 		
 		//move animals if necessary
 		for (Drawable drawable : drawables) {
@@ -102,7 +99,7 @@ public class World {
 	}
 	
 	public void setPlayerTarget(Vector2 playerTarget) {
-		this.playerTarget = playerTarget;
+		player.setCurrentTarget(playerTarget);
 	}
 
 	public void dispose() {

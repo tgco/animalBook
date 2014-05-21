@@ -10,13 +10,13 @@ public class Player extends Movable {
 	
 	private static final String texturePath = "objectTextures/player.png";
 
-	public Player(OrthographicCamera camera) {
+	public Player() {
 		super(texturePath);
 		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/4);
 		previousTarget = position.cpy();
-		currentTarget = previousTarget;
+		currentTarget = previousTarget.cpy();
 		
-		speed = 10;
+		speed = .5f;
 	}
 	
 	public void draw(SpriteBatch batch) {

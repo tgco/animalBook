@@ -3,7 +3,6 @@ package com.tgco.animalBook.gameObjects;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 //Objects that will move on screen
@@ -32,7 +31,7 @@ public abstract class Movable extends Drawable {
 	 }
 	
 	 public void setCurrentTarget(Vector2 target) {
-		 currentTarget = target;
+		 currentTarget = target.cpy();
 	 }
 	 
 	@Override

@@ -56,7 +56,7 @@ public class World {
 		moveCameraToTouch(cameraTarget);
 
 		//draw objects
-		worldRender.render(batch, drawables);
+		worldRender.render(batch, drawables, player);
 	}
 	
 	public void move(Movable mover) {

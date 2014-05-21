@@ -14,7 +14,6 @@ public class Goat extends Animal{
 	
 	public Goat() {
 		super(texturePath);
-		super.position = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 	}
 
 	

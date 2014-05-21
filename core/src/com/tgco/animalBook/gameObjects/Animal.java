@@ -1,5 +1,8 @@
 package com.tgco.animalBook.gameObjects;
 
+import java.util.Random;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -11,23 +14,32 @@ public abstract class Animal extends Movable {
 	
 	//interval between drop chances
 	private float dropInterval;
-	private int moveRate =0;
+	private int changeTargetCount = 0;
 	
+	protected Random rand;
 
 	public Animal(String texturePath) {
 		super(texturePath);
+		//Animals start in the middle of the screen
+		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
+		previousTarget = position.cpy();
+		currentTarget = previousTarget.cpy();
+		
+		rand = new Random();
 	}
 	
 	@Override
 	public void draw(SpriteBatch batch) {
 		
-		batch.draw(texture, position.x, position.y, 75,75);
-		move();
-		if(moveRate % 120 == 0 && rand.nextInt(100) <20){
-			
+		batch.draw(texture, position.x, position.y, 125,125);
+		
+		
+		if(changeTargetCount % 120 == 0 && rand.nextInt(100) < 20){
+
 			changeTarget();	
 		}
-		moveRate++;
+		
+		changeTargetCount++;
 	}
 	public void changeTarget(){
 		currentTarget = new Vector2(position.x + rand.nextInt(400) -200, position.y +rand.nextInt(400)-200);

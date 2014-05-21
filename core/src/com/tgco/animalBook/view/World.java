@@ -55,14 +55,20 @@ public class World {
 	public void render(SpriteBatch batch) {
 		//move the camera if necessary
 		moveCameraToTouch(cameraTarget);
+		
+		//move animals if necessary
+		for (Drawable drawable : drawables) {
+			if (drawable.isMovable())
+				((Movable) drawable).move();
+		}
+		
+		//move player
+		player.move();
 
 		//draw objects
 		worldRender.render(batch, drawables, player);
 	}
 	
-	public void move(Movable mover) {
-		
-	}
 
 	//Finds the newest touch and interpolates the camera to its position
 	public void moveCameraToTouch(Vector3 lastTouch) {

@@ -14,9 +14,8 @@ public class Goose extends Animal {
 	
 	public Goose() {
 		super(texturePath);
-		super.position = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-		super.currentTarget = position;
-		previousTarget = position;
+		
+		speed = 5;
 	}
 	
 

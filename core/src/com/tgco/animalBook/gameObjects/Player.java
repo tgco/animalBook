@@ -12,14 +12,16 @@ public class Player extends Movable {
 
 	public Player(OrthographicCamera camera) {
 		super(texturePath);
-		super.position = new Vector2(camera.position.x, camera.position.y);
-		super.currentTarget = position;
-		previousTarget = position;
+		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/4);
+		previousTarget = position.cpy();
+		currentTarget = previousTarget;
+		
+		speed = 10;
 	}
 	
 	public void draw(SpriteBatch batch) {
-		batch.draw(texture, position.x, position.y, 56, 114);
-		move();
+		batch.draw(texture, position.x, position.y, 56,114);
+
 	}
 
 }

@@ -12,15 +12,19 @@ public abstract class Movable extends Drawable {
 	protected float speed;
 	protected Vector2 previousTarget;
 	protected Vector2 currentTarget;
-	protected Random rand= new Random();
+	
 	
 	public Movable(String texturePath) {
 		super(texturePath);
+		
 	}
 	
-	 public void move(){
-		 previousTarget.lerp(currentTarget, Gdx.graphics.getDeltaTime()*(1/8f));
-		 position = previousTarget;
+	 public void move() {
+		 //Lerp the position to the target
+		 position.lerp(previousTarget, speed*Gdx.graphics.getDeltaTime());
+		 
+		 //Lerp the previous target to the current
+		 previousTarget.lerp(currentTarget, speed*Gdx.graphics.getDeltaTime());
 	 }
 	
 	@Override

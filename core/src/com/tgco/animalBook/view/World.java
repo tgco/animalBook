@@ -42,7 +42,7 @@ public class World {
 
 		if(level == 0){
 			for(int i = 0; i < NUM_ANIMALS; i++){
-				drawables.add(new Goose(camera));
+				drawables.add(new Goose());
 			}
 		}
 		//touch variable

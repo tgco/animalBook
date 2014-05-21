@@ -12,9 +12,9 @@ public class Goat extends Animal{
 
 	private static final String texturePath = "objectTextures/goat.jpg";
 	
-	public Goat(OrthographicCamera camera) {
+	public Goat() {
 		super(texturePath);
-		super.position = new Vector2(camera.position.x, camera.position.y);
+		super.position = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 	}
 
 	

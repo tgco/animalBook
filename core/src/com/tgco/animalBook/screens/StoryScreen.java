@@ -168,6 +168,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 				 */
 				pageNumber++;
 				if (pageNumber < storyFilepaths[0].length){
+					timeCounter = 0;
 					backgroundTexture =  new Texture(Gdx.files.internal(storyFilepaths[0][pageNumber]));
 					displaying = false;
 					fadingOut = true;

@@ -8,10 +8,10 @@ public class Sheep extends Animal {
 
 	private static final DropType dropType = Consumable.DropType.WOOL;
 
-	private static final Texture texture = new Texture(Gdx.files.internal("objectTextures/sheep.png"));
+	private static final String texturePath = "objectTextures/sheep.png";
 
 	public Sheep() {
-		super(texture);
+		super(texturePath);
 	}
 
 	

@@ -25,12 +25,6 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	//buttons
 	private Button leaveButton;
 
-	//Rendering objects
-	private SpriteBatch batch;
-
-	//Input handler
-	//private InputMultiplexer inputMultiplexer;
-
 	public MarketScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
 

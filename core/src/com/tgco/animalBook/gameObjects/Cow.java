@@ -7,11 +7,11 @@ import com.tgco.animalBook.gameObjects.Consumable.DropType;
 public class Cow extends Animal {
 
 	private static final DropType dropType = Consumable.DropType.MILK;
-
-	private static final Texture texture = new Texture(Gdx.files.internal("objectTextures/cow.png"));
+	
+	private static final String texturePath = "objectTextures/cow.png";
 
 	public Cow() {
-		super(texture);
+		super(texturePath);
 	}
 
 

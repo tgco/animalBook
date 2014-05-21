@@ -14,8 +14,8 @@ public abstract class Movable extends Drawable {
 	protected Vector2 currentTarget;
 	protected Random rand= new Random();
 	
-	public Movable(Texture texture) {
-		super(texture);
+	public Movable(String texturePath) {
+		super(texturePath);
 	}
 	
 	 public void move(){

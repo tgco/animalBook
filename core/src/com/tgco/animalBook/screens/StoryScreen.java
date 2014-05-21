@@ -19,7 +19,6 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
 	private Button skipButton, continueButton;
 	private static final String[][] storyFilepaths = new String[1][2];
-	private SpriteBatch batch;
 	private int pageNumber;
 	
 	public StoryScreen(AnimalBookGame gameInstance) {
@@ -30,7 +29,6 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		storyFilepaths[0][0] = "story/story1.png";
 		storyFilepaths[0][1] = "story/story2.jpg";
 		backgroundTexture =  new Texture(Gdx.files.internal(storyFilepaths[0][0]));
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -80,7 +78,6 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 		buttonStage.addActor(skipButton);
-		//Gdx.input.setInputProcessor(buttonStage);
 		
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/continueButton.atlas"));
 		buttonSkin = new Skin();

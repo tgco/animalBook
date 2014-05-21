@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Player extends Movable {
 	
-	private static final Texture texture = new Texture(Gdx.files.internal("objectTextures/player.png"));
+	private static final String texturePath = "objectTextures/player.png";
 
 	public Player() {
-		super(texture);
+		super(texturePath);
 	}
 	
 	public void draw(SpriteBatch batch) {

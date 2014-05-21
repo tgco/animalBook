@@ -24,13 +24,6 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	private Button mainMenuButton;
 	private Button helpButton;
 	
-	//Input handler
-	//private InputMultiplexer inputMultiplexer;
-	
-	//Background
-	private SpriteBatch batch;
-	
-	
 	public OptionsScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 		
@@ -136,7 +129,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				SoundHandler.muteSounds();
+				SoundHandler.toggleSounds();
 			
 			}
 		});
@@ -148,7 +141,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				SoundHandler.muteMusic();
+				SoundHandler.toggleMusic();
 			
 			}
 		});

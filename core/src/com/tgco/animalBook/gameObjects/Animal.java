@@ -34,7 +34,7 @@ public abstract class Animal extends Movable {
 		batch.draw(texture, position.x, position.y, 125,125);
 		
 		
-		if(changeTargetCount % 60 == 0 && rand.nextInt(100) < 30){
+		if(changeTargetCount % 120 == 0 && rand.nextInt(100) < 20){
 
 			changeTarget();	
 		}

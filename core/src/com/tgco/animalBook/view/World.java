@@ -50,6 +50,7 @@ public class World {
 		player = new Player(camera);
 		//touch variable
 		cameraTarget = new Vector3(camera.position);
+		playerTarget = new Vector2(camera.position.x, camera.position.y);
 		
 		worldRender = new WorldRenderer();
 	}
@@ -57,6 +58,7 @@ public class World {
 	public void render(SpriteBatch batch) {
 		//move the camera if necessary
 		moveCameraToTouch(cameraTarget);
+		player.setCurrentTarget(playerTarget);
 		
 		//move animals if necessary
 		for (Drawable drawable : drawables) {
@@ -78,10 +80,6 @@ public class World {
 		camera.update();
 	}
 	
-	public void movePlayerToTouch(Vector2 lastTouch) {
-		player.changeTarget(lastTouch);
-		player.move();
-	}
 
 	public OrthographicCamera getCamera() {
 		return camera;

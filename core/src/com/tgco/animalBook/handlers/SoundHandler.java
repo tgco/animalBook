@@ -39,7 +39,7 @@ public class SoundHandler {
 			return;
 		} else {
 			marketBackgroundMusic.setLooping(isLooping);
-			marketBackgroundMusic.setVolume((float) 0.5);
+			marketBackgroundMusic.setVolume((float) 0.1);
 			marketBackgroundMusic.play();
 		}
 	}

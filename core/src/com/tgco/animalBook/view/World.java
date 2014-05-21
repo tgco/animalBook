@@ -3,6 +3,7 @@ package com.tgco.animalBook.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.gameObjects.Drawable;
@@ -25,6 +26,7 @@ public class World {
 	
 	//The player character
 	private Player player;
+	private Vector2 playerTarget;
 	
 	private static int level = 0;
 	private static final int NUM_ANIMALS = 5;
@@ -75,13 +77,26 @@ public class World {
 		camera.position.lerp(lastTouch.cpy(),Gdx.graphics.getDeltaTime());
 		camera.update();
 	}
+	
+	public void movePlayerToTouch(Vector2 lastTouch) {
+		player.changeTarget(lastTouch);
+		player.move();
+	}
 
 	public OrthographicCamera getCamera() {
 		return camera;
 	}
 	
+	public Player getPlayer() {
+		return player;
+	}
+	
 	public void setCameraTarget(Vector3 cameraTarget) {
 		this.cameraTarget = cameraTarget;
+	}
+	
+	public void setPlayerTarget(Vector2 playerTarget) {
+		this.playerTarget = playerTarget;
 	}
 
 	public void dispose() {

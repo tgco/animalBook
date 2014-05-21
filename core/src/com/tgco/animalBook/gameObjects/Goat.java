@@ -12,8 +12,8 @@ public class Goat extends Animal{
 
 	private static final String texturePath = "objectTextures/goat.jpg";
 	
-	public Goat() {
-		super(texturePath);
+	public Goat(Vector2 pos) {
+		super(texturePath, pos);
 	}
 
 	

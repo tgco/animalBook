@@ -18,10 +18,10 @@ public abstract class Animal extends Movable {
 	
 	protected Random rand;
 
-	public Animal(String texturePath) {
+	public Animal(String texturePath, Vector2 position) {
 		super(texturePath);
 		//Animals start in the middle of the screen
-		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
+		this.position = position;
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
 		

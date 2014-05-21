@@ -2,6 +2,7 @@ package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
 public class Pig extends Animal {
@@ -10,8 +11,8 @@ public class Pig extends Animal {
 
 	private static final String texturePath = "objectTextures/pig.png";
 
-	public Pig() {
-		super(texturePath);
+	public Pig(Vector2 pos) {
+		super(texturePath, pos);
 	}
 
 	

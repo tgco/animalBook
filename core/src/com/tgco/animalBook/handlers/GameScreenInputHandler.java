@@ -85,6 +85,8 @@ public class GameScreenInputHandler implements InputProcessor {
 	
 	//Uses the ends of a drag line to influence all animals motion
 	public void herdWithDrag(Vector3 startTouch, Vector3 endTouch, Array<Movable> movables) {
+		//Find middle of the drag
+		Vector2 dragCenter = new Vector2((startTouch.x + endTouch.x)/2,(startTouch.y + endTouch.y)/2);
 		//Find a unit vector representing the drag direction
 		Vector2 dragUnitVector = new Vector2(startTouch.x - endTouch.x, startTouch.y - endTouch.y);
 		dragUnitVector.nor();
@@ -93,18 +95,15 @@ public class GameScreenInputHandler implements InputProcessor {
 
 		for (Movable movable : movables) {
 			//find perpendicular projection of position onto unit vector
-			perpProjection = movable.getPosition().cpy().sub(dragUnitVector.cpy().scl(movable.getPosition().cpy().dot(dragUnitVector.cpy())));
+			//perpProjection = movable.getPosition().cpy().sub(dragUnitVector.cpy().scl(movable.getPosition().cpy().dot(dragUnitVector.cpy())));
+			perpProjection = (movable.getPosition().cpy().sub(dragCenter)).cpy().sub(dragUnitVector.cpy().scl((movable.getPosition().cpy().sub(dragCenter)).cpy().dot(dragUnitVector.cpy())));
 			//Amount to move over the currentTarget of the animal
 			if (perpProjection.cpy().len() != 0) {
 				
-				Vector2 dragAveragePosition = new Vector2((startTouch.x + endTouch.x)/2,(startTouch.y + endTouch.y)/2);
-				float reactionScale = 250;
-				float flip = 1;
-				//if touch is closer to origin, change direction of influence
-				if (movable.getPosition().cpy().len() < dragAveragePosition.cpy().len())
-					flip = -1;
+				//change to adjust how much a goose reacts to a drag (should depend on distance of goose from drag center)
+				float reactionScale = 10000 * 1/(movable.getPosition().cpy().sub(dragCenter).len());
 				
-				movable.addToCurrentTarget(perpProjection.cpy().nor().scl(flip*reactionScale));
+				movable.addToCurrentTarget(movable.getPosition().cpy().sub(dragCenter.cpy()).nor().scl(reactionScale));
 			}
 		}
 		

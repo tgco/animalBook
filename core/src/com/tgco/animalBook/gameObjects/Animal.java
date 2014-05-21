@@ -35,6 +35,7 @@ public abstract class Animal extends Movable {
 		
 		
 		if(changeTargetCount % 120 == 0 && rand.nextInt(100) < 20){
+
 			changeTarget();	
 		}
 		

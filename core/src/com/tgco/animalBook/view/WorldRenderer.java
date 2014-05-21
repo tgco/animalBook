@@ -15,11 +15,11 @@ public class WorldRenderer {
 	
 	public void render(SpriteBatch batch, Array<Drawable> drawables, Player player) {
 		//Draw all objects
+		player.draw(batch);
+		
 		for (Drawable drawable : drawables) {
 			drawable.draw(batch);
 		}
-		
-		player.draw(batch);
 	}
 
 }

@@ -73,6 +73,7 @@ public class GameScreenInputHandler implements InputProcessor {
 			else {
 				//Drag gesture is detected, draw a barrier between touch and last touch
 				Gdx.app.log("InputHandler", "Drag captured");
+				SoundHandler.playWhistle();
 				herdWithDrag(lastTouch, touch, gameScreen.getWorld().getMovables());
 			}
 		}

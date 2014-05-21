@@ -10,6 +10,7 @@ public class SoundHandler {
 	private static Music storyBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/storyNoise.wav"));
 	private static Music marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
 	private static Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
+	private static Sound whistle = Gdx.audio.newSound(Gdx.files.internal("sounds/whistle.wav"));
 	
 	private static boolean soundMuted = false;
 	private static boolean musicMuted = false;
@@ -72,6 +73,14 @@ public class SoundHandler {
 		}
 	}
 	
+	public static void playWhistle() {
+		if (soundMuted) {
+			return;
+		} else {
+			whistle.play();
+		}
+	} 
+	
 	public static void toggleSounds() {
 		if (soundMuted) {
 			soundMuted = false;
@@ -96,9 +105,11 @@ public class SoundHandler {
 	
 	public static void resetAudio() {
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/farmNoise.wav"));
-		 storyBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/storyNoise.wav"));
-		 marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
+		storyBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/storyNoise.wav"));
+		marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
 		buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
+		whistle = Gdx.audio.newSound(Gdx.files.internal("sounds/whistle.wav"));
+		
 		//soundMuted = true;
 		//musicMuted = true;
 	}
@@ -108,5 +119,6 @@ public class SoundHandler {
 		storyBackgroundMusic.dispose();
 		marketBackgroundMusic.dispose();
 		buttonClick.dispose();
+		whistle.dispose();
 	}
 }

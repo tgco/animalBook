@@ -19,8 +19,6 @@ import com.tgco.animalBook.handlers.SoundHandler;
 public class LoseScreen extends ButtonScreenAdapter implements Screen {
 
 	private Button mainMenuButton, retryButton;
-	SpriteBatch batch;
-	//private InputMultiplexer inputMultiplexer;
 	
 	public LoseScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);

@@ -72,7 +72,7 @@ public class SoundHandler {
 		}
 	}
 	
-	public static void muteSounds() {
+	public static void toggleSounds() {
 		if (soundMuted) {
 			soundMuted = false;
 		} else {
@@ -80,7 +80,7 @@ public class SoundHandler {
 		}
 	}
 	
-	public static void muteMusic() {
+	public static void toggleMusic() {
 		if (musicMuted) {
 			backgroundMusic.setVolume((float) 0.5);
 			storyBackgroundMusic.setVolume((float) 0.3);
@@ -92,6 +92,10 @@ public class SoundHandler {
 			marketBackgroundMusic.setVolume(0);
 			musicMuted = true;
 		}
+	}
+	
+	public static void loadAudio() {
+		
 	}
 	
 	public static void dispose() {

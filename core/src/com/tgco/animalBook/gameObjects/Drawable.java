@@ -1,5 +1,6 @@
 package com.tgco.animalBook.gameObjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -11,8 +12,8 @@ public abstract class Drawable {
 	
 	protected Vector2 position;
 
-	public Drawable(Texture texture) {
-		this.texture = texture;
+	public Drawable(String texturePath) {
+		this.texture = new Texture(Gdx.files.internal(texturePath));
 	}
 	
 	public void draw(SpriteBatch batch) {

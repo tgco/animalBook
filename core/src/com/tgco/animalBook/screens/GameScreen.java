@@ -29,11 +29,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Button inventoryButton;
 	private Button marketButton;
 
-	//Rendering objects
-	private SpriteBatch batch;
-
-	//Input handler
-	//private InputMultiplexer inputMultiplexer;
 
 
 	public GameScreen(AnimalBookGame gameInstance) {

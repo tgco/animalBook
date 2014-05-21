@@ -10,10 +10,10 @@ public class Goat extends Animal{
 	
 	private static final DropType dropType = Consumable.DropType.CHEESE;
 
-	private static final Texture texture = new Texture(Gdx.files.internal("objectTextures/goat.jpg"));
+	private static final String texturePath = "objectTextures/goat.jpg";
 	
 	public Goat(OrthographicCamera camera) {
-		super(texture);
+		super(texturePath);
 		super.position = new Vector2(camera.position.x, camera.position.y);
 	}
 

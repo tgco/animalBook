@@ -18,14 +18,9 @@ import com.tgco.animalBook.handlers.SoundHandler;
 
 public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	
-	
-
 	private Button playButton;
 	private Button optionsButton;
 	private Button testButton;
-
-	//private InputMultiplexer inputMultiplexer;
-	private SpriteBatch batch;
 
 	public MainMenuScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);

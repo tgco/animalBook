@@ -8,10 +8,10 @@ public class Pig extends Animal {
 
 	private static final DropType dropType = Consumable.DropType.BACON;
 
-	private static final Texture texture = new Texture(Gdx.files.internal("objectTextures/pig.png"));
+	private static final String texturePath = "objectTextures/pig.png";
 
 	public Pig() {
-		super(texture);
+		super(texturePath);
 	}
 
 	

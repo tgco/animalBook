@@ -10,8 +10,8 @@ public class Consumable extends Drawable {
 		MILK, EGG, BACON, CHEESE, WOOL;
 	}
 
-	public Consumable(Texture texture) {
-		super(texture);
+	public Consumable(String texturePath) {
+		super(texturePath);
 	}
 
 }

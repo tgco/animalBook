@@ -3,6 +3,7 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -30,6 +31,9 @@ public abstract class ButtonScreenAdapter {
 
 	//Button texture initialization
 	protected TextureAtlas atlas;
+	
+	//Batch for background rendering
+	protected SpriteBatch batch;
 
 	public ButtonScreenAdapter(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;
@@ -40,6 +44,7 @@ public abstract class ButtonScreenAdapter {
 		backgroundTexture.dispose();
 		buttonSkin.dispose();
 		buttonStage.dispose();
+		batch.dispose();
 		inputMultiplexer.clear();
 		
 	}

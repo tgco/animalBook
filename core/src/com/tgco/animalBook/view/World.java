@@ -81,7 +81,6 @@ public class World {
 		for (Drawable drawable : drawables) {
 			drawable.dispose();
 		}
-		
 	}
 
 }

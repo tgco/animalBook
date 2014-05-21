@@ -10,10 +10,10 @@ public class Goose extends Animal {
 
 	private static final DropType dropType = Consumable.DropType.EGG;
 	
-	private static final Texture texture = new Texture(Gdx.files.internal("objectTextures/goose.png"));
+	private static final String texturePath = "objectTextures/goose.png";
 	
 	public Goose(OrthographicCamera camera) {
-		super(texture);
+		super(texturePath);
 		super.position = new Vector2(camera.position.x, camera.position.y);
 		super.currentTarget = position;
 		previousTarget = position;

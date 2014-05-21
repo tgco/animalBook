@@ -25,12 +25,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	//buttons
 	private Button leaveButton;
 
-	//Input handler
-	//private InputMultiplexer inputMultiplexer;
-
-	//Background
-	private SpriteBatch batch;
-
 
 	public InventoryScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);

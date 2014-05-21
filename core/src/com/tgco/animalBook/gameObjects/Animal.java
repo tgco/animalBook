@@ -14,9 +14,8 @@ public abstract class Animal extends Movable {
 	private int moveRate =0;
 	
 
-	public Animal(Texture texture) {
-		super(texture);
-		
+	public Animal(String texturePath) {
+		super(texturePath);
 	}
 	
 	@Override

@@ -21,11 +21,6 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	//buttons
 	private Button tutorialButton;
 
-	//Input handler
-	//private InputMultiplexer inputMultiplexer;
-
-	private SpriteBatch batch;
-
 	public TutorialScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 

@@ -26,7 +26,11 @@ public class Player extends Movable {
 	}
 	
 	public void eat(float value) {
-		playerHealth += value;
+		if ((playerHealth + value) > 100) {
+			playerHealth = 100;
+		} else {
+			playerHealth += value;
+		}
 	}
 	
 	public void decreaseHealth(float amount) {

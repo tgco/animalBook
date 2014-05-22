@@ -29,9 +29,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Button inventoryButton;
 	private Button upgradeButton;
 	private Button pauseButton;
-
+	private Button eatButton;
+	
+	
 	boolean paused;
-
 
 	public GameScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
@@ -148,6 +149,22 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryButton.setHeight(BUTTON_HEIGHT);
 		inventoryButton.setX(EDGE_TOLERANCE);
 		inventoryButton.setY(Gdx.graphics.getHeight() - 2*BUTTON_HEIGHT - EDGE_TOLERANCE);
+		
+		//EAT BUTTON
+		//TEMP FOR TESTING
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/eatButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+		
+		ButtonStyle eatButtonStyle = new ButtonStyle();
+		eatButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		eatButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		eatButton = new Button(eatButtonStyle);
+		eatButton.setWidth(BUTTON_WIDTH);
+		eatButton.setHeight(BUTTON_HEIGHT);
+		eatButton.setX(EDGE_TOLERANCE);
+		eatButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//PAUSE BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/pauseButton.atlas"));
@@ -193,6 +210,17 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				gameInstance.setScreen(new InventoryScreen(gameInstance,GameScreen.this));
 			}
 		});
+		
+		eatButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				gameWorld.getPlayer().eat(10f);
+			}
+		});
 
 		pauseButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -209,6 +237,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.addActor(inventoryButton);
 		buttonStage.addActor(upgradeButton);
 		buttonStage.addActor(pauseButton);
+		buttonStage.addActor(eatButton);
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}

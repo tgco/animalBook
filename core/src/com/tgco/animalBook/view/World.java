@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.tgco.animalBook.gameObjects.Drawable;
 import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Movable;
@@ -73,8 +74,6 @@ public class World {
 	public void updateGameLogic() {
 		//move the camera
 		moveCameraUp(cameraSpeed);
-		
-		player.decreaseHealth(.01f);
 
 		//move animals if necessary
 		for (Drawable drawable : drawables) {
@@ -85,6 +84,11 @@ public class World {
 		//move player
 		player.move(cameraSpeed);
 
+		player.decreaseHealth(.01f);
+		
+		player.setSpeed(.2f*(player.getHealth()/100));
+		cameraSpeed = .2f*(player.getHealth()/100);
+		Gdx.app.log("Speed:", "camera speed: " + cameraSpeed + "; player speed: " + player.getSpeed() + "; player health: " + player.getHealth());
 	}
 
 

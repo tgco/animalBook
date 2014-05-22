@@ -14,7 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
-import com.tgco.animalBook.gameObjects.Player;
+import com.tgco.animalBook.gameObjects.Consumable;
+import com.tgco.animalBook.gameObjects.Inventory;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
@@ -65,7 +66,10 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	private void initializeInventoryInterface() {
-		Player p = gameScreen.getWorld().getPlayer();
+		Inventory inventory = gameScreen.getWorld().getPlayer().getInventory();
+		for (int i = 0; i < 5; i++){
+			atlas = new TextureAtlas(Gdx.files.internal(""));
+		}
 	}
 
 	@Override

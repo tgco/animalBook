@@ -68,7 +68,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	private void initializeInventoryInterface() {
 		Inventory inventory = gameScreen.getWorld().getPlayer().getInventory();
 		for (int i = 0; i < 5; i++){
-			atlas = new TextureAtlas(Gdx.files.internal(""));
 		}
 	}
 

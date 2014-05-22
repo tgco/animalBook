@@ -1,19 +1,19 @@
 
-marketButton.png
+pauseButton.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-buttonPressed
+playButton
   rotate: false
   xy: 1, 1
-  size: 256, 256
-  orig: 256, 256
+  size: 284, 273
+  orig: 284, 273
   offset: 0, 0
   index: -1
-buttonUnpressed
+pauseButton
   rotate: false
-  xy: 259, 1
-  size: 256, 256
-  orig: 256, 256
+  xy: 287, 23
+  size: 247, 251
+  orig: 247, 251
   offset: 0, 0
   index: -1

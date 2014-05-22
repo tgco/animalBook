@@ -27,12 +27,16 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	
 	//buttons
 	private Button inventoryButton;
-	private Button marketButton;
+	private Button upgradeButton;
+	private Button pauseButton;
 
+	boolean paused;
 
 
 	public GameScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
+		
+		paused = false;
 
 		//Initialize game world
 		gameWorld = new World();
@@ -72,7 +76,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		//Draw world over background
-		gameWorld.render(batch);
+		gameWorld.render(batch,paused);
 		batch.end();
 
 		//Draw buttons over the screen
@@ -115,20 +119,20 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	protected void initializeButtons() {
 
-		//MARKET BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/marketButton.atlas"));
+		//UPGRADE BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/upgradeButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
-		ButtonStyle marketButtonStyle = new ButtonStyle();
-		marketButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		marketButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		ButtonStyle upgradeButtonStyle = new ButtonStyle();
+		upgradeButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		upgradeButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
-		marketButton = new Button(marketButtonStyle);
-		marketButton.setWidth(BUTTON_WIDTH);
-		marketButton.setHeight(BUTTON_HEIGHT);
-		marketButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
-		marketButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		upgradeButton = new Button(upgradeButtonStyle);
+		upgradeButton.setWidth(BUTTON_WIDTH);
+		upgradeButton.setHeight(BUTTON_HEIGHT);
+		upgradeButton.setX(EDGE_TOLERANCE);
+		upgradeButton.setY(Gdx.graphics.getHeight() - 3*BUTTON_HEIGHT - 2*EDGE_TOLERANCE);
 
 		//INVENTORY BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/inventoryButton.atlas"));
@@ -143,10 +147,25 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryButton.setWidth(BUTTON_WIDTH);
 		inventoryButton.setHeight(BUTTON_HEIGHT);
 		inventoryButton.setX(EDGE_TOLERANCE);
-		inventoryButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		inventoryButton.setY(Gdx.graphics.getHeight() - 2*BUTTON_HEIGHT - EDGE_TOLERANCE);
+		
+		//PAUSE BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/pauseButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+		
+		ButtonStyle pauseButtonStyle = new ButtonStyle();
+		pauseButtonStyle.up = buttonSkin.getDrawable("pauseButton");
+		pauseButtonStyle.checked = buttonSkin.getDrawable("playButton");
+
+		pauseButton = new Button(pauseButtonStyle);
+		pauseButton.setWidth(BUTTON_WIDTH);
+		pauseButton.setHeight(BUTTON_HEIGHT);
+		pauseButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
+		pauseButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//LISTENERS
-		marketButton.addListener(new InputListener() {
+		upgradeButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
@@ -169,9 +188,22 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				gameInstance.setScreen(new InventoryScreen(gameInstance,GameScreen.this));
 			}
 		});
+		
+		pauseButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				SoundHandler.changeBackgroundVolume((float) .1);
+				paused = !paused;
+			}
+		});
 
 		buttonStage.addActor(inventoryButton);
-		buttonStage.addActor(marketButton);
+		buttonStage.addActor(upgradeButton);
+		buttonStage.addActor(pauseButton);
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}

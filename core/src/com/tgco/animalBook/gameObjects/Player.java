@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Player extends Movable {
 	
 	private static final String texturePath = "objectTextures/player.png";
+	private static final Inventory inventory = new Inventory();
 
 	public Player(float speed) {
 		super(texturePath);

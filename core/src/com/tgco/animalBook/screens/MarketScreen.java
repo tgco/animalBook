@@ -98,7 +98,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				//Grab the world
 				World world = gameScreen.getWorld();
 				world.setPlayerTarget(world.getPlayer().getPosition());
-				gameInstance.setScreen(gameScreen);
+				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});
 

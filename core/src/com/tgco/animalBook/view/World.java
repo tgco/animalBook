@@ -39,7 +39,7 @@ public class World {
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
-		cameraSpeed = .5f;
+		cameraSpeed = .2f;
 		
 		int x;
 		if(level == 0){

@@ -21,7 +21,7 @@ public abstract class Movable extends Drawable {
 
 	public void move(float cameraSpeed) {
 		//move bias with camera direction
-		position.y += cameraSpeed;
+		position.y += 1.5*cameraSpeed;
 		
 		//Lerp the position to the target //previousTarget.len2()/currentTarget.len2()*1.5f
 		position.lerp(previousTarget, speed*Gdx.graphics.getDeltaTime());

@@ -17,24 +17,25 @@ import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
-public class MarketScreen extends ButtonScreenAdapter implements Screen {
+public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 
 	//reference to the game screen
 	private GameScreen gameScreen;
 
 	//buttons
 	private Button leaveButton;
+	private Button fruitfullButton;
+	private Button LongerButton;
 
-	public MarketScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
+	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
 
 		this.gameScreen = gameScreen;
 		
 		//Background rendering
 		batch = new SpriteBatch();
-		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/romaninaLandscape.jpg"));
 
-		SoundHandler.playMarketBackgroundMusic(true);
 
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -68,8 +69,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	protected void initializeButtons() {
 
-		//MARKET BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/leaveButton.atlas"));
+		//Leave BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/leaveButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
@@ -83,6 +84,36 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		leaveButton.setX(EDGE_TOLERANCE);
 		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
+		//fruitfull BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/fruitfullButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle fruitfullButtonStyle = new ButtonStyle();
+		leaveButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		leaveButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		fruitfullButton = new Button(fruitfullButtonStyle);
+		fruitfullButton.setWidth(BUTTON_WIDTH);
+		fruitfullButton.setHeight(BUTTON_HEIGHT);
+		fruitfullButton.setX(Gdx.graphics.getWidth()/2 - 100);
+		fruitfullButton.setY(Gdx.graphics.getHeight()/2 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		
+
+		//longer BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/LongerButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle LongerButtonStyle = new ButtonStyle();
+		leaveButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		leaveButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		LongerButton = new Button(fruitfullButtonStyle);
+		LongerButton.setWidth(BUTTON_WIDTH);
+		LongerButton.setHeight(BUTTON_HEIGHT);
+		LongerButton.setX(Gdx.graphics.getWidth()/2 + 100);
+		LongerButton.setY(Gdx.graphics.getHeight()/2 - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//LISTENERS
 		leaveButton.addListener(new InputListener() {
@@ -98,7 +129,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				//Grab the world
 				World world = gameScreen.getWorld();
 				world.setPlayerTarget(world.getPlayer().getPosition());
-				gameInstance.setScreen(new GameScreen(gameInstance));
+				gameInstance.setScreen(gameScreen);
 			}
 		});
 

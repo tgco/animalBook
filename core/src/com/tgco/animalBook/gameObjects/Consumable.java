@@ -19,11 +19,11 @@ public class Consumable extends ABDrawable {
 	}
 
 	public enum DropType {
-		MILK("objectTextures/milk.png", "inventoryScreen/milkButton.atlas", 1000, 1000), 
-		EGG("objectTextures/egg.png", "inventoryScreen/eggButton.atlas", 2000, 2000), 
-		BACON("objectTextures/bacon.png", "inventoryScreen/baconButton.atlas", 3000, 3000), 
-		CHEESE("objectTextures/cheese.png", "inventoryScreen/cheeseButton.atlas", 4000, 4000), 
-		WOOL("objectTextures/wool.png", "inventoryScreen/woolButton.atlas", 5000, 5000);
+		MILK("objectTextures/milk.png", "objectTextures/milkButton.atlas", 1000, 1000), 
+		EGG("objectTextures/egg.png", "objectTextures/eggButton.atlas", 2000, 2000), 
+		BACON("objectTextures/bacon.png", "objectTextures/baconButton.atlas", 3000, 3000), 
+		CHEESE("objectTextures/cheese.png", "objectTextures/cheeseButton.atlas", 4000, 4000), 
+		WOOL("objectTextures/wool.png", "objectTextures/woolButton.atlas", 5000, 5000);
 		
 		private final String texturePath;
 		private final String atlasPath;

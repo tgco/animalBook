@@ -31,8 +31,6 @@ public class WorldRenderer {
 			drawable.draw(batch);
 		}
 		
-		font.draw(batch, String.valueOf((int) player.getHealth()), player.getPosition().x - 50, player.getPosition().y - 50);
-		
 		shapeRender.begin(ShapeType.Filled);
 		
 		//Health bar
@@ -48,6 +46,8 @@ public class WorldRenderer {
 		shapeRender.rect(20, 20 + progressPercentage*200, 20, 10);
 		
 		shapeRender.end();
+		
+		font.draw(batch, String.valueOf((int) player.getHealth()), player.getPosition().x - 50, player.getPosition().y - 50);
 	}
 
 }

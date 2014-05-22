@@ -91,8 +91,6 @@ public class World {
 	public void updateGameLogic() {
 		//move the camera
 		moveCameraUp(cameraSpeed);
-		
-		player.decreaseHealth(.01f);
 
 		//move animals if necessary
 		for (Drawable drawable : drawables) {
@@ -102,6 +100,12 @@ public class World {
 
 		//move player
 		player.move(cameraSpeed);
+
+
+		player.decreaseHealth(.01f);
+		
+		player.setSpeed(.2f*(player.getHealth()/100));
+		cameraSpeed = .2f*(player.getHealth()/100);
 
 		//check for collisions between the market and the player/geese
 		for (Drawable drawable : drawables) {

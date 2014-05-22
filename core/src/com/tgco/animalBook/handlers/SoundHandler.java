@@ -77,7 +77,7 @@ public class SoundHandler {
 		if (soundMuted) {
 			return;
 		} else {
-			whistle.play();
+			whistle.play(.1f);
 		}
 	} 
 	

@@ -54,7 +54,6 @@ public class WorldRenderer {
 		
 		batch.begin();
 
-		font.draw(batch, String.valueOf((int) player.getHealth()), player.getPosition().cpy().x - 50, player.getPosition().cpy().y - 50);
 	}
 
 }

@@ -16,7 +16,7 @@ public class World {
 
 	//Camera to view the world
 	private OrthographicCamera camera;
-	private Vector3 cameraTarget;
+	private float cameraSpeed;
 
 	//Rendering object
 	private WorldRenderer worldRender;
@@ -39,6 +39,8 @@ public class World {
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
+		cameraSpeed = .5f;
+		
 		int x;
 		if(level == 0){
 			for(int i = 0; i < NUM_ANIMALS; i++){
@@ -55,34 +57,32 @@ public class World {
 			
 		}
 		
-		player = new Player();
-		//touch variable
-		cameraTarget = new Vector3(camera.position);
-		
+		player = new Player(cameraSpeed);
+	
 		worldRender = new WorldRenderer();
 	}
 
 	public void render(SpriteBatch batch) {
-		//move the camera if necessary
-		moveCameraToTouch(cameraTarget);
+		//move the camera
+		moveCameraUp(cameraSpeed);
 		
 		//move animals if necessary
 		for (Drawable drawable : drawables) {
 			if (drawable.isMovable())
-				((Movable) drawable).move();
+				((Movable) drawable).move(cameraSpeed);
 		}
 		
 		//move player
-		player.move();
+		player.move(cameraSpeed);
 
 		//draw objects
 		worldRender.render(batch, drawables, player);
 	}
 	
 
-	//Finds the newest touch and interpolates the camera to its position
-	public void moveCameraToTouch(Vector3 lastTouch) {
-		camera.position.lerp(lastTouch.cpy(),Gdx.graphics.getDeltaTime());
+	//Moves the camera up at the desired speed
+	public void moveCameraUp(float speed) {
+		camera.position.y += speed;
 		camera.update();
 	}
 	
@@ -93,10 +93,6 @@ public class World {
 	
 	public Player getPlayer() {
 		return player;
-	}
-	
-	public void setCameraTarget(Vector3 cameraTarget) {
-		this.cameraTarget = cameraTarget;
 	}
 	
 	public void setPlayerTarget(Vector2 playerTarget) {

@@ -62,15 +62,10 @@ public class GameScreenInputHandler implements InputProcessor {
 		Vector3 touch = new Vector3(screenX,screenY,0);
 		//unproject touch to world coordinates
 		gameScreen.getWorld().getCamera().unproject(touch);
-		Vector2 moveTouch = new Vector2(touch.x, touch.y);
 
 		//Determine if drag is registered
 		if (lastTouch != null) {
-			if ( touch.cpy().sub(lastTouch.cpy()).len() < touchToDragTolerance ) {
-				gameScreen.getWorld().setCameraTarget(touch);
-				gameScreen.getWorld().setPlayerTarget(moveTouch.sub(0,Gdx.graphics.getHeight()/4));
-			}
-			else {
+			if ( touch.cpy().sub(lastTouch.cpy()).len() > touchToDragTolerance ) {
 				//Drag gesture is detected, draw a barrier between touch and last touch
 				Gdx.app.log("InputHandler", "Drag captured");
 				SoundHandler.playWhistle();
@@ -95,7 +90,6 @@ public class GameScreenInputHandler implements InputProcessor {
 
 		for (Movable movable : movables) {
 			//find perpendicular projection of position onto unit vector
-			//perpProjection = movable.getPosition().cpy().sub(dragUnitVector.cpy().scl(movable.getPosition().cpy().dot(dragUnitVector.cpy())));
 			perpProjection = (movable.getPosition().cpy().sub(dragCenter)).cpy().sub(dragUnitVector.cpy().scl((movable.getPosition().cpy().sub(dragCenter)).cpy().dot(dragUnitVector.cpy())));
 			//Amount to move over the currentTarget of the animal
 			if (perpProjection.cpy().len() != 0) {

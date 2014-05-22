@@ -10,17 +10,22 @@ public class Player extends Movable {
 	
 	private static final String texturePath = "objectTextures/player.png";
 
-	public Player() {
+	public Player(float speed) {
 		super(texturePath);
-		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/4);
+		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/8);
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
 		
-		speed = .5f;
+		this.speed = speed;
 	}
 	
 	public void draw(SpriteBatch batch) {
 		batch.draw(texture, position.x, position.y, 70, 143);
+	}
+	
+	@Override
+	public void move(float cameraSpeed) {
+		position.y += speed;
 	}
 
 }

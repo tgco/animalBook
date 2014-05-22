@@ -186,7 +186,6 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 				gameScreen.resetInputProcessors();
 				//Grab the world
 				World world = gameScreen.getWorld();
-				world.setPlayerTarget(world.getPlayer().getPosition());
 				gameInstance.setScreen(gameScreen);
 			}
 		});

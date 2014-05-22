@@ -107,7 +107,6 @@ public class World {
 		
 		player.setSpeed(.2f*(player.getHealth()/100));
 		cameraSpeed = .2f*(player.getHealth()/100);
-		Gdx.app.log("Speed:", "camera speed: " + cameraSpeed + "; player speed: " + player.getSpeed() + "; player health: " + player.getHealth());
 
 		//check for collisions between the market and the player/geese
 		for (Drawable drawable : drawables) {

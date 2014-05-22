@@ -63,7 +63,6 @@ public class World {
 				}
 				else {
 					x = (i - (int)Math.floor(.5*NUM_ANIMALS));
-					Gdx.app.log("aasdf", "x is " + x);
 					drawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
 				}
 			}
@@ -93,6 +92,8 @@ public class World {
 	public void updateGameLogic() {
 		//move the camera
 		moveCameraUp(cameraSpeed);
+		
+		player.decreaseHealth(.01f);
 
 		//move animals if necessary
 		for (Drawable drawable : drawables) {
@@ -115,7 +116,6 @@ public class World {
 		if (player.getPosition().cpy().sub(market.getPosition()).len() < COLLISION_TOLERANCE) {
 			gameInstance.setScreen(new MarketScreen(gameInstance,gameInstance.getGameScreen()));
 		}
-
 	}
 
 

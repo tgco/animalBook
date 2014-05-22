@@ -33,7 +33,9 @@ public class World {
 	//Lane length for this level
 	private float laneLength;
 	//Distance where two object classify as colliding
-	private static final float COLLISION_TOLERANCE = 100;
+	private static final float COLLISION_TOLERANCE = 75;
+	//Distance an animal is from player before it is lost (length of the diagonal of screen)
+	private static final float LOST_ANIMAL_TOLERANCE = (new Vector2(Gdx.graphics.getWidth(),Gdx.graphics.getHeight())).len();
 
 	//The player character
 	private Player player;
@@ -71,9 +73,9 @@ public class World {
 		player = new Player(cameraSpeed);
 
 		//Make the market and set it at the end
-		laneLength = 1000;
+		laneLength = 500;
 		market = new Market();
-		market.setPosition(new Vector2(player.getPosition().x, player.getPosition().y + laneLength));
+		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength));
 
 		drawables.add(market);
 
@@ -101,16 +103,16 @@ public class World {
 		//move player
 		player.move(cameraSpeed);
 
-
+		//Health effects
 		player.decreaseHealth(.01f);
-		
 		player.setSpeed(.2f*(player.getHealth()/100));
 		cameraSpeed = .2f*(player.getHealth()/100);
 
 		//check for collisions between the market and the player/geese
 		for (Drawable drawable : drawables) {
-			if (drawable.getPosition().cpy().sub(market.getPosition()).len() < COLLISION_TOLERANCE) {
-				if (!drawable.isMarket()) {
+			if (!drawable.isMarket()) {
+				if (market.getPosition().cpy().sub(drawable.getPosition()).len() < COLLISION_TOLERANCE) {
+					Gdx.app.log("", "object removed");
 					drawables.removeValue(drawable, false);
 				}
 			}
@@ -135,10 +137,6 @@ public class World {
 
 	public Player getPlayer() {
 		return player;
-	}
-
-	public void setPlayerTarget(Vector2 playerTarget) {
-		player.setCurrentTarget(playerTarget);
 	}
 
 	public void dispose() {

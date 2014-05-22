@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
-import com.tgco.animalBook.gameObjects.Drawable;
+import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
@@ -27,7 +27,7 @@ public class World {
 	private WorldRenderer worldRender;
 
 	//All game objects to be drawn
-	private Array<Drawable> drawables;
+	private Array<ABDrawable> aBDrawables;
 	private Market market;
 
 	//Lane length for this level
@@ -46,7 +46,7 @@ public class World {
 	public World(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;
 
-		drawables = new Array<Drawable>();
+		aBDrawables = new Array<ABDrawable>();
 
 		//Camera initialization
 		camera = new OrthographicCamera();
@@ -60,11 +60,11 @@ public class World {
 			for(int i = 0; i < NUM_ANIMALS; i++){
 				if(i < .5*NUM_ANIMALS){
 					x = -i;
-					drawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40 -50, (float) (Gdx.graphics.getHeight()/2 -x*x*25 + 10*x -50))));
+					aBDrawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40 -50, (float) (Gdx.graphics.getHeight()/2 -x*x*25 + 10*x -50))));
 				}
 				else {
 					x = (i - (int)Math.floor(.5*NUM_ANIMALS));
-					drawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
+					aBDrawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
 				}
 			}
 
@@ -77,7 +77,7 @@ public class World {
 		market = new Market();
 		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength));
 
-		drawables.add(market);
+		aBDrawables.add(market);
 
 		worldRender = new WorldRenderer();
 	}
@@ -87,7 +87,7 @@ public class World {
 			updateGameLogic();
 
 		//draw objects
-		worldRender.render(batch, drawables, player, 1f - (market.getPosition().y - COLLISION_TOLERANCE - player.getPosition().y)/(laneLength - COLLISION_TOLERANCE));
+		worldRender.render(batch, aBDrawables, player, 1f - (market.getPosition().y - COLLISION_TOLERANCE - player.getPosition().y)/(laneLength - COLLISION_TOLERANCE));
 	}
 
 	public void updateGameLogic() {
@@ -95,9 +95,9 @@ public class World {
 		moveCameraUp(cameraSpeed);
 
 		//move animals if necessary
-		for (Drawable drawable : drawables) {
-			if (drawable.isMovable())
-				((Movable) drawable).move(cameraSpeed);
+		for (ABDrawable aBDrawable : aBDrawables) {
+			if (aBDrawable.isMovable())
+				((Movable) aBDrawable).move(cameraSpeed);
 		}
 
 		//move player
@@ -109,11 +109,11 @@ public class World {
 		cameraSpeed = .2f*(player.getHealth()/100);
 
 		//check for collisions between the market and the player/geese
-		for (Drawable drawable : drawables) {
-			if (!drawable.isMarket()) {
-				if (market.getPosition().cpy().sub(drawable.getPosition()).len() < COLLISION_TOLERANCE) {
-					Gdx.app.log("", "object removed");
-					drawables.removeValue(drawable, false);
+
+		for (ABDrawable aBDrawable : aBDrawables) {
+			if (aBDrawable.getPosition().cpy().sub(market.getPosition()).len() < COLLISION_TOLERANCE) {
+				if (!aBDrawable.isMarket()) {
+					aBDrawables.removeValue(aBDrawable, false);
 				}
 			}
 		}
@@ -140,16 +140,16 @@ public class World {
 	}
 
 	public void dispose() {
-		for (Drawable drawable : drawables) {
-			drawable.dispose();
+		for (ABDrawable aBDrawable : aBDrawables) {
+			aBDrawable.dispose();
 		}
 	}
 
 	public Array<Movable> getMovables() {
 		Array<Movable> movables = new Array<Movable>();
-		for (Drawable drawable : drawables) {
-			if (drawable.isMovable())
-				movables.add((Movable) drawable);
+		for (ABDrawable aBDrawable : aBDrawables) {
+			if (aBDrawable.isMovable())
+				movables.add((Movable) aBDrawable);
 		}
 		return movables;
 	}

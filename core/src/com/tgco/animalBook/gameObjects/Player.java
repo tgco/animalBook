@@ -10,6 +10,8 @@ public class Player extends Movable {
 	
 	private static final String texturePath = "objectTextures/player.png";
 	private static final Inventory inventory = new Inventory();
+	private float playerMoney =0;
+	
 	private float playerHealth = 100;
 
 	public Player(float speed) {
@@ -26,7 +28,11 @@ public class Player extends Movable {
 	}
 	
 	public void eat(float value) {
-		playerHealth += value;
+		if ((playerHealth + value) > 100) {
+			playerHealth = 100;
+		} else {
+			playerHealth += value;
+		}
 	}
 	
 	public void decreaseHealth(float amount) {
@@ -48,6 +54,17 @@ public class Player extends Movable {
 
 	public void setSpeed(float newSpeed) {
 		speed = newSpeed;
+	}
+	
+	public float getPlayerMoney() {
+		return playerMoney;
+	}
+
+	public void setPlayerMoney(float playerMoney) {
+		this.playerMoney = playerMoney;
+	}
+	public Inventory getInventory(){
+		return inventory;
 	}
 
 }

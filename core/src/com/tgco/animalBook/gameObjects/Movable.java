@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 //Objects that will move on screen
-public abstract class Movable extends Drawable {
+public abstract class Movable extends ABDrawable {
 
 	protected float speed;
 	protected float cameraSpeed;

@@ -41,5 +41,9 @@ public abstract class ABDrawable {
 	public void dispose() {
 		texture.dispose();
 	}
+	
+	public Texture getTexture(){
+		return texture;
+	}
 
 }

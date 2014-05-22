@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.tgco.animalBook.gameObjects.Drawable;
 import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Movable;
@@ -26,6 +27,10 @@ public class World {
 	
 	//The player character
 	private Player player;
+	
+	//Timer to track health ticks
+	private long lastHealthTick;
+	private long timeSinceLastTick;
 	
 	private static int level = 0;
 	private static final int NUM_ANIMALS = 5;
@@ -63,6 +68,8 @@ public class World {
 	}
 
 	public void render(SpriteBatch batch) {
+		player.decreaseHealth(.01f);
+		
 		//move the camera
 		moveCameraUp(cameraSpeed);
 		
@@ -76,7 +83,8 @@ public class World {
 		player.move(cameraSpeed);
 
 		//draw objects
-		worldRender.render(batch, drawables, player);
+		worldRender.render(batch, drawables, player, player.getHealth());
+		
 	}
 	
 

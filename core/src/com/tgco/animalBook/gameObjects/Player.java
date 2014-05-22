@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Player extends Movable {
 	
 	private static final String texturePath = "objectTextures/player.png";
+	private float playerHealth = 100;
 
 	public Player(float speed) {
 		super(texturePath);
@@ -21,6 +22,18 @@ public class Player extends Movable {
 	
 	public void draw(SpriteBatch batch) {
 		batch.draw(texture, position.x, position.y, 70, 143);
+	}
+	
+	public void eat(float value) {
+		playerHealth += value;
+	}
+	
+	public void decreaseHealth(float amount) {
+		playerHealth -= amount;
+	}
+	
+	public float getHealth() {
+		return playerHealth;
 	}
 	
 	@Override

@@ -9,4 +9,9 @@ public class Cheese extends Consumable {
 		super(texturePath, position);
 	}
 
+	@Override
+	public DropType getType() {
+		return DropType.CHEESE;
+	}
+
 }

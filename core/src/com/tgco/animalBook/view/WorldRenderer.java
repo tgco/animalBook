@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.tgco.animalBook.gameObjects.Drawable;
+import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Player;
 
 
@@ -23,12 +23,12 @@ public class WorldRenderer {
 		shapeRender = new ShapeRenderer();
 	}
 	
-	public void render(SpriteBatch batch, Array<Drawable> drawables, Player player, float progressPercentage) {
+	public void render(SpriteBatch batch, Array<ABDrawable> aBDrawables, Player player, float progressPercentage) {
 		//Draw all objects
 		player.draw(batch);
 		
-		for (Drawable drawable : drawables) {
-			drawable.draw(batch);
+		for (ABDrawable aBDrawable : aBDrawables) {
+			aBDrawable.draw(batch);
 		}
 		
 		shapeRender.begin(ShapeType.Filled);

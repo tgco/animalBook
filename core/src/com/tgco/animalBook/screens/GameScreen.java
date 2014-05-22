@@ -195,7 +195,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseBackgroundMusic();
-				gameInstance.setScreen(new UpgradesScreen(gameInstance,GameScreen.this));
+				gameInstance.setScreen(new UpgradesScreen(gameInstance,GameScreen.this, gameWorld));
 			}
 		});
 

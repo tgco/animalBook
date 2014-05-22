@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
@@ -32,14 +33,16 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	private Button fruitfullButton;
 	private Button LongerButton;
 	private Button MoreButton;
-
-	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
+	private World world;
+	
+	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen, World world) {
 		super(gameInstance);
 
 		this.gameScreen = gameScreen;
 		font = new BitmapFont();
 		//Background rendering
 		batch = new SpriteBatch();
+		this.world = world;
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
 
 
@@ -67,12 +70,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		shapeRender.rect(Gdx.graphics.getWidth()/2 - 100+25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE+25, 0, 0);
 		shapeRender.end();
 		
-		batch.begin();
-		font.setColor(Color.BLACK);
-		font.draw(batch, "$" + String.valueOf((int) 500), Gdx.graphics.getWidth()/2 - 100 - BUTTON_WIDTH +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
-		font.draw(batch, "$" + String.valueOf((int) 1000), Gdx.graphics.getWidth()/2 +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
-		font.draw(batch, "$" + String.valueOf((int) 1500), Gdx.graphics.getWidth()/2 + 100 + BUTTON_WIDTH +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
-		batch.end();
+		drawAmounts();
 	}
 
 	@Override
@@ -84,6 +82,14 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
+	public void drawAmounts(){
+		batch.begin();
+		font.setColor(Color.BLACK);
+		font.draw(batch, "$" + String.valueOf((int) 500), Gdx.graphics.getWidth()/2 - 100 - BUTTON_WIDTH +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
+		font.draw(batch, "$" + String.valueOf((int) 1000), Gdx.graphics.getWidth()/2 +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
+		font.draw(batch, "$" + String.valueOf((int) 1500), Gdx.graphics.getWidth()/2 + 100 + BUTTON_WIDTH +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
+		batch.end();
+	}
 	@Override
 	protected void initializeButtons() {
 
@@ -101,7 +107,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		leaveButton.setHeight(BUTTON_HEIGHT);
 		leaveButton.setX(EDGE_TOLERANCE);
 		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
-
+		
 		//fruitfull BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/fruitfullButton.atlas"));
 		buttonSkin = new Skin();
@@ -110,6 +116,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		ButtonStyle fruitfullButtonStyle = new ButtonStyle();
 		fruitfullButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		fruitfullButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		//fruitfullButtonStyle.disabled = new Drawable();
 
 		fruitfullButton = new Button(fruitfullButtonStyle);
 		fruitfullButton.setWidth(BUTTON_WIDTH);
@@ -167,6 +174,10 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		});
 
 
+		if(world.getPlayer().getPlayerMoney() < 500){
+			fruitfullButton.setDisabled(true);
+			
+		}
 		buttonStage.addActor(leaveButton);
 		buttonStage.addActor(fruitfullButton);
 		buttonStage.addActor(LongerButton);

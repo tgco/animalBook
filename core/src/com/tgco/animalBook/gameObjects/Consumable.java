@@ -3,7 +3,7 @@ package com.tgco.animalBook.gameObjects;
 import com.badlogic.gdx.math.Vector2;
 
 //Dropped by animals for collection by the player
-public abstract class Consumable extends Drawable {
+public abstract class Consumable extends ABDrawable {
 	public Consumable(String texturePath, Vector2 position){
 		super(texturePath);
 		this.position = position;

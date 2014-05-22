@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Player extends Movable {
 	
 	private static final String texturePath = "objectTextures/player.png";
+	private static final Inventory inventory = new Inventory();
 	private float playerHealth = 100;
 
 	public Player(float speed) {
@@ -25,7 +26,11 @@ public class Player extends Movable {
 	}
 	
 	public void eat(float value) {
-		playerHealth += value;
+		if ((playerHealth + value) > 100) {
+			playerHealth = 100;
+		} else {
+			playerHealth += value;
+		}
 	}
 	
 	public void decreaseHealth(float amount) {
@@ -39,6 +44,14 @@ public class Player extends Movable {
 	@Override
 	public void move(float cameraSpeed) {
 		position.y += speed;
+	}
+
+	public float getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(float newSpeed) {
+		speed = newSpeed;
 	}
 
 }

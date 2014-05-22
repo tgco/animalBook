@@ -24,23 +24,24 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	//World of objects
 	private World gameWorld;
-	
+
 	//buttons
 	private Button inventoryButton;
 	private Button upgradeButton;
 	private Button pauseButton;
-
+	private Button eatButton;
+	
+	
 	boolean paused;
-
 
 	public GameScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
-		
+
 		paused = false;
 
 		//Initialize game world
-		gameWorld = new World();
-		
+		gameWorld = new World(gameInstance);
+
 		//Initialize rendering objects
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
@@ -61,15 +62,15 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		//Process button presses
 		buttonStage.act(delta);
-		
+
 		//render background and world
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
-		
+
 		//Find the node on screen to draw grass around
 		Vector2 tileNode = findTileNodeOnScreen();
-		
+
 		batch.begin();
-		
+
 		//Draw four grass textures around the node on screen
 		batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -82,28 +83,28 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//Draw buttons over the screen
 		buttonStage.draw();
 	}
-	
+
 	//Finds which "node" is visible on screen and draws four grass tiles around it
 	public Vector2 findTileNodeOnScreen() {
-		
+
 		//If camera is in the negative quadrant
 		boolean flipX = false;
 		boolean flipY = false;
-		
+
 		if (gameWorld.getCamera().position.x < 0)
 			flipX = true;
 		if (gameWorld.getCamera().position.y < 0)
 			flipY = true;
-		
+
 		int xCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.x / Gdx.graphics.getWidth()) + .5);
 		int yCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.y / Gdx.graphics.getHeight()) + .5);
-		
+
 		//Provides correct float truncation for tiling in the negative x/y direction
 		if (flipX)
 			xCoordinate *= -1;
 		if (flipY)
 			yCoordinate *= -1;
-		
+
 		return new Vector2(xCoordinate,yCoordinate);
 	}
 
@@ -149,14 +150,35 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryButton.setX(EDGE_TOLERANCE);
 		inventoryButton.setY(Gdx.graphics.getHeight() - 2*BUTTON_HEIGHT - EDGE_TOLERANCE);
 		
+		//EAT BUTTON
+		//TEMP FOR TESTING
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/eatButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+		
+		ButtonStyle eatButtonStyle = new ButtonStyle();
+		eatButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		eatButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		eatButton = new Button(eatButtonStyle);
+		eatButton.setWidth(BUTTON_WIDTH);
+		eatButton.setHeight(BUTTON_HEIGHT);
+		eatButton.setX(EDGE_TOLERANCE);
+		eatButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
+
 		//PAUSE BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/pauseButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		
+
 		ButtonStyle pauseButtonStyle = new ButtonStyle();
-		pauseButtonStyle.up = buttonSkin.getDrawable("pauseButton");
-		pauseButtonStyle.checked = buttonSkin.getDrawable("playButton");
+		if (!paused) {
+			pauseButtonStyle.up = buttonSkin.getDrawable("pauseButton");
+			pauseButtonStyle.checked = buttonSkin.getDrawable("playButton");
+		} else {
+			pauseButtonStyle.up = buttonSkin.getDrawable("playButton");
+			pauseButtonStyle.checked = buttonSkin.getDrawable("pauseButton");
+		}
 
 		pauseButton = new Button(pauseButtonStyle);
 		pauseButton.setWidth(BUTTON_WIDTH);
@@ -189,6 +211,17 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 		
+		eatButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				gameWorld.getPlayer().eat(10f);
+			}
+		});
+
 		pauseButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -204,6 +237,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.addActor(inventoryButton);
 		buttonStage.addActor(upgradeButton);
 		buttonStage.addActor(pauseButton);
+		buttonStage.addActor(eatButton);
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}
@@ -236,14 +270,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		super.dispose();
 		gameWorld.dispose();
 	}
-	
+
 	public World getWorld() {
 		return gameWorld;
 	}
-	
+
 	public void resetInputProcessors() {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
-	
+
 
 }

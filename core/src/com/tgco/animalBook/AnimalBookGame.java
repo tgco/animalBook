@@ -4,13 +4,14 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.tgco.animalBook.handlers.SoundHandler;
+import com.tgco.animalBook.screens.GameScreen;
 import com.tgco.animalBook.screens.MainMenuScreen;
 import com.tgco.animalBook.screens.SplashScreen;
 
 public class AnimalBookGame extends Game {
 
 	//Version string, debug variables
-	public static final String version = "0.0.5";
+	public static final String version = "0.1.0";
 	public static final Boolean debugMode = true;
 	private FPSLogger fpsLogger;
 
@@ -53,8 +54,8 @@ public class AnimalBookGame extends Game {
 		super.resume();
 	}
 
-	public Screen getGScreen(){
-		return getScreen();
+	public GameScreen getGameScreen(){
+		return (GameScreen) getScreen();
 	}
 	public void setMMScreen() {
 		

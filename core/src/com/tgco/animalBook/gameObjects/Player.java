@@ -56,17 +56,15 @@ public class Player extends Movable {
 		speed = newSpeed;
 	}
 	
-<<<<<<< HEAD
 	public float getPlayerMoney() {
 		return playerMoney;
 	}
 
 	public void setPlayerMoney(float playerMoney) {
 		this.playerMoney = playerMoney;
-=======
+	}
 	public Inventory getInventory(){
 		return inventory;
->>>>>>> 7c10898b272ffc9944b293b1ec0c6b30ab3e1dd0
 	}
 
 }

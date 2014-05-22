@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Drawable;
@@ -86,7 +85,7 @@ public class World {
 			updateGameLogic();
 
 		//draw objects
-		worldRender.render(batch, drawables, player);
+		worldRender.render(batch, drawables, player, 1f - (market.getPosition().y - COLLISION_TOLERANCE - player.getPosition().y)/(laneLength - COLLISION_TOLERANCE));
 	}
 
 	public void updateGameLogic() {

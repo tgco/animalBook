@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.tgco.animalBook.gameObjects.Drawable;
 import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Movable;
@@ -27,15 +26,7 @@ public class World {
 
 	//The player character
 	private Player player;
-<<<<<<< HEAD
-	
-	//Timer to track health ticks
-	private long lastHealthTick;
-	private long timeSinceLastTick;
-	
-=======
 
->>>>>>> 272074f1c8387b8fe186b8fadba8b46cb68fa5bd
 	private static int level = 0;
 	private static final int NUM_ANIMALS = 5;
 
@@ -71,11 +62,6 @@ public class World {
 		worldRender = new WorldRenderer();
 	}
 
-<<<<<<< HEAD
-	public void render(SpriteBatch batch) {
-		player.decreaseHealth(.01f);
-		
-=======
 	public void render(SpriteBatch batch, boolean paused) {
 		if (!paused)
 			updateGameLogic();
@@ -85,9 +71,10 @@ public class World {
 	}
 
 	public void updateGameLogic() {
->>>>>>> 272074f1c8387b8fe186b8fadba8b46cb68fa5bd
 		//move the camera
 		moveCameraUp(cameraSpeed);
+		
+		player.decreaseHealth(.01f);
 
 		//move animals if necessary
 		for (Drawable drawable : drawables) {
@@ -97,13 +84,7 @@ public class World {
 
 		//move player
 		player.move(cameraSpeed);
-<<<<<<< HEAD
 
-		//draw objects
-		worldRender.render(batch, drawables, player, player.getHealth());
-		
-=======
->>>>>>> 272074f1c8387b8fe186b8fadba8b46cb68fa5bd
 	}
 
 

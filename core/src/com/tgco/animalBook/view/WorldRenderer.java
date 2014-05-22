@@ -23,7 +23,7 @@ public class WorldRenderer {
 		shapeRender = new ShapeRenderer();
 	}
 	
-	public void render(SpriteBatch batch, Array<Drawable> drawables, Player player, float health) {
+	public void render(SpriteBatch batch, Array<Drawable> drawables, Player player) {
 		//Draw all objects
 		player.draw(batch);
 		
@@ -31,13 +31,13 @@ public class WorldRenderer {
 			drawable.draw(batch);
 		}
 		
-		font.draw(batch, String.valueOf((int) health), player.getPosition().x - 50, player.getPosition().y - 50);
+		font.draw(batch, String.valueOf((int) player.getHealth()), player.getPosition().x - 50, player.getPosition().y - 50);
 		
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.BLACK);
 		shapeRender.rect(Gdx.graphics.getWidth()/2 - 50, Gdx.graphics.getHeight() - 50, 100, 25);
 		shapeRender.setColor(Color.RED);
-		shapeRender.rect(Gdx.graphics.getWidth()/2 - 47, Gdx.graphics.getHeight() - 47, 94*(health/100), 19);
+		shapeRender.rect(Gdx.graphics.getWidth()/2 - 47, Gdx.graphics.getHeight() - 47, 94*(player.getHealth()/100), 19);
 		shapeRender.end();
 	}
 

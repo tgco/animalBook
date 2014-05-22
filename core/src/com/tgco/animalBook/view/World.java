@@ -50,7 +50,6 @@ public class World {
 				}
 				else {
 					x = (i - (int)Math.floor(.5*NUM_ANIMALS));
-					Gdx.app.log("aasdf", "x is " + x);
 					drawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
 				}
 			}

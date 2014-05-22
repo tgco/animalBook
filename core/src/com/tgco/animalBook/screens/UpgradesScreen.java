@@ -24,6 +24,8 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 
 	//buttons
 	private Button leaveButton;
+	private Button fruitfullButton;
+	private Button LongerButton;
 
 	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
@@ -67,7 +69,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	protected void initializeButtons() {
 
-		//MARKET BUTTON
+		//Leave BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/leaveButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
@@ -82,6 +84,36 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		leaveButton.setX(EDGE_TOLERANCE);
 		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
+		//fruitfull BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/fruitfullButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle fruitfullButtonStyle = new ButtonStyle();
+		leaveButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		leaveButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		fruitfullButton = new Button(fruitfullButtonStyle);
+		fruitfullButton.setWidth(BUTTON_WIDTH);
+		fruitfullButton.setHeight(BUTTON_HEIGHT);
+		fruitfullButton.setX(Gdx.graphics.getWidth()/2 - 100);
+		fruitfullButton.setY(Gdx.graphics.getHeight()/2 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		
+
+		//longer BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/LongerButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle LongerButtonStyle = new ButtonStyle();
+		leaveButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		leaveButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		LongerButton = new Button(fruitfullButtonStyle);
+		LongerButton.setWidth(BUTTON_WIDTH);
+		LongerButton.setHeight(BUTTON_HEIGHT);
+		LongerButton.setX(Gdx.graphics.getWidth()/2 + 100);
+		LongerButton.setY(Gdx.graphics.getHeight()/2 - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//LISTENERS
 		leaveButton.addListener(new InputListener() {

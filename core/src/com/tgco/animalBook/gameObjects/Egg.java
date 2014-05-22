@@ -6,15 +6,10 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Egg extends Consumable {
 	private static final Random rand = new Random();
+	private static final String texturePath = "gameTexture/egg.png";
 
-	public Egg(String texturePath) {
-		super(texturePath);
-		// TODO Auto-generated constructor stub
-	}
-
-	public Egg(String texturePath, Vector2 position) {
+	public Egg(Vector2 position) {
 		super(texturePath, position);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Boolean attemptHatching(){	
@@ -22,5 +17,4 @@ public class Egg extends Consumable {
 			return true;
 		return false;
 	}
-
 }

@@ -2,6 +2,7 @@ package com.tgco.animalBook.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -34,14 +35,18 @@ public class World {
 	private float laneLength;
 	//Distance where two object classify as colliding
 	private static final float COLLISION_TOLERANCE = 75;
-	//Distance an animal is from player before it is lost (length of the diagonal of screen)
-	private static final float LOST_ANIMAL_TOLERANCE = (new Vector2(Gdx.graphics.getWidth(),Gdx.graphics.getHeight())).len();
+	//Distance an animal is from player before it is lost (length of width of screen)
+	private static final float LOST_ANIMAL_TOLERANCE = Gdx.graphics.getWidth();
 
 	//The player character
 	private Player player;
 
 	private static int level = 0;
 	private static final int NUM_ANIMALS = 5;
+	
+	//Displays the amount of animals left
+	private BitmapFont font;
+	
 
 	public World(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;
@@ -73,18 +78,23 @@ public class World {
 		player = new Player(cameraSpeed);
 
 		//Make the market and set it at the end
-		laneLength = 500;
+		laneLength = 1000;
 		market = new Market();
 		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength));
 
 		aBDrawables.add(market);
 
 		worldRender = new WorldRenderer();
+		
+		font = new BitmapFont();
 	}
 
 	public void render(SpriteBatch batch, boolean paused) {
 		if (!paused)
 			updateGameLogic();
+		
+		//Show number of animals left
+		font.draw(batch, String.valueOf(aBDrawables.size - 1), player.getPosition().x - 500, player.getPosition().y + 50);
 
 		//draw objects
 		worldRender.render(batch, aBDrawables, player, 1f - (market.getPosition().y - COLLISION_TOLERANCE - player.getPosition().y)/(laneLength - COLLISION_TOLERANCE));
@@ -108,8 +118,16 @@ public class World {
 		player.setSpeed(.2f*(player.getHealth()/100));
 		cameraSpeed = .2f*(player.getHealth()/100);
 
-		//check for collisions between the market and the player/geese
+		//check for and remove lost animals
+		for (ABDrawable drawable : aBDrawables) {
+			if (!drawable.isMarket()) {
+				if (drawable.getPosition().cpy().sub(player.getPosition()).len() > LOST_ANIMAL_TOLERANCE) {
+					aBDrawables.removeValue(drawable, false);
+				}
+			}
+		}
 
+		//check for collisions between the market and the player/geese
 		for (ABDrawable aBDrawable : aBDrawables) {
 			if (aBDrawable.getPosition().cpy().sub(market.getPosition()).len() < COLLISION_TOLERANCE) {
 				if (!aBDrawable.isMarket()) {

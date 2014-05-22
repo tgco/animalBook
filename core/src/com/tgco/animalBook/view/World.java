@@ -6,13 +6,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Drawable;
 import com.tgco.animalBook.gameObjects.Goose;
+import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Player;
+import com.tgco.animalBook.screens.MarketScreen;
 
 //Generates game objects and handles game logic between them
 public class World {
+
+	//reference to the game instance
+	private AnimalBookGame gameInstance;
 
 	//Camera to view the world
 	private OrthographicCamera camera;
@@ -23,6 +29,12 @@ public class World {
 
 	//All game objects to be drawn
 	private Array<Drawable> drawables;
+	private Market market;
+
+	//Lane length for this level
+	private float laneLength;
+	//Distance where two object classify as colliding
+	private static final float COLLISION_TOLERANCE = 100;
 
 	//The player character
 	private Player player;
@@ -30,7 +42,8 @@ public class World {
 	private static int level = 0;
 	private static final int NUM_ANIMALS = 5;
 
-	public World() {
+	public World(AnimalBookGame gameInstance) {
+		this.gameInstance = gameInstance;
 
 		drawables = new Array<Drawable>();
 
@@ -59,6 +72,13 @@ public class World {
 
 		player = new Player(cameraSpeed);
 
+		//Make the market and set it at the end
+		laneLength = 1000;
+		market = new Market();
+		market.setPosition(new Vector2(player.getPosition().x, player.getPosition().y + laneLength));
+
+		drawables.add(market);
+
 		worldRender = new WorldRenderer();
 	}
 
@@ -82,6 +102,20 @@ public class World {
 
 		//move player
 		player.move(cameraSpeed);
+
+		//check for collisions between the market and the player/geese
+		for (Drawable drawable : drawables) {
+			if (drawable.getPosition().cpy().sub(market.getPosition()).len() < COLLISION_TOLERANCE) {
+				if (!drawable.isMarket()) {
+					drawables.removeValue(drawable, false);
+				}
+			}
+		}
+
+		if (player.getPosition().cpy().sub(market.getPosition()).len() < COLLISION_TOLERANCE) {
+			gameInstance.setScreen(new MarketScreen(gameInstance,gameInstance.getGameScreen()));
+		}
+
 	}
 
 

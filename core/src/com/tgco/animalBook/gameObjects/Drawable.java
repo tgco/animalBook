@@ -25,8 +25,16 @@ public abstract class Drawable {
 		return position;
 	}
 	
+	public void setPosition(Vector2 position) {
+		this.position = position;
+	}
+	
 	//determines if this object can be moved
 	public boolean isMovable() {
+		return false;
+	}
+	
+	public boolean isMarket() {
 		return false;
 	}
 	

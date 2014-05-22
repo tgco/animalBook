@@ -53,5 +53,9 @@ public class Player extends Movable {
 	public void setSpeed(float newSpeed) {
 		speed = newSpeed;
 	}
+	
+	public Inventory getInventory(){
+		return inventory;
+	}
 
 }

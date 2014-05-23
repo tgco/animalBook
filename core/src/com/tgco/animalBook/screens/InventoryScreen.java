@@ -16,8 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
-import com.tgco.animalBook.gameObjects.Inventory;
-import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
@@ -30,7 +28,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	private Button leaveButton;
 
 	//inventory nums
-	private static final BitmapFont[] fonts = new BitmapFont[5];
+	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
 
 	public InventoryScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
@@ -57,7 +55,8 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
 		buttonStage.act(delta);
 		buttonStage.draw();
-		for (int i = 0; i < Consumable.DropType.values().length; i ++){
+		int numConsumables = Consumable.DropType.values().length;
+		for (int i = 0; i < numConsumables; i ++){
 			updateInventoryScreenItems(i);
 		}
 	}
@@ -70,60 +69,66 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		//reinit buttons
 		initializeInventoryInterface();
 		initializeButtons();
-		
+
 	}
 	private void initializeInventoryInterface() {
-		for (int i = 0; i < 5; i++){
-			//Bad coding here
+		for (int i = 0; i < Consumable.DropType.values().length; i++){
+			//initialize variables needed for listeners
 			final int foodValue = Consumable.DropType.values()[i].getHungerValue();
 			final int foodIndex = i;
+
+			//associated BitmapFont object for consumable[i]
 			fonts[i] = new BitmapFont();
-			
+
+			//create atlas and add it to a new skin
 			atlas = new TextureAtlas(Gdx.files.internal(Consumable.DropType.values()[i].getAtlasPath()));
 			buttonSkin = new Skin();
 			buttonSkin.addRegions(atlas);
-			
+
+			//create a Buttonstyle
 			ButtonStyle inventoryButtonStyle = new ButtonStyle();
 			inventoryButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 			inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-			
+
+			//create a new button using aforementioned button style and set stuff up
 			Button inventoryButton = new Button(inventoryButtonStyle);
 			inventoryButton.setWidth(BUTTON_WIDTH/2);
 			inventoryButton.setHeight(BUTTON_HEIGHT/2);
-			inventoryButton.setX(2*i*BUTTON_WIDTH/2 + BUTTON_WIDTH/2);
+			inventoryButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/4 - (Consumable.DropType.values().length/2)*BUTTON_WIDTH + 2*i*BUTTON_WIDTH/2);
 			inventoryButton.setY(Gdx.graphics.getHeight()/2);
 
+			//then add a listener to the button
 			inventoryButton.addListener(new InputListener(){
+
+				//for use in the new listener
 				private int hungerValue = foodValue;
 				private int consumableIndex = foodIndex;
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 					return true;
 				}
-
 				public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-					
-					System.out.println("Attempting to consume: " + Consumable.DropType.values()[consumableIndex]);
-					System.out.println("Player has: " + gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size);
-					System.out.println("Attempting to regain: " + hungerValue + " hunger.");
+
+					//player eats when button of representing object gets eaten
 					if(gameScreen.getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[consumableIndex])){
 						gameScreen.getWorld().getPlayer().eat(hungerValue);
-						System.out.println("Player consumed: " + Consumable.DropType.values()[consumableIndex]);
-						System.out.println("Player now has: " + gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size);
 					}
 				}
 			});
+			//add actor inventoryButton actor to the buttonStage
 			buttonStage.addActor(inventoryButton);
+			
+			//update the text for the corresponding item in the inventory
 			updateInventoryScreenItems(i);
 		}
 	}
 
 	protected void updateInventoryScreenItems(int consumableIndex) {
-		
+		//get the number of items in the player's inventory for the given index
 		batch.begin();
 		fonts[consumableIndex].setColor(55,55,55,1f);
 		fonts[consumableIndex].draw(batch,
 				String.valueOf(gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size),
-				2*consumableIndex*BUTTON_WIDTH/2 + BUTTON_WIDTH/2,
+				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/4 - (Consumable.DropType.values().length/2)*BUTTON_WIDTH + 2*consumableIndex*BUTTON_WIDTH/2,
 				Gdx.graphics.getHeight()/2);
 		batch.end();
 	}

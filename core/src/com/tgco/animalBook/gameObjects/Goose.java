@@ -3,6 +3,7 @@ package com.tgco.animalBook.gameObjects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
@@ -16,6 +17,9 @@ public class Goose extends Animal {
 		super(texturePath, pos);
 		
 		speed = 1/14f;
+		width = 100;
+		height = 100;
+		bounds = new Rectangle(position.x,position.y,width,height);
 	}
 	
 

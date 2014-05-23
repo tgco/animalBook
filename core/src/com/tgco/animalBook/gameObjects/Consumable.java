@@ -27,13 +27,13 @@ public class Consumable extends ABDrawable {
 		
 		private final String texturePath;
 		private final String atlasPath;
-		private final int value;
-		private final int foodValue;
+		private final int marketValue;
+		private final int hungerValue;
 		private DropType(String tp, String ap, int v, int vf){
 			texturePath = tp;
 			atlasPath = ap;
-			value = v;
-			foodValue = vf;
+			marketValue = v;
+			hungerValue = vf;
 		}
 		
 		public final String getTexturePath(){
@@ -42,11 +42,11 @@ public class Consumable extends ABDrawable {
 		public final String getAtlasPath(){
 			return atlasPath;
 		}
-		public final int getValue(){
-			return value;
+		public int getMarketValue(){
+			return marketValue;
 		}
-		public final int getFoodValue(){
-			return foodValue;
+		public int getHungerValue(){
+			return hungerValue;
 		}
 	}
 }

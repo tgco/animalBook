@@ -1,5 +1,7 @@
 package com.tgco.animalBook.gameObjects;
 
+import com.badlogic.gdx.math.Rectangle;
+
 //Instance of the market drawn at the end of the lane for each level
 public class Market extends ABDrawable {
 	
@@ -7,6 +9,10 @@ public class Market extends ABDrawable {
 
 	public Market() {
 		super(texturePath);
+		
+		width = 200;
+		height = 200;
+		bounds = new Rectangle(position.x,position.y,width,height);
 	}
 	
 	@Override

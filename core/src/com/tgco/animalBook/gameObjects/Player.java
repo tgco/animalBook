@@ -62,11 +62,16 @@ public class Player extends Movable {
 		return playerMoney;
 	}
 
-	public void setPlayerMoney(float playerMoney) {
-		this.playerMoney = playerMoney;
+	public void addPlayerMoney(float playerMoney) {
+		this.playerMoney += playerMoney;
 	}
 	public Inventory getInventory(){
 		return inventory;
+	}
+
+	public void subtractPlayerMoney(float playerMoney) {
+		this.playerMoney -= playerMoney;
+		
 	}
 
 }

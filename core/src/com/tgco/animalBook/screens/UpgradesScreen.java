@@ -44,8 +44,8 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	private Button LongerButton;
 	private Button MoreButton;
 	private World world;
-	private static final double REGION_HEIGHT = BUTTON_HEIGHT*2.45f;
-	private static final double REGION_WIDTH = BUTTON_WIDTH*2.45f;
+	private static final double REGION_HEIGHT = UPGRADE_BUTTON_HEIGHT*2.45f;
+	private static final double REGION_WIDTH = UPGRADE_BUTTON_WIDTH*2.45f;
 	private static final float STRING_WIDTH_FR = Gdx.graphics.getWidth()/2 - 100 - UPGRADE_BUTTON_WIDTH +50;
 	private static final float STRING_WIDTH_LD = Gdx.graphics.getWidth()/2 +50;
 	private static final float STRING_WIDTH_MD =  Gdx.graphics.getWidth()/2 + 100 + UPGRADE_BUTTON_WIDTH +50;

@@ -2,6 +2,7 @@ package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
@@ -13,6 +14,10 @@ public class Sheep extends Animal {
 
 	public Sheep(Vector2 pos) {
 		super(texturePath, pos);
+		
+		width = 100;
+		height = 100;
+		bounds = new Rectangle(position.x,position.y,width,height);
 	}
 
 	

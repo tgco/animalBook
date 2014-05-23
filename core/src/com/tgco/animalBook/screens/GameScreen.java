@@ -3,11 +3,14 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -32,6 +35,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Button eatButton;
 	private UpgradesScreen upgradeScreen;
 	
+	private BitmapFont font;
+	
 	
 	boolean paused;
 
@@ -42,7 +47,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		//Initialize game world
 		gameWorld = new World(gameInstance);
-
+		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
 		//Initialize rendering objects
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
@@ -80,9 +85,18 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		//Draw world over background
+		font.setColor(Color.BLACK);
+		font.setScale(1.2f);
+		Vector3 vect = new Vector3(Gdx.graphics.getWidth()/2 +10,0 +3*EDGE_TOLERANCE,0);
+		gameWorld.getCamera().unproject(vect);
+		font.draw(batch, "Your Money: $" + String.valueOf(gameWorld.getPlayer().getPlayerMoney()), vect.x ,vect.y );
+
 		gameWorld.render(batch,paused);
+		
+		
 		batch.end();
 
+		
 		//Draw buttons over the screen
 		buttonStage.draw();
 	}

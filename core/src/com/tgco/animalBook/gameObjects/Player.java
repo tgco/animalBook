@@ -23,7 +23,7 @@ public class Player extends Movable {
 		
 		width = 70;
 		height = 143;
-		bounds = new Rectangle(position.x,position.y,width,height);
+		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 		
 		this.speed = speed;
 	}

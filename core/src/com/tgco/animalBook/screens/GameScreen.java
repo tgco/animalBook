@@ -278,6 +278,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public World getWorld() {
 		return gameWorld;
 	}
+	
+	public boolean isPaused() {
+		return paused;
+	}
 
 	public void resetInputProcessors() {
 		Gdx.input.setInputProcessor(inputMultiplexer);

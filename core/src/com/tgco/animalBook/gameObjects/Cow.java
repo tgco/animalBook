@@ -18,7 +18,7 @@ public class Cow extends Animal {
 		width = 300;
 		height = 300;
 		
-		bounds = new Rectangle(position.x,position.y,width,height);
+		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 
 

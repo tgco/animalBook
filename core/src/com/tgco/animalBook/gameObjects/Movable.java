@@ -34,8 +34,8 @@ public abstract class Movable extends ABDrawable {
 		previousTarget.lerp(currentTarget,30*speed*Gdx.graphics.getDeltaTime());
 		
 		//update bounds
-		bounds.setX(position.x);
-		bounds.setY(position.y);
+		bounds.setX(position.x - width/2);
+		bounds.setY(position.y - height/2);
 
 	}
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -28,9 +29,8 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	//buttons
 	private Button leaveButton;
 
-	private Player player; 
-	private Inventory inventory;
-	private int foodValue;
+	//inventory nums
+	private static final BitmapFont[] fonts = new BitmapFont[5];
 
 	public InventoryScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
@@ -43,9 +43,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		
-		player = gameScreen.getWorld().getPlayer();
-		inventory = player.getInventory();
 	}
 
 	@Override
@@ -60,6 +57,9 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
 		buttonStage.act(delta);
 		buttonStage.draw();
+		for (int i = 0; i < Consumable.DropType.values().length; i ++){
+			updateInventoryScreenItems(i);
+		}
 	}
 
 	@Override
@@ -74,7 +74,10 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	}
 	private void initializeInventoryInterface() {
 		for (int i = 0; i < 5; i++){
-			foodValue = Consumable.DropType.values()[i].getHungerValue();
+			//Bad coding here
+			final int foodValue = Consumable.DropType.values()[i].getHungerValue();
+			final int foodIndex = i;
+			
 			atlas = new TextureAtlas(Gdx.files.internal(Consumable.DropType.values()[i].getAtlasPath()));
 			buttonSkin = new Skin();
 			buttonSkin.addRegions(atlas);
@@ -88,20 +91,39 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButton.setHeight(BUTTON_HEIGHT/2);
 			inventoryButton.setX(2*i*BUTTON_WIDTH/2 + BUTTON_WIDTH/2);
 			inventoryButton.setY(Gdx.graphics.getHeight()/2);
-			
+
 			inventoryButton.addListener(new InputListener(){
 				private int hungerValue = foodValue;
+				private int consumableIndex = foodIndex;
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 					return true;
 				}
 
 				public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-					player.eat(hungerValue);
-					System.out.println(foodValue);
+					System.out.println("Attempting to consume: " + Consumable.DropType.values()[consumableIndex]);
+					System.out.println("Player has: " + gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size);
+					System.out.println("Attempting to regain: " + hungerValue + " hunger.");
+					if(gameScreen.getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[consumableIndex])){
+						gameScreen.getWorld().getPlayer().eat(hungerValue);
+						System.out.println("Player consumed: " + Consumable.DropType.values()[consumableIndex]);
+						System.out.println("Player now has: " + gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size);
+					}
 				}
 			});
 			buttonStage.addActor(inventoryButton);
+			updateInventoryScreenItems(i);
 		}
+	}
+
+	protected void updateInventoryScreenItems(int consumableIndex) {
+		fonts[consumableIndex] = new BitmapFont();
+		batch.begin();
+		fonts[consumableIndex].setColor(55,55,55,1f);
+		fonts[consumableIndex].draw(batch,
+				String.valueOf(gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size),
+				2*consumableIndex*BUTTON_WIDTH/2 + BUTTON_WIDTH/2,
+				Gdx.graphics.getHeight()/2);
+		batch.end();
 	}
 
 	@Override

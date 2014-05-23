@@ -47,9 +47,9 @@ public class WorldRenderer {
 		player.draw(batch);
 		
 		batch.end();
-
+		
 		shapeRender.begin(ShapeType.Filled);
-
+		
 		//Health bar
 		shapeRender.setColor(Color.BLACK);
 		shapeRender.rect(Gdx.graphics.getWidth()/2 - 50, Gdx.graphics.getHeight() - 50, 100, 25);

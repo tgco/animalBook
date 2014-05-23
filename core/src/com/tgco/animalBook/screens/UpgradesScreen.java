@@ -49,6 +49,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	private static final float STRING_WIDTH_FR = Gdx.graphics.getWidth()/2 - 100 - UPGRADE_BUTTON_WIDTH +50;
 	private static final float STRING_WIDTH_LD = Gdx.graphics.getWidth()/2 +50;
 	private static final float STRING_WIDTH_MD =  Gdx.graphics.getWidth()/2 + 100 + UPGRADE_BUTTON_WIDTH +50;
+
 	
 	
 	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {

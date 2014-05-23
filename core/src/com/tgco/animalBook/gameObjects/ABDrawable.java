@@ -18,11 +18,10 @@ public abstract class ABDrawable {
 	public ABDrawable(String texturePath) {
 		this.texture = new Texture(Gdx.files.internal(texturePath));
 		//default values
-		
 		position = new Vector2();
 		width = 100;
 		height = 100;
-		bounds = new Rectangle(position.x,position.y,width,height);
+		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 	
 	public void draw(SpriteBatch batch) {
@@ -35,8 +34,8 @@ public abstract class ABDrawable {
 	
 	public void setPosition(Vector2 position) {
 		this.position = position;
-		bounds.setX(position.x);
-		bounds.setY(position.y);
+		bounds.setX(position.x - width/2);
+		bounds.setY(position.y - height/2);
 	}
 	
 	//determines if this object can be moved

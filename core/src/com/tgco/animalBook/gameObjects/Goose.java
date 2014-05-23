@@ -19,7 +19,7 @@ public class Goose extends Animal {
 		speed = 1/14f;
 		width = 100;
 		height = 100;
-		bounds = new Rectangle(position.x,position.y,width,height);
+		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 	
 

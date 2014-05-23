@@ -3,17 +3,17 @@ pauseButton.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-playButton
-  rotate: false
-  xy: 1, 1
-  size: 284, 273
-  orig: 284, 273
-  offset: 0, 0
-  index: -1
 pauseButton
   rotate: false
-  xy: 287, 23
-  size: 247, 251
-  orig: 247, 251
+  xy: 0, 0
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+playButton
+  rotate: false
+  xy: 400, 0
+  size: 400, 400
+  orig: 400, 400
   offset: 0, 0
   index: -1

@@ -4,13 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Movable {
 	
 	private static final String texturePath = "objectTextures/player.png";
 	private static final Inventory inventory = new Inventory();
-	private float playerMoney =0;
+	private float playerMoney = 0;
 	
 	private float playerHealth = 100;
 
@@ -20,11 +21,11 @@ public class Player extends Movable {
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
 		
+		width = 70;
+		height = 143;
+		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
+		
 		this.speed = speed;
-	}
-	
-	public void draw(SpriteBatch batch) {
-		batch.draw(texture, position.x, position.y, 70, 143);
 	}
 	
 	public void eat(float value) {
@@ -46,6 +47,7 @@ public class Player extends Movable {
 	@Override
 	public void move(float cameraSpeed) {
 		position.y += speed;
+		bounds.y += speed;
 	}
 
 	public float getSpeed() {

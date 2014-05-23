@@ -73,7 +73,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 	}
 
-	@Override
+	@Override	
 	public void pause() {
 		// TODO Auto-generated method stub
 

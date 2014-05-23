@@ -29,12 +29,12 @@ public class GameScreenInputHandler implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-        if(keycode == Keys.BACK){
-        	gameInstance.setScreen(new MainMenuScreen(gameInstance));
-        }
-        return false;
+		if(keycode == Keys.BACK){
+			gameInstance.setScreen(new MainMenuScreen(gameInstance));
+		}
+		return false;
 	}
-	
+
 	@Override
 	public boolean keyUp(int keycode) {
 		// TODO Auto-generated method stub
@@ -67,9 +67,11 @@ public class GameScreenInputHandler implements InputProcessor {
 		if (lastTouch != null) {
 			if ( touch.cpy().sub(lastTouch.cpy()).len() > touchToDragTolerance ) {
 				//Drag gesture is detected, draw a barrier between touch and last touch
-				Gdx.app.log("InputHandler", "Drag captured");
-				SoundHandler.playWhistle();
-				herdWithDrag(lastTouch, touch, gameScreen.getWorld().getMovables());
+				if (!gameScreen.isPaused()) {
+					gameScreen.getWorld().addSwipeToWorld(lastTouch, touch);
+					SoundHandler.playWhistle();
+					herdWithDrag(lastTouch, touch, gameScreen.getWorld().getMovables());
+				}
 			}
 		}
 
@@ -77,7 +79,7 @@ public class GameScreenInputHandler implements InputProcessor {
 		lastTouch = null;
 		return false;
 	}
-	
+
 	//Uses the ends of a drag line to influence all animals motion
 	public void herdWithDrag(Vector3 startTouch, Vector3 endTouch, Array<Movable> movables) {
 		//Find middle of the drag
@@ -85,22 +87,26 @@ public class GameScreenInputHandler implements InputProcessor {
 		//Find a unit vector representing the drag direction
 		Vector2 dragUnitVector = new Vector2(startTouch.x - endTouch.x, startTouch.y - endTouch.y);
 		dragUnitVector.nor();
-		
+
 		Vector2 perpProjection;
+		Vector2 positionCenter;
 
 		for (Movable movable : movables) {
-			//find perpendicular projection of position onto unit vector
-			perpProjection = (movable.getPosition().cpy().sub(dragCenter)).cpy().sub(dragUnitVector.cpy().scl((movable.getPosition().cpy().sub(dragCenter)).cpy().dot(dragUnitVector.cpy())));
+			//find center of the drawable
+			positionCenter = movable.getPosition().cpy().add(new Vector2(movable.getWidth()/2,movable.getHeight()/2));
+			//find perpendicular projection of the position minus center onto unit vector
+			perpProjection = (positionCenter.cpy().sub(dragCenter)).cpy().sub(dragUnitVector.cpy().scl((positionCenter.cpy().sub(dragCenter)).cpy().dot(dragUnitVector.cpy())));
 			//Amount to move over the currentTarget of the animal
 			if (perpProjection.cpy().len() != 0) {
-				
+
 				//change to adjust how much a goose reacts to a drag (should depend on distance of goose from drag center)
-				float reactionScale = 10000 * 1/(movable.getPosition().cpy().sub(dragCenter).len());
-				
-				movable.addToCurrentTarget(movable.getPosition().cpy().sub(dragCenter.cpy()).nor().scl(reactionScale));
+				float reactionScale = 20000 * 1/(positionCenter.cpy().sub(dragCenter).len());
+
+				//movable.addToCurrentTarget(movable.getPosition().cpy().sub(dragCenter.cpy()).nor().scl(reactionScale));
+				movable.addToCurrentTarget(perpProjection.cpy().nor().scl(reactionScale));
 			}
 		}
-		
+
 	}
 
 	@Override

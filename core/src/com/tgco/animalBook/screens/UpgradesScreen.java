@@ -74,8 +74,9 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		shapeRender.end();
 		
 		drawAmounts(0.5f, 0);
-		drawAmounts(1, 1);
-		drawAmounts(1, 2);
+		drawAmounts(0.5f, 1);
+		drawAmounts(0.5f, 2);
+		reinitButtons();
 	}
 
 	@Override
@@ -103,6 +104,34 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		}
 		
 		batch.end();
+	}
+	
+	public void reinitButtons(){
+		if(world.getPlayer().getPlayerMoney() < 500){
+			fruitfullButton.setDisabled(true);
+			drawAmounts(0.5f, 0);
+			
+		}
+		else{
+			fruitfullButton.setDisabled(false);
+			drawAmounts(1f, 0);
+		}
+		 if(world.getPlayer().getPlayerMoney() < 1000){
+			LongerButton.setDisabled(true);
+			drawAmounts(0.5f, 1);
+		}
+		 else{
+			 LongerButton.setDisabled(false);
+				drawAmounts(1, 1);
+		 }
+		if(world.getPlayer().getPlayerMoney() < 1500){
+			MoreButton.setDisabled(true);
+			drawAmounts(0.5f, 2);
+		}
+		else{
+			MoreButton.setDisabled(false);
+			drawAmounts(1, 2);
+		}
 	}
 	@Override
 	protected void initializeButtons() {
@@ -151,7 +180,14 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		ButtonStyle LongerButtonStyle = new ButtonStyle();
 		LongerButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		LongerButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-
+		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
+		trLongerButton.setRegionHeight((int) (BUTTON_HEIGHT*1.8f));
+		trLongerButton.setRegionWidth((int) (BUTTON_WIDTH*1.7f));
+		
+		LongerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
+		
+		
+		
 		LongerButton = new Button(LongerButtonStyle);
 		LongerButton.setWidth(BUTTON_WIDTH);
 		LongerButton.setHeight(BUTTON_HEIGHT);
@@ -162,11 +198,16 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/MoreButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-
+		
 		ButtonStyle MoreButtonStyle = new ButtonStyle();
 		MoreButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		MoreButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-
+		TextureRegion trMoreButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/MoreButtonDis.png")) );
+		trMoreButton.setRegionHeight((int) (BUTTON_HEIGHT*1.8f));
+		trMoreButton.setRegionWidth((int) (BUTTON_WIDTH*1.7f));
+		
+		MoreButtonStyle.disabled = new TextureRegionDrawable(trMoreButton);
+		
 		MoreButton = new Button(MoreButtonStyle);
 		MoreButton.setWidth(BUTTON_WIDTH);
 		MoreButton.setHeight(BUTTON_HEIGHT);
@@ -196,9 +237,17 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 			drawAmounts(0.5f, 0);
 			
 		}
+		 if(world.getPlayer().getPlayerMoney() < 1000){
+			LongerButton.setDisabled(true);
+			drawAmounts(0.5f, 1);
+		}
+		if(world.getPlayer().getPlayerMoney() < 1500){
+			MoreButton.setDisabled(true);
+			drawAmounts(0.5f, 2);
+		}
 		
-		drawAmounts(1, 1);
-		drawAmounts(1, 2);
+		
+		
 		buttonStage.addActor(leaveButton);
 		buttonStage.addActor(fruitfullButton);
 		buttonStage.addActor(LongerButton);

@@ -23,6 +23,11 @@ public class WorldRenderer {
 	
 	private Array<Swipe> swipes;
 	
+	private static final float PROGRESS_BAR_WIDTH = 20;
+	private static final float PROGRESS_BAR_HEIGHT = 210;
+	private static final float PROGRESS_SLIDER_WIDTH = 20;
+	private static final float PROGRESS_SLIDER_HEIGHT = 10;
+	
 
 	public WorldRenderer() {
 		font = new BitmapFont();
@@ -58,10 +63,10 @@ public class WorldRenderer {
 
 		//Progress bar
 		shapeRender.setColor(Color.CYAN);
-		shapeRender.rect(20, 20, 20, 210);
+		shapeRender.rect((.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 		shapeRender.setColor(Color.BLACK);
-		shapeRender.rect(20, 20 + progressPercentage*200, 20, 10);
-		
+		shapeRender.rect((.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT - PROGRESS_SLIDER_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
+		Gdx.app.log("",String.valueOf(Gdx.graphics.getHeight()));
 		shapeRender.end();
 		
 		//Swipes on screen

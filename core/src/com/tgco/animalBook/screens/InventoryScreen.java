@@ -77,6 +77,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			//Bad coding here
 			final int foodValue = Consumable.DropType.values()[i].getHungerValue();
 			final int foodIndex = i;
+			fonts[i] = new BitmapFont();
 			
 			atlas = new TextureAtlas(Gdx.files.internal(Consumable.DropType.values()[i].getAtlasPath()));
 			buttonSkin = new Skin();
@@ -100,6 +101,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 				}
 
 				public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+					
 					System.out.println("Attempting to consume: " + Consumable.DropType.values()[consumableIndex]);
 					System.out.println("Player has: " + gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size);
 					System.out.println("Attempting to regain: " + hungerValue + " hunger.");
@@ -116,7 +118,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	protected void updateInventoryScreenItems(int consumableIndex) {
-		fonts[consumableIndex] = new BitmapFont();
+		
 		batch.begin();
 		fonts[consumableIndex].setColor(55,55,55,1f);
 		fonts[consumableIndex].draw(batch,

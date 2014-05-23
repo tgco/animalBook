@@ -61,11 +61,23 @@ public class WorldRenderer {
 		shapeRender.rect(20, 20, 20, 210);
 		shapeRender.setColor(Color.BLACK);
 		shapeRender.rect(20, 20 + progressPercentage*200, 20, 10);
-
+		
 		shapeRender.end();
+		
+		//Swipes on screen
+		for (Swipe swipe : swipes) {
+			if (swipe.getLifeTime() == 0) {
+				swipes.removeValue(swipe, false);
+			} else
+				swipe.draw(shapeRender);
+		}
 		
 		batch.begin();
 
+	}
+	
+	public void dispose() {
+		shapeRender.dispose();
 	}
 
 }

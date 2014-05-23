@@ -91,7 +91,7 @@ public class GameScreenInputHandler implements InputProcessor {
 
 		for (Movable movable : movables) {
 			//find center of the drawable
-			positionCenter = movable.getPosition().cpy().add(new Vector2(movable.getWidth(),movable.getHeight()));
+			positionCenter = movable.getPosition().cpy().add(new Vector2(movable.getWidth()/2,movable.getHeight()/2));
 			//find perpendicular projection of the position minus center onto unit vector
 			perpProjection = (positionCenter.cpy().sub(dragCenter)).cpy().sub(dragUnitVector.cpy().scl((positionCenter.cpy().sub(dragCenter)).cpy().dot(dragUnitVector.cpy())));
 			//Amount to move over the currentTarget of the animal

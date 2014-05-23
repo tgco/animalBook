@@ -128,7 +128,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		font.setColor(0, 0, 0, alpha);
 		switch(boxName){
 			case 0: 
-				font.draw(batch, "current: " + String.format("%.1f",((Animal) world.getMovables().get(0)).getFertilityRate())+ " %", Gdx.graphics.getWidth()/2 - 100 - BUTTON_WIDTH +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
+				font.draw(batch, "current: " + String.format("%.1f",((Animal) world.getMovables().get(0)).getFertilityRate())+ " %", Gdx.graphics.getWidth()/2 - 100 - UPGRADE_BUTTON_WIDTH +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
 
 				break;
 			case 1:
@@ -136,7 +136,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 				break;
 			case 2:
 
-				font.draw(batch, "current: " + String.format("%.2f",((Animal) world.getMovables().get(0)).getTimeOnGround()) + " s", Gdx.graphics.getWidth()/2 + 100 + BUTTON_WIDTH +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
+				font.draw(batch, "current: " + String.format("%.2f",((Animal) world.getMovables().get(0)).getTimeOnGround()) + " s", Gdx.graphics.getWidth()/2 + 100 + UPGRADE_BUTTON_WIDTH +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
 
 				break;
 		}

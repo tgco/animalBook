@@ -19,8 +19,8 @@ public abstract class ButtonScreenAdapter {
 	protected InputMultiplexer inputMultiplexer;
 
 	//dimensions for buttons
-	protected static final float BUTTON_WIDTH = (1f/7f)*Gdx.graphics.getWidth();
-	protected static final float BUTTON_HEIGHT = (1f/7f)*Gdx.graphics.getWidth();
+	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
+	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
 	
 	//Menu buttons are larger
 	protected static final float MENU_BUTTON_WIDTH = (1f/3f)*Gdx.graphics.getWidth();

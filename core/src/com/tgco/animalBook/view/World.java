@@ -181,8 +181,8 @@ public class World {
 	}
 	
 	public void addSwipeToWorld(Vector3 begin, Vector3 end) {
-		camera.project(begin);
-		camera.project(end);
+		//camera.project(begin);
+		//camera.project(end);
 		worldRender.addSwipe(new Vector2(begin.x,begin.y), new Vector2(end.x,end.y));
 	}
 

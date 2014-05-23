@@ -44,6 +44,9 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	private Button LongerButton;
 	private Button MoreButton;
 	private World world;
+	private static final double REGION_HEIGHT = BUTTON_HEIGHT*2.5f;
+	private static final double REGION_WIDTH = BUTTON_WIDTH*2.5f;
+	
 	
 	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
@@ -125,13 +128,13 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		font.setColor(0, 0, 0, alpha);
 		switch(boxName){
 			case 0: 
-				font.draw(batch, "Current rate: " + String.format("%.1f",((Animal) world.getMovables().get(0)).getFertilityRate()), Gdx.graphics.getWidth()/2 - 100 - BUTTON_WIDTH +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
+				font.draw(batch, "current: " + String.format("%.1f",((Animal) world.getMovables().get(0)).getFertilityRate())+ " %", Gdx.graphics.getWidth()/2 - 100 - BUTTON_WIDTH +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
 				break;
 			case 1:
-				font.draw(batch, "current rate: " + String.format("%.2f",((Animal) world.getMovables().get(0)).getDropInterval()) + " s", Gdx.graphics.getWidth()/2 +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
+				font.draw(batch, "current: " + String.format("%.3f",((Animal) world.getMovables().get(0)).getDropInterval()) + " s", Gdx.graphics.getWidth()/2 +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
 				break;
 			case 2:
-				font.draw(batch, "current rate" + String.format("%.2f",((Animal) world.getMovables().get(0)).getTimeOnGround()) + " s", Gdx.graphics.getWidth()/2 + 100 + BUTTON_WIDTH +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
+				font.draw(batch, "current: " + String.format("%.2f",((Animal) world.getMovables().get(0)).getTimeOnGround()) + " s", Gdx.graphics.getWidth()/2 + 100 + BUTTON_WIDTH +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
 				break;
 		}
 		
@@ -196,8 +199,8 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		fruitfullButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		fruitfullButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trFruitfullButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/fruitfullButtonDis.png")) );
-		trFruitfullButton.setRegionHeight((int) (BUTTON_HEIGHT*1.8f));
-		trFruitfullButton.setRegionWidth((int) (BUTTON_WIDTH*1.7f));
+		trFruitfullButton.setRegionHeight((int) (REGION_HEIGHT));
+		trFruitfullButton.setRegionWidth((int) (REGION_WIDTH));
 		
 		fruitfullButtonStyle.disabled = new TextureRegionDrawable(trFruitfullButton);
 
@@ -217,8 +220,8 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		LongerButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		LongerButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
-		trLongerButton.setRegionHeight((int) (BUTTON_HEIGHT*1.8f));
-		trLongerButton.setRegionWidth((int) (BUTTON_WIDTH*1.7f));
+		trLongerButton.setRegionHeight((int) (REGION_HEIGHT));
+		trLongerButton.setRegionWidth((int) (REGION_WIDTH));
 		
 		LongerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
 		
@@ -239,8 +242,8 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		MoreButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		MoreButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trMoreButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/MoreButtonDis.png")) );
-		trMoreButton.setRegionHeight((int) (BUTTON_HEIGHT*1.8f));
-		trMoreButton.setRegionWidth((int) (BUTTON_WIDTH*1.7f));
+		trMoreButton.setRegionHeight((int) (REGION_HEIGHT));
+		trMoreButton.setRegionWidth((int) (REGION_WIDTH));
 		
 		MoreButtonStyle.disabled = new TextureRegionDrawable(trMoreButton);
 		

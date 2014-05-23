@@ -62,6 +62,19 @@ public abstract class Animal extends Movable {
 			}
 		}
 	}
+	
+	
+	public double getFertilityRate() {
+		return fertilityRate;
+	}
+
+	public double getDropInterval() {
+		return dropInterval/60.0;
+	}
+
+	public double getTimeOnGround() {
+		return timeOnGround /60.0;
+	}
 
 	public void upgradeFertilityRate(double fertilityRate) {
 		this.fertilityRate += fertilityRate;

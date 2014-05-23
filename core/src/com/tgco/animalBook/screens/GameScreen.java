@@ -30,6 +30,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Button upgradeButton;
 	private Button pauseButton;
 	private Button eatButton;
+	private UpgradesScreen upgradeScreen;
 	
 	
 	boolean paused;
@@ -53,6 +54,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer.addProcessor(touchControls);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		Gdx.input.setCatchBackKey(true);
+		
+		
 	}
 
 	@Override

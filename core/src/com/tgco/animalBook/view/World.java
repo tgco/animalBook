@@ -45,10 +45,15 @@ public class World {
 	private static int level = 0;
 	private static final int NUM_ANIMALS = 5;
 	
+	//upgrade presses
+	private int fruitfullMoneyP =0;
+	private int LongerMoneyP =0;
+	private int MoreMoneyP =0;
+	
 	//Displays the amount of animals left
 	private BitmapFont font;
 	
-
+	
 	public World(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;
 
@@ -176,4 +181,28 @@ public class World {
 		return movables;
 	}
 
+	public int getFruitfullMoneyP() {
+		return fruitfullMoneyP;
+	}
+
+	public void addFruitfullMoneyP() {
+		this.fruitfullMoneyP += 1;
+	}
+
+	public int getLongerMoneyP() {
+		return LongerMoneyP;
+	}
+
+	public void addLongerMoneyP() {
+		LongerMoneyP += 1;
+	}
+
+	public int getMoreMoneyP() {
+		return MoreMoneyP;
+	}
+
+	public void addMoreMoneyP() {
+		MoreMoneyP += 1;
+	}
+	
 }

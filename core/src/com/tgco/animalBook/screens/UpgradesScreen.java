@@ -21,7 +21,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.gameObjects.ABDrawable;
+import com.tgco.animalBook.gameObjects.Animal;
+import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
@@ -30,6 +34,9 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	//reference to the game screen
 	private GameScreen gameScreen;
 	private BitmapFont font;
+	private int fruitfullMoney;
+	private int LongerMoney;
+	private int MoreMoney;
 	
 	//buttons
 	private Button leaveButton;
@@ -38,16 +45,19 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	private Button MoreButton;
 	private World world;
 	
-	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen, World world) {
+	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
 
 		this.gameScreen = gameScreen;
 		font = new BitmapFont();
 		//Background rendering
 		batch = new SpriteBatch();
-		this.world = world;
+		this.world = gameScreen.getWorld();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
-
+		
+		fruitfullMoney = 100;
+		LongerMoney = 500;
+		MoreMoney = 1000;
 
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -93,13 +103,13 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		font.setColor(0, 0, 0, alpha);
 		switch(boxName){
 			case 0: 
-				font.draw(batch, "$" + String.valueOf((int) 500), Gdx.graphics.getWidth()/2 - 100 - BUTTON_WIDTH +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
+				font.draw(batch, "$" + String.valueOf(fruitfullMoney), Gdx.graphics.getWidth()/2 - 100 - BUTTON_WIDTH +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
 				break;
 			case 1:
-				font.draw(batch, "$" + String.valueOf((int) 1000), Gdx.graphics.getWidth()/2 +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
+				font.draw(batch, "$" + String.valueOf(LongerMoney), Gdx.graphics.getWidth()/2 +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
 				break;
 			case 2:
-				font.draw(batch, "$" + String.valueOf((int) 1500), Gdx.graphics.getWidth()/2 + 100 + BUTTON_WIDTH +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
+				font.draw(batch, "$" + String.valueOf(MoreMoney), Gdx.graphics.getWidth()/2 + 100 + BUTTON_WIDTH +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
 				break;
 		}
 		
@@ -231,7 +241,63 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 
+		
+		fruitfullButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
 
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				//take away player money and add more to precentage of droppings
+				//Gdx.input.setCatchBackKey(true);
+				
+				 Array<Movable> animals = world.getMovables();
+				 for(Movable animal : animals){
+					 ((Animal) animal).upgradeFertilityRate(5);
+				 }
+				 world.getPlayer().subtractPlayerMoney(fruitfullMoney);
+				 fruitfullMoney += fruitfullMoney;
+			}
+		});
+		
+		LongerButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				//take away player money and add more to precentage of droppings
+				//Gdx.input.setCatchBackKey(true);
+				
+				 Array<Movable> animals = world.getMovables();
+				 for(Movable animal : animals){
+					 ((Animal) animal).upgradeDropInterval(5);
+				 }
+				 world.getPlayer().subtractPlayerMoney(LongerMoney);
+				 LongerMoney += LongerMoney;
+			}
+		});
+		MoreButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				//take away player money and add more to precentage of droppings
+				//Gdx.input.setCatchBackKey(true);
+				
+				 Array<Movable> animals = world.getMovables();
+				 for(Movable animal : animals){
+					 ((Animal) animal).upgradeTimeOnGround(5);
+				 }
+				 world.getPlayer().subtractPlayerMoney(MoreMoney);
+				 MoreMoney += MoreMoney;
+			}
+		});
+		
 		if(world.getPlayer().getPlayerMoney() < 500){
 			fruitfullButton.setDisabled(true);
 			drawAmounts(0.5f, 0);

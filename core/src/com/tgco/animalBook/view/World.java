@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.ABDrawable;
+import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
@@ -106,8 +107,11 @@ public class World {
 
 		//move animals if necessary
 		for (ABDrawable aBDrawable : aBDrawables) {
-			if (aBDrawable.isMovable())
+			if (aBDrawable.isMovable()){
 				((Movable) aBDrawable).move(cameraSpeed);
+				((Animal) aBDrawable).drop();
+			}
+				
 		}
 
 		//move player

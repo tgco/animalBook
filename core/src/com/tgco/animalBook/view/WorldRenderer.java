@@ -47,7 +47,7 @@ public class WorldRenderer {
 		player.draw(batch);
 		
 		batch.end();
-
+		
 		shapeRender.begin(ShapeType.Filled);
 		
 		//Health bar

@@ -44,8 +44,11 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	private Button LongerButton;
 	private Button MoreButton;
 	private World world;
-	private static final double REGION_HEIGHT = BUTTON_HEIGHT*2.5f;
-	private static final double REGION_WIDTH = BUTTON_WIDTH*2.5f;
+	private static final double REGION_HEIGHT = BUTTON_HEIGHT*2.45f;
+	private static final double REGION_WIDTH = BUTTON_WIDTH*2.45f;
+	private static final float STRING_WIDTH_FR = Gdx.graphics.getWidth()/2 - 100 - UPGRADE_BUTTON_WIDTH +50;
+	private static final float STRING_WIDTH_LD = Gdx.graphics.getWidth()/2 +50;
+	private static final float STRING_WIDTH_MD =  Gdx.graphics.getWidth()/2 + 100 + UPGRADE_BUTTON_WIDTH +50;
 	
 	
 	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
@@ -110,13 +113,16 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		font.setColor(0, 0, 0, alpha);
 		switch(boxName){
 			case 0: 
-				font.draw(batch, "$" + String.valueOf(fruitfullMoney), Gdx.graphics.getWidth()/2 - 100 - UPGRADE_BUTTON_WIDTH +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
+				font.draw(batch, "+" + String.valueOf(5), STRING_WIDTH_FR +5, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +75);
+				font.draw(batch, "$" + String.valueOf(fruitfullMoney), STRING_WIDTH_FR, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +55);
 				break;
 			case 1:
-				font.draw(batch, "$" + String.valueOf(LongerMoney), Gdx.graphics.getWidth()/2 +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
+				font.draw(batch, "+" + String.format("%.2f",5/60.0) + " s", STRING_WIDTH_LD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 75);
+				font.draw(batch, "$" + String.valueOf(LongerMoney), STRING_WIDTH_LD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 55);
 				break;
 			case 2:
-				font.draw(batch, "$" + String.valueOf(MoreMoney), Gdx.graphics.getWidth()/2 + 100 + UPGRADE_BUTTON_WIDTH +40, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
+				font.draw(batch, "-" + String.format("%.2f",5/60.0) + " s", STRING_WIDTH_MD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 75);
+				font.draw(batch, "$" + String.valueOf(MoreMoney),STRING_WIDTH_MD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +55);
 				break;
 		}
 		
@@ -128,15 +134,15 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		font.setColor(0, 0, 0, alpha);
 		switch(boxName){
 			case 0: 
-				font.draw(batch, "current: " + String.format("%.1f",((Animal) world.getMovables().get(0)).getFertilityRate())+ " %", Gdx.graphics.getWidth()/2 - 100 - BUTTON_WIDTH +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
+				font.draw(batch, "current: " + String.format("%.1f",((Animal) world.getMovables().get(0)).getFertilityRate())+ " %", STRING_WIDTH_FR -15, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
 
 				break;
 			case 1:
-				font.draw(batch, "current: " + String.format("%.3f",((Animal) world.getMovables().get(0)).getDropInterval()) + " s", Gdx.graphics.getWidth()/2 +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
+				font.draw(batch, "current: " + String.format("%.3f",((Animal) world.getMovables().get(0)).getTimeOnGround()) + " s", STRING_WIDTH_LD-15, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
 				break;
 			case 2:
 
-				font.draw(batch, "current: " + String.format("%.2f",((Animal) world.getMovables().get(0)).getTimeOnGround()) + " s", Gdx.graphics.getWidth()/2 + 100 + BUTTON_WIDTH +25, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +25);
+				font.draw(batch, "current: " + String.format("%.2f",((Animal) world.getMovables().get(0)).getDropInterval()) + " s", STRING_WIDTH_MD-15, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
 
 				break;
 		}
@@ -313,7 +319,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 				
 				 Array<Movable> animals = world.getMovables();
 				 for(Movable animal : animals){
-					 ((Animal) animal).upgradeDropInterval(5);
+					 ((Animal) animal).upgradeTimeOnGround(5);
 				 }
 				 world.getPlayer().subtractPlayerMoney(LongerMoney);
 				 LongerMoney += LongerMoney;
@@ -334,7 +340,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 				
 				 Array<Movable> animals = world.getMovables();
 				 for(Movable animal : animals){
-					 ((Animal) animal).upgradeTimeOnGround(5);
+					 ((Animal) animal).upgradeDropInterval(5);
 				 }
 				 world.getPlayer().subtractPlayerMoney(MoreMoney);
 				 gameScreen.getWorld().addMoreMoneyP();

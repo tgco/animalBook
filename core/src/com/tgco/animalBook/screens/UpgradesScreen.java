@@ -44,8 +44,8 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	private Button LongerButton;
 	private Button MoreButton;
 	private World world;
-	private static final double REGION_HEIGHT = BUTTON_HEIGHT*2.5f;
-	private static final double REGION_WIDTH = BUTTON_WIDTH*2.5f;
+	private static final double REGION_HEIGHT = UPGRADE_BUTTON_HEIGHT*2.5f;
+	private static final double REGION_WIDTH = UPGRADE_BUTTON_WIDTH*2.5f;
 	
 	
 	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {

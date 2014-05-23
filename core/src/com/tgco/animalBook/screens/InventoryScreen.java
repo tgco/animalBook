@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.gameObjects.Inventory;
+import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
@@ -27,6 +28,9 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	//buttons
 	private Button leaveButton;
 
+	private Player player; 
+	private Inventory inventory;
+	private int foodValue;
 
 	public InventoryScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
@@ -39,6 +43,9 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		
+		player = gameScreen.getWorld().getPlayer();
+		inventory = player.getInventory();
 	}
 
 	@Override
@@ -61,14 +68,39 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			buttonStage = new Stage();
 		buttonStage.clear();
 		//reinit buttons
-		initializeButtons();
 		initializeInventoryInterface();
+		initializeButtons();
+		
 	}
-
 	private void initializeInventoryInterface() {
-		Inventory inventory = gameScreen.getWorld().getPlayer().getInventory();
 		for (int i = 0; i < 5; i++){
+			foodValue = Consumable.DropType.values()[i].getHungerValue();
 			atlas = new TextureAtlas(Gdx.files.internal(Consumable.DropType.values()[i].getAtlasPath()));
+			buttonSkin = new Skin();
+			buttonSkin.addRegions(atlas);
+			
+			ButtonStyle inventoryButtonStyle = new ButtonStyle();
+			inventoryButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+			inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+			
+			Button inventoryButton = new Button(inventoryButtonStyle);
+			inventoryButton.setWidth(BUTTON_WIDTH/2);
+			inventoryButton.setHeight(BUTTON_HEIGHT/2);
+			inventoryButton.setX(2*i*BUTTON_WIDTH/2 + BUTTON_WIDTH/2);
+			inventoryButton.setY(Gdx.graphics.getHeight()/2);
+			
+			inventoryButton.addListener(new InputListener(){
+				private int hungerValue = foodValue;
+				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+					return true;
+				}
+
+				public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+					player.eat(hungerValue);
+					System.out.println(foodValue);
+				}
+			});
+			buttonStage.addActor(inventoryButton);
 		}
 	}
 

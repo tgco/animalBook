@@ -16,6 +16,9 @@ public abstract class Movable extends ABDrawable {
 
 	public Movable(String texturePath) {
 		super(texturePath);
+		
+		//default speed
+		speed = 1/14f;
 
 	}
 
@@ -29,6 +32,10 @@ public abstract class Movable extends ABDrawable {
 		//Lerp the previous target to the current
 		//currentTarget, previousTarget.len2()/currentTarget.len2()
 		previousTarget.lerp(currentTarget,30*speed*Gdx.graphics.getDeltaTime());
+		
+		//update bounds
+		bounds.setX(position.x);
+		bounds.setY(position.y);
 
 	}
 

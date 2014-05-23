@@ -20,11 +20,11 @@ public abstract class ButtonScreenAdapter {
 
 	//dimensions for buttons
 	protected static final float BUTTON_WIDTH = (1f/7f)*Gdx.graphics.getWidth();
-	protected static final float BUTTON_HEIGHT = (1f/6f)*Gdx.graphics.getHeight();
+	protected static final float BUTTON_HEIGHT = (1f/7f)*Gdx.graphics.getWidth();
 	
 	//Menu buttons are larger
 	protected static final float MENU_BUTTON_WIDTH = (1f/3f)*Gdx.graphics.getWidth();
-	protected static final float MENU_BUTTON_HEIGHT = (1f/5f)*Gdx.graphics.getHeight();
+	protected static final float MENU_BUTTON_HEIGHT = (1f/8f)*Gdx.graphics.getWidth();
 	
 	//distance between buttons and between the edge and a button
 	protected static final float EDGE_TOLERANCE = 20;

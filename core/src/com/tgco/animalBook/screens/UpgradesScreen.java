@@ -186,6 +186,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		font.setColor(Color.BLACK);
 		font.setScale(1.2f);
 		font.draw(batch, "Your Money: $" + String.valueOf(world.getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 -10, Gdx.graphics.getHeight() -2*EDGE_TOLERANCE);
+		font.setScale(.75f);
 		batch.end();
 	}
 	@Override

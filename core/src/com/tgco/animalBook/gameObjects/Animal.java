@@ -27,7 +27,7 @@ public abstract class Animal extends Movable {
 		currentTarget = previousTarget.cpy();
 		
 		//bounds
-		bounds = new Rectangle(position.x,position.y,width,height);
+		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 
 		//initialize the rates
 		fertilityRate = 5;

@@ -12,7 +12,7 @@ public class Market extends ABDrawable {
 		
 		width = 200;
 		height = 200;
-		bounds = new Rectangle(position.x,position.y,width,height);
+		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 	
 	@Override

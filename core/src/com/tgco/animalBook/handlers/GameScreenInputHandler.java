@@ -104,6 +104,8 @@ public class GameScreenInputHandler implements InputProcessor {
 
 				//movable.addToCurrentTarget(movable.getPosition().cpy().sub(dragCenter.cpy()).nor().scl(reactionScale));
 				movable.addToCurrentTarget(perpProjection.cpy().nor().scl(reactionScale));
+				
+				gameScreen.getWorld().addSwipeToWorld(new Vector3(positionCenter.x,positionCenter.y,0), new Vector3(positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).x,positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).y,0));
 			}
 		}
 

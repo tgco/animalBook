@@ -66,7 +66,7 @@ public class WorldRenderer {
 		shapeRender.rect((.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 		shapeRender.setColor(Color.BLACK);
 		shapeRender.rect((.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT - PROGRESS_SLIDER_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
-		Gdx.app.log("",String.valueOf(Gdx.graphics.getHeight()));
+		
 		shapeRender.end();
 		
 		//Swipes on screen

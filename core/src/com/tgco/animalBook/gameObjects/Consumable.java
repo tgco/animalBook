@@ -19,6 +19,7 @@ public class Consumable extends ABDrawable {
 	}
 
 	public enum DropType {
+		//ENUM_NAME ("string path of object texture", "string path of object atlas", marketValue, hungerValue);
 		EGG("objectTextures/egg.png", "objectTextures/eggButton.atlas", 2000, 10),
 		BACON("objectTextures/bacon.png", "objectTextures/baconButton.atlas", 3000, 20),
 		CHEESE("objectTextures/cheese.png", "objectTextures/cheeseButton.atlas", 4000, 15), 

@@ -94,7 +94,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			Button inventoryButton = new Button(inventoryButtonStyle);
 			inventoryButton.setWidth(BUTTON_WIDTH/2);
 			inventoryButton.setHeight(BUTTON_HEIGHT/2);
-			inventoryButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/4 - (Consumable.DropType.values().length/2)*BUTTON_WIDTH + 2*i*BUTTON_WIDTH/2);
+			inventoryButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*i);
 			inventoryButton.setY(Gdx.graphics.getHeight()/2);
 
 			//then add a listener to the button
@@ -128,7 +128,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		fonts[consumableIndex].setColor(55,55,55,1f);
 		fonts[consumableIndex].draw(batch,
 				String.valueOf(gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size),
-				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/4 - (Consumable.DropType.values().length/2)*BUTTON_WIDTH + 2*consumableIndex*BUTTON_WIDTH/2,
+				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex,
 				Gdx.graphics.getHeight()/2);
 		batch.end();
 	}

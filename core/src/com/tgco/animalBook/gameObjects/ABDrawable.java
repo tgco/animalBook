@@ -47,6 +47,9 @@ public abstract class ABDrawable {
 		return false;
 	}
 	
+	public boolean isDropping() {
+		return false;
+	}
 	public void dispose() {
 		texture.dispose();
 	}

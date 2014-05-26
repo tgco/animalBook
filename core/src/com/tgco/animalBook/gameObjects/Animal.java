@@ -31,7 +31,7 @@ public abstract class Animal extends Movable {
 
 		//initialize the rates
 		fertilityRate = 5;
-		dropInterval = 100;
+		dropInterval = 400;
 		timeOnGround = 120;
 
 		
@@ -56,14 +56,18 @@ public abstract class Animal extends Movable {
 	
 	
 	//Create a consumable or new animal
-	public void drop() {
+	public ABDrawable drop() {
+		
 		if(changeTargetCount % dropInterval ==0){
 			if(rand.nextInt(100) < fertilityRate){
-				//drop animal
+				return new Dropped(new Goose(this.position.cpy()),this.position.cpy());
 			}
 			else{
-				//drop egg
+				return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy());
 			}
+		}
+		else{
+			return null;
 		}
 	}
 	

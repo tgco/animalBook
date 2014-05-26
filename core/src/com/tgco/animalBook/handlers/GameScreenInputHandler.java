@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.screens.GameScreen;
 import com.tgco.animalBook.screens.MainMenuScreen;
@@ -74,7 +75,23 @@ public class GameScreenInputHandler implements InputProcessor {
 				}
 			}
 		}
-
+		
+		for (int i =0; i < gameScreen.getWorld().getDropped().size ; i++){
+			Dropped dropping = 	gameScreen.getWorld().getDropped().get(i);
+			if (!gameScreen.isPaused()){
+				Vector3 vect = new Vector3(screenX,screenY,0);
+				//unproject operations
+				gameScreen.getWorld().getCamera().unproject(vect);
+				Vector2 vect2 = new Vector2(vect.x, vect.y);
+				if(vect2.cpy().sub(dropping.getPosition().cpy()).len() <= 30){
+					gameScreen.getWorld().removeFromABDrawable(dropping);
+				}
+			}
+		}
+		
+		
+		
+		
 		//Rest the lastTouch so touchDown will grab a new touch next time
 		lastTouch = null;
 		return false;

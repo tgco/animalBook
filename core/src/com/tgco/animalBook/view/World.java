@@ -1,5 +1,7 @@
 package com.tgco.animalBook.view;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Animal;
+import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
@@ -49,6 +52,7 @@ public class World {
 	private int LongerMoneyP =0;
 	private int MoreMoneyP =0;
 	
+	private Random rand = new Random();
 	//Displays the amount of animals left
 	private BitmapFont font;
 	
@@ -107,8 +111,15 @@ public class World {
 		//move animals if necessary
 		for (ABDrawable aBDrawable : aBDrawables) {
 			if (aBDrawable.isMovable()){
+				//Gdx.app.log("My tag", "the size is " + aBDrawable.getClass());
 				((Movable) aBDrawable).move(cameraSpeed);
-				((Animal) aBDrawable).drop();
+				if(rand.nextInt(100) <= 50){
+				ABDrawable dropping =  ((Animal)aBDrawable).drop();
+				if(dropping != null){
+					aBDrawables.add(dropping);
+				}
+				}
+					
 			}
 				
 		}
@@ -180,6 +191,14 @@ public class World {
 		return movables;
 	}
 	
+	public Array<Dropped> getDropped() {
+		Array<Dropped> droppings = new Array<Dropped>();
+		for (ABDrawable aBDrawable : aBDrawables) {
+			if (aBDrawable.isDropping())
+				droppings.add((Dropped) aBDrawable);
+		}
+		return droppings;
+	}
 	public void addSwipeToWorld(Vector3 begin, Vector3 end) {
 		camera.project(begin);
 		camera.project(end);
@@ -210,5 +229,10 @@ public class World {
 	public void addMoreMoneyP() {
 		MoreMoneyP += 1;
 	}
-	
+	public void removeFromABDrawable(ABDrawable dropped){
+		//if(aBDrawables.get(index) instanceof Dropped){
+		
+			aBDrawables.removeValue(dropped, true);
+		//}
+	}
 }

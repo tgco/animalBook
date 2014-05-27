@@ -19,8 +19,8 @@ public abstract class ABDrawable {
 		this.texture = new Texture(Gdx.files.internal(texturePath));
 		//default values
 		position = new Vector2();
-		width = 100;
-		height = 100;
+		width = .093f*Gdx.graphics.getWidth();
+		height = .147f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 	

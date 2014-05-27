@@ -1,5 +1,6 @@
 package com.tgco.animalBook.gameObjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -13,8 +14,8 @@ public class Dropped extends ABDrawable{
 		super(consume.getType().getTexturePath());
 		this.consume = consume;
 		this.position = pos;
-		width = 25;
-		height = 25;
+		width = .028f*Gdx.graphics.getWidth();
+		height = .044f*Gdx.graphics.getHeight();
 		this.timeLeft = timeLeft;
 
 	}
@@ -23,8 +24,8 @@ public class Dropped extends ABDrawable{
 		super(animal.getDropType().getTexturePath());
 		this.animal = animal;
 		this.position = pos;
-		width = 25;
-		height = 25;
+		width = .028f*Gdx.graphics.getWidth();
+		height = .044f*Gdx.graphics.getHeight();
 		this.timeLeft = timeLeft;
 	}
 

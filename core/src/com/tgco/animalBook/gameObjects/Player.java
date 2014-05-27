@@ -21,8 +21,8 @@ public class Player extends Movable {
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
 		
-		width = 70;
-		height = 143;
+		width = .065f*Gdx.graphics.getWidth();
+		height = .21f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 		
 		this.speed = speed;

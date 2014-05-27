@@ -45,7 +45,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	//inventory nums
 	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
 
-	public InventoryScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
+	public InventoryScreen(AnimalBookGame gameInstance, final GameScreen gameScreen) {
 		super(gameInstance);
 
 		this.gameScreen = gameScreen;
@@ -60,17 +60,16 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		//drag and drop stuff
 		dnd.addTarget(new Target(eatZone) {
 			@Override
-			public boolean drag(Source source, Payload payload, float x,
-					float y, int pointer) {
-				// TODO Auto-generated method stub
-				return false;
+			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
+				System.out.println("Target Dragging");
+				return true;
 			}
 
 			@Override
-			public void drop(Source source, Payload payload, float x,
-					float y, int pointer) {
-				// TODO Auto-generated method stub
-
+			public void drop(Source source, Payload payload, float x, float y, int pointer) {
+				//gameScreen.getWorld().getPlayer().eat(Consumable.DropType.EGG.getHungerValue());
+				gameScreen.getWorld().getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
+				System.out.println("EATTTT");
 			}
 		});
 	}
@@ -165,6 +164,10 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			            DragAndDrop.Target target){
 					if (target == null){
 						gameScreen.getWorld().getPlayer().getInventory().addItem(new Consumable(Consumable.DropType.values()[index]));
+						System.out.println("NOT EATING");
+					}
+					else{
+						System.out.println("Valid target");
 					}
 				}
 				

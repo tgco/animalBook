@@ -69,7 +69,7 @@ public class World {
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
-		cameraSpeed = .4f;
+		cameraSpeed = .8f;
 
 		int x;
 		if(level == 0){
@@ -116,7 +116,7 @@ public class World {
 			updateGameLogic();
 
 		//draw objects
-		worldRender.render(batch, aBDrawables, player, 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength));
+		worldRender.render(batch, aBDrawables, player, 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera);
 	}
 
 	public void updateGameLogic() {
@@ -225,8 +225,8 @@ public class World {
 		return droppings;
 	}
 	public void addSwipeToWorld(Vector3 begin, Vector3 end) {
-		camera.project(begin);
-		camera.project(end);
+		//camera.project(begin);
+		//camera.project(end);
 		worldRender.addSwipe(new Vector2(begin.x,begin.y), new Vector2(end.x,end.y));
 	}
 

@@ -1,6 +1,7 @@
 package com.tgco.animalBook;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.tgco.animalBook.handlers.SoundHandler;
@@ -28,8 +29,12 @@ public class AnimalBookGame extends Game {
 	@Override
 	public void render () {
 		super.render();
-		if (debugMode)
+		if (debugMode) {
 			fpsLogger.log();
+			Gdx.app.log("Width", String.valueOf(Gdx.graphics.getWidth()));
+			Gdx.app.log("Height", String.valueOf(Gdx.graphics.getHeight()));
+		}
+		
 	}
 
 	@Override

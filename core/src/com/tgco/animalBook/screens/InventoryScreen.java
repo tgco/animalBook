@@ -17,14 +17,22 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
 public class InventoryScreen extends ButtonScreenAdapter implements Screen {
+
+	private static final Image eatZone = new Image(new Texture(Gdx.files.internal("objectTextures/eatZone.png")));
+	private static final DragAndDrop dnd = new DragAndDrop();
 	
 	private ShapeRenderer shapeRender;
 
@@ -42,12 +50,29 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
 		this.gameScreen = gameScreen;
 
-		//Background Rendering
+		//Rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/inventoryBackground.jpg"));
 		shapeRender = new ShapeRenderer();
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		
+		//drag and drop stuff
+		dnd.addTarget(new Target(eatZone) {
+				@Override
+				public boolean drag(Source source, Payload payload, float x,
+						float y, int pointer) {
+					// TODO Auto-generated method stub
+					return false;
+				}
+
+				@Override
+				public void drop(Source source, Payload payload, float x,
+						float y, int pointer) {
+					// TODO Auto-generated method stub
+					
+				}
+		});
 	}
 
 	@Override
@@ -81,10 +106,12 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
 	}
 	private void initializeInventoryInterface() {
+
 		for (int i = 0; i < Consumable.DropType.values().length; i++){
 			//initialize variables needed for listeners
 			final int foodValue = Consumable.DropType.values()[i].getHungerValue();
 			final int foodIndex = i;
+			final int index = i;
 
 			//associated BitmapFont object for consumable[i]
 			fonts[i] = new BitmapFont();
@@ -100,44 +127,43 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
 			//create a new button using aforementioned button style and set stuff up
-			Button inventoryButton = new Button(inventoryButtonStyle);
+			final Button inventoryButton = new Button(inventoryButtonStyle);
 			inventoryButton.setWidth(BUTTON_WIDTH/2);
 			inventoryButton.setHeight(BUTTON_HEIGHT/2);
 			inventoryButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*i);
 			inventoryButton.setY(Gdx.graphics.getHeight()/2);
 
 			//then add a listener to the button
-			inventoryButton.addListener(new InputListener(){
-
-				//for use in the new listener
-				private int hungerValue = foodValue;
-				private int consumableIndex = foodIndex;
-				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-					return true;
-				}
-				public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-
-					//player eats when button of representing object gets eaten
-					if(gameScreen.getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[consumableIndex])){
-						gameScreen.getWorld().getPlayer().eat(hungerValue);
-					}
-				}
-			});
+			inventoryButton.addListener(new InventoryItemListener(Consumable.DropType.values()[i]));
 			//add actor inventoryButton actor to the buttonStage
 			buttonStage.addActor(inventoryButton);
-			
+			eatZone.setPosition(Gdx.graphics.getWidth()/2 - eatZone.getWidth()/2, 10);
+			buttonStage.addActor(eatZone);
+
 			//update the text for the corresponding item in the inventory
 			updateInventoryScreenItems(i);
-			updateHealthBar();
+			dnd.addSource(new Source(inventoryButton){
+
+				@Override
+				public Payload dragStart(InputEvent event, float x, float y,
+						int pointer) {
+					Payload payload = new Payload();
+					payload.setObject(new Consumable(Consumable.DropType.values()[index]));
+					payload.setDragActor(inventoryButton);
+					// TODO Auto-generated method stub
+					return payload;
+				}}
+			);
 		}
+		updateHealthBar();
 	}
 
 	private void updateHealthBar() {
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.BLACK);
-		shapeRender.rect(Gdx.graphics.getWidth()/2 - 50, Gdx.graphics.getHeight() - 50, 100, 25);
+		shapeRender.rect(Gdx.graphics.getWidth()/2 - .046f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .073f*Gdx.graphics.getHeight(), .093f*Gdx.graphics.getWidth(), .037f*Gdx.graphics.getHeight());
 		shapeRender.setColor(Color.RED);
-		shapeRender.rect(Gdx.graphics.getWidth()/2 - 47, Gdx.graphics.getHeight() - 47, 94*(gameScreen.getWorld().getPlayer().getHealth()/100), 19);
+		shapeRender.rect(Gdx.graphics.getWidth()/2 - .0435f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .069f*Gdx.graphics.getHeight(), 94*(gameScreen.getWorld().getPlayer().getHealth()/100), .028f*Gdx.graphics.getHeight());
 		shapeRender.end();
 	}
 
@@ -220,4 +246,25 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		shapeRender.dispose();
 	}
 
+	private class InventoryItemListener extends InputListener{
+
+		//for use in the new listener
+		//private int hungerValue = foodValue;
+		//private int consumableIndex = foodIndex;
+		private Consumable.DropType dropType;
+
+		public InventoryItemListener(Consumable.DropType dropType){
+			this.dropType = dropType;
+		}
+		public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+			return true;
+		}
+		public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+
+			//player eats when button of representing object gets eaten
+			if(gameScreen.getWorld().getPlayer().getInventory().removeItem(dropType)){
+				gameScreen.getWorld().getPlayer().eat(dropType.getHungerValue());
+			}
+		}
+	}
 }

@@ -31,7 +31,7 @@ public abstract class ButtonScreenAdapter {
 	protected static final float MENU_BUTTON_HEIGHT = (1f/8f)*Gdx.graphics.getWidth();
 	
 	//distance between buttons and between the edge and a button
-	protected static final float EDGE_TOLERANCE = 20;
+	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
 
 	//Button texture initialization
 	protected TextureAtlas atlas;

@@ -110,6 +110,14 @@ public class LevelHandler {
 		return 1000*level;
 	}
 	
+	public void increaseStored() {
+		storedAmount++;
+	}
+	
+	public void decreaseStored() {
+		storedAmount--;
+	}
+	
 	public int getStoredAmount() {
 		return storedAmount;
 	}

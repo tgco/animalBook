@@ -15,11 +15,18 @@ public class Cow extends Animal {
 	public Cow(Vector2 pos) {
 		super(texturePath, pos);
 		
+		
+		speed = 1/14f;
 		width = 200;
 		height = 200;
-		
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
+
+	@Override
+	public DropType getDropType() {
+		return dropType;
+	}
+	
 
 
 

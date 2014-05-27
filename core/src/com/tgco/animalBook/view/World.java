@@ -14,10 +14,8 @@ import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.gameObjects.Dropped;
-import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
-import com.tgco.animalBook.gameObjects.Pig;
 import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
@@ -248,5 +246,9 @@ public class World {
 				player.getInventory().addItem((Consumable) ((Dropped) dropped).getDropped());
 			}
 		//}
+	}
+	
+	public LevelHandler getLevelHandler() {
+		return levelHandler;
 	}
 }

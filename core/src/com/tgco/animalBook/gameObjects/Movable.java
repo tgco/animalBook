@@ -26,7 +26,7 @@ public abstract class Movable extends ABDrawable {
 		//move bias with camera direction
 		position.y += 1.5*cameraSpeed;
 		
-		//Lerp the position to the target //previousTarget.len2()/currentTarget.len2()*1.5f
+		//Lerp the position to the target
 		position.lerp(previousTarget, speed*Gdx.graphics.getDeltaTime());
 
 		//Lerp the previous target to the current

@@ -40,12 +40,12 @@ public class World {
 	//Lane length for this level
 	private float laneLength;
 	//Distance an animal is from player before it is lost
-	private static final float LOST_ANIMAL_TOLERANCE = 2*Gdx.graphics.getWidth()/3;
+	private static final float LOST_ANIMAL_TOLERANCE = 2*Gdx.graphics.getWidth()/4;
 
 	//The player character
 	private Player player;
 
-	private static int level = 5;
+	private static int level = 1;
 
 	private static final int NUM_ANIMALS = 5;
 	
@@ -92,8 +92,10 @@ public class World {
 	}
 
 	public void render(SpriteBatch batch, boolean paused) {
-		if (!paused)
+		if (!paused){
 			updateGameLogic();
+			checkLost();
+		}
 
 		//draw objects
 		worldRender.render(batch, aBDrawables, player, 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera);
@@ -160,7 +162,10 @@ public class World {
 	}
 	
 	public void checkLost(){
+		Gdx.app.log("My Tag", "size of movables" + getMovables().size);
 		if(getMovables().size <=0 || player.getHealth() <=0 ){
+			SoundHandler.toggleSounds();
+			SoundHandler.toggleMusic();
 			gameInstance.getGameScreen().setLost();
 		}
 	}
@@ -242,7 +247,6 @@ public class World {
 		
 			aBDrawables.removeValue(dropped, true);
 			if(((Dropped) dropped).getDropped() instanceof Animal){
-				Gdx.app.log("this is my tag", "the animal is hatched");
 				aBDrawables.add(((Dropped) dropped).getDropped());
 			}
 			else{

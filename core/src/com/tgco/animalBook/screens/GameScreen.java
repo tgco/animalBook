@@ -110,6 +110,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		
 		}
 		else{
+			Gdx.gl.glClearColor(1, 1, 1, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			
 			popupStage.act(delta);
 			popupStage.draw();
 		}
@@ -320,7 +323,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void setLost(){
 		hasLost = true;
 		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-		lostDialog lostD = new lostDialog("You Lost", skin);
+		lostDialog lostD = new lostDialog("You Lost", skin, gameInstance);
+		lostD.show(popupStage);
 		popupStage.addActor(lostD);
 		inputMultiplexer.addProcessor(popupStage);
 	}

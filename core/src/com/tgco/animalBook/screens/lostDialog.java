@@ -2,31 +2,27 @@ package com.tgco.animalBook.screens;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.tgco.animalBook.AnimalBookGame;
 
 public class lostDialog extends Dialog{
 
-	public lostDialog(String title, Skin skin, String windowStyleName) {
-		super(title, skin, windowStyleName);
-		// TODO Auto-generated constructor stub
-	}
-	public lostDialog(String title, WindowStyle windowStyleName) {
-		super(title, windowStyleName);
-		// TODO Auto-generated constructor stub
-	}
-	public lostDialog(String title, Skin skin) {
+	private AnimalBookGame gameInstance;
+	public lostDialog(String title, Skin skin, AnimalBookGame gameInstance) {
 		super(title, skin);
-		// TODO Auto-generated constructor stub
+		this.gameInstance = gameInstance;
 	}
 	
 	{
 		text("You lost all your animals");
-		button("Retry");
-		button("Quit");
+		button("Retry", "retry");
+		button("Quit", "quit");
 		
 	}
 	
 	@Override
 	public void result(Object object){
-		
+		if(object.equals("retry")){
+			gameInstance.setScreen(new GameScreen(gameInstance));
+		}
 	}
 }

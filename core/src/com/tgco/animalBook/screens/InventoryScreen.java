@@ -11,12 +11,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.SoundHandler;
@@ -43,12 +45,9 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		//Background Rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/inventoryBackground.jpg"));
-
+		shapeRender = new ShapeRenderer();
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		
-		shapeRender = new ShapeRenderer();
-		
 	}
 
 	@Override

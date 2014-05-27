@@ -1,29 +1,31 @@
 package com.tgco.animalBook.gameObjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class Dropped extends ABDrawable{
-	private static final String texturePath = "objectTextures/dropEgg.jpg";
+
 	private Consumable consume = null;
 	private Animal animal = null;
 	private double timeLeft;
+
 	public Dropped(Consumable consume, Vector2 pos, double timeLeft) {
-		super(texturePath);
+		super(consume.getType().getTexturePath());
 		this.consume = consume;
 		this.position = pos;
-		width = 25;
-		height = 25;
+		width = .028f*Gdx.graphics.getWidth();
+		height = .044f*Gdx.graphics.getHeight();
 		this.timeLeft = timeLeft;
-		
+
 	}
-	
+
 	public Dropped(Animal animal, Vector2 pos, double timeLeft) {
-		super(texturePath);
+		super(animal.getDropType().getTexturePath());
 		this.animal = animal;
 		this.position = pos;
-		width = 25;
-		height = 25;
+		width = .028f*Gdx.graphics.getWidth();
+		height = .044f*Gdx.graphics.getHeight();
 		this.timeLeft = timeLeft;
 	}
 
@@ -35,14 +37,14 @@ public class Dropped extends ABDrawable{
 			return consume;
 		}
 	}
-	
+
 	@Override
 	public void draw(SpriteBatch batch) {
 		super.draw(batch);
 		timeLeft--;
 	}
-	
-	
+
+
 	public double getTimeLeft() {
 		return timeLeft;
 	}

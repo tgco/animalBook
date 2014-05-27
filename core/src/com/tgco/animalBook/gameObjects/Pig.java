@@ -15,11 +15,15 @@ public class Pig extends Animal {
 	public Pig(Vector2 pos) {
 		super(texturePath, pos);
 		
-		width = 100;
-		height = 100;
+		speed = 1/10f;
+		width = .093f*Gdx.graphics.getWidth();
+		height = .147f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 
-	
+	@Override
+	public DropType getDropType() {
+		return dropType;
+	}
 
 }

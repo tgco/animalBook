@@ -24,8 +24,8 @@ public class Consumable extends ABDrawable {
 		BACON("objectTextures/bacon.png", "objectTextures/baconButton.atlas", 3000, 20),
 		CHEESE("objectTextures/cheese.png", "objectTextures/cheeseButton.atlas", 4000, 15), 
 		WOOL("objectTextures/wool.png", "objectTextures/woolButton.atlas", 5000, 5),
-		MILK("objectTextures/milk.png", "objectTextures/milkButton.atlas", 1000, 25),
-		DRAGON("objectTextures/milk.png", "objectTextures/milkButton.atlas", 1000, 25);
+		MILK("objectTextures/milk.png", "objectTextures/milkButton.atlas", 1000, 25);
+		//DRAGON("objectTextures/milk.png", "objectTextures/milkButton.atlas", 1000, 25);
 		
 		private final String texturePath;
 		private final String atlasPath;

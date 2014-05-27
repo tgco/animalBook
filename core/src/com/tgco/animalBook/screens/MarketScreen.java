@@ -61,7 +61,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 		//Draw money
-		font.setColor(Color.BLACK);
+		font.setColor(Color.WHITE);
 		font.setScale(1.2f);
 		font.draw(batch, "Your Money: $" + String.valueOf(gameScreen.getWorld().getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 , Gdx.graphics.getHeight() - 3*EDGE_TOLERANCE );
 		
@@ -93,7 +93,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			final int foodIndex = i;
 
 			//associated BitmapFont object for consumable[i]
-			fonts[i] = new BitmapFont();
+			fonts[i] = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+			fonts[i].setColor(Color.CYAN);
 
 			//create atlas and add it to a new skin
 			atlas = new TextureAtlas(Gdx.files.internal(Consumable.DropType.values()[i].getAtlasPath()));
@@ -110,7 +111,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			marketButton.setWidth(BUTTON_WIDTH/2);
 			marketButton.setHeight(BUTTON_HEIGHT/2);
 			marketButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*i);
-			marketButton.setY(Gdx.graphics.getHeight()/2);
+			marketButton.setY(Gdx.graphics.getHeight()/1.5f);
 
 			//then add a listener to the button
 			marketButton.addListener(new InputListener(){
@@ -144,7 +145,11 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		fonts[consumableIndex].draw(batch,
 				String.valueOf(gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size),
 				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex,
-				Gdx.graphics.getHeight()/2);
+				Gdx.graphics.getHeight()/1.5f);
+		fonts[consumableIndex].draw(batch,
+				String.valueOf(Consumable.DropType.values()[consumableIndex].getMarketValue()),
+				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex,
+				Gdx.graphics.getHeight()/1.5f - fonts[consumableIndex].getCapHeight());
 		batch.end();
 	}
 

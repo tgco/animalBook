@@ -22,6 +22,9 @@ public class GameScreenInputHandler implements InputProcessor {
 
 	//Distinguishes distance the finger must move to register a drag instead of a touch
 	private static float touchToDragTolerance = 50f;
+	
+	//Must be under this distance to react to a swipe
+	private static final float HERD_TOLERANCE = 300f;
 
 	public GameScreenInputHandler(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		this.gameInstance = gameInstance;
@@ -75,7 +78,7 @@ public class GameScreenInputHandler implements InputProcessor {
 				}
 			}
 		}
-		
+
 		for (int i =0; i < gameScreen.getWorld().getDropped().size ; i++){
 			Dropped dropping = 	gameScreen.getWorld().getDropped().get(i);
 			if (!gameScreen.isPaused()){
@@ -88,10 +91,10 @@ public class GameScreenInputHandler implements InputProcessor {
 				}
 			}
 		}
-		
-		
-		
-		
+
+
+
+
 		//Rest the lastTouch so touchDown will grab a new touch next time
 		lastTouch = null;
 		return false;
@@ -116,11 +119,15 @@ public class GameScreenInputHandler implements InputProcessor {
 			//Amount to move over the currentTarget of the animal
 			if (perpProjection.cpy().len() != 0) {
 
-				//change to adjust how much a goose reacts to a drag (should depend on distance of goose from drag center)
-				float reactionScale = 20000 * 1/(positionCenter.cpy().sub(dragCenter).len());
+				if (positionCenter.cpy().sub(dragCenter).len() < HERD_TOLERANCE){
 
-				//movable.addToCurrentTarget(movable.getPosition().cpy().sub(dragCenter.cpy()).nor().scl(reactionScale));
-				movable.addToCurrentTarget(perpProjection.cpy().nor().scl(reactionScale));
+					//change to adjust how much a goose reacts to a drag (should depend on distance of goose from drag center)
+					float reactionScale = 70000 * 1/positionCenter.cpy().sub(dragCenter).len();
+
+					movable.addToCurrentTarget(perpProjection.cpy().nor().scl(reactionScale));
+
+					gameScreen.getWorld().addSwipeToWorld(new Vector3(positionCenter.x,positionCenter.y,0), new Vector3(positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).x,positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).y,0));
+				}
 			}
 		}
 

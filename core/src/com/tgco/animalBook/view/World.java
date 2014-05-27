@@ -148,6 +148,7 @@ public class World {
 			
 			if (aBDrawable.getBounds().overlaps(market.getBounds())) {
 				if (!aBDrawable.isMarket()) {
+					levelHandler.increaseStored();
 					aBDrawables.removeValue(aBDrawable, false);
 				}
 			}

@@ -11,7 +11,7 @@ public class Player extends Movable {
 	
 	private static final String texturePath = "objectTextures/player.png";
 	private static final Inventory inventory = new Inventory();
-	private float playerMoney = 0;
+	private int playerMoney = 0;
 	
 	private float playerHealth = 100;
 
@@ -58,7 +58,7 @@ public class Player extends Movable {
 		speed = newSpeed;
 	}
 	
-	public float getPlayerMoney() {
+	public int getPlayerMoney() {
 		return playerMoney;
 	}
 

@@ -17,6 +17,7 @@ import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
+import com.tgco.animalBook.gameObjects.Pig;
 import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.MarketScreen;
@@ -46,7 +47,7 @@ public class World {
 	//The player character
 	private Player player;
 
-	private static int level = 0;
+	private static int level = 1;
 	private static final int NUM_ANIMALS = 5;
 	
 	//upgrade presses
@@ -80,6 +81,18 @@ public class World {
 				else {
 					x = (i - (int)Math.floor(.5*NUM_ANIMALS));
 					aBDrawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
+				}
+			}
+
+		} else if(level == 1){
+			for(int i = 0; i < NUM_ANIMALS; i++){
+				if(i < .5*NUM_ANIMALS){
+					x = -i;
+					aBDrawables.add(new Pig(new Vector2(Gdx.graphics.getWidth()/2 + x*40 -50, (float) (Gdx.graphics.getHeight()/2 -x*x*25 + 10*x -50))));
+				}
+				else {
+					x = (i - (int)Math.floor(.5*NUM_ANIMALS));
+					aBDrawables.add(new Pig(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
 				}
 			}
 
@@ -123,10 +136,10 @@ public class World {
 				
 				
 				if(rand.nextInt(100) <= 50){
-				ABDrawable dropping =  ((Animal)aBDrawable).drop();
-				if(dropping != null){
-					aBDrawables.add(dropping);
-				}
+					ABDrawable dropping =  ((Animal)aBDrawable).drop();
+					if(dropping != null){
+						aBDrawables.add(dropping);
+					}
 				}
 					
 			}

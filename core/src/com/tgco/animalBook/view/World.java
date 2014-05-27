@@ -80,6 +80,7 @@ public class World {
 		player = new Player(cameraSpeed);
 
 		//Make the market and set it at the end
+
 		laneLength = levelHandler.returnLaneLength(level);
 		market = new Market();
 		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength + player.getHeight()));

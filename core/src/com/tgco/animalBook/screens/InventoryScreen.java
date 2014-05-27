@@ -19,13 +19,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
 public class InventoryScreen extends ButtonScreenAdapter implements Screen {
-	
+
 	private ShapeRenderer shapeRender;
 
 	//reference to maintain player position
@@ -107,25 +108,10 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButton.setY(Gdx.graphics.getHeight()/2);
 
 			//then add a listener to the button
-			inventoryButton.addListener(new InputListener(){
-
-				//for use in the new listener
-				private int hungerValue = foodValue;
-				private int consumableIndex = foodIndex;
-				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-					return true;
-				}
-				public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-
-					//player eats when button of representing object gets eaten
-					if(gameScreen.getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[consumableIndex])){
-						gameScreen.getWorld().getPlayer().eat(hungerValue);
-					}
-				}
-			});
+			inventoryButton.addListener(new InventoryItemListener(Consumable.DropType.values()[i]));
 			//add actor inventoryButton actor to the buttonStage
 			buttonStage.addActor(inventoryButton);
-			
+
 			//update the text for the corresponding item in the inventory
 			updateInventoryScreenItems(i);
 			updateHealthBar();
@@ -172,18 +158,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
 		//LISTENERS
 		leaveButton.addListener(new InputListener() {
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
 
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				SoundHandler.playButtonClick();
-				SoundHandler.changeBackgroundVolume((float) .5);
-				gameScreen.resetInputProcessors();
-				//Grab the world
-				World world = gameScreen.getWorld();
-				gameInstance.setScreen(gameScreen);
-			}
 		});
 
 		buttonStage.addActor(leaveButton);
@@ -220,4 +195,25 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		shapeRender.dispose();
 	}
 
+	private class InventoryItemListener extends InputListener{
+
+		//for use in the new listener
+		//private int hungerValue = foodValue;
+		//private int consumableIndex = foodIndex;
+		private Consumable.DropType dropType;
+
+		public InventoryItemListener(Consumable.DropType dropType){
+			this.dropType = dropType;
+		}
+		public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+			return true;
+		}
+		public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+
+			//player eats when button of representing object gets eaten
+			if(gameScreen.getWorld().getPlayer().getInventory().removeItem(dropType)){
+				gameScreen.getWorld().getPlayer().eat(dropType.getHungerValue());
+			}
+		}
+	}
 }

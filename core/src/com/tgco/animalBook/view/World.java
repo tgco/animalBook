@@ -18,6 +18,7 @@ import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Player;
+import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.MarketScreen;
 
@@ -46,7 +47,7 @@ public class World {
 	//The player character
 	private Player player;
 
-	private static int level = 0;
+	private static int level = 5;
 	private static final int NUM_ANIMALS = 5;
 	
 	//upgrade presses
@@ -57,6 +58,9 @@ public class World {
 	private Random rand = new Random();
 	//Displays the amount of animals left
 	private BitmapFont font;
+	
+	//manages level creation
+	private LevelHandler levelHandler;
 	
 	public World(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;
@@ -70,20 +74,8 @@ public class World {
 		camera.update();
 		cameraSpeed = .8f;
 
-		int x;
-		if(level == 0){
-			for(int i = 0; i < NUM_ANIMALS; i++){
-				if(i < .5*NUM_ANIMALS){
-					x = -i;
-					aBDrawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40 -50, (float) (Gdx.graphics.getHeight()/2 -x*x*25 + 10*x -50))));
-				}
-				else {
-					x = (i - (int)Math.floor(.5*NUM_ANIMALS));
-					aBDrawables.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
-				}
-			}
-
-		}
+		levelHandler = new LevelHandler(level);
+		aBDrawables.addAll(levelHandler.addAnimals(level, NUM_ANIMALS));
 
 		player = new Player(cameraSpeed);
 

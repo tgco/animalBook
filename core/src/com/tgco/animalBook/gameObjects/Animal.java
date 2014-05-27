@@ -30,7 +30,7 @@ public abstract class Animal extends Movable {
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 
 		//initialize the rates
-		fertilityRate = 5;
+		fertilityRate = 15;
 		dropInterval = 400;
 		timeOnGround = 120;
 
@@ -60,10 +60,10 @@ public abstract class Animal extends Movable {
 		
 		if(changeTargetCount % dropInterval ==0){
 			if(rand.nextInt(100) < fertilityRate){
-				return new Dropped(new Goose(this.position.cpy()),this.position.cpy());
+				return new Dropped(new Goose(this.position.cpy()),this.position.cpy(), timeOnGround);
 			}
 			else{
-				return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy());
+				return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
 			}
 		}
 		else{

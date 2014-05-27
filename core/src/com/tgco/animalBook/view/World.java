@@ -68,21 +68,22 @@ public class World {
 		this.gameInstance = gameInstance;
 
 		aBDrawables = new Array<ABDrawable>();
+		
+		levelHandler = new LevelHandler(level);
 
 		//Camera initialization
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
-		cameraSpeed = .8f;
 		
-		levelHandler = new LevelHandler(level);
+		cameraSpeed = levelHandler.returnCameraSpeed(level);
 		aBDrawables.addAll(levelHandler.addAnimals(level, NUM_ANIMALS));
 
 		player = new Player(cameraSpeed);
 
 		//Make the market and set it at the end
-		laneLength = 1000;
+		laneLength = levelHandler.returnLaneLength(level);
 		market = new Market();
 		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength + player.getHeight()));
 

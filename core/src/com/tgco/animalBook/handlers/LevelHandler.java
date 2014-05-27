@@ -75,5 +75,14 @@ public class LevelHandler {
 
 
 	}
+	
+	public float returnCameraSpeed(int level) {
+		return 2*level;
+	}
+	
+	public float returnLaneLength(int level) {
+		
+		return 1000*level;
+	}
 
 }

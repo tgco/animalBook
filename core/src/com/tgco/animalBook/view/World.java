@@ -18,6 +18,7 @@ import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Player;
+import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.MarketScreen;
 
 //Generates game objects and handles game logic between them
@@ -161,6 +162,7 @@ public class World {
 
 		
 		if (player.getBounds().overlaps(market.getBounds())) {
+			SoundHandler.pauseBackgroundMusic();
 			gameInstance.setScreen(new MarketScreen(gameInstance,gameInstance.getGameScreen()));
 		}
 		

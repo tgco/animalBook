@@ -3,10 +3,13 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
@@ -24,6 +28,9 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 	//buttons
 	private Button leaveButton;
+	
+	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
+	private BitmapFont font;
 
 	public MarketScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
@@ -33,6 +40,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		//Background rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
+		
+		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
 
 		SoundHandler.playMarketBackgroundMusic(true);
 
@@ -50,10 +59,21 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		//render background
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
+		//Draw money
+		font.setColor(Color.BLACK);
+		font.setScale(1.2f);
+		font.draw(batch, "Your Money: $" + String.valueOf(gameScreen.getWorld().getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 , Gdx.graphics.getHeight() - 3*EDGE_TOLERANCE );
+		
 		batch.end();
 
 		//Draw buttons
 		buttonStage.draw();
+		int numConsumables = Consumable.DropType.values().length;
+		for (int i = 0; i < numConsumables; i ++){
+			updateMarketScreenItems(i);
+		}
+	
 	}
 
 	@Override
@@ -62,7 +82,70 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			buttonStage = new Stage();
 		buttonStage.clear();
 		//reinit buttons
+		initializeMarketInterface();
 		initializeButtons();
+	}
+	
+	private void initializeMarketInterface() {
+		for (int i = 0; i < Consumable.DropType.values().length; i++){
+			//initialize variables needed for listeners
+			final int marketValue = Consumable.DropType.values()[i].getMarketValue();
+			final int foodIndex = i;
+
+			//associated BitmapFont object for consumable[i]
+			fonts[i] = new BitmapFont();
+
+			//create atlas and add it to a new skin
+			atlas = new TextureAtlas(Gdx.files.internal(Consumable.DropType.values()[i].getAtlasPath()));
+			buttonSkin = new Skin();
+			buttonSkin.addRegions(atlas);
+
+			//create a Buttonstyle
+			ButtonStyle inventoryButtonStyle = new ButtonStyle();
+			inventoryButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+			inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+			//create a new button using aforementioned button style and set stuff up
+			Button marketButton = new Button(inventoryButtonStyle);
+			marketButton.setWidth(BUTTON_WIDTH/2);
+			marketButton.setHeight(BUTTON_HEIGHT/2);
+			marketButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*i);
+			marketButton.setY(Gdx.graphics.getHeight()/2);
+
+			//then add a listener to the button
+			marketButton.addListener(new InputListener(){
+
+				//for use in the new listener
+				private int consumableIndex = foodIndex;
+				private int sellValue = marketValue;
+				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+					return true;
+				}
+				public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+
+					//player eats when button of representing object gets eaten
+					if(gameScreen.getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[consumableIndex])){
+						gameScreen.getWorld().getPlayer().addPlayerMoney(sellValue);
+					}
+				}
+			});
+			//add actor inventoryButton actor to the buttonStage
+			buttonStage.addActor(marketButton);
+			
+			//update the text for the corresponding item in the market
+			updateMarketScreenItems(i);
+		}
+	}
+	
+	protected void updateMarketScreenItems(int consumableIndex) {
+		//get the number of items in the player's inventory for the given index
+		batch.begin();
+		fonts[consumableIndex].setColor(55,55,55,1f);
+		fonts[consumableIndex].draw(batch,
+				String.valueOf(gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size),
+				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex,
+				Gdx.graphics.getHeight()/2);
+		batch.end();
 	}
 
 	@Override

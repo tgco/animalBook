@@ -1,6 +1,7 @@
 package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -21,10 +22,14 @@ public class Swipe {
 		lifeTime = 100;
 	}
 	
-	public void draw(ShapeRenderer render) {
+	public void draw(OrthographicCamera cam) {
+		
+		ShapeRenderer render = new ShapeRenderer();
+		render.setProjectionMatrix(cam.combined);
 		render.begin(ShapeType.Line);
 		render.line(begin.x, begin.y, end.x, end.y, Color.ORANGE, Color.PINK);
 		render.end();
+		render.dispose();
 		
 		lifeTime -= 1;
 	}

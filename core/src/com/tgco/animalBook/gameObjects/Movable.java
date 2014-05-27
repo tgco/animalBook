@@ -30,7 +30,6 @@ public abstract class Movable extends ABDrawable {
 		position.lerp(previousTarget, speed*Gdx.graphics.getDeltaTime());
 
 		//Lerp the previous target to the current
-		//currentTarget, previousTarget.len2()/currentTarget.len2()
 		previousTarget.lerp(currentTarget,30*speed*Gdx.graphics.getDeltaTime());
 		
 		//update bounds

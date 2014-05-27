@@ -40,7 +40,7 @@ public class WorldRenderer {
 		swipes.add(new Swipe(begin,end));
 	}
 	
-	public void render(SpriteBatch batch, Array<ABDrawable> drawables, Player player, float progressPercentage) {
+	public void render(SpriteBatch batch, Array<ABDrawable> drawables, Player player, float progressPercentage,OrthographicCamera cam) {
 		//Draw all objects
 		player.draw(batch);
 		
@@ -74,7 +74,7 @@ public class WorldRenderer {
 			if (swipe.getLifeTime() == 0) {
 				swipes.removeValue(swipe, false);
 			} else
-				swipe.draw(shapeRender);
+				swipe.draw(cam);
 		}
 		
 		batch.begin();

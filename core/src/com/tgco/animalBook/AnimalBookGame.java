@@ -31,8 +31,6 @@ public class AnimalBookGame extends Game {
 		super.render();
 		if (debugMode) {
 			fpsLogger.log();
-			Gdx.app.log("Width", String.valueOf(Gdx.graphics.getWidth()));
-			Gdx.app.log("Height", String.valueOf(Gdx.graphics.getHeight()));
 		}
 		
 	}

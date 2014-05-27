@@ -149,8 +149,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			dnd.addSource(new Source(inventoryButton){
 
 				@Override
-				public Payload dragStart(InputEvent event, float x, float y,
-						int pointer) {
+				public Payload dragStart(InputEvent event, float x, float y,int pointer) {
 					Payload payload = new Payload();
 					if (gameScreen.getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[index])){
 						payload.setObject(new Consumable(Consumable.DropType.values()[index]));
@@ -160,6 +159,15 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 					}
 					return null;
 				}
+				
+				@Override
+				public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload,
+			            DragAndDrop.Target target){
+					if (target == null){
+						gameScreen.getWorld().getPlayer().getInventory().addItem(new Consumable(Consumable.DropType.values()[index]));
+					}
+				}
+				
 			}
 					);
 		}

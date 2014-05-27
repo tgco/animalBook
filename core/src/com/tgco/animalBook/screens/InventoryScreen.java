@@ -33,7 +33,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
 	private static final Image eatZone = new Image(new Texture(Gdx.files.internal("objectTextures/eatZone.png")));
 	private static final DragAndDrop dnd = new DragAndDrop();
-	
+
 	private ShapeRenderer shapeRender;
 
 	//reference to maintain player position
@@ -56,22 +56,22 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		shapeRender = new ShapeRenderer();
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		
+
 		//drag and drop stuff
 		dnd.addTarget(new Target(eatZone) {
-				@Override
-				public boolean drag(Source source, Payload payload, float x,
-						float y, int pointer) {
-					// TODO Auto-generated method stub
-					return false;
-				}
+			@Override
+			public boolean drag(Source source, Payload payload, float x,
+					float y, int pointer) {
+				// TODO Auto-generated method stub
+				return false;
+			}
 
-				@Override
-				public void drop(Source source, Payload payload, float x,
-						float y, int pointer) {
-					// TODO Auto-generated method stub
-					
-				}
+			@Override
+			public void drop(Source source, Payload payload, float x,
+					float y, int pointer) {
+				// TODO Auto-generated method stub
+
+			}
 		});
 	}
 
@@ -134,7 +134,11 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButton.setY(Gdx.graphics.getHeight()/2);
 
 			//then add a listener to the button
-			inventoryButton.addListener(new InventoryItemListener(Consumable.DropType.values()[i]));
+			
+			//
+			//inventoryButton.addListener(new InventoryItemListener(Consumable.DropType.values()[i]));
+			//
+			
 			//add actor inventoryButton actor to the buttonStage
 			buttonStage.addActor(inventoryButton);
 			eatZone.setPosition(Gdx.graphics.getWidth()/2 - eatZone.getWidth()/2, 10);
@@ -148,12 +152,16 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 				public Payload dragStart(InputEvent event, float x, float y,
 						int pointer) {
 					Payload payload = new Payload();
-					payload.setObject(new Consumable(Consumable.DropType.values()[index]));
-					payload.setDragActor(inventoryButton);
-					// TODO Auto-generated method stub
-					return payload;
-				}}
-			);
+					if (gameScreen.getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[index])){
+						payload.setObject(new Consumable(Consumable.DropType.values()[index]));
+						Image buttonImage = new Image(inventoryButton.getBackground());
+						payload.setDragActor(buttonImage);
+						return payload;
+					}
+					return null;
+				}
+			}
+					);
 		}
 		updateHealthBar();
 	}

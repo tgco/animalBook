@@ -15,8 +15,8 @@ public class Cow extends Animal {
 	public Cow(Vector2 pos) {
 		super(texturePath, pos);
 		
-		width = 300;
-		height = 300;
+		width = 200;
+		height = 200;
 		
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}

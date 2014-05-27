@@ -119,9 +119,7 @@ public class World {
 			if (aBDrawable.isMovable()){
 				//Gdx.app.log("My tag", "the size is " + aBDrawable.getClass());
 				((Movable) aBDrawable).move(cameraSpeed);
-				
-				
-				
+
 				if(rand.nextInt(100) <= 50){
 				ABDrawable dropping =  ((Animal)aBDrawable).drop();
 				if(dropping != null){
@@ -167,7 +165,12 @@ public class World {
 		}
 		
 	}
-
+	
+	public void checkLost(){
+		if(getMovables().size <=0 || player.getHealth() <=0 ){
+			gameInstance.getGameScreen().setLost();
+		}
+	}
 
 	//Moves the camera up at the desired speed
 	public void moveCameraUp(float speed) {

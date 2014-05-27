@@ -3,6 +3,7 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -35,6 +36,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Button eatButton;
 	private UpgradesScreen upgradeScreen;
 	
+	private Stage popupStage;
+	private boolean hasLost = false;
+	
+	
+	
 	private BitmapFont font;
 	
 	
@@ -42,7 +48,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	public GameScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
-
+		popupStage = new Stage();
 		paused = false;
 
 		//Initialize game world
@@ -65,6 +71,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void render(float delta) {
+		
+		if(!hasLost ){
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -96,9 +104,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		
 		batch.end();
 
-		
 		//Draw buttons over the screen
 		buttonStage.draw();
+		
+		}
+		else{
+			popupStage.act(delta);
+			popupStage.draw();
+		}
 	}
 
 	//Finds which "node" is visible on screen and draws four grass tiles around it
@@ -132,6 +145,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.clear();
 		//reinit buttons
 		initializeButtons();
+		
+		
 	}
 
 	@Override
@@ -262,7 +277,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void show() {
-
+		
 	}
 
 	@Override
@@ -300,6 +315,13 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void resetInputProcessors() {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
-
+	
+	public void setLost(){
+		hasLost = true;
+		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+		lostDialog lostD = new lostDialog("You Lost", skin);
+		popupStage.addActor(lostD);
+		inputMultiplexer.addProcessor(popupStage);
+	}
 
 }

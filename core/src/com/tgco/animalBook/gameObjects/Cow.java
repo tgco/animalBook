@@ -17,8 +17,8 @@ public class Cow extends Animal {
 		
 		
 		speed = 1/14f;
-		width = 200;
-		height = 200;
+		width = .139f*Gdx.graphics.getWidth();
+		height = .22f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 

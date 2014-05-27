@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
 public abstract class Animal extends Movable {
 	
@@ -16,6 +17,8 @@ public abstract class Animal extends Movable {
 	private double dropInterval;
 	private double timeOnGround;
 	private int changeTargetCount = 0;
+	
+	private DropType dropType;
 	
 	protected Random rand;
 
@@ -60,10 +63,32 @@ public abstract class Animal extends Movable {
 		
 		if(changeTargetCount % dropInterval ==0){
 			if(rand.nextInt(100) < fertilityRate){
-				return new Dropped(new Goose(this.position.cpy()),this.position.cpy(), timeOnGround);
+				if (this.getClass().equals(Goose.class)) 
+					return new Dropped(new Goose(this.position.cpy()),this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Pig.class))
+					return new Dropped(new Pig(this.position.cpy()),this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Goat.class))
+					return new Dropped(new Goat(this.position.cpy()),this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Sheep.class))
+					return new Dropped(new Sheep(this.position.cpy()),this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Cow.class))
+					return new Dropped(new Cow(this.position.cpy()),this.position.cpy(), timeOnGround);
+				else
+					return new Dropped(new Goose(this.position.cpy()),this.position.cpy(), timeOnGround);
 			}
 			else{
-				return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
+				if (this.getClass().equals(Goose.class))
+					return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Pig.class))
+					return new Dropped(new Consumable(Consumable.DropType.values()[1]), this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Goat.class))
+					return new Dropped(new Consumable(Consumable.DropType.values()[2]), this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Sheep.class))
+					return new Dropped(new Consumable(Consumable.DropType.values()[3]), this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Cow.class))
+					return new Dropped(new Consumable(Consumable.DropType.values()[4]), this.position.cpy(), timeOnGround);
+				else
+					return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
 			}
 		}
 		else{
@@ -96,4 +121,5 @@ public abstract class Animal extends Movable {
 		this.timeOnGround += timeOnGround;
 	}
 	
+	public abstract DropType getDropType();
 }

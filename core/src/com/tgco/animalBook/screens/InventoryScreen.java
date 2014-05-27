@@ -3,11 +3,14 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,6 +23,8 @@ import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
 public class InventoryScreen extends ButtonScreenAdapter implements Screen {
+	
+	private ShapeRenderer shapeRender;
 
 	//reference to maintain player position
 	private GameScreen gameScreen;
@@ -41,6 +46,9 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		
+		shapeRender = new ShapeRenderer();
+		
 	}
 
 	@Override
@@ -59,6 +67,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		for (int i = 0; i < numConsumables; i ++){
 			updateInventoryScreenItems(i);
 		}
+		updateHealthBar();
 	}
 
 	@Override
@@ -69,6 +78,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		//reinit buttons
 		initializeInventoryInterface();
 		initializeButtons();
+		updateHealthBar();
 
 	}
 	private void initializeInventoryInterface() {
@@ -119,7 +129,17 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			
 			//update the text for the corresponding item in the inventory
 			updateInventoryScreenItems(i);
+			updateHealthBar();
 		}
+	}
+
+	private void updateHealthBar() {
+		shapeRender.begin(ShapeType.Filled);
+		shapeRender.setColor(Color.BLACK);
+		shapeRender.rect(Gdx.graphics.getWidth()/2 - 50, Gdx.graphics.getHeight() - 50, 100, 25);
+		shapeRender.setColor(Color.RED);
+		shapeRender.rect(Gdx.graphics.getWidth()/2 - 47, Gdx.graphics.getHeight() - 47, 94*(gameScreen.getWorld().getPlayer().getHealth()/100), 19);
+		shapeRender.end();
 	}
 
 	protected void updateInventoryScreenItems(int consumableIndex) {
@@ -198,7 +218,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
-
+		shapeRender.dispose();
 	}
 
 }

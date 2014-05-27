@@ -17,6 +17,7 @@ import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
+import com.tgco.animalBook.gameObjects.Pig;
 import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
@@ -48,6 +49,7 @@ public class World {
 	private Player player;
 
 	private static int level = 5;
+
 	private static final int NUM_ANIMALS = 5;
 	
 	//upgrade presses
@@ -73,7 +75,7 @@ public class World {
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 		cameraSpeed = .8f;
-
+		
 		levelHandler = new LevelHandler(level);
 		aBDrawables.addAll(levelHandler.addAnimals(level, NUM_ANIMALS));
 
@@ -115,10 +117,10 @@ public class World {
 				
 				
 				if(rand.nextInt(100) <= 50){
-				ABDrawable dropping =  ((Animal)aBDrawable).drop();
-				if(dropping != null){
-					aBDrawables.add(dropping);
-				}
+					ABDrawable dropping =  ((Animal)aBDrawable).drop();
+					if(dropping != null){
+						aBDrawables.add(dropping);
+					}
 				}
 					
 			}

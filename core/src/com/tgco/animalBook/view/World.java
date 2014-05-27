@@ -47,7 +47,7 @@ public class World {
 	//The player character
 	private Player player;
 
-	private static int level = 1;
+	private static int level = 0;
 	private static final int NUM_ANIMALS = 5;
 	
 	//upgrade presses
@@ -101,7 +101,7 @@ public class World {
 		player = new Player(cameraSpeed);
 
 		//Make the market and set it at the end
-		laneLength = 1000;
+		laneLength = 250;
 		market = new Market();
 		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength + player.getHeight()));
 

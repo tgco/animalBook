@@ -45,7 +45,7 @@ public class World {
 	//The player character
 	private Player player;
 
-	private static int level = 5;
+	private static int level = 1;
 
 	private static final int NUM_ANIMALS = 5;
 	
@@ -148,6 +148,7 @@ public class World {
 			
 			if (aBDrawable.getBounds().overlaps(market.getBounds())) {
 				if (!aBDrawable.isMarket()) {
+					levelHandler.increaseStored();
 					aBDrawables.removeValue(aBDrawable, false);
 				}
 			}

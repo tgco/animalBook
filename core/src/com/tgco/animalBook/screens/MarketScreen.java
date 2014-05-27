@@ -28,6 +28,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 	//buttons
 	private Button leaveButton;
+	private Button levelAnimalButton;
 	
 	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
 	private BitmapFont font;
@@ -51,6 +52,9 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void render(float delta) {
+		int storedAnimal = gameScreen.getWorld().getLevelHandler().getStoredAmount();
+		int needAnimals = gameScreen.getWorld().getLevelHandler().getPassLevelAmount();
+		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -64,6 +68,10 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		font.setColor(Color.WHITE);
 		font.setScale(1.2f);
 		font.draw(batch, "Your Money: $" + String.valueOf(gameScreen.getWorld().getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 , Gdx.graphics.getHeight() - 3*EDGE_TOLERANCE );
+		
+		font.setColor(Color.WHITE);
+		font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		font.draw(batch, "Need: " + String.valueOf(needAnimals), Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE - font.getCapHeight());
 		
 		batch.end();
 
@@ -170,6 +178,21 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		leaveButton.setHeight(BUTTON_HEIGHT);
 		leaveButton.setX(EDGE_TOLERANCE);
 		leaveButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		
+		//LEVEL ANIMAL BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/button.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+		
+		ButtonStyle levelAnimalButtonStyle = new ButtonStyle();
+		levelAnimalButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		levelAnimalButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		levelAnimalButton = new Button(levelAnimalButtonStyle);
+		levelAnimalButton.setWidth(BUTTON_WIDTH);
+		levelAnimalButton.setHeight(BUTTON_HEIGHT);
+		levelAnimalButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
+		levelAnimalButton.setY(Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 
 		//LISTENERS
@@ -188,9 +211,25 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});
+		
+		levelAnimalButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				if (gameScreen.getWorld().getLevelHandler().getStoredAmount() == 0) {
+					return;
+				} else {
+					gameScreen.getWorld().getLevelHandler().decreaseStored();
+				}
+			}
+		});
 
 
 		buttonStage.addActor(leaveButton);
+		buttonStage.addActor(levelAnimalButton);
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}

@@ -125,5 +125,9 @@ public class LevelHandler {
 	public int getPassLevelAmount() {
 		return passLevelAmount;
 	}
+	
+	public int getLevel(){
+		return level;
+	}
 
 }

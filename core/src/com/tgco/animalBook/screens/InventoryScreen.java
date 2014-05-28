@@ -34,11 +34,34 @@ import com.tgco.animalBook.handlers.SoundHandler;
  *
  */
 public class InventoryScreen extends ButtonScreenAdapter implements Screen {
+	/**
+	 * The image that represents the drop zone for the player's eat() function
+	 */
 	private static final Image eatZone = new Image(new Texture(Gdx.files.internal("objectTextures/eatzone.png")));
+	
+	/**
+	 * DragAndDrop object that facilitates drag and drop functionality in this screen
+	 */
 	private static final DragAndDrop dnd = new DragAndDrop();
+	
+	/**
+	 * Renders player health bar
+	 */
 	private ShapeRenderer shapeRender;
+	
+	/**
+	 * instance of gameScreen
+	 */
 	private GameScreen gameScreen;
+	
+	/**
+	 * Button for leaving the inventory scren
+	 */
 	private Button leaveButton;
+	
+	/**
+	 * Draws amounts of each inventory item
+	 */
 	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
 
 	/**

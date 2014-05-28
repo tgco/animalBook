@@ -26,11 +26,34 @@ import com.tgco.animalBook.handlers.SoundHandler;
  */
 public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
+	/**
+	 * Buttons
+	 */
 	private Button 			skipButton, continueButton;
+	
+	/**
+	 * Holds story screen string paths
+	 */
 	private static final	ArrayMap<Integer, Array<String>> storyMap = new ArrayMap<Integer, Array<String>>();
+	
+	/**
+	 * Fading sprite for story screen transitions
+	 */
 	private Sprite			fadingSprite;
+	
+	/**
+	 * batch for rendering
+	 */
 	private SpriteBatch	batch;
+	
+	/**
+	 * simple page number for storyMap
+	 */
 	private int					pageNumber;
+	
+	/**
+	 * Fading screen constants
+	 */
 	private final float	FADE_IN_TIME = 1;
 	private final float	FADE_OUT_TIME = 1;
 	private float				timeCounter;

@@ -1,3 +1,9 @@
+/**
+ * File : Animal.java
+ * The animal class is an abstract class that has the basic functionality of all animals in the game.
+ * it draws itself, drops the proper dropped items
+ * 
+ */
 package com.tgco.animalBook.gameObjects;
 
 import java.util.Random;
@@ -9,26 +15,38 @@ import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
 public abstract class Animal extends Movable {
 	
-	//rate in percent that a child animal is spawned instead of a consumable
+	/**
+	 * rate in percent that a child animal is spawned instead of a consumable
+	 */
 	private double fertilityRate;
 	
-	//interval between drop chances
+	/** interval between drop chances */
 	private double dropInterval;
+	/** the time it stays on the ground until it disappers */
 	private double timeOnGround;
+	
+	/** a counter to reflect the amount of frames have gone by to determine when to move the animal */
 	private int changeTargetCount = 0;
 	
+	/** every animal has a different item that is dropped */
 	private DropType dropType;
 	
+	/** rand is used to created random movement of the animal */
 	protected Random rand;
 
+	/**
+	 * animal construct which every child must have a string to it's picture which is needed for ABDrawbles
+	 *  along with a position
+	 * @param texturePath the string path to the picture
+	 * @param position the starting position when the animal is created
+	 */
 	public Animal(String texturePath, Vector2 position) {
 		super(texturePath);
-		//Animals start in the middle of the screen
 		this.position = position;
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
 		
-		//bounds
+		//leeway for collection
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 
 		//initialize the rates
@@ -40,6 +58,9 @@ public abstract class Animal extends Movable {
 		rand = new Random();
 	}
 	
+	/**
+	 * draw is done every frame. It draws and then decides if it should move with a 75%  chance after 5/6 of a second
+	 */
 	@Override
 	public void draw(SpriteBatch batch) {
 		super.draw(batch);
@@ -52,12 +73,17 @@ public abstract class Animal extends Movable {
 		
 		changeTargetCount++;
 	}
-	public void changeTarget(){
+	
+	private void changeTarget(){
 		currentTarget = new Vector2(position.x + rand.nextInt(400) - 200, position.y + rand.nextInt(400) - 200);
 	}
 	
 	
-	//Create a consumable or new animal
+	/**
+	 * Create a consumable or new animal based on which animal the parent is.
+	 * 
+	 * @return ABDrawable which is either an animal or consumable to the Dropped class
+	 */
 	public ABDrawable drop() {
 		
 		if(changeTargetCount % dropInterval ==0){
@@ -95,30 +121,54 @@ public abstract class Animal extends Movable {
 		}
 	}
 	
-	
+	/**
+	 * used for upgradesScreen
+	 * @return fertilityRate
+	 */
 	public double getFertilityRate() {
 		return fertilityRate;
 	}
 
+	/**
+	 * used for the upgradesScreen in terms of seconds
+	 * @return getDroppedInterval
+	 */
 	public double getDropInterval() {
 		return dropInterval/60.0;
 	}
 
+	/**
+	 * used for the upgradesScreen in terms of seconds
+	 * @return getTimeOnGround
+	 */
 	public double getTimeOnGround() {
 		return timeOnGround /60.0;
 	}
-
+	
+	/**
+	 *  used with the upgradesScreen to increase the fertility of the animal
+	 * @param fertilityRate the amount to add to the fertilityRate of the animal
+	 */
 	public void upgradeFertilityRate(double fertilityRate) {
 		this.fertilityRate += fertilityRate;
 	}
 
+	/**
+	 * used with the upgradesScreen to increase the drop rate of the animal
+	 * @param dropInterval the amount to add to the dropInterval of the animal
+	 */
 	public void upgradeDropInterval(double dropInterval) {
 		this.dropInterval -= dropInterval;
 	}
 
+	/**
+	 * used with the upgradesScreen to increase how long it will stay on the ground
+	 * @param timeOnGround the amount to add to the timeOnGround of the animal
+	 */
 	public void upgradeTimeOnGround(double timeOnGround) {
 		this.timeOnGround += timeOnGround;
 	}
 	
+	/** every animal will be able to get the dropType that it has */
 	public abstract DropType getDropType();
 }

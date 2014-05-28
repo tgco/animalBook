@@ -12,7 +12,7 @@ public class Consumable extends ABDrawable {
 	
 	/**
 	 * Constructor creates a consumable given a DropType type.
-	 * @param dropType
+	 * @param dropType - The objects intended DropType
 	 */
 	public Consumable(DropType dropType){
 		super(dropType.getTexturePath());
@@ -21,7 +21,7 @@ public class Consumable extends ABDrawable {
 	
 	/**
 	 * Returns this object's DropType.
-	 * @return type
+	 * @return type - returns the DropType
 	 */
 	public DropType getType(){
 		return type;
@@ -46,10 +46,10 @@ public class Consumable extends ABDrawable {
 		
 		/**
 		 * Private constructor necessary to create Consumable enumeration.
-		 * @param texturePath
-		 * @param atlasPath
-		 * @param marketValue
-		 * @param hungerValue
+		 * @param texturePath - String path to the texture file
+		 * @param atlasPath - String path to the atlas file
+		 * @param marketValue - The Consumable's market value
+		 * @param hungerValue - The Consumable's hunger value
 		 */
 		private DropType(String texturePath, String atlasPath, int marketValue, int hungerValue){
 			this.texturePath		=	texturePath;

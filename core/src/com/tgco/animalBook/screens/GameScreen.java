@@ -320,10 +320,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 	
-	public void setLost(){
+	public void setLost(boolean noAnimals){
 		hasLost = true;
 		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-		lostDialog lostD = new lostDialog("You Lost", skin, gameInstance);
+		lostDialog lostD = new lostDialog("You Lost", skin, gameInstance,noAnimals);
 		lostD.show(popupStage);
 		popupStage.addActor(lostD);
 		inputMultiplexer.addProcessor(popupStage);

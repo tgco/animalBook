@@ -21,10 +21,11 @@ import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.MarketScreen;
 
 /**
- * 
+ *  Initializes game objects and handles the logic between them for game play
+ *  
  * @author
  *
- * Initializes game objects and handles the logic between them for game play
+ *
  */
 public class World {
 

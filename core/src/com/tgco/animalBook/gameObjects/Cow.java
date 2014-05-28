@@ -6,11 +6,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
 /**
+ * Implements correct drop type, texture path, speed and size
+ * for this type of animal.
  * 
  * @author
  *
- * Implements correct drop type, texture path, speed and size
- * for this type of animal.
+ * 
  */
 public class Cow extends Animal {
 

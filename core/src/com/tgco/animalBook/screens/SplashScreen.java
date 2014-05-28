@@ -10,10 +10,11 @@ import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
 /**
+ * Fades in, displays, and fades out a logo.
  * 
  * @author
  *
- * Fades in, displays, and fades out a logo.
+ * 
  */
 public class SplashScreen implements Screen {
 

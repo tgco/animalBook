@@ -15,10 +15,11 @@ import com.tgco.animalBook.gameObjects.Swipe;
 
 
 /**
+ * Provides rendering for all drawable objects in the game world, including the health and progress bars
  * 
  * @author
  *
- * Provides rendering for all drawable objects in the game world, including the health and progress bars
+ * 
  */
 public class WorldRenderer {
 

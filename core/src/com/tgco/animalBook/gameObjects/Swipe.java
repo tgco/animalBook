@@ -8,11 +8,12 @@ import com.badlogic.gdx.math.Vector2;
 
 
 /**
+ * Container class that stores begin and end points of a line and
+ * provides drawing functionality for that line
  * 
  * @author
  *
- * Container class that stores begin and end points of a line and
- * provides drawing functionality for that line
+ * 
  */
 public class Swipe {
 	

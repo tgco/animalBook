@@ -15,13 +15,12 @@ public class AnimalBookGame extends Game {
 
 	/**Version string  */
 	public static final String version = "0.2.0";
-	
+
 	/** debug variables */
 	public static final Boolean debugMode = true;
 	private FPSLogger fpsLogger;
 	//Testing new control system (taps)
-		public static final boolean tapControls = false;
-
+	public static final boolean tapControls = true;
 
 	/**
 	 * every game starts with the create function.
@@ -30,9 +29,7 @@ public class AnimalBookGame extends Game {
 	@Override
 	public void create () {
 		//Set the initial screen
-
 		setScreen(new SplashScreen(this));
-
 		if (debugMode)
 			fpsLogger = new FPSLogger();
 	}
@@ -43,10 +40,8 @@ public class AnimalBookGame extends Game {
 	@Override
 	public void render () {
 		super.render();
-		if (debugMode) {
+		if (debugMode) 
 			fpsLogger.log();
-		}
-		
 	}
 
 	/**
@@ -58,7 +53,7 @@ public class AnimalBookGame extends Game {
 		getScreen().dispose();
 		SoundHandler.dispose();
 	}
-	
+
 	/**
 	 * resizes at the start of the game creating
 	 * @param width the width of the game window  
@@ -86,17 +81,19 @@ public class AnimalBookGame extends Game {
 	}
 
 	/**
-	 * this is used to get the gameScreen at the android level
+	 * Used to cast the current screen to gameScreen to
+	 * provide gameScreen functionality
+	 * 
 	 * @return GameScreen
 	 */
 	public GameScreen getGameScreen(){
 		return (GameScreen) getScreen();
 	}
+	
 	/**
-	 * resets the audio stuff becuase of how android works with static. Static is not deleted at onStop().
+	 * resets the audio stuff because of how android works with static. Static is not deleted at onStop().
 	 */
 	public void reset() {
 		SoundHandler.resetAudio();
 	}
-
 }

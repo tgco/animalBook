@@ -13,7 +13,7 @@ public class Player extends Movable {
 	/** the texture is what the player looks like */
 	private static final String texturePath = "objectTextures/player.png";
 	/**inventory houses the consumables it's carrying */
-	private static final Inventory inventory = new Inventory();
+	private final Inventory inventory = new Inventory();
 	/** it starts at $0*/
 	private int playerMoney = 0;
 	/** it starts at full health */

@@ -1,13 +1,14 @@
 package com.tgco.animalBook.view;
 
 import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Animal;
@@ -38,7 +39,7 @@ public class World {
 	 * The camera used to view the world
 	 */
 	private OrthographicCamera camera;
-	
+
 	/**
 	 * The speed the camera moves up the lane
 	 */
@@ -52,8 +53,8 @@ public class World {
 	/**
 	 * Array of objects that will be drawn to the screen
 	 */
-	private Array<ABDrawable> aBDrawables;
-	
+	private ArrayMap<String, Array<ABDrawable>> drawMap;
+
 	/**
 	 * Market located at end of the game level
 	 */
@@ -63,7 +64,7 @@ public class World {
 	 * The distance the player must walk to reach the market
 	 */
 	private float laneLength;
-	
+
 	/**
 	 * Distance an animal can be from the player before it is lost and removed
 	 */
@@ -82,25 +83,25 @@ public class World {
 	/**
 	 * The number of animals the player has
 	 */
-	private static final int NUM_ANIMALS = 5;
-	
+	private static int numAnimals = 5;
+
 	/**
 	 * Number of times each upgrade button has been pressed
 	 */
-	private int fruitfullMoneyP =0;
-	private int LongerMoneyP =0;
-	private int MoreMoneyP =0;
-	
+	private int fruitfullMoneyP	= 0;
+	private int LongerMoneyP	= 0;
+	private int MoreMoneyP		= 0;
+
 	/**
 	 * Generates random numbers for probability
 	 */
 	private Random rand = new Random();
-	
+
 	/**
 	 * Load all information that differs between levels
 	 */
 	private LevelHandler levelHandler;
-	
+
 	/**
 	 * Constructor with game instance
 	 * 
@@ -108,20 +109,19 @@ public class World {
 	 */
 	public World(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;
+		drawMap = new ArrayMap<String, Array<ABDrawable>>();
 
-		aBDrawables = new Array<ABDrawable>();
 		worldRender = new WorldRenderer();
-		
+
 		levelHandler = new LevelHandler(level);
+		drawMap.put("Movable", levelHandler.addAnimals(level, numAnimals));
 
 		//Camera initialization
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
-		cameraSpeed = levelHandler.returnCameraSpeed(level);
-		
-		aBDrawables.addAll(levelHandler.addAnimals(level, NUM_ANIMALS));
+		cameraSpeed = levelHandler.returnCameraSpeed(level);	
 
 		player = new Player(cameraSpeed);
 
@@ -129,9 +129,12 @@ public class World {
 		laneLength = levelHandler.returnLaneLength(level);
 		market = new Market();
 		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength + player.getHeight()));
+		drawMap.put("Market", new Array<ABDrawable>());
+		drawMap.get("Market").add(market);
 
-		aBDrawables.add(market);
-		
+		drawMap.put("Dropped", new Array<ABDrawable>());
+		drawMap.put("Player", new Array<ABDrawable>());
+		drawMap.get("Player").add(player);
 	}
 
 	/**
@@ -147,7 +150,7 @@ public class World {
 		}
 
 		//draw objects
-		worldRender.render(batch, aBDrawables, player, 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera);
+		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera);
 	}
 
 	/**
@@ -157,25 +160,23 @@ public class World {
 		//move the camera
 		moveCameraUp(cameraSpeed);
 
-		for (ABDrawable aBDrawable : aBDrawables) {
+		for (ABDrawable dropped : drawMap.get("Dropped")){
 			//Remove uncollected drops
-			if(aBDrawable.isDropping() && ((Dropped) aBDrawable).getTimeLeft() <= 0){
-				aBDrawables.removeValue(aBDrawable, true);
+			if(((Dropped) dropped).getTimeLeft() <= 0){
+				drawMap.get("Dropped").removeValue(dropped, true);
 			}
-			
-			if (aBDrawable.isMovable()){
-				//move animals if necessary
-				((Movable) aBDrawable).move(cameraSpeed);
-				//Drop new items
-				if(rand.nextInt(100) <= 50){
-					ABDrawable dropping =  ((Animal)aBDrawable).drop();
-					if(dropping != null){
-						aBDrawables.add(dropping);
-					}
+		}
+
+		for (ABDrawable movable : drawMap.get("Movable")) {
+			//move animals if necessary
+			((Movable) movable).move(cameraSpeed);
+			//Drop new items
+			if(rand.nextInt(100) <= 50){
+				ABDrawable dropping =  ((Animal)movable).drop();
+				if(dropping != null){
+					drawMap.get("Dropped").add(dropping);
 				}
-					
 			}
-				
 		}
 
 		//move player
@@ -187,22 +188,18 @@ public class World {
 		cameraSpeed = .2f*(player.getHealth()/100);
 
 		//check for and remove lost animals
-		for (ABDrawable drawable : aBDrawables) {
-			if (!drawable.isMarket()) {
-				if (drawable.getPosition().cpy().sub(player.getPosition()).len() > LOST_ANIMAL_TOLERANCE) {
-					aBDrawables.removeValue(drawable, false);
-				}
+		for (ABDrawable drawable : drawMap.get("Movable")) {
+
+			if (drawable.getPosition().cpy().sub(player.getPosition()).len() > LOST_ANIMAL_TOLERANCE) {
+				drawMap.get("Movable").removeValue(drawable, false);
 			}
 		}
 
-		//check for collisions between the market and the player/geese
-		for (ABDrawable aBDrawable : aBDrawables) {
-			
-			if (aBDrawable.getBounds().overlaps(market.getBounds())) {
-				if (!aBDrawable.isMarket()) {
-					levelHandler.increaseStored();
-					aBDrawables.removeValue(aBDrawable, false);
-				}
+		//check for collisions between the market and the animals
+		for (ABDrawable movable : drawMap.get("Movable")) {
+			if (movable.getBounds().overlaps(market.getBounds())) {
+				levelHandler.increaseStored();
+				drawMap.get("Movable").removeValue(movable, false);
 			}
 		}
 
@@ -211,9 +208,8 @@ public class World {
 			SoundHandler.pauseBackgroundMusic();
 			gameInstance.setScreen(new MarketScreen(gameInstance,gameInstance.getGameScreen()));
 		}
-		
 	}
-	
+
 	/**
 	 * Checks if the player lost the current level
 	 */
@@ -244,10 +240,11 @@ public class World {
 	 * Disposes all objects that need to release memory
 	 */
 	public void dispose() {
-		for (ABDrawable aBDrawable : aBDrawables) {
-			aBDrawable.dispose();
+		for (Array<ABDrawable> drawableArrays : drawMap.values){
+			for (ABDrawable drawable : drawableArrays) {
+				drawable.dispose();
+			}
 		}
-		
 		worldRender.dispose();
 	}
 
@@ -258,13 +255,12 @@ public class World {
 	 */
 	public Array<Movable> getMovables() {
 		Array<Movable> movables = new Array<Movable>();
-		for (ABDrawable aBDrawable : aBDrawables) {
-			if (aBDrawable.isMovable())
+		for (ABDrawable aBDrawable : drawMap.get("Movable")){
 				movables.add((Movable) aBDrawable);
 		}
 		return movables;
 	}
-	
+
 	/**
 	 * Finds which drawables are dropped items, casts them to dropped and returns them in an array
 	 * 
@@ -272,15 +268,12 @@ public class World {
 	 */
 	public Array<Dropped> getDropped() {
 		Array<Dropped> droppings = new Array<Dropped>();
-		for (ABDrawable aBDrawable : aBDrawables) {
-			if (aBDrawable.isDropping()){
+		for (ABDrawable aBDrawable : drawMap.get("Dropped")) {
 				droppings.add((Dropped) aBDrawable);
-			}
-			
 		}
 		return droppings;
 	}
-	
+
 	/**
 	 * Adds a swipe line to the world so it will be rendered
 	 * 
@@ -288,26 +281,24 @@ public class World {
 	 * @param end	the point where the swipe ends
 	 */
 	public void addSwipeToWorld(Vector3 begin, Vector3 end) {
-		//camera.project(begin);
-		//camera.project(end);
 		worldRender.addSwipe(new Vector2(begin.x,begin.y), new Vector2(end.x,end.y));
 	}
-	
+
 	/**
 	 * Removes the dropped item from the drawn objects, and handles the logic for the collection of the item
 	 * 
 	 * @param dropped the dropped item on screen that is to be removed
 	 */
 	public void removeFromABDrawable(ABDrawable dropped){
-			aBDrawables.removeValue(dropped, true);
-			if(((Dropped) dropped).getDropped() instanceof Animal){
-				aBDrawables.add(((Dropped) dropped).getDropped());
-			}
-			else{
-				player.getInventory().addItem((Consumable) ((Dropped) dropped).getDropped());
-			}
+		drawMap.get("Dropped").removeValue(dropped, true);
+		if(((Dropped) dropped).getDropped() instanceof Animal){
+			drawMap.get("Movable").add(((Dropped) dropped).getDropped());
+		}
+		else{
+			player.getInventory().addItem((Consumable) ((Dropped) dropped).getDropped());
+		}
 	}
-	
+
 	/**
 	 * Returns the camera used to view the world
 	 * 
@@ -316,8 +307,8 @@ public class World {
 	public OrthographicCamera getCamera() {
 		return camera;
 	}
-	
-	
+
+
 	public int getFruitfullMoneyP() {
 		return fruitfullMoneyP;
 	}
@@ -341,11 +332,11 @@ public class World {
 	public void addMoreMoneyP() {
 		MoreMoneyP += 1;
 	}
-	
+
 	public LevelHandler getLevelHandler() {
 		return levelHandler;
 	}
-	
+
 	public Player getPlayer() {
 		return player;
 	}

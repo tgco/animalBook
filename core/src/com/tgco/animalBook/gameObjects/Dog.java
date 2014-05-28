@@ -5,6 +5,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
+/**
+ * 
+ * @author
+ *
+ * Sets up correct width and height for this implementation of an animal
+ */
 public class Dog extends Animal {
 
 	/**

@@ -12,7 +12,13 @@ import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.screens.GameScreen;
 import com.tgco.animalBook.screens.MainMenuScreen;
 
-
+/**
+ * 
+ * @author
+ * 
+ * Handles input to create touch controls for the game screen, 
+ * and implements logic for influencing animals with a swipe gesture.
+ */
 public class GameScreenInputHandler implements InputProcessor {
 
 	/**

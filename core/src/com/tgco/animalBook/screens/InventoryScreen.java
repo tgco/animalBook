@@ -11,14 +11,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
@@ -27,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.SoundHandler;
-import com.tgco.animalBook.view.World;
 
 public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
@@ -61,16 +58,26 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		dnd.addTarget(new Target(eatZone) {
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
-				System.out.println("Target Dragging");
+				if (payload.getObject() instanceof Consumable)
+						if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL){
+							this.getActor().setColor(Color.RED);
+							return false;
+						}
+				this.getActor().setColor(Color.GREEN);
 				return true;
 			}
+			
+			@Override
+			public void reset( Source source, Payload payload) {
+				getActor().setColor(Color.WHITE);
+			}
+
 
 			@Override
 			public void drop(Source source, Payload payload, float x, float y, int pointer) {
 				//gameScreen.getWorld().getPlayer().eat(Consumable.DropType.EGG.getHungerValue());
 				if (payload.getObject() instanceof Consumable)
 					gameScreen.getWorld().getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
-				System.out.println("EATTTT");
 			}
 		});
 	}
@@ -144,22 +151,16 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 					Payload payload = new Payload();
 					if (gameScreen.getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[index])){
 						payload.setObject(new Consumable(Consumable.DropType.values()[index]));
-						Image buttonImage = new Image(inventoryButton.getBackground());
-						payload.setDragActor(buttonImage);
+						payload.setDragActor(new Image(inventoryButton.getBackground()));
 						return payload;
 					}
 					return null;
 				}
 				
 				@Override
-				public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload,
-			            DragAndDrop.Target target){
+				public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload, DragAndDrop.Target target){
 					if (target == null){
 						gameScreen.getWorld().getPlayer().getInventory().addItem(new Consumable(Consumable.DropType.values()[index]));
-						System.out.println("NOT EATING");
-					}
-					else{
-						System.out.println("Valid target");
 					}
 				}
 			}

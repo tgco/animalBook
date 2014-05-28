@@ -59,7 +59,7 @@ public class WorldRenderer {
 		shapeRender.setColor(Color.BLACK);
 		shapeRender.rect(Gdx.graphics.getWidth()/2 - .046f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .073f*Gdx.graphics.getHeight(), .093f*Gdx.graphics.getWidth(), .037f*Gdx.graphics.getHeight());
 		shapeRender.setColor(Color.RED);
-		shapeRender.rect(Gdx.graphics.getWidth()/2 - .0435f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .069f*Gdx.graphics.getHeight(), .87f*Gdx.graphics.getWidth()*(player.getHealth()/100), .028f*Gdx.graphics.getHeight());
+		shapeRender.rect(Gdx.graphics.getWidth()/2 - .0435f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .069f*Gdx.graphics.getHeight(), .087f*Gdx.graphics.getWidth()*(player.getHealth()/100), .028f*Gdx.graphics.getHeight());
 
 		//Progress bar
 		shapeRender.setColor(Color.CYAN);

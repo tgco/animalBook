@@ -22,7 +22,7 @@ public class GameScreenInputHandler implements InputProcessor {
 
 	//Distinguishes distance the finger must move to register a drag instead of a touch
 	private static float touchToDragTolerance = 50f;
-	
+
 	//Must be under this distance to react to a swipe
 	private static final float HERD_TOLERANCE = 300f;
 
@@ -57,6 +57,23 @@ public class GameScreenInputHandler implements InputProcessor {
 			lastTouch = new Vector3(screenX,screenY,0);
 			//unproject operations
 			gameScreen.getWorld().getCamera().unproject(lastTouch);
+
+			if (AnimalBookGame.tapControls) {
+				//Move geese
+				
+				Vector3 camCenter = new Vector3(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
+				gameScreen.getWorld().getCamera().unproject(camCenter);
+				Vector2 camCenter2d = new Vector2(camCenter.x,camCenter.y);
+				
+				for(Movable movable : gameScreen.getWorld().getMovables()) {
+					if (movable.getBounds().contains(new Vector2(lastTouch.x,lastTouch.y))) {
+						float reactionScale = 100;
+						SoundHandler.playWhistle();
+						movable.addToCurrentTarget(camCenter2d.cpy().sub(movable.getPosition()).nor().scl(reactionScale));
+					}
+				}
+			}
+
 		}
 		return false;
 	}

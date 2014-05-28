@@ -47,7 +47,7 @@ public class World {
 
 	private static int level = 1;
 
-	private static final int NUM_ANIMALS = 5;
+	private static final int NUM_ANIMALS = 25;
 	
 	//upgrade presses
 	private int fruitfullMoneyP =0;

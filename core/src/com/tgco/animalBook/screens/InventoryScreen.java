@@ -31,7 +31,7 @@ import com.tgco.animalBook.view.World;
 
 public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 
-	private static final Image eatZone = new Image(new Texture(Gdx.files.internal("objectTextures/eatZone.png")));
+	private static final Image eatZone = new Image(new Texture(Gdx.files.internal("objectTextures/eatzone.png")));
 	private static final DragAndDrop dnd = new DragAndDrop();
 
 	private ShapeRenderer shapeRender;

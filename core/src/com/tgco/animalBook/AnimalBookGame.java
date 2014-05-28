@@ -14,6 +14,9 @@ public class AnimalBookGame extends Game {
 	public static final Boolean debugMode = true;
 	private FPSLogger fpsLogger;
 
+	//Testing new control system (taps)
+	public static final boolean tapControls = false;
+	
 	@Override
 	public void create () {
 		//Set the initial screen

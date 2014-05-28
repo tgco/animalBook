@@ -26,6 +26,12 @@ import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
+/**
+ * The UpgradeScreen object is responsible for the upgrading of the player and of the animals
+ * 
+ * @author Kelly
+ *
+ */
 public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 
 	//reference to the game screen
@@ -47,8 +53,12 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	private static final float STRING_WIDTH_LD = Gdx.graphics.getWidth()/2 +50;
 	private static final float STRING_WIDTH_MD =  Gdx.graphics.getWidth()/2 + 100 + UPGRADE_BUTTON_WIDTH +50;
 
-	
-	
+	/**
+	 * The UpgradeScreen constructor. Sets values of upgrade costs and initializes and on screen components
+	 * 
+	 * @param gameInstance - The current game instance
+	 * @param gameScreen - The current game screen
+	 */
 	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
 
@@ -68,6 +78,9 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
+	/**
+	 * Overriding render due to special functionality with upgrade buttons
+	 */
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -98,6 +111,9 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		reinitButtons();
 	}
 
+	/**
+	 * Overriding resize due to differing button configurations
+	 */
 	@Override
 	public void resize(int width, int height) {
 		if ( buttonStage == null)
@@ -107,6 +123,12 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
+	/**
+	 * Draws the amounts of fertility, length, and more money upgrades
+	 * 
+	 * @param alpha
+	 * @param boxName
+	 */
 	public void drawAmounts(float alpha, int boxName){
 		batch.begin();
 		font.setColor(0, 0, 0, alpha);
@@ -128,6 +150,12 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		batch.end();
 	}
 	
+	/**
+	 * Draws the data of each upgrade
+	 * 
+	 * @param alpha
+	 * @param boxName
+	 */
 	public void drawData(float alpha, int boxName){
 		batch.begin();
 		font.setColor(0, 0, 0, alpha);
@@ -147,6 +175,10 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		
 		batch.end();
 	}
+	
+	/**
+	 * Reinitializes buttons
+	 */
 	public void reinitButtons(){
 		if(world.getPlayer().getPlayerMoney() < fruitfullMoney){
 			fruitfullButton.setDisabled(true);
@@ -368,8 +400,6 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 			drawAmounts(0.5f, 2);
 		}
 		
-		
-		
 		buttonStage.addActor(leaveButton);
 		buttonStage.addActor(fruitfullButton);
 		buttonStage.addActor(LongerButton);
@@ -379,33 +409,19 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-
-	}
+	public void show() {}
 
 	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-
-	}
+	public void hide() {}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
+	public void pause() {}
 
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
+	public void resume() {}
 
 	@Override
 	public void dispose() {
 		super.dispose();
-
 	}
-
 }

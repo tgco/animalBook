@@ -13,33 +13,47 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
+/**
+ * Story screen takes care of the story element of the game.
+ * 
+ * @author Kelly
+ *
+ */
 public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
-	private Button skipButton, continueButton;
-	private static final String[][] storyFilepaths = new String[1][2];
-	private Sprite fadingSprite;
-	private SpriteBatch batch;
-	private int pageNumber;
+	private Button 			skipButton, continueButton;
+	private static final	ArrayMap<Integer, Array<String>> storyMap = new ArrayMap<Integer, Array<String>>();
+	private Sprite			fadingSprite;
+	private SpriteBatch	batch;
+	private int					pageNumber;
+	private final float	FADE_IN_TIME = 1;
+	private final float	FADE_OUT_TIME = 1;
+	private float				timeCounter;
+	private boolean		fadingIn, fadingOut, displaying;
 	
-	private final float FADE_IN_TIME = 1;
-	private final float FADE_OUT_TIME = 1;
-	private float timeCounter;
-	private boolean fadingIn;
-	private boolean fadingOut;
-	private boolean displaying;
-	
+	/**
+	 * StoryScreen constructor
+	 * 
+	 * @param gameInstance - The current AnimalBookGame instance.
+	 */
 	public StoryScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
+		
+		for (int i = 0; i < 5; i++){
+			storyMap.put(i, new Array<String>());
+		}
+		
 		SoundHandler.playStoryBackgroundMusic(true);
 		batch = new SpriteBatch();
 		pageNumber = 0;
-		storyFilepaths[0][0] = "story/story1.png";
-		storyFilepaths[0][1] = "story/story2.jpg";
-		backgroundTexture =  new Texture(Gdx.files.internal(storyFilepaths[0][0]));
-		//backgroundTexture =  new Texture(Gdx.files.internal(storyFilepaths[gameInstance.getLevel()][0]));
+		storyMap.get(0).add("story/story1.png");
+		storyMap.get(0).add("story/story2.jpg");
+		backgroundTexture =  new Texture(Gdx.files.internal(storyMap.get(1-1).first()));
 		fadingSprite = new Sprite(backgroundTexture);
 		fadingSprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		timeCounter = 0;
@@ -48,22 +62,16 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		displaying = false;
 	}
 
+	/**
+	 * Renders screen objects
+	 * @param delta - amount of time between each frame
+	 */
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+		
 		batch.begin();
-		
-		/*if ( fadingIn && timeCounter <= FADE_IN_TIME ) {}else{if(fadingIn){}
-		}
-		
-		if ( displaying && timeCounter <= DISPLAY_TIME) {}else{if(displaying){}
-		}
-		
-		if ( fadingOut && timeCounter <= FADE_OUT_TIME) {}else{if(fadingOut){}
-		}*/
-		
 		if ( fadingIn && timeCounter <= FADE_IN_TIME ) {
 			//draw with an increasing alpha
 			fadingSprite.draw(batch, timeCounter/FADE_IN_TIME);
@@ -76,7 +84,6 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 				displaying = true;
 			}
 		}
-
 			if (displaying) {
 				fadingSprite.draw(batch, 1);
 			}
@@ -98,9 +105,6 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 				timeCounter = 0;
 			}
 		}
-		
-		
-		//batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.end();
 		
 		buttonStage.act(delta);
@@ -108,12 +112,17 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		timeCounter += delta;
 	}
 
+	/**
+	 * Called if screen has been resized
+	 * 
+	 * @param width
+	 * @param height
+	 */
 	@Override
 	public void resize(int width, int height) {
 		if ( buttonStage == null)
 			buttonStage = new Stage();
 		buttonStage.clear();
-		//reinit buttons
 		initializeButtons();
 	}
 
@@ -142,7 +151,6 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 		buttonStage.addActor(skipButton);
-		//Gdx.input.setInputProcessor(buttonStage);
 		
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/continueButton.atlas"));
 		buttonSkin = new Skin();
@@ -160,16 +168,10 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				//next background
-				/*
-				    if (pageNumber < storyFilepaths[gameInstance.getLevel()].length){
-					backgroundTexture =  new Texture(Gdx.files.internal(storyFilepaths[gameInstance.getLevel()][pageNumber]));
-				}
-				 */
 				pageNumber++;
-				if (pageNumber < storyFilepaths[0].length){
+				if (pageNumber < storyMap.get(1-1).size){
 					timeCounter = 0;
-					backgroundTexture =  new Texture(Gdx.files.internal(storyFilepaths[0][pageNumber]));
+					backgroundTexture =  new Texture(Gdx.files.internal(storyMap.get(1-1).get(pageNumber)));
 					displaying = false;
 					fadingOut = true;
 				}
@@ -182,39 +184,25 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 		buttonStage.addActor(continueButton);
-		
 		Gdx.input.setInputProcessor(buttonStage);
 	}
 	
 
 	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-
-	}
+	public void show() {}
 
 	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-
-	}
+	public void hide() {}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
+	public void pause() {}
 
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
+	public void resume() {}
 
 	@Override
 	public void dispose() {
 		super.dispose();
-
 	}
 
 }

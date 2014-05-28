@@ -11,15 +11,35 @@ import com.tgco.animalBook.gameObjects.Pig;
 import com.tgco.animalBook.gameObjects.Sheep;
 
 //instantiates correct object for the given level
+/**
+ * This class returns the correct values for each variable that changes between levels 
+ * 
+ * @author
+ *
+ * 
+ */
 public class LevelHandler {
 
+	/**
+	 * The level to be initialized
+	 */
 	private int level;
 
-	//Amount of animals needed to move on
+	/**
+	 * The amount of animals needed in order to progress to the next level
+	 */
 	private int passLevelAmount;
-	//Number of animals player has successfully brought to market
+	
+	/**
+	 * Number of animals the player has already stored in the market
+	 */
 	private int storedAmount;
 
+	/**
+	 * Constructor that takes the level in order to initialize pass amounts
+	 * 
+	 * @param level the level that the handler will return values for
+	 */
 	public LevelHandler(int level) {
 		this.level = level;
 
@@ -44,6 +64,13 @@ public class LevelHandler {
 		}
 	}
 
+	/**
+	 * Returns a array of the correct type of animal for the specified level
+	 * 
+	 * @param level		 the level to select animals for
+	 * @param numAnimals the number of animals to initialize
+	 * @return			 an array with the correct number of the correct animal type
+	 */
 	public Array<ABDrawable> addAnimals(int level, int numAnimals) {
 
 		Array<ABDrawable> animals = new Array<ABDrawable>();
@@ -101,15 +128,30 @@ public class LevelHandler {
 
 	}
 
+	/**
+	 * Selects and returns the correct camera speed for the level
+	 * 
+	 * @param level the level to get the camera speed for
+	 * @return		the speed for the camera
+	 */
 	public float returnCameraSpeed(int level) {
 		return 2*level;
 	}
 
+	/**
+	 * Selects and returns the correct lane length for the level
+	 * 
+	 * @param level the level to get the lane length for
+	 * @return		the length of the lane for the specified level
+	 */
 	public float returnLaneLength(int level) {
 
 		return 1000*level;
 	}
 	
+	/**
+	 * Getters and increments for the specified variables
+	 */
 	public void increaseStored() {
 		storedAmount++;
 	}
@@ -124,6 +166,10 @@ public class LevelHandler {
 	
 	public int getPassLevelAmount() {
 		return passLevelAmount;
+	}
+	
+	public int getLevel(){
+		return level;
 	}
 
 }

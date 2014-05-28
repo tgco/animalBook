@@ -1,3 +1,8 @@
+/**
+ * File : MainMenuScreen.java
+ * The menu screen is after the splash screen and has 2 buttons; option and play the game. Exit through this screen.
+ * 
+ */
 package com.tgco.animalBook.screens;
 
 import com.badlogic.gdx.Gdx;
@@ -18,6 +23,9 @@ import com.tgco.animalBook.handlers.SoundHandler;
 
 public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	
+	/**
+	 * buttons for the user to click on 
+	 */
 	private Button playButton;
 	private Button optionsButton;
 	private Button testButton;
@@ -28,12 +36,19 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		//Background rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/mainback.png"));
+		
+		//libgdx should not catch the back key, the device should catch the back button
 		Gdx.input.setCatchBackKey(false);
+		
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
 	}
 
+	/** render draws everything for the screen at every frame
+	 * 
+	 * @param delta the time between two frames
+	 */
 	@Override
 	public void render(float delta) {
 		//clear screen
@@ -54,6 +69,11 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 	}
 
+	/**
+	 * resize is called at the begining of launch and also when ever the screen gets resized.
+	 * @param width the width of the new size
+	 * @param height the height of the new size
+	 */
 	@Override
 	public void resize(int width, int height) {
 		if (buttonStage == null)
@@ -62,60 +82,61 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
+	/**
+	 * the show, hide, pause, resume buttons are not being used becuase
+	 *  the life cycle of the screen is not needed at this point.
+	 */
 	@Override
-	public void show() {
-
-	}
+	public void show() {}
 
 	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-
-	}
+	public void hide() {}
 
 	@Override	
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
+	public void pause() {}
 
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
+	public void resume() {}
 
-	}
-
+	/**
+	 * all textures that the screen has created should get deleted.
+	 * super is from ButtonScreenAdapter 
+	 */
 	@Override
 	public void dispose() {
 		super.dispose();
 	}
 
-	//Sets up the menu buttons and adds them to the stage to be rendered
+	/**
+	 * Sets up the menu buttons and adds them to the stage to be rendered
+	 * adds the listeners to the buttons, for the buttons to act when pressed
+	 */
 	@Override
 	protected void initializeButtons() {
+		
+		//create style for play button
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/button.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		//Design button style
 		ButtonStyle style = new ButtonStyle();
 		style.up = buttonSkin.getDrawable("buttonUnpressed");
 		style.down = buttonSkin.getDrawable("buttonPressed");
 
-		//Create buttons from style
+		//Create play button
 		playButton = new Button(style);
 		playButton.setWidth(MENU_BUTTON_WIDTH);
 		playButton.setHeight(MENU_BUTTON_HEIGHT);
 		playButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
 		playButton.setY(Gdx.graphics.getHeight()/2);
 
-
+		//create style for options button, must start over
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/buttonO.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 		style = new ButtonStyle();
 		style.up = buttonSkin.getDrawable("buttonUnpressed");
 		style.down = buttonSkin.getDrawable("buttonPressed");
-
+		
 		optionsButton = new Button(style);
 		optionsButton.setWidth(MENU_BUTTON_WIDTH);
 		optionsButton.setHeight(MENU_BUTTON_HEIGHT);

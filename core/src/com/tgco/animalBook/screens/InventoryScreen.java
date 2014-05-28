@@ -26,25 +26,29 @@ import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.SoundHandler;
 
+/**
+ * The InventoryScreen object. Is responsible for providing users an overview of their in-game Consumables as well as the option
+ * to drag and drop what they want to consume to stay aline
+ * 
+ * @author Kelly Masuda
+ *
+ */
 public class InventoryScreen extends ButtonScreenAdapter implements Screen {
-
 	private static final Image eatZone = new Image(new Texture(Gdx.files.internal("objectTextures/eatzone.png")));
 	private static final DragAndDrop dnd = new DragAndDrop();
-
 	private ShapeRenderer shapeRender;
-
-	//reference to maintain player position
 	private GameScreen gameScreen;
-
-	//buttons
 	private Button leaveButton;
-
-	//inventory nums
 	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
 
+	/**
+	 * The inventory screen constructor.
+	 * 
+	 * @param gameInstance - The current game instance
+	 * @param gameScreen - The current game screen
+	 */
 	public InventoryScreen(AnimalBookGame gameInstance, final GameScreen gameScreen) {
 		super(gameInstance);
-
 		this.gameScreen = gameScreen;
 
 		//Rendering
@@ -54,34 +58,45 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
-		//drag and drop stuff
+		//drag and drop target initialization
 		dnd.addTarget(new Target(eatZone) {
+
+			/**
+			 * Overriding drag function to move Consumable to correct locations
+			 */
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 				if (payload.getObject() instanceof Consumable)
-						if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL){
-							this.getActor().setColor(Color.RED);
-							return false;
-						}
+					if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL){
+						this.getActor().setColor(Color.RED);
+						return false;
+					}
 				this.getActor().setColor(Color.GREEN);
 				return true;
 			}
-			
+
+			/**
+			 * Overriding reset function to reset objects to correct colors
+			 */
 			@Override
 			public void reset( Source source, Payload payload) {
 				getActor().setColor(Color.WHITE);
 			}
 
-
+			/**
+			 * Overriding drop function to move object from one location to another
+			 */
 			@Override
 			public void drop(Source source, Payload payload, float x, float y, int pointer) {
-				//gameScreen.getWorld().getPlayer().eat(Consumable.DropType.EGG.getHungerValue());
 				if (payload.getObject() instanceof Consumable)
 					gameScreen.getWorld().getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
 			}
 		});
 	}
 
+	/**
+	 * Overriding render function to display inventory items correctly
+	 */
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -101,6 +116,9 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		updateHealthBar();
 	}
 
+	/**
+	 * Overriding resize function to initialize inventory interface
+	 */
 	@Override
 	public void resize(int width, int height) {
 		if ( buttonStage == null)
@@ -110,8 +128,11 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		initializeInventoryInterface();
 		initializeButtons();
 		updateHealthBar();
-
 	}
+
+	/**
+	 * Creates buttons for inventory interface, health bar, and drag and drop functionality
+	 */
 	private void initializeInventoryInterface() {
 
 		for (int i = 0; i < Consumable.DropType.values().length; i++){
@@ -136,7 +157,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButton.setHeight(BUTTON_HEIGHT/2);
 			inventoryButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*i);
 			inventoryButton.setY(Gdx.graphics.getHeight()/2);
-			
+
 			//add actor inventoryButton actor to the buttonStage
 			buttonStage.addActor(inventoryButton);
 			eatZone.setPosition(Gdx.graphics.getWidth()/2 - eatZone.getWidth()/2, 10);
@@ -145,7 +166,10 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			//update the text for the corresponding item in the inventory
 			updateInventoryScreenItems(i);
 			dnd.addSource(new Source(inventoryButton){
-				
+
+				/**
+				 * Overriding dragStart to initialize drag and drop payload
+				 */
 				@Override
 				public Payload dragStart(InputEvent event, float x, float y,int pointer) {
 					Payload payload = new Payload();
@@ -156,7 +180,10 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 					}
 					return null;
 				}
-				
+
+				/**
+				 * Overriding dragStop to determine if drag has stopped over a valid target
+				 */
 				@Override
 				public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload, DragAndDrop.Target target){
 					if (target == null){
@@ -169,6 +196,9 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		updateHealthBar();
 	}
 
+	/**
+	 * Creates and maintains players health bar
+	 */
 	private void updateHealthBar() {
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.BLACK);
@@ -178,6 +208,11 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		shapeRender.end();
 	}
 
+	/**
+	 * Text representation of number of objects each inventory item has
+	 * 
+	 * @param consumableIndex - The Consumable.DropType index
+	 */
 	protected void updateInventoryScreenItems(int consumableIndex) {
 		//get the number of items in the player's inventory for the given index
 		batch.begin();
@@ -189,6 +224,9 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		batch.end();
 	}
 
+	/**
+	 * Overriding initializeButtons to create main buttons
+	 */
 	@Override
 	protected void initializeButtons() {
 
@@ -220,35 +258,24 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 				//Grab the world
 				gameInstance.setScreen(gameScreen);
 			}
-		});
+		}
+				);
 
 		buttonStage.addActor(leaveButton);
-
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 
 	@Override
-	public void show() {
-
-	}
+	public void show() {}
 
 	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-
-	}
+	public void hide() {}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
+	public void pause() {}
 
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
+	public void resume() {}
 
 	@Override
 	public void dispose() {

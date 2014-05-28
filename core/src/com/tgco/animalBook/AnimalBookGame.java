@@ -44,6 +44,7 @@ public class AnimalBookGame extends Game {
 		getScreen().dispose();
 		SoundHandler.dispose();
 	}
+	
 
 	@Override
 	public void resize(int width, int height) {
@@ -71,5 +72,9 @@ public class AnimalBookGame extends Game {
 
 	public void reset() {
 		SoundHandler.resetAudio();
+	}
+
+	public boolean getnoAnimals() {
+		return true;
 	}
 }

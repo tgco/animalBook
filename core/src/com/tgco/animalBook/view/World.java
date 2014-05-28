@@ -163,11 +163,16 @@ public class World {
 	}
 	
 	public void checkLost(){
-		Gdx.app.log("My Tag", "size of movables" + getMovables().size);
-		if(getMovables().size <=0 || player.getHealth() <=0 ){
+		//Gdx.app.log("My Tag", "size of movables" + getMovables().size);
+		if(getMovables().size <=0 && levelHandler.getStoredAmount() <= 0 ){
 			SoundHandler.toggleSounds();
 			SoundHandler.toggleMusic();
-			gameInstance.getGameScreen().setLost();
+			gameInstance.getGameScreen().setLost(true);
+		}
+		else if( player.getHealth() <=0){
+			SoundHandler.toggleSounds();
+			SoundHandler.toggleMusic();
+			gameInstance.getGameScreen().setLost(false);
 		}
 	}
 

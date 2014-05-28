@@ -68,7 +68,8 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			@Override
 			public void drop(Source source, Payload payload, float x, float y, int pointer) {
 				//gameScreen.getWorld().getPlayer().eat(Consumable.DropType.EGG.getHungerValue());
-				gameScreen.getWorld().getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
+				if (payload.getObject() instanceof Consumable)
+					gameScreen.getWorld().getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
 				System.out.println("EATTTT");
 			}
 		});
@@ -107,9 +108,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	private void initializeInventoryInterface() {
 
 		for (int i = 0; i < Consumable.DropType.values().length; i++){
-			//initialize variables needed for listeners
-			final int foodValue = Consumable.DropType.values()[i].getHungerValue();
-			final int foodIndex = i;
 			final int index = i;
 
 			//associated BitmapFont object for consumable[i]
@@ -131,12 +129,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButton.setHeight(BUTTON_HEIGHT/2);
 			inventoryButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*i);
 			inventoryButton.setY(Gdx.graphics.getHeight()/2);
-
-			//then add a listener to the button
-			
-			//
-			//inventoryButton.addListener(new InventoryItemListener(Consumable.DropType.values()[i]));
-			//
 			
 			//add actor inventoryButton actor to the buttonStage
 			buttonStage.addActor(inventoryButton);
@@ -146,7 +138,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			//update the text for the corresponding item in the inventory
 			updateInventoryScreenItems(i);
 			dnd.addSource(new Source(inventoryButton){
-
+				
 				@Override
 				public Payload dragStart(InputEvent event, float x, float y,int pointer) {
 					Payload payload = new Payload();
@@ -170,7 +162,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 						System.out.println("Valid target");
 					}
 				}
-				
 			}
 					);
 		}
@@ -226,7 +217,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.changeBackgroundVolume((float) .5);
 				gameScreen.resetInputProcessors();
 				//Grab the world
-				World world = gameScreen.getWorld();
 				gameInstance.setScreen(gameScreen);
 			}
 		});
@@ -263,27 +253,5 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	public void dispose() {
 		super.dispose();
 		shapeRender.dispose();
-	}
-
-	private class InventoryItemListener extends InputListener{
-
-		//for use in the new listener
-		//private int hungerValue = foodValue;
-		//private int consumableIndex = foodIndex;
-		private Consumable.DropType dropType;
-
-		public InventoryItemListener(Consumable.DropType dropType){
-			this.dropType = dropType;
-		}
-		public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-			return true;
-		}
-		public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-
-			//player eats when button of representing object gets eaten
-			if(gameScreen.getWorld().getPlayer().getInventory().removeItem(dropType)){
-				gameScreen.getWorld().getPlayer().eat(dropType.getHungerValue());
-			}
-		}
 	}
 }

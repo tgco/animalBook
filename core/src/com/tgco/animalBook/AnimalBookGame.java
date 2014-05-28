@@ -38,7 +38,7 @@ public class AnimalBookGame extends Game {
 	}
 
 	/**
-	 * only overrided for debuging purposes
+	 * only overridden for debugging purposes
 	 */
 	@Override
 	public void render () {

@@ -1,6 +1,7 @@
 package com.tgco.animalBook.view;
 
 import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -40,7 +41,7 @@ public class World {
 	//Lane length for this level
 	private float laneLength;
 	//Distance an animal is from player before it is lost
-	private static final float LOST_ANIMAL_TOLERANCE = 2*Gdx.graphics.getWidth()/3;
+	private static final float LOST_ANIMAL_TOLERANCE = 2*Gdx.graphics.getWidth()/4;
 
 	//The player character
 	private Player player;
@@ -92,8 +93,10 @@ public class World {
 	}
 
 	public void render(SpriteBatch batch, boolean paused) {
-		if (!paused)
+		if (!paused){
 			updateGameLogic();
+			checkLost();
+		}
 
 		//draw objects
 		worldRender.render(batch, aBDrawables, player, 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera);
@@ -112,9 +115,7 @@ public class World {
 			if (aBDrawable.isMovable()){
 				//Gdx.app.log("My tag", "the size is " + aBDrawable.getClass());
 				((Movable) aBDrawable).move(cameraSpeed);
-				
-				
-				
+
 				if(rand.nextInt(100) <= 50){
 					ABDrawable dropping =  ((Animal)aBDrawable).drop();
 					if(dropping != null){
@@ -161,7 +162,20 @@ public class World {
 		}
 		
 	}
-
+	
+	public void checkLost(){
+		//Gdx.app.log("My Tag", "size of movables" + getMovables().size);
+		if(getMovables().size <=0 && levelHandler.getStoredAmount() <= 0 ){
+			SoundHandler.toggleSounds();
+			SoundHandler.toggleMusic();
+			gameInstance.getGameScreen().setLost(true);
+		}
+		else if( player.getHealth() <=0){
+			SoundHandler.toggleSounds();
+			SoundHandler.toggleMusic();
+			gameInstance.getGameScreen().setLost(false);
+		}
+	}
 
 	//Moves the camera up at the desired speed
 	public void moveCameraUp(float speed) {
@@ -240,7 +254,6 @@ public class World {
 		
 			aBDrawables.removeValue(dropped, true);
 			if(((Dropped) dropped).getDropped() instanceof Animal){
-				Gdx.app.log("this is my tag", "the animal is hatched");
 				aBDrawables.add(((Dropped) dropped).getDropped());
 			}
 			else{

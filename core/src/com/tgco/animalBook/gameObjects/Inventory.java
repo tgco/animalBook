@@ -7,6 +7,12 @@ public class Inventory {
 	
 	private static ArrayMap<Consumable.DropType, Array<Consumable>> inventory;
 	
+	/**
+	 * Constructs a new Inventory
+	 * <p>
+	 * Creates a new inventory ArrayMap. Then stores Arrays of all consumable types
+	 * within the inventory.
+	 */
 	public Inventory() {
 		inventory = new ArrayMap<Consumable.DropType, Array<Consumable>>(false, 5);
 		Consumable.DropType[] dropTypes = Consumable.DropType.values();
@@ -19,6 +25,15 @@ public class Inventory {
 		}
 	}
 	
+	/**
+	 * Adds an item to the inventory.
+	 * <p>
+	 * If the inventory has 100 items in it, it is considered full, and the adding of the item
+	 * will fail.
+	 * 
+	 * @param consumable the item to be added to the inventory
+	 * @return <code>true</code> if the item is successfully added, <code>false</code> if the inventory is full
+	 */
 	public boolean addItem(Consumable consumable){
 		if (inventory.get(consumable.getType()).size == 100)
 			return false;
@@ -28,6 +43,15 @@ public class Inventory {
 		}
 	}
 	
+	/**
+	 * Removes an item from the inventory.
+	 * <p>
+	 * If the inventory has 0 items in it, it is considered empty, and the removing of the item
+	 * will fail.
+	 * 
+	 * @param consumable the item to be removed from the inventory
+	 * @return <code>true</code> if the item is successfully removed, <code>false</code> if the inventory is already empty
+	 */
 	public boolean removeItem(Consumable.DropType dropType){
 		if (inventory.get(dropType).size == 0)
 			return false;
@@ -37,6 +61,11 @@ public class Inventory {
 		}
 	}
 	
+	/**
+	 * Returns the inventory ArrayMap
+	 * 
+	 * @return the inventory object
+	 */
 	public ArrayMap<Consumable.DropType, Array<Consumable>> getInventory(){
 		return inventory;
 	}

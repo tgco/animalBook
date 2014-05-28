@@ -7,7 +7,14 @@ import com.badlogic.gdx.math.Rectangle;
 public class Market extends ABDrawable {
 	
 	protected static final String texturePath = "objectTextures/market.png";
-
+	
+	/**
+	 * Constructs a new Market.
+	 * <p>
+	 * Sets the width and height to be equal to a decimal multiple of the width and height
+	 * (respectively) of the application window. Sets the bounds as a Rectangle centered in
+	 * the middle of the object with the same width and height of the object.
+	 */
 	public Market() {
 		super(texturePath);
 		
@@ -16,6 +23,11 @@ public class Market extends ABDrawable {
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 	
+	/**
+	 * Returns <code>true</code>
+	 * <p>
+	 * Overrides the default isMarket method of ABDrawable to return <code>true</code>
+	 */
 	@Override
 	public boolean isMarket() {
 		return true;

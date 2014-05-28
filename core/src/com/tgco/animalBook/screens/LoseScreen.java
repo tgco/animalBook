@@ -19,7 +19,14 @@ import com.tgco.animalBook.handlers.SoundHandler;
 public class LoseScreen extends ButtonScreenAdapter implements Screen {
 
 	private Button mainMenuButton, retryButton;
-	
+	/**
+	 * Constructs a new Lose Screen with a game instance
+	 * <p>
+	 * Initializes a new SpriteBatch for rendering objects. Initializes the proper texture
+	 * as the background. Initializes a new input multiplexer and processor to handle user input
+	 * 
+	 * @param gameInstance the game instance to reference
+	 */
 	public LoseScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 
@@ -31,6 +38,14 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
+	/**
+	 * Renders the on screen objects.
+	 * <p>
+	 * First clears the screen of any previous objects that had been drawn. Then renders the background.
+	 * Next renders all the buttons to be displayed.
+	 * 
+	 * @param delta the time between frames
+	 */
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
@@ -46,6 +61,15 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.draw();
 	}
 
+	/**
+	 * Redraws the screen to scale everything properly when the application window is resized
+	 * <p>
+	 * Creates new button stage if there is none, then clears the stage to prepare for redrawing.
+	 * Then reinitializes the market interface and the buttons.
+	 * 
+	 * @param width the width of the resized screen
+	 * @param height the height of the resized screen
+	 */
 	@Override
 	public void resize(int width, int height) {
 		if ( buttonStage == null)
@@ -131,6 +155,9 @@ public class LoseScreen extends ButtonScreenAdapter implements Screen {
 
 	}
 
+	/**
+	 * Disposes of all objects contained in the lose screen.
+	 */
 	@Override
 	public void dispose() {
 		super.dispose();

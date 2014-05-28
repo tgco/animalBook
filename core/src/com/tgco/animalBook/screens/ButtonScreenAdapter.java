@@ -39,10 +39,18 @@ public abstract class ButtonScreenAdapter {
 	//Batch for background rendering
 	protected SpriteBatch batch;
 
+	/**
+	 * Constructs a new Button Screen Adapter with a game instance
+	 * 
+	 * @param gameInstance the game instance to reference
+	 */
 	public ButtonScreenAdapter(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;
 	}
 
+	/**
+	 * Disposes of all objects contained in the button screen adapter
+	 */
 	public void dispose() {
 		atlas.dispose();
 		backgroundTexture.dispose();

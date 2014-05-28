@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.SoundHandler;
-import com.tgco.animalBook.view.World;
 
 public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
@@ -32,6 +31,17 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
 	private BitmapFont font;
 
+	/**
+	 * Constructs a new Market Screen with a game instance and a game screen.
+	 * <p>
+	 * Initializes a new SpriteBatch for rendering objects. Initializes the proper texture to be displayed
+	 * as the background. Initializes a new BitmapFont using a custom font located in the assets folder.
+	 * Starts playing the background music. Initializes a new input multiplexer and processor to handle
+	 * user inputs.
+	 * 
+	 * @param gameInstance the game instance to reference
+	 * @param gameScreen the game screen to reference
+	 */
 	public MarketScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
 
@@ -48,7 +58,17 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
-
+	
+	/**
+	 * Renders the on screen objects.
+	 * <p>
+	 * First clears the screen of any previous objects that had been drawn. Then renders the background texture
+	 * and the player's current money, as well as the required amount of animals to progress to the next level.
+	 * Next renders all of the buttons to be displayed, as well as updates the screen to show how many of each
+	 * consumable item the player has in his/her inventory.
+	 * 
+	 * @param delta the time between frames
+	 */
 	@Override
 	public void render(float delta) {
 		int storedAnimal = gameScreen.getWorld().getLevelHandler().getStoredAmount();
@@ -82,7 +102,16 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		}
 	
 	}
-
+	
+	/**
+	 * Redraws the screen to scale everything properly when the application window is resized.
+	 * <p>
+	 * Creates new button stage if there is none, then clears the stage to prepare for redrawing. Then
+	 * reinitializes the market interface and the buttons.
+	 * 
+	 * @param width the width of the resized screen
+	 * @param height the height of the resized screen
+	 */
 	@Override
 	public void resize(int width, int height) {
 		if ( buttonStage == null)
@@ -109,12 +138,12 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			buttonSkin.addRegions(atlas);
 
 			//create a Buttonstyle
-			ButtonStyle inventoryButtonStyle = new ButtonStyle();
-			inventoryButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-			inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+			ButtonStyle marketButtonStyle = new ButtonStyle();
+			marketButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+			marketButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
 			//create a new button using aforementioned button style and set stuff up
-			Button marketButton = new Button(inventoryButtonStyle);
+			Button marketButton = new Button(marketButtonStyle);
 			marketButton.setWidth(BUTTON_WIDTH/2);
 			marketButton.setHeight(BUTTON_HEIGHT/2);
 			marketButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*i);
@@ -206,7 +235,6 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playBackgroundMusic(true);
 				gameScreen.resetInputProcessors();
 				//Grab the world
-				World world = gameScreen.getWorld();
 				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});
@@ -257,6 +285,9 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 	}
 
+	/**
+	 * Disposes of all objects contained in the market screen.
+	 */
 	@Override
 	public void dispose() {
 		super.dispose();

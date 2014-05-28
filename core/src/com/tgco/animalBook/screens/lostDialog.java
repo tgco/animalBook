@@ -8,6 +8,17 @@ import com.tgco.animalBook.handlers.SoundHandler;
 public class lostDialog extends Dialog{
 
 	private AnimalBookGame gameInstance;
+	
+	/**
+	 * Constructs a new lose dialog with a title, a skin, a game instance, and a boolean option
+	 * <p>
+	 * The boolean noAnimals determines what message is output to the player
+	 * 
+	 * @param title the title of the dialog
+	 * @param skin the skin to be used by the dialog
+	 * @param gameInstance the game instance to reference
+	 * @param noAnimals represents cause of loss
+	 */
 	public lostDialog(String title, Skin skin, AnimalBookGame gameInstance, boolean noAnimals) {
 		super(title, skin);
 		this.gameInstance = gameInstance;
@@ -15,7 +26,7 @@ public class lostDialog extends Dialog{
 			this.text("Aleksandra has lost all her animals");
 		}
 		else{
-			this.text("Aleksandra has not eaten enough, so she starved to death");
+			this.text("Aleksandra has not eaten enough, so she was too tired to continue");
 		}
 	}
 	
@@ -26,7 +37,15 @@ public class lostDialog extends Dialog{
 		
 	}
 	
-	
+	/**
+	 * Performs actions depending on which button is pressed
+	 * <p>
+	 * If the player presses the retry button, a new game screen is instantiated, and the player
+	 * replays the previous level. If they press the quit button, they are returned to the main
+	 * menu.
+	 * 
+	 * @param object what button gets clicked
+	 */
 	@Override
 	public void result(Object object){
 		if(object.equals("retry")){

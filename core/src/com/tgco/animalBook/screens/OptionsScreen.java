@@ -24,6 +24,14 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	private Button mainMenuButton;
 	private Button helpButton;
 	
+	/**
+	 * Constructs a new Options Screen with a game instance
+	 * <p>
+	 * Initializes a new SpriteBatch for rendering objects. Initializes the proper texture to be used
+	 * as the background. Initializes a new input multiplexer and processor to handle user inputs.
+	 * 
+	 * @param gameInstance the game instance to reference
+	 */
 	public OptionsScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 		
@@ -34,7 +42,15 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
-
+	
+	/**
+	 * Renders the on screen objects.
+	 * <p>
+	 * First clears the screen of any previous objects that had been drawn. Then renders the background.
+	 * Next renders all the buttons to be displayed.
+	 * 
+	 * @param delta the time between frames
+	 */
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -49,6 +65,15 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.draw();
 	}
 
+	/**
+	 * Redraws the screen to scale everything properly when the application window is resized.
+	 * <p>
+	 * Creates new button stage if there is none, then clears the stage to prepare for redrawing. Then
+	 * reinitializes the market interface and the buttons.
+	 * 
+	 * @param width the width of the resized screen
+	 * @param height the height of the resized screen
+	 */
 	@Override
 	public void resize(int width, int height) {
 		if ( buttonStage == null)
@@ -199,6 +224,9 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		
 	}
 
+	/**
+	 * Disposes of all objects contained in the options screen.
+	 */
 	@Override
 	public void dispose() {
 		super.dispose();

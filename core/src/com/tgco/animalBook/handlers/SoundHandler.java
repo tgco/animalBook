@@ -15,6 +15,16 @@ public class SoundHandler {
 	private static boolean soundMuted = false;
 	private static boolean musicMuted = false;
 	
+	/**
+	 * Plays the file stored as backgroundMusic at relative volume 0.5. Sets the music to loop
+	 * if isLooping is <code>true</code>.
+	 * <p>
+	 * This method checks the status of the boolean musicMuted first. If musicMuted is <code>true</code>, 
+	 * this method does nothing and simply returns. If musicMuted is <code>false</code>, this
+	 * method calls the play method of the Music object.
+	 * 
+	 * @param isLooping a boolean telling the method whether it should loop the music
+	 */
 	public static void playBackgroundMusic(boolean isLooping) {
 		if (musicMuted) {
 			return;
@@ -25,6 +35,16 @@ public class SoundHandler {
 		}
 	}
 	
+	/**
+	 * Plays the file stored as storyBackgroundMusic at relative volume 0.5. Sets the music to 
+	 * loop if isLooping is <code>true</code>.
+	 * <p>
+	 * This method checks the status of the boolean musicMuted first. If musicMuted is <code>true</code>, 
+	 * this method does nothing and simply returns. If musicMuted is <code>false</code>, this
+	 * method calls the play method of the Music object.
+	 * 
+	 * @param isLooping a boolean telling the method whether it should loop the music
+	 */
 	public static void playStoryBackgroundMusic(boolean isLooping) {
 		if (musicMuted) {
 			return;
@@ -35,6 +55,16 @@ public class SoundHandler {
 		}
 	}
 	
+	/**
+	 * Plays the file stored as marketBackgroundMusic at relative volume 0.5. Sets the music to 
+	 * loop if isLooping is <code>true</code>.
+	 * <p>
+	 * This method checks the status of the boolean musicMuted first. If musicMuted is <code>true</code>, 
+	 * this method does nothing and simply returns. If musicMuted is <code>false</code>, this
+	 * method calls the play method of the Music object.
+	 * 
+	 * @param isLooping a boolean telling the method whether it should loop the music
+	 */
 	public static void playMarketBackgroundMusic(boolean isLooping) {
 		if (musicMuted) {
 			return;
@@ -45,18 +75,39 @@ public class SoundHandler {
 		}
 	}
 	
+	/**
+	 * Pauses the file stored as backgroundMusic. When unpaused, the music will resume at the
+	 * exact point it was paused at.
+	 */
 	public static void pauseBackgroundMusic() {
 		backgroundMusic.pause();
 	}
 	
+	/**
+	 * Pauses the file stored as storyBackgroundMusic. When unpaused, the music will resume at the
+	 * exact point it was paused at.
+	 */
 	public static void pauseStoryBackgroundMusic() {
 		storyBackgroundMusic.pause();
 	}
 	
+	/**
+	 * Pauses the file stored as marketBackgroundMusic. When unpaused, the music will resume at the
+	 * exact point it was paused at.
+	 */
 	public static void pauseMarketBackgroundMusic() {
 		marketBackgroundMusic.pause();
 	}
 	
+	/**
+	 * Changes the relative volume of the file stored as backgroundMusic.
+	 * <p>
+	 * This method checks the status of the boolean musicMuted first. If musicMuted is <code>true</code>, 
+	 * this method does nothing and simply returns. If musicMuted is <code>false</code>, this
+	 * method calls the setVolume method of the Music object.
+	 * 
+	 * @param level a float from 0 to 1 giving the relative volume of the music
+	 */
 	public static void changeBackgroundVolume(float level) {
 		if (musicMuted) {
 			return;
@@ -65,6 +116,13 @@ public class SoundHandler {
 		}
 	}
 	
+	/**
+	 * Plays the file stored as buttonClick.
+	 * <p>
+	 * This method checks the status of the boolean soundMuted first. If soundMuted is <code>true</code>, 
+	 * this method does nothing and simply returns. If soundMuted is <code>false</code>, this
+	 * method calls the play method of the Sound object.
+	 */
 	public static void playButtonClick() {
 		if (soundMuted) {
 			return;
@@ -73,6 +131,13 @@ public class SoundHandler {
 		}
 	}
 	
+	/**
+	 * Plays the file stored as whistle.
+	 * <p>
+	 * This method checks the status of the boolean soundMuted first. If soundMuted is <code>true</code>, 
+	 * this method does nothing and simply returns. If soundMuted is <code>false</code>, this
+	 * method calls the play method of the Sound object.
+	 */
 	public static void playWhistle() {
 		if (soundMuted) {
 			return;
@@ -81,14 +146,24 @@ public class SoundHandler {
 		}
 	} 
 	
+	/**
+	 * Changes the value of soundMuted.
+	 * <p>
+	 * This method sets toggles soundMuted between true and false. It always sets the boolean to
+	 * the opposite of its current value.
+	 */
 	public static void toggleSounds() {
-		if (soundMuted) {
-			soundMuted = false;
-		} else {
-			soundMuted = true;
-		}
+		soundMuted = !soundMuted;
 	}
 	
+	/**
+	 * Changes the value of musicMuted and changes the volume of all music.
+	 * <p>
+	 * This method checks the status of the boolean musicMuted first. If musicMuted is <code>true</code>, this
+	 * method sets all music back to their default values (as they were initialized), and changes
+	 * musicMuted to <code>false</code>. If musicMuted is <code>false</code>, this method sets the volume of 
+	 * all music to 0, and changes musicMuted to <code>true</code>. 
+	 */
 	public static void toggleMusic() {
 		if (musicMuted) {
 			backgroundMusic.setVolume((float) 0.5);
@@ -103,6 +178,9 @@ public class SoundHandler {
 		}
 	}
 	
+	/**
+	 * Reinitializes all Sound and Music variables.
+	 */
 	public static void resetAudio() {
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/farmNoise.wav"));
 		storyBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/storyNoise.wav"));
@@ -114,6 +192,9 @@ public class SoundHandler {
 		//musicMuted = true;
 	}
 	
+	/**
+	 * Disposes of all Sound and Music variables.
+	 */
 	public static void dispose() {
 		backgroundMusic.dispose();
 		storyBackgroundMusic.dispose();

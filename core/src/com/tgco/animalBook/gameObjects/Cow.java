@@ -5,6 +5,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
+/**
+ * 
+ * @author
+ *
+ * Implements correct drop type, texture path, speed and size
+ * for this type of animal.
+ */
 public class Cow extends Animal {
 
 	/**

@@ -20,7 +20,12 @@ import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.MarketScreen;
 
-//Generates game objects and handles game logic between them
+/**
+ * 
+ * @author
+ *
+ * Initializes game objects and handles the logic between them for game play
+ */
 public class World {
 
 	/**

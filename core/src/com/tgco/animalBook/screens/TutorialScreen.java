@@ -16,11 +16,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
+/**
+ * Extends the button screen to play a sequence of tutorials and teach the player
+ * the game and controls.
+ * 
+ * @author
+ *
+ * 
+ */
 public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
-	//buttons
+	/**
+	 * Button used for the user interface
+	 */
 	private Button tutorialButton;
 
+	/**
+	 * Constructor that takes a game instance
+	 * 
+	 * @param gameInstance the currently running game instance
+	 */
 	public TutorialScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 
@@ -32,6 +47,11 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
+	/**
+	 * Renders the background and buttons
+	 * 
+	 * @param delta the time between frames
+	 */
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -47,6 +67,12 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.draw();
 	}
 
+	/**
+	 * Runs when the screen is resized to resize and relocate buttons
+	 * 
+	 * @param width the new width of the screen
+	 * @param height the new height of the screen
+	 */
 	@Override
 	public void resize(int width, int height) {
 		if ( buttonStage == null)
@@ -56,6 +82,9 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
+	/**
+	 * Initializes all buttons that are part of the user interface
+	 */
 	@Override
 	protected void initializeButtons() {
 
@@ -92,7 +121,19 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}
+	
+	/**
+	 * Disposed of objects that should release memory
+	 */
+	@Override
+	public void dispose() {
+		super.dispose();
 
+	}
+
+	/**
+	 * Unused functions for screen events
+	 */
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
@@ -114,12 +155,6 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
 
 	}
 

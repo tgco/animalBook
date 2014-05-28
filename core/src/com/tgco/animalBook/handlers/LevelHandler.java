@@ -12,10 +12,11 @@ import com.tgco.animalBook.gameObjects.Sheep;
 
 //instantiates correct object for the given level
 /**
+ * This class returns the correct values for each variable that changes between levels 
  * 
  * @author
  *
- * This class returns the correct values for each variable that changes between levels 
+ * 
  */
 public class LevelHandler {
 

@@ -23,11 +23,12 @@ import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
 /**
+ * Draws the user interface for game play, and creates a world where all game objects are made.
+ * Also draws the background and draws a lose screen once the player has lost.
  * 
  * @author
  *
- * Draws the user interface for game play, and creates a world where all game objects are made.
- * Also draws the background and draws a lose screen once the player has lost.
+ * 
  */
 public class GameScreen extends ButtonScreenAdapter implements Screen {
 

@@ -9,28 +9,61 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
+/**
+ * 
+ * @author
+ *
+ * Fades in, displays, and fades out a logo.
+ */
 public class SplashScreen implements Screen {
 
-	//reference to change the screen
+	/**
+	 * A reference to the running game instance to change screens
+	 */
 	private AnimalBookGame gameInstance;
 
+	/**
+	 * The logo to be displayed
+	 */
 	private Texture logo;
+	
+	/**
+	 * Sprite that provides fading functionality to the logo texture
+	 */
 	private Sprite fadingSprite;
+	
+	/**
+	 * The batch for rendering objects to the screen
+	 */
 	private SpriteBatch batch;
 
+	/**
+	 * Time amounts for fading in, display, and fading out durations
+	 */
 	private final float FADE_IN_TIME = 2;
 	private final float DISPLAY_TIME = 1;
 	private final float FADE_OUT_TIME = 2;
-	//keeps track of time for fading purposes;
+	
+	/**
+	 * Tracks time to progress the fade sequence
+	 */
 	private float timeCounter;
-	//keeps track of current fading event
+	
+	/**
+	 * Booleans to keep track of where the screen is in the fade cycle
+	 */
 	private boolean fadingIn;
 	private boolean fadingOut;
 	private boolean displaying;
 
+	/**
+	 * Constructor that takes the game instance
+	 * 
+	 * @param gameInstance a reference to the running game instance
+	 */
 	public SplashScreen(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;
-		//initialize gimmeGamesLogo
+		//initialize logo
 		logo = new Texture(Gdx.files.internal("backgrounds/logo.png"));
 		fadingSprite = new Sprite(logo);
 		fadingSprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -46,6 +79,9 @@ public class SplashScreen implements Screen {
 
 	}
 
+	/**
+	 * Renders the background using the correct alpha for fading effects
+	 */
 	@Override
 	public void render(float delta) {
 		//clear screen
@@ -97,7 +133,19 @@ public class SplashScreen implements Screen {
 		//increment counter
 		timeCounter += delta;
 	}
+	
+	/**
+	 * Disposes of the texture and batch to release memory
+	 */
+	@Override
+	public void dispose() {
+		batch.dispose();
+		logo.dispose();
+	}
 
+	/**
+	 * Unused screen event functions
+	 */
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
@@ -126,12 +174,6 @@ public class SplashScreen implements Screen {
 	public void resume() {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void dispose() {
-		batch.dispose();
-		logo.dispose();
 	}
 
 }

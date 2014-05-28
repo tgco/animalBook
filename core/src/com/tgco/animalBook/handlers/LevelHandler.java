@@ -34,6 +34,11 @@ public class LevelHandler {
 	 * Number of animals the player has already stored in the market
 	 */
 	private int storedAmount;
+	
+	/**
+	 * Number of animals the player will start with next level
+	 */
+	private int nextLevelStart;
 
 	/**
 	 * Constructor that takes the level in order to initialize pass amounts
@@ -160,12 +165,20 @@ public class LevelHandler {
 		storedAmount--;
 	}
 	
+	public void increaseNextLevelStart() {
+		nextLevelStart++;
+	}
+	
 	public int getStoredAmount() {
 		return storedAmount;
 	}
 	
 	public int getPassLevelAmount() {
 		return passLevelAmount;
+	}
+	
+	public int getNextLevelStart() {
+		return nextLevelStart;
 	}
 	
 	public int getLevel(){

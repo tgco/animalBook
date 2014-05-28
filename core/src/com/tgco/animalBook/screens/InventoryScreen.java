@@ -88,7 +88,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			 */
 			@Override
 			public void drop(Source source, Payload payload, float x, float y, int pointer) {
-				//gameScreen.getWorld().getPlayer().eat(Consumable.DropType.EGG.getHungerValue());
 				if (payload.getObject() instanceof Consumable)
 					gameScreen.getWorld().getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
 			}

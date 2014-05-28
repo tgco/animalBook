@@ -34,21 +34,45 @@ import com.tgco.animalBook.view.World;
  */
 public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 
-	//reference to the game screen
+	/**
+	 * The game screen
+	 */
 	private GameScreen gameScreen;
+	
+	/**
+	 * The font to be used to display data
+	 */
 	private BitmapFont font;
+	
+	/**
+	 * Amounts of each upgrade
+	 */
 	private int fruitfullMoney;
 	private int LongerMoney;
 	private int MoreMoney;
 	
-	//buttons
+	/**
+	 * Buttons
+	 */
 	private Button leaveButton;
 	private Button fruitfullButton;
 	private Button LongerButton;
 	private Button MoreButton;
+	
+	/**
+	 * the world
+	 */
 	private World world;
+	
+	/**
+	 * Button specs
+	 */
 	private static final double REGION_HEIGHT = UPGRADE_BUTTON_HEIGHT*2.25f;
 	private static final double REGION_WIDTH = UPGRADE_BUTTON_WIDTH*2.25f;
+	
+	/**
+	 * Button text specs
+	 */
 	private static final float STRING_WIDTH_FR = Gdx.graphics.getWidth()/2 - 100 - UPGRADE_BUTTON_WIDTH +50;
 	private static final float STRING_WIDTH_LD = Gdx.graphics.getWidth()/2 +50;
 	private static final float STRING_WIDTH_MD =  Gdx.graphics.getWidth()/2 + 100 + UPGRADE_BUTTON_WIDTH +50;

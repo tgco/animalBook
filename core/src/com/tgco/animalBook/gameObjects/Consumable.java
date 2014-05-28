@@ -8,6 +8,10 @@ package com.tgco.animalBook.gameObjects;
  * @author Kelly Masuda
  */
 public class Consumable extends ABDrawable {
+	
+	/**
+	 * DropType type
+	 */
 	private DropType type;
 	
 	/**

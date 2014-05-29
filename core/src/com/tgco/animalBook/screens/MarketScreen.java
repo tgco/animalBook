@@ -74,7 +74,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	 * and the player's current money, as well as the required amount of animals to progress to the next level.
 	 * Next renders all of the buttons to be displayed, as well as updates the screen to show how many of each
 	 * consumable item the player has in his/her inventory.
-	 * 
+	 * </p>
 	 * @param delta the time between frames
 	 */
 	@Override
@@ -307,8 +307,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);
-				gameScreen.resetInputProcessors();
-				//Grab the world
+				gameScreen.dispose();
 				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});
@@ -342,28 +341,13 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-
-	}
-
+	public void show() {}
 	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-
-	}
-
+	public void hide() {}
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
+	public void pause() {}
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
+	public void resume() {}
 
 	/**
 	 * Disposes of all objects contained in the market screen.
@@ -371,7 +355,10 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
-
+		font.dispose();
+		for (BitmapFont font : fonts) {
+			font.dispose();
+		}
 	}
 
 }

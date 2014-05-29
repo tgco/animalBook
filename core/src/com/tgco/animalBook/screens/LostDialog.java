@@ -26,7 +26,7 @@ public class LostDialog extends Dialog{
 			this.text("Aleksandra has lost all her animals");
 		}
 		else{
-			this.text("Aleksandra has not eaten enough, so she was too tired to continue");
+			this.text("Aleksandra has not eaten enough, so she was too hungry to continue");
 		}
 	}
 	
@@ -48,13 +48,17 @@ public class LostDialog extends Dialog{
 	 */
 	@Override
 	public void result(Object object){
+		SoundHandler.toggleSounds();
+		SoundHandler.toggleMusic();
 		if(object.equals("retry")){
+			GameScreen temp = gameInstance.getGameScreen();
 			gameInstance.setScreen(new GameScreen(gameInstance));
-			SoundHandler.toggleSounds();
-			SoundHandler.toggleMusic();
+			temp.dispose();
 		}
 		else if(object.equals("quit")){
+			GameScreen temp = gameInstance.getGameScreen();
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));
+			temp.dispose();
 		}
 	}
 }

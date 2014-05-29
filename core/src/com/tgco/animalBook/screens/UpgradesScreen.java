@@ -336,6 +336,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 				//Grab the world
 				World world = gameScreen.getWorld();
 				gameInstance.setScreen(gameScreen);
+				dispose();
 			}
 		});
 
@@ -442,5 +443,6 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
+		font.dispose();
 	}
 }

@@ -251,7 +251,6 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);
 				gameScreen.dispose();
-				//Grab the world
 				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});
@@ -291,6 +290,10 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
+		font.dispose();
+		for (BitmapFont font : fonts) {
+			font.dispose();
+		}
 	}
 
 }

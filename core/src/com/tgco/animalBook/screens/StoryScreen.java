@@ -171,6 +171,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.pauseStoryBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);
 				gameInstance.setScreen(new GameScreen(gameInstance));
+				dispose();
 			}
 		});
 		buttonStage.addActor(skipButton);
@@ -203,6 +204,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 					SoundHandler.pauseStoryBackgroundMusic();
 					SoundHandler.playBackgroundMusic(true);
 					gameInstance.setScreen(new GameScreen(gameInstance));
+					dispose();
 				}
 			}
 		});

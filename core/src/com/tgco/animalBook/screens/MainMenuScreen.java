@@ -168,6 +168,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				//Change the screen when the button is let go
 				gameInstance.setScreen(new GameScreen(gameInstance));
+				dispose();
 			}
 		});
 
@@ -181,6 +182,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 				//Change the screen when the button is let go
 				Gdx.input.setCatchBackKey(true);
 				gameInstance.setScreen(new OptionsScreen(gameInstance));
+				dispose();
 			}
 		});
 		
@@ -194,6 +196,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.pauseBackgroundMusic();
 				//Change the screen when the button is let go
 				gameInstance.setScreen(new StoryScreen(gameInstance));
+				dispose();
 			}
 		});
 
@@ -201,7 +204,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.addActor(playButton);
 		buttonStage.addActor(optionsButton);
 		buttonStage.addActor(testButton);
-
+		
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 

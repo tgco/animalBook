@@ -41,7 +41,6 @@ public class Swipe {
 	public Swipe(Vector2 begin, Vector2 end) {
 		this.begin = begin;
 		this.end = end;
-		
 		lifeTime = 100;
 	}
 	

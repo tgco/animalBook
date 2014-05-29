@@ -179,7 +179,7 @@ public class World {
 	 * Disposes all objects that need to release memory
 	 */
 	public void dispose() {
-		for (Array<ABDrawable> drawableArrays : drawMap.values){
+		for (Array<ABDrawable> drawableArrays : drawMap.values()){
 			for (ABDrawable drawable : drawableArrays) {
 				drawable.dispose();
 			}
@@ -341,7 +341,6 @@ public class World {
 		if (player.getBounds().overlaps(market.getBounds())) {
 			SoundHandler.pauseBackgroundMusic();
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
-			drawMap.get("Player").get(0).dispose();
 		}
 	}
 }

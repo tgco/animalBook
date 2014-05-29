@@ -47,7 +47,6 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		super(gameInstance);
 
 		this.gameScreen = gameScreen;
-		
 		//Background rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
@@ -67,7 +66,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	 * and the player's current money, as well as the required amount of animals to progress to the next level.
 	 * Next renders all of the buttons to be displayed, as well as updates the screen to show how many of each
 	 * consumable item the player has in his/her inventory.
-	 * 
+	 * </p>
 	 * @param delta the time between frames
 	 */
 	@Override
@@ -268,6 +267,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				
 				
 				gameScreen.resetInputProcessors();
+				gameScreen.dispose();
 				//Grab the world
 				gameInstance.setScreen(new GameScreen(gameInstance));
 				
@@ -290,37 +290,19 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				}
 			}
 		});
-
-
 		buttonStage.addActor(nextLevelButton);
 		buttonStage.addActor(levelAnimalButton);
-
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 
 	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-
-	}
-
+	public void show() {}
 	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-
-	}
-
+	public void hide() {}
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
+	public void pause() {}
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
+	public void resume() {}
 
 	/**
 	 * Disposes of all objects contained in the market screen.
@@ -328,7 +310,6 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
-
 	}
 
 }

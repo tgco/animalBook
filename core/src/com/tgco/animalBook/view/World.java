@@ -110,11 +110,26 @@ public class World {
 	public World(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;
 		drawMap = new ArrayMap<String, Array<ABDrawable>>();
-
+		
+		boolean levelSize = gameInstance.getLevelData().size >0;
+		// spot 1 is current level
+		//spot 2 is player			
+		//spot 3 is storing movable array
+		//spot 4 is storing dropped items array
+		
+		if(levelSize && gameInstance.getLevelData().get(0) !=null){
+			level = (Integer) gameInstance.getLevelData().get(0);
+			Gdx.app.log("My Tag", "the level is " + level);
+		}
 		worldRender = new WorldRenderer();
-
 		levelHandler = new LevelHandler(level);
-		drawMap.put("Movable", levelHandler.addAnimals(level, numAnimals));
+		
+		if(levelSize && gameInstance.getLevelData().get(2) !=null){
+			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
+		}else{
+			drawMap.put("Movable", levelHandler.addAnimals(level, numAnimals));
+		}
+		
 
 		//Camera initialization
 		camera = new OrthographicCamera();
@@ -122,8 +137,11 @@ public class World {
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 		cameraSpeed = levelHandler.returnCameraSpeed(level);	
-
-		player = new Player(cameraSpeed);
+		if(levelSize && gameInstance.getLevelData().get(1) != null){
+			player = (Player) gameInstance.getLevelData().get(1);
+		}else{
+			player = new Player(cameraSpeed);
+		}
 
 		//Make the market and set it at the end
 		laneLength = levelHandler.returnLaneLength(level);
@@ -132,7 +150,11 @@ public class World {
 		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.get("Market").add(market);
 
-		drawMap.put("Dropped", new Array<ABDrawable>());
+		if(levelSize && gameInstance.getLevelData().get(3) != null){
+			drawMap.put("Dropped", (Array<ABDrawable>) gameInstance.getLevelData().get(3));
+		}else{
+			drawMap.put("Dropped", new Array<ABDrawable>());
+		}
 		drawMap.put("Player", new Array<ABDrawable>());
 		drawMap.get("Player").add(player);
 	}
@@ -339,5 +361,9 @@ public class World {
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public void addToLevel(int i) {
+		levelHandler.addLevel();	
 	}
 }

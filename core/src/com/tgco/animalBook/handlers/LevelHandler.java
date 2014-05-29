@@ -184,5 +184,7 @@ public class LevelHandler {
 	public int getLevel(){
 		return level;
 	}
-
+	public void addLevel(){
+		level++;
+	}
 }

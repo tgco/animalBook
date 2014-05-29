@@ -251,9 +251,27 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);
+				
+				gameScreen.getWorld().addToLevel(1);
+				
+				// spot 1 is current level
+				gameInstance.addToDatalevel(gameScreen.getWorld().getLevelHandler().getLevel(),0);
+				
+				//spot 2 is player money			
+				gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
+				
+				//spot 3 is storing movable array
+				gameInstance.addToDatalevel(null,2);
+				
+				//spot 4 is storing dropped items array
+				gameInstance.addToDatalevel(null, 3);
+				
+				
 				gameScreen.resetInputProcessors();
 				//Grab the world
 				gameInstance.setScreen(new GameScreen(gameInstance));
+				
+				
 			}
 		});
 		

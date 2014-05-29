@@ -7,6 +7,7 @@ package com.tgco.animalBook;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.GameScreen;
 import com.tgco.animalBook.screens.SplashScreen;
@@ -21,7 +22,7 @@ public class AnimalBookGame extends Game {
 	private FPSLogger fpsLogger;
 	//Testing new control system (taps)
 	public static final boolean tapControls = true;
-
+	private static Array<Object> LevelData = new Array<Object>(4);
 	/**
 	 * every game starts with the create function.
 	 * this sets the initial screen to splash screen
@@ -95,5 +96,13 @@ public class AnimalBookGame extends Game {
 	 */
 	public void reset() {
 		SoundHandler.resetAudio();
+	}
+
+	public Array<Object> getLevelData() {
+		return LevelData;
+	}
+	
+	public void addToDatalevel(Object obj, int pos){
+		LevelData.insert(pos, obj);
 	}
 }

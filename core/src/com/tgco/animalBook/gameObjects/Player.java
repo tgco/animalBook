@@ -20,7 +20,7 @@ public class Player extends Movable {
 	private float playerHealth = 100;
 
 	/**
-	 * the consturctor which sets the variables of it's parent
+	 * the constructor which sets the variables of it's parent
 	 * @param speed since it is a movable it must have some speed
 	 */
 	public Player(float speed) {
@@ -28,7 +28,6 @@ public class Player extends Movable {
 		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/8);
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
-		
 		width = .065f*Gdx.graphics.getWidth();
 		height = .21f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
@@ -120,7 +119,6 @@ public class Player extends Movable {
 	 */
 	public void subtractPlayerMoney(float playerMoney) {
 		this.playerMoney -= playerMoney;
-		
 	}
 
 }

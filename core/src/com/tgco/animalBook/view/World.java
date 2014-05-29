@@ -31,9 +31,19 @@ import com.tgco.animalBook.screens.MarketScreen;
 public class World {
 
 	/**
-	 * Reference to the running game instance
+	 * The current level being played
 	 */
-	private AnimalBookGame gameInstance;
+	private static int level = 1;
+
+	/**
+	 * Distance an animal can be from the player before it is lost and removed
+	 */
+	private static final float LOST_ANIMAL_TOLERANCE = 2*Gdx.graphics.getWidth()/4;
+
+	/**
+	 * The number of animals the player has
+	 */
+	private static int numAnimals = 5;
 
 	/**
 	 * The camera used to view the world
@@ -46,19 +56,19 @@ public class World {
 	private float cameraSpeed;
 
 	/**
-	 * Handles all of the game object rendering responsibility
-	 */
-	private WorldRenderer worldRender;
-
-	/**
 	 * Array of objects that will be drawn to the screen
 	 */
 	private ArrayMap<String, Array<ABDrawable>> drawMap;
 
 	/**
-	 * Market located at end of the game level
+	 * Number of times each upgrade button has been pressed
 	 */
-	private Market market;
+	private int fruitfullMoneyP	= 0;
+
+	/**
+	 * Reference to the running game instance
+	 */
+	private AnimalBookGame gameInstance;
 
 	/**
 	 * The distance the player must walk to reach the market
@@ -66,31 +76,21 @@ public class World {
 	private float laneLength;
 
 	/**
-	 * Distance an animal can be from the player before it is lost and removed
+	 * Load all information that differs between levels
 	 */
-	private static final float LOST_ANIMAL_TOLERANCE = 2*Gdx.graphics.getWidth()/4;
+	private LevelHandler levelHandler;
 
+	private int LongerMoneyP	= 0;
+
+	/**
+	 * Market located at end of the game level
+	 */
+	private Market market;
+	private int MoreMoneyP		= 0;
 	/**
 	 * The main player
 	 */
 	private Player player;
-
-	/**
-	 * The current level being played
-	 */
-	private static int level = 1;
-
-	/**
-	 * The number of animals the player has
-	 */
-	private static int numAnimals = 5;
-
-	/**
-	 * Number of times each upgrade button has been pressed
-	 */
-	private int fruitfullMoneyP	= 0;
-	private int LongerMoneyP	= 0;
-	private int MoreMoneyP		= 0;
 
 	/**
 	 * Generates random numbers for probability
@@ -98,9 +98,9 @@ public class World {
 	private Random rand = new Random();
 
 	/**
-	 * Load all information that differs between levels
+	 * Handles all of the game object rendering responsibility
 	 */
-	private LevelHandler levelHandler;
+	private WorldRenderer worldRender;
 
 	/**
 	 * Constructor with game instance
@@ -137,6 +137,137 @@ public class World {
 		drawMap.get("Player").add(player);
 	}
 
+	public void addFruitfullMoneyP() {
+		this.fruitfullMoneyP += 1;
+	}
+
+	public void addLongerMoneyP() {
+		LongerMoneyP += 1;
+	}
+
+	public void addMoreMoneyP() {
+		MoreMoneyP += 1;
+	}
+
+	/**
+	 * Adds a swipe line to the world so it will be rendered
+	 * 
+	 * @param begin the point where the swipe begins
+	 * @param end	the point where the swipe ends
+	 */
+	public void addSwipeToWorld(Vector3 begin, Vector3 end) {
+		worldRender.addSwipe(new Vector2(begin.x,begin.y), new Vector2(end.x,end.y));
+	}
+
+	/**
+	 * Checks if the player lost the current level
+	 */
+	public void checkLost(){
+		if(getMovables().size <=0 && levelHandler.getStoredAmount() <= 0 ){
+			SoundHandler.toggleSounds();
+			SoundHandler.toggleMusic();
+			gameInstance.getGameScreen().setLost(true);
+		}
+		else if( player.getHealth() <=0){
+			SoundHandler.toggleSounds();
+			SoundHandler.toggleMusic();
+			gameInstance.getGameScreen().setLost(false);
+		}
+	}
+
+	/**
+	 * Disposes all objects that need to release memory
+	 */
+	public void dispose() {
+		for (Array<ABDrawable> drawableArrays : drawMap.values){
+			for (ABDrawable drawable : drawableArrays) {
+				drawable.dispose();
+			}
+		}
+		worldRender.dispose();
+	}
+
+	/**
+	 * Returns the camera used to view the world
+	 * 
+	 * @return		the camera currently in use
+	 */
+	public OrthographicCamera getCamera() {
+		return camera;
+	}
+
+	/**
+	 * Finds which drawables are dropped items, casts them to dropped and returns them in an array
+	 * 
+	 * @return		an array of all dropped items currently in the world
+	 */
+	public Array<Dropped> getDropped() {
+		Array<Dropped> droppings = new Array<Dropped>();
+		for (ABDrawable aBDrawable : drawMap.get("Dropped")) {
+			droppings.add((Dropped) aBDrawable);
+		}
+		return droppings;
+	}
+
+	public int getFruitfullMoneyP() {
+		return fruitfullMoneyP;
+	}
+
+	public LevelHandler getLevelHandler() {
+		return levelHandler;
+	}
+
+
+	public int getLongerMoneyP() {
+		return LongerMoneyP;
+	}
+
+	public int getMoreMoneyP() {
+		return MoreMoneyP;
+	}
+
+	/**
+	 * Finds which drawables are movable, casts them to movable and returns them in an array
+	 * 
+	 * @return		an array of all movable objects currently in the world
+	 */
+	public Array<Movable> getMovables() {
+		Array<Movable> movables = new Array<Movable>();
+		for (ABDrawable aBDrawable : drawMap.get("Movable")){
+			movables.add((Movable) aBDrawable);
+		}
+		return movables;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	/**
+	 * Updates the camera position to progress towards the end of the level
+	 * 
+	 * @param speed the desired speed for the camera movement
+	 */
+	public void moveCameraUp(float speed) {
+		camera.position.y += speed;
+		camera.update();
+	}
+
+	/**
+	 * Removes the dropped item from the drawn objects, and handles the logic for the collection of the item
+	 * 
+	 * @param dropped the dropped item on screen that is to be removed
+	 */
+	public void removeFromABDrawable(ABDrawable dropped){
+		drawMap.get("Dropped").removeValue(dropped, true);
+		if(((Dropped) dropped).getDropped() instanceof Animal){
+			drawMap.get("Movable").add(((Dropped) dropped).getDropped());
+		}
+		else{
+			player.getInventory().addItem((Consumable) ((Dropped) dropped).getDropped());
+		}
+	}
+
 	/**
 	 * Updates game logic and begins all drawing
 	 * 
@@ -164,6 +295,7 @@ public class World {
 			//Remove uncollected drops
 			if(((Dropped) dropped).getTimeLeft() <= 0){
 				drawMap.get("Dropped").removeValue(dropped, true);
+				dropped.dispose();
 			}
 		}
 
@@ -192,6 +324,7 @@ public class World {
 
 			if (drawable.getPosition().cpy().sub(player.getPosition()).len() > LOST_ANIMAL_TOLERANCE) {
 				drawMap.get("Movable").removeValue(drawable, false);
+				drawable.dispose();
 			}
 		}
 
@@ -200,144 +333,15 @@ public class World {
 			if (movable.getBounds().overlaps(market.getBounds())) {
 				levelHandler.increaseStored();
 				drawMap.get("Movable").removeValue(movable, false);
+				movable.dispose();
 			}
 		}
 
 		//check if player reached market
 		if (player.getBounds().overlaps(market.getBounds())) {
 			SoundHandler.pauseBackgroundMusic();
-			gameInstance.setScreen(new MarketScreen(gameInstance,gameInstance.getGameScreen()));
+			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
+			drawMap.get("Player").get(0).dispose();
 		}
-	}
-
-	/**
-	 * Checks if the player lost the current level
-	 */
-	public void checkLost(){
-		if(getMovables().size <=0 && levelHandler.getStoredAmount() <= 0 ){
-			SoundHandler.toggleSounds();
-			SoundHandler.toggleMusic();
-			gameInstance.getGameScreen().setLost(true);
-		}
-		else if( player.getHealth() <=0){
-			SoundHandler.toggleSounds();
-			SoundHandler.toggleMusic();
-			gameInstance.getGameScreen().setLost(false);
-		}
-	}
-
-	/**
-	 * Updates the camera position to progress towards the end of the level
-	 * 
-	 * @param speed the desired speed for the camera movement
-	 */
-	public void moveCameraUp(float speed) {
-		camera.position.y += speed;
-		camera.update();
-	}
-
-	/**
-	 * Disposes all objects that need to release memory
-	 */
-	public void dispose() {
-		for (Array<ABDrawable> drawableArrays : drawMap.values){
-			for (ABDrawable drawable : drawableArrays) {
-				drawable.dispose();
-			}
-		}
-		worldRender.dispose();
-	}
-
-	/**
-	 * Finds which drawables are movable, casts them to movable and returns them in an array
-	 * 
-	 * @return		an array of all movable objects currently in the world
-	 */
-	public Array<Movable> getMovables() {
-		Array<Movable> movables = new Array<Movable>();
-		for (ABDrawable aBDrawable : drawMap.get("Movable")){
-				movables.add((Movable) aBDrawable);
-		}
-		return movables;
-	}
-
-	/**
-	 * Finds which drawables are dropped items, casts them to dropped and returns them in an array
-	 * 
-	 * @return		an array of all dropped items currently in the world
-	 */
-	public Array<Dropped> getDropped() {
-		Array<Dropped> droppings = new Array<Dropped>();
-		for (ABDrawable aBDrawable : drawMap.get("Dropped")) {
-				droppings.add((Dropped) aBDrawable);
-		}
-		return droppings;
-	}
-
-	/**
-	 * Adds a swipe line to the world so it will be rendered
-	 * 
-	 * @param begin the point where the swipe begins
-	 * @param end	the point where the swipe ends
-	 */
-	public void addSwipeToWorld(Vector3 begin, Vector3 end) {
-		worldRender.addSwipe(new Vector2(begin.x,begin.y), new Vector2(end.x,end.y));
-	}
-
-	/**
-	 * Removes the dropped item from the drawn objects, and handles the logic for the collection of the item
-	 * 
-	 * @param dropped the dropped item on screen that is to be removed
-	 */
-	public void removeFromABDrawable(ABDrawable dropped){
-		drawMap.get("Dropped").removeValue(dropped, true);
-		if(((Dropped) dropped).getDropped() instanceof Animal){
-			drawMap.get("Movable").add(((Dropped) dropped).getDropped());
-		}
-		else{
-			player.getInventory().addItem((Consumable) ((Dropped) dropped).getDropped());
-		}
-	}
-
-	/**
-	 * Returns the camera used to view the world
-	 * 
-	 * @return		the camera currently in use
-	 */
-	public OrthographicCamera getCamera() {
-		return camera;
-	}
-
-
-	public int getFruitfullMoneyP() {
-		return fruitfullMoneyP;
-	}
-
-	public void addFruitfullMoneyP() {
-		this.fruitfullMoneyP += 1;
-	}
-
-	public int getLongerMoneyP() {
-		return LongerMoneyP;
-	}
-
-	public void addLongerMoneyP() {
-		LongerMoneyP += 1;
-	}
-
-	public int getMoreMoneyP() {
-		return MoreMoneyP;
-	}
-
-	public void addMoreMoneyP() {
-		MoreMoneyP += 1;
-	}
-
-	public LevelHandler getLevelHandler() {
-		return levelHandler;
-	}
-
-	public Player getPlayer() {
-		return player;
 	}
 }

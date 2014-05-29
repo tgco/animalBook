@@ -57,8 +57,6 @@ public abstract class ButtonScreenAdapter {
 		buttonSkin.dispose();
 		buttonStage.dispose();
 		batch.dispose();
-		inputMultiplexer.clear();
-		
 	}
 	
 	protected abstract void initializeButtons();

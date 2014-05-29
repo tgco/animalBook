@@ -68,7 +68,7 @@ public class GameScreenInputHandler implements InputProcessor {
 	public boolean keyDown(int keycode) {
 		if(keycode == Keys.BACK){
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));
-			//gameScreen.dispose();
+			gameScreen.dispose();
 		}
 		return false;
 	}

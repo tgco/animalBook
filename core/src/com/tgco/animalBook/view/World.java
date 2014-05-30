@@ -54,7 +54,7 @@ public class World {
 	/**
 	 * The speed the camera moves up the lane when all animals have reached market
 	 */
-	private float increasedCameraSpeed = 2f*cameraSpeed;
+	private float increasedCameraSpeed;
 
 	/**
 	 * Array of objects that will be drawn to the screen
@@ -134,6 +134,7 @@ public class World {
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
+		increasedCameraSpeed = 2f*cameraSpeed;
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
 			player.resetPlayerPosition();
@@ -305,16 +306,21 @@ public class World {
 	public void updateGameLogic() {
 		
 		float speed;
-		//move the camera
-		if(getMovables().size <=0 && gameInstance.getLevelHandler().getStoredAmount() > 0) {
-			speed = increasedCameraSpeed;
-		} else {
-			speed = cameraSpeed;
-		}
-		Gdx.app.log("Speed is: ", String.valueOf(speed));
-		
-		moveCameraUp(speed);
+		//Health effects
+		player.decreaseHealth(.01f);
 
+		if(getMovables().size <=0 && gameInstance.getLevelHandler().getStoredAmount() > 0) {
+			speed = increasedCameraSpeed*(player.getHealth()/100);
+		} else {
+			speed = cameraSpeed*(player.getHealth()/100);
+		}
+		
+		player.setSpeed(speed);
+		
+		//move the camera and player
+		moveCameraUp(speed);
+		player.move(speed);
+		
 		for (ABDrawable dropped : drawMap.get("Dropped")){
 			//Remove uncollected drops
 			if(((Dropped) dropped).getTimeLeft() <= 0){
@@ -333,15 +339,7 @@ public class World {
 					drawMap.get("Dropped").add(dropping);
 				}
 			}
-		}
-
-		//move player
-		player.move(speed);
-
-		//Health effects
-		player.decreaseHealth(.01f);
-		player.setSpeed(cameraSpeed*(player.getHealth()/100));
-		speed = cameraSpeed*(player.getHealth()/100);
+		}		
 
 		//check for and remove lost animals
 		for (ABDrawable drawable : drawMap.get("Movable")) {

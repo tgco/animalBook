@@ -1,7 +1,10 @@
 package com.tgco.animalBook.gameObjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -31,6 +34,11 @@ public class Swipe {
 	 * The amount of time the swipe is drawn on screen
 	 */
 	private int lifeTime;
+	
+	/**
+	 * Texture that swipes are drawn in
+	 */
+	private final Texture TEXTURE = new Texture(Gdx.files.internal("objectTextures/swipe.png"));
 
 	/**
 	 * Constructor that takes beginning and end point of the swipe line
@@ -51,12 +59,15 @@ public class Swipe {
 	 */
 	public void draw(OrthographicCamera cam) {
 		
-		ShapeRenderer render = new ShapeRenderer();
-		render.setProjectionMatrix(cam.combined);
-		render.begin(ShapeType.Line);
-		render.line(begin.x, begin.y, end.x, end.y, Color.ORANGE, Color.PINK);
-		render.end();
-		render.dispose();
+		SpriteBatch batch = new SpriteBatch();
+		batch.setProjectionMatrix(cam.combined);
+		batch.begin();
+		//Find length of swipe and rotation
+		float length = end.cpy().sub(begin).len();
+		float rotation = end.cpy().sub(begin).angle();
+		batch.draw(TEXTURE, begin.x, begin.y, 0, 0, length, length/5, 1, 1, rotation, 0, 0, TEXTURE.getWidth(), TEXTURE.getHeight(), false, false);
+		batch.end();
+		batch.dispose();
 		
 		lifeTime -= 1;
 	}
@@ -67,6 +78,10 @@ public class Swipe {
 	 */
 	public int getLifeTime() {
 		return lifeTime;
+	}
+	
+	public void dispose() {
+		TEXTURE.dispose();
 	}
 
 }

@@ -54,7 +54,7 @@ public abstract class ABDrawable {
 	}
 	
 	/**
-	 *  sets the position on the new bounds of the object
+	 *  sets the position on the new  of the object
 	 * @param position is the new position of it
 	 */
 	public void setPosition(Vector2 position) {

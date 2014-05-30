@@ -28,16 +28,20 @@ import com.tgco.animalBook.handlers.SoundHandler;
 
 /**
  * The InventoryScreen object. Is responsible for providing users an overview of their in-game Consumables as well as the option
- * to drag and drop what they want to consume to stay aline
+ * to drag and drop what they want to consume to stay alive
  * 
  * @author Kelly Masuda
  *
  */
 public class InventoryScreen extends ButtonScreenAdapter implements Screen {
+	
+	
+	private Texture imageTexture = new Texture(Gdx.files.internal("objectTextures/eatzone.png"));
+	
 	/**
 	 * The image that represents the drop zone for the player's eat() function
 	 */
-	private static final Image eatZone = new Image(new Texture(Gdx.files.internal("objectTextures/eatzone.png")));
+	private Image eatZone = new Image(imageTexture);
 	
 	/**
 	 * DragAndDrop object that facilitates drag and drop functionality in this screen
@@ -304,6 +308,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	public void dispose() {
 		super.dispose();
 		shapeRender.dispose();
+		imageTexture.dispose();
 		for (BitmapFont font : fonts) {
 			font.dispose();
 		}

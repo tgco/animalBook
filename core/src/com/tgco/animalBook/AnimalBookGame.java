@@ -11,8 +11,6 @@ import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.GameScreen;
-import com.tgco.animalBook.screens.MainMenuScreen;
-import com.tgco.animalBook.screens.OptionsScreen;
 import com.tgco.animalBook.screens.SplashScreen;
 
 public class AnimalBookGame extends Game {

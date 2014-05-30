@@ -112,7 +112,7 @@ public class GameScreenInputHandler implements InputProcessor {
 				
 				for(Movable movable : gameScreen.getWorld().getMovables()) {
 					if (movable.getBounds().contains(new Vector2(lastTouch.x,lastTouch.y))) {
-						float reactionScale = 100;
+						float reactionScale = 200;
 						//SoundHandler.playWhistle();
 						movable.addToCurrentTarget(camCenter2d.cpy().sub(movable.getPosition()).nor().scl(reactionScale));
 					}
@@ -206,7 +206,7 @@ public class GameScreenInputHandler implements InputProcessor {
 					movable.addToCurrentTarget(perpProjection.cpy().nor().scl(reactionScale));
 					
 					//Add a line to draw the direction the goose was influenced
-					gameScreen.getWorld().addSwipeToWorld(new Vector3(positionCenter.x,positionCenter.y,0), new Vector3(positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).x,positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).y,0));
+					//gameScreen.getWorld().addSwipeToWorld(new Vector3(positionCenter.x,positionCenter.y,0), new Vector3(positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).x,positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).y,0));
 				}
 			}
 		}

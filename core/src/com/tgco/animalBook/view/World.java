@@ -306,7 +306,7 @@ public class World {
 		
 		float speed;
 		//move the camera
-		if(getMovables().size <=0 && levelHandler.getStoredAmount() > 0) {
+		if(getMovables().size <=0 && gameInstance.getLevelHandler().getStoredAmount() > 0) {
 			speed = increasedCameraSpeed;
 		} else {
 			speed = cameraSpeed;

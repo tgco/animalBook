@@ -146,7 +146,7 @@ public class LevelHandler {
 	 * @return		the speed for the camera
 	 */
 	public float returnCameraSpeed(int level) {
-		return .2f*level;
+		return .4f*level;
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class LevelHandler {
 	 */
 	public float returnLaneLength(int level) {
 
-		return 1000*level;
+		return 3000 + 2000*(level - 1);
 	}
 	
 	/**

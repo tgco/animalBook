@@ -5,6 +5,7 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -30,12 +31,6 @@ import com.tgco.animalBook.screens.MarketScreen;
  */
 public class World {
 
-
-	/**
-	 * Distance an animal can be from the player before it is lost and removed
-	 */
-	private static final float LOST_ANIMAL_TOLERANCE = 2*Gdx.graphics.getWidth()/4;
-
 	/**
 	 * The number of animals the player has
 	 */
@@ -50,6 +45,16 @@ public class World {
 	 * The speed the camera moves up the lane
 	 */
 	private float cameraSpeed;
+	
+	/**
+	 * Bounds for losing animals
+	 */
+	private Rectangle cameraBounds;
+	
+	/**
+	 * How far off screen an animal can be before it is lost
+	 */
+	private float tolerance;
 	
 	/**
 	 * The speed the camera moves up the lane when all animals have reached market
@@ -134,6 +139,10 @@ public class World {
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
+		
+		tolerance = drawMap.get("Movable").get(0).getWidth();
+		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
+		
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
 		increasedCameraSpeed = 2f*cameraSpeed;
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
@@ -323,6 +332,9 @@ public class World {
 		moveCameraUp(speed);
 		player.move(speed);
 		
+		//Update Camera bounds
+		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
+		
 		for (ABDrawable dropped : drawMap.get("Dropped")){
 			//Remove uncollected drops
 			if(((Dropped) dropped).getTimeLeft() <= 0){
@@ -346,7 +358,7 @@ public class World {
 		//check for and remove lost animals
 		for (ABDrawable drawable : drawMap.get("Movable")) {
 
-			if (drawable.getPosition().cpy().sub(player.getPosition()).len() > LOST_ANIMAL_TOLERANCE) {
+			if (!(cameraBounds.contains(drawable.getPosition()))) {
 				drawMap.get("Movable").removeValue(drawable, false);
 				drawable.dispose();
 			}

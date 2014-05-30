@@ -28,7 +28,7 @@ import com.tgco.animalBook.handlers.SoundHandler;
 
 /**
  * The InventoryScreen object. Is responsible for providing users an overview of their in-game Consumables as well as the option
- * to drag and drop what they want to consume to stay aline
+ * to drag and drop what they want to consume to stay alive
  * 
  * @author Kelly Masuda
  *

@@ -96,14 +96,15 @@ public class WorldRenderer {
 		shapeRender.end();
 
 		//Swipes on screen
-		/*
+		
 		for (Swipe swipe : swipes) {
 			if (swipe.getLifeTime() == 0) {
 				swipes.removeValue(swipe, false);
+				swipe.dispose();
 			} else
 				swipe.draw(cam);
 		}
-		 */
+		 
 		batch.begin();
 
 	}

@@ -16,6 +16,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
+/**
+ * CURRENTLY NOT IN USE
+ * @author
+ *
+ */
 public class LoseScreen extends ButtonScreenAdapter implements Screen {
 
 	private Button mainMenuButton, retryButton;

@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.GameScreen;
+import com.tgco.animalBook.screens.MainMenuScreen;
+import com.tgco.animalBook.screens.OptionsScreen;
 import com.tgco.animalBook.screens.SplashScreen;
 
 public class AnimalBookGame extends Game {
@@ -29,11 +31,11 @@ public class AnimalBookGame extends Game {
 	 */
 	@Override
 	public void create () {
-		//Set the initial screen
 		
 		for(int i=0; i< 4; i++){
-			LevelData.add(null);
+			LevelData.insert(i,null);
 		}
+		//Set the initial screen
 		setScreen(new SplashScreen(this));
 		if (debugMode)
 			fpsLogger = new FPSLogger();

@@ -30,10 +30,6 @@ import com.tgco.animalBook.screens.MarketScreen;
  */
 public class World {
 
-	/**
-	 * The current level being played
-	 */
-	private static int level = 1;
 
 	/**
 	 * Distance an animal can be from the player before it is lost and removed
@@ -54,6 +50,11 @@ public class World {
 	 * The speed the camera moves up the lane
 	 */
 	private float cameraSpeed;
+	
+	/**
+	 * The speed the camera moves up the lane when all animals have reached market
+	 */
+	private float increasedCameraSpeed = 2f*cameraSpeed;
 
 	/**
 	 * Array of objects that will be drawn to the screen
@@ -75,10 +76,7 @@ public class World {
 	 */
 	private float laneLength;
 
-	/**
-	 * Load all information that differs between levels
-	 */
-	private LevelHandler levelHandler;
+	
 
 	private int LongerMoneyP	= 0;
 
@@ -117,18 +115,16 @@ public class World {
 		
 		//spot 4 is storing dropped items array
 		
-		if(levelSize && gameInstance.getLevelData().get(0) !=null){
-			level = (Integer) gameInstance.getLevelData().get(0);
-		}
+		
 		worldRender = new WorldRenderer();
-		levelHandler = new LevelHandler(level);
+		
 		
 		//spot 3 is storing movable array
 		if(levelSize && gameInstance.getLevelData().get(2) !=null){
 			//Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
 			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
 		}else{
-			drawMap.put("Movable", levelHandler.addAnimals(level, numAnimals));
+			drawMap.put("Movable", gameInstance.getLevelHandler().addAnimals( gameInstance.getLevelHandler().getLevel()));
 		}
 		
 
@@ -137,7 +133,7 @@ public class World {
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
-		cameraSpeed = levelHandler.returnCameraSpeed(level);	
+		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
 			player.resetPlayerPosition();
@@ -146,7 +142,7 @@ public class World {
 		}
 
 		//Make the market and set it at the end
-		laneLength = levelHandler.returnLaneLength(level);
+		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 		market = new Market();
 		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength + player.getHeight()));
 		drawMap.put("Market", new Array<ABDrawable>());
@@ -187,7 +183,7 @@ public class World {
 	 * Checks if the player lost the current level
 	 */
 	public void checkLost(){
-		if(getMovables().size <=0 && levelHandler.getStoredAmount() <= 0 ){
+		if(getMovables().size <=0 &&  gameInstance.getLevelHandler().getStoredAmount() <= 0 ){
 			SoundHandler.toggleSounds();
 			SoundHandler.toggleMusic();
 			gameInstance.getGameScreen().setLost(true);
@@ -237,11 +233,6 @@ public class World {
 		return fruitfullMoneyP;
 	}
 
-	public LevelHandler getLevelHandler() {
-		return levelHandler;
-	}
-
-
 	public int getLongerMoneyP() {
 		return LongerMoneyP;
 	}
@@ -283,13 +274,13 @@ public class World {
 	 * @param dropped the dropped item on screen that is to be removed
 	 */
 	public void removeFromABDrawable(ABDrawable dropped){
-		drawMap.get("Dropped").removeValue(dropped, true);
 		if(((Dropped) dropped).getDropped() instanceof Animal){
 			drawMap.get("Movable").add(((Dropped) dropped).getDropped());
 		}
 		else{
 			player.getInventory().addItem((Consumable) ((Dropped) dropped).getDropped());
 		}
+		drawMap.get("Dropped").removeValue(dropped, true);
 	}
 
 	/**
@@ -312,8 +303,17 @@ public class World {
 	 * Updates all logic between game objects and moves them if necessary
 	 */
 	public void updateGameLogic() {
+		
+		float speed;
 		//move the camera
-		moveCameraUp(cameraSpeed);
+		if(getMovables().size <=0 && levelHandler.getStoredAmount() > 0) {
+			speed = increasedCameraSpeed;
+		} else {
+			speed = cameraSpeed;
+		}
+		Gdx.app.log("Speed is: ", String.valueOf(speed));
+		
+		moveCameraUp(speed);
 
 		for (ABDrawable dropped : drawMap.get("Dropped")){
 			//Remove uncollected drops
@@ -325,7 +325,7 @@ public class World {
 
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
-			((Movable) movable).move(cameraSpeed);
+			((Movable) movable).move(speed);
 			//Drop new items
 			if(rand.nextInt(100) <= 50){
 				ABDrawable dropping =  ((Animal)movable).drop();
@@ -336,12 +336,12 @@ public class World {
 		}
 
 		//move player
-		player.move(cameraSpeed);
+		player.move(speed);
 
 		//Health effects
 		player.decreaseHealth(.01f);
-		player.setSpeed(.2f*(player.getHealth()/100));
-		cameraSpeed = .2f*(player.getHealth()/100);
+		player.setSpeed(cameraSpeed*(player.getHealth()/100));
+		speed = cameraSpeed*(player.getHealth()/100);
 
 		//check for and remove lost animals
 		for (ABDrawable drawable : drawMap.get("Movable")) {
@@ -355,7 +355,7 @@ public class World {
 		//check for collisions between the market and the animals
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			if (movable.getBounds().overlaps(market.getBounds())) {
-				levelHandler.increaseStored();
+				 gameInstance.getLevelHandler().increaseStored();
 				drawMap.get("Movable").removeValue(movable, false);
 				movable.dispose();
 			}
@@ -368,7 +368,4 @@ public class World {
 		}
 	}
 
-	public void addToLevel(int i) {
-		levelHandler.addLevel();	
-	}
 }

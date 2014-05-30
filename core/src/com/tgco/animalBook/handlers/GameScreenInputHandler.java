@@ -72,9 +72,9 @@ public class GameScreenInputHandler implements InputProcessor {
 			//store the data in levelData of Game
 			
 			// spot 1 is current level
-			gameInstance.addToDatalevel(gameScreen.getWorld().getLevelHandler().getLevel(),0);
+			gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
 			
-			//spot 2 is player money			
+			//spot 2 is player			
 			gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
 			
 			//spot 3 is storing movable array
@@ -159,6 +159,7 @@ public class GameScreenInputHandler implements InputProcessor {
 				gameScreen.getWorld().getCamera().unproject(vect);
 				Vector2 vect2 = new Vector2(vect.x, vect.y);
 				if(dropping.getBounds().contains(vect2)){
+
 					gameScreen.getWorld().removeFromABDrawable(dropping);
 					SoundHandler.playPickup();
 					dropping.dispose();

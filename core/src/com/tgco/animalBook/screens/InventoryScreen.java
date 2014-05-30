@@ -243,7 +243,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		fonts[consumableIndex].draw(batch,
 				String.valueOf(gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size),
 				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex,
-				Gdx.graphics.getHeight()/2);
+				Gdx.graphics.getHeight()/2 + 20);
 		batch.end();
 	}
 

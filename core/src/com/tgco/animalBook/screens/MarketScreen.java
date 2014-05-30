@@ -79,9 +79,9 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
-		int storedAnimal = gameScreen.getWorld().getLevelHandler().getStoredAmount();
-		int nextLevel = gameScreen.getWorld().getLevelHandler().getNextLevelStart();
-		int needAnimals = gameScreen.getWorld().getLevelHandler().getPassLevelAmount();
+		int storedAnimal = gameInstance.getLevelHandler().getStoredAmount();
+		int nextLevel = gameInstance.getLevelHandler().getNextLevelStart();
+		int needAnimals = gameInstance.getLevelHandler().getPassLevelAmount();
 		String needAnimalsString = "Need: " + String.valueOf(needAnimals);
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -135,7 +135,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	private void reinitButtons() {
-		if(gameScreen.getWorld().getLevelHandler().getNextLevelStart() < gameScreen.getWorld().getLevelHandler().getPassLevelAmount()){
+		if(gameInstance.getLevelHandler().getNextLevelStart() < gameInstance.getLevelHandler().getPassLevelAmount()){
 			nextLevelButton.setDisabled(true);
 		}
 		else{
@@ -291,9 +291,27 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 					SoundHandler.playButtonClick();
 					SoundHandler.pauseMarketBackgroundMusic();
 					SoundHandler.playBackgroundMusic(true);
+					
+					gameInstance.addToLevel(1);
+					
+					// spot 1 is current level
+					gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
+					
+					//spot 2 is player money			
+					gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
+					
+					//spot 3 is storing movable array
+					gameInstance.addToDatalevel(null,2);
+					
+					//spot 4 is storing dropped items array
+					gameInstance.addToDatalevel(null, 3);
+					
+					
 					gameScreen.resetInputProcessors();
-					//Grab the world
+					gameScreen.dispose();
 					gameInstance.setScreen(new GameScreen(gameInstance));
+					
+					
 				}
 			}
 		});
@@ -306,28 +324,11 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseMarketBackgroundMusic();
-				SoundHandler.playBackgroundMusic(true);
-				
-				gameScreen.getWorld().addToLevel(1);
-				
-				// spot 1 is current level
-				gameInstance.addToDatalevel(gameScreen.getWorld().getLevelHandler().getLevel(),0);
-				
-				//spot 2 is player money			
-				gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
-				
-				//spot 3 is storing movable array
-				gameInstance.addToDatalevel(null,2);
-				
-				//spot 4 is storing dropped items array
-				gameInstance.addToDatalevel(null, 3);
-				
-				
+				SoundHandler.playBackgroundMusic(true);			
 				gameScreen.resetInputProcessors();
 				gameScreen.dispose();
 				gameInstance.setScreen(new GameScreen(gameInstance));
-				
-				
+
 			}
 		});
 
@@ -338,16 +339,16 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				if (gameScreen.getWorld().getLevelHandler().getStoredAmount() == 0) {
+				if (gameInstance.getLevelHandler().getStoredAmount() == 0) {
 					return;
 				} else {
-					gameScreen.getWorld().getLevelHandler().decreaseStored();
-					gameScreen.getWorld().getLevelHandler().increaseNextLevelStart();
+					gameInstance.getLevelHandler().decreaseStored();
+					gameInstance.getLevelHandler().increaseNextLevelStart();
 				}
 			}
 		});
 
-		if(gameScreen.getWorld().getLevelHandler().getNextLevelStart() < gameScreen.getWorld().getLevelHandler().getPassLevelAmount()){
+		if(gameInstance.getLevelHandler().getNextLevelStart() <gameInstance.getLevelHandler().getPassLevelAmount()){
 			nextLevelButton.setDisabled(true);
 		}
 

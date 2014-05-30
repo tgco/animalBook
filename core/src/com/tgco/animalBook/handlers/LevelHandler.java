@@ -76,13 +76,16 @@ public class LevelHandler {
 	 * @param numAnimals the number of animals to initialize
 	 * @return			 an array with the correct number of the correct animal type
 	 */
-	public Array<ABDrawable> addAnimals(int level, int numAnimals) {
-		//Gdx.app.log("My Tag", "the numAnimals in levelHandler is " + numAnimals);
+	public Array<ABDrawable> addAnimals(int level) {
+		int startAnimals = nextLevelStart;
+		if(startAnimals == 0)
+			startAnimals =5;
 		Array<ABDrawable> animals = new Array<ABDrawable>();
 
+		Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
 		int x;
-		for(int i = 0; i < numAnimals; i++){
-			if(i < .5*numAnimals){
+		for(int i = 0; i < startAnimals; i++){
+			if(i < .5*startAnimals){
 				x = -i;
 
 				switch(level) {
@@ -105,7 +108,7 @@ public class LevelHandler {
 
 			}
 			else {
-				x = (i - (int)Math.floor(.5*numAnimals));
+				x = (i - (int)Math.floor(.5*startAnimals));
 
 				switch(level) {
 				case 1 :

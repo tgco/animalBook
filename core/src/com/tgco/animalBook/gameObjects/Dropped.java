@@ -48,6 +48,7 @@ public class Dropped extends ABDrawable{
 		this.position = pos;
 		width = .028f*Gdx.graphics.getWidth();
 		height = .044f*Gdx.graphics.getHeight();
+		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 		this.timeLeft = timeLeft;
 	}
 

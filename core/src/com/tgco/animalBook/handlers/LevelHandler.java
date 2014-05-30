@@ -84,47 +84,51 @@ public class LevelHandler {
 
 		Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
 		int x;
+		float animalWidth;
+		float animalHeight;
 		for(int i = 0; i < startAnimals; i++){
 			if(i < .5*startAnimals){
 				x = -i;
-
+				animalWidth = Gdx.graphics.getWidth()/2 + x*30 -10;
+				animalHeight = (float) (Gdx.graphics.getHeight()/2 -1*x*x - 2*x );
 				switch(level) {
 				case 1 :
-					animals.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40 -50, (float) (Gdx.graphics.getHeight()/2 -x*x*25 + 10*x -50))));
+					animals.add(new Goose(new Vector2(animalWidth, animalHeight)));
 					break;
 				case 2 :
-					animals.add(new Pig(new Vector2(Gdx.graphics.getWidth()/2 + x*40 -50, (float) (Gdx.graphics.getHeight()/2 -x*x*25 + 10*x -50))));
+					animals.add(new Pig(new Vector2(animalWidth, animalHeight)));
 					break;
 				case 3 :
-					animals.add(new Goat(new Vector2(Gdx.graphics.getWidth()/2 + x*40 -50, (float) (Gdx.graphics.getHeight()/2 -x*x*25 + 10*x -50))));
+					animals.add(new Goat(new Vector2(animalWidth, animalHeight)));
 					break;
 				case 4 :
-					animals.add(new Sheep(new Vector2(Gdx.graphics.getWidth()/2 + x*40 -50, (float) (Gdx.graphics.getHeight()/2 -x*x*25 + 10*x -50))));
+					animals.add(new Sheep(new Vector2(animalWidth, animalHeight)));
 					break;
 				case 5 :
-					animals.add(new Cow(new Vector2(Gdx.graphics.getWidth()/2 + x*40 -50, (float) (Gdx.graphics.getHeight()/2 -x*x*25 + 10*x -50))));
+					animals.add(new Cow(new Vector2(animalWidth, animalHeight)));
 					break;
 				}
 
 			}
 			else {
 				x = (i - (int)Math.floor(.5*startAnimals));
-
+				animalWidth = Gdx.graphics.getWidth()/2 + x*30 +30;
+				animalHeight = (float) (Gdx.graphics.getHeight()/2 -1*x*x - 2*x );
 				switch(level) {
 				case 1 :
-					animals.add(new Goose(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
+					animals.add(new Goose(new Vector2(animalWidth, animalHeight)));
 					break;
 				case 2 :
-					animals.add(new Pig(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
+					animals.add(new Pig(new Vector2(animalWidth, animalHeight)));
 					break;
 				case 3 :
-					animals.add(new Goat(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
+					animals.add(new Goat(new Vector2(animalWidth, animalHeight)));
 					break;
 				case 4 :
-					animals.add(new Sheep(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
+					animals.add(new Sheep(new Vector2(animalWidth, animalHeight)));
 					break;
 				case 5 :
-					animals.add(new Cow(new Vector2(Gdx.graphics.getWidth()/2 + x*40, (float) (Gdx.graphics.getHeight()/2 -x*x*30 + 15*x -50))));
+					animals.add(new Cow(new Vector2(animalWidth, animalHeight)));
 					break;
 				}
 

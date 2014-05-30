@@ -5,17 +5,17 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
 public class SoundHandler {
-	
+
 	private static Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/farmNoise.wav"));
 	private static Music storyBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/storyNoise.wav"));
 	private static Music marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
 	private static Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
 	private static Sound whistle = Gdx.audio.newSound(Gdx.files.internal("sounds/whistle.wav"));
 	private static Sound pickup = Gdx.audio.newSound(Gdx.files.internal("sounds/pickup.wav"));
-	
+
 	private static boolean soundMuted = false;
 	private static boolean musicMuted = false;
-	
+
 	/**
 	 * Plays the file stored as backgroundMusic at relative volume 0.5. Sets the music to loop
 	 * if isLooping is <code>true</code>.
@@ -35,7 +35,7 @@ public class SoundHandler {
 			backgroundMusic.play();
 		}
 	}
-	
+
 	/**
 	 * Plays the file stored as storyBackgroundMusic at relative volume 0.5. Sets the music to 
 	 * loop if isLooping is <code>true</code>.
@@ -55,7 +55,7 @@ public class SoundHandler {
 			storyBackgroundMusic.play();
 		}
 	}
-	
+
 	/**
 	 * Plays the file stored as marketBackgroundMusic at relative volume 0.5. Sets the music to 
 	 * loop if isLooping is <code>true</code>.
@@ -75,7 +75,7 @@ public class SoundHandler {
 			marketBackgroundMusic.play();
 		}
 	}
-	
+
 	/**
 	 * Pauses the file stored as backgroundMusic. When unpaused, the music will resume at the
 	 * exact point it was paused at.
@@ -83,7 +83,7 @@ public class SoundHandler {
 	public static void pauseBackgroundMusic() {
 		backgroundMusic.pause();
 	}
-	
+
 	/**
 	 * Pauses the file stored as storyBackgroundMusic. When unpaused, the music will resume at the
 	 * exact point it was paused at.
@@ -91,7 +91,7 @@ public class SoundHandler {
 	public static void pauseStoryBackgroundMusic() {
 		storyBackgroundMusic.pause();
 	}
-	
+
 	/**
 	 * Pauses the file stored as marketBackgroundMusic. When unpaused, the music will resume at the
 	 * exact point it was paused at.
@@ -99,7 +99,7 @@ public class SoundHandler {
 	public static void pauseMarketBackgroundMusic() {
 		marketBackgroundMusic.pause();
 	}
-	
+
 	/**
 	 * Changes the relative volume of the file stored as backgroundMusic.
 	 * <p>
@@ -116,7 +116,7 @@ public class SoundHandler {
 			backgroundMusic.setVolume(level);
 		}
 	}
-	
+
 	/**
 	 * Plays the file stored as buttonClick.
 	 * <p>
@@ -131,7 +131,7 @@ public class SoundHandler {
 			buttonClick.play();
 		}
 	}
-	
+
 	/**
 	 * Plays the file stored as whistle.
 	 * <p>
@@ -146,7 +146,7 @@ public class SoundHandler {
 			whistle.play(.1f);
 		}
 	} 
-	
+
 	/**
 	 * Plays the file stored as pickup.
 	 * <p>
@@ -161,7 +161,7 @@ public class SoundHandler {
 			pickup.play(1);
 		}
 	}
-	
+
 	/**
 	 * Changes the value of soundMuted.
 	 * <p>
@@ -171,7 +171,7 @@ public class SoundHandler {
 	public static void toggleSounds() {
 		soundMuted = !soundMuted;
 	}
-	
+
 	/**
 	 * Changes the value of musicMuted and changes the volume of all music.
 	 * <p>
@@ -193,7 +193,7 @@ public class SoundHandler {
 			musicMuted = true;
 		}
 	}
-	
+
 	/**
 	 * Reinitializes all Sound and Music variables.
 	 */
@@ -203,11 +203,11 @@ public class SoundHandler {
 		marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
 		buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
 		whistle = Gdx.audio.newSound(Gdx.files.internal("sounds/whistle.wav"));
-		
+		pickup = Gdx.audio.newSound(Gdx.files.internal("sounds/pickup.wav"));
 		//soundMuted = true;
 		//musicMuted = true;
 	}
-	
+
 	/**
 	 * Disposes of all Sound and Music variables.
 	 */
@@ -217,5 +217,6 @@ public class SoundHandler {
 		marketBackgroundMusic.dispose();
 		buttonClick.dispose();
 		whistle.dispose();
+		pickup.dispose();
 	}
 }

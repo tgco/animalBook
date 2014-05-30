@@ -278,8 +278,8 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .5);
 				gameScreen.resetInputProcessors();
-				//Grab the world
 				gameInstance.setScreen(gameScreen);
+				dispose();
 			}
 		}
 				);
@@ -304,5 +304,8 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	public void dispose() {
 		super.dispose();
 		shapeRender.dispose();
+		for (BitmapFont font : fonts) {
+			font.dispose();
+		}
 	}
 }

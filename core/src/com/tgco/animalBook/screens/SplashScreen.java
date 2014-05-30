@@ -125,6 +125,7 @@ public class SplashScreen implements Screen {
 				timeCounter = 0;
 				//SET MENU SCREEN HERE
 				gameInstance.setScreen(new MainMenuScreen(gameInstance));
+				dispose();
 			}
 		}
 

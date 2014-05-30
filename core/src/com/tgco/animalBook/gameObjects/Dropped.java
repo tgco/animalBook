@@ -7,6 +7,7 @@ package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Dropped extends ABDrawable{
@@ -16,11 +17,11 @@ public class Dropped extends ABDrawable{
 	/** animal is 1 item it may carry */
 	private Animal animal = null;
 	
-	/** how much time it has left before disappering */
+	/** how much time it has left before disappearing */
 	private double timeLeft;
 
 	/**
-	 *  the consturctor with Consumble exists if the dropped item should house a Consumable.
+	 *  the constructor with Consumable exists if the dropped item should house a Consumable.
 	 * @param consume is passed in a new Consumable
 	 * @param pos starting position of the dropped object
 	 * @param timeLeft how much time is left
@@ -31,6 +32,7 @@ public class Dropped extends ABDrawable{
 		this.position = pos;
 		width = .028f*Gdx.graphics.getWidth();
 		height = .044f*Gdx.graphics.getHeight();
+		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 		this.timeLeft = timeLeft;
 
 	}
@@ -81,7 +83,7 @@ public class Dropped extends ABDrawable{
 	}
 
 	/**
-	 * overrides the varaible in ABDrawables for the world to pick out all dropped objects.
+	 * overrides the variable in ABDrawables for the world to pick out all dropped objects.
 	 */
 	@Override
 	public boolean isDropping() {

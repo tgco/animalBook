@@ -365,7 +365,6 @@ public class World {
 		if (player.getBounds().overlaps(market.getBounds())) {
 			SoundHandler.pauseBackgroundMusic();
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
-			drawMap.get("Player").get(0).dispose();
 		}
 	}
 

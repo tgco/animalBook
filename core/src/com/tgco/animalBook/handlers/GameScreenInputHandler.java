@@ -82,9 +82,8 @@ public class GameScreenInputHandler implements InputProcessor {
 			
 			//spot 4 is storing dropped items array
 			gameInstance.addToDatalevel(gameScreen.getWorld().getDropped(), 3);
-			
-			
-			
+
+			gameScreen.dispose();
 		}
 		return false;
 	}
@@ -159,8 +158,9 @@ public class GameScreenInputHandler implements InputProcessor {
 				//unproject operations
 				gameScreen.getWorld().getCamera().unproject(vect);
 				Vector2 vect2 = new Vector2(vect.x, vect.y);
-				if(vect2.cpy().sub(dropping.getPosition().cpy()).len() <= 30){
+				if(dropping.getBounds().contains(vect2)){
 					gameScreen.getWorld().removeFromABDrawable(dropping);
+					dropping.dispose();
 				}
 			}
 		}

@@ -334,13 +334,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	/**
-	 * Resets the input processor controls to the input setup for the game screen
-	 */
-	public void resetInputProcessors() {
-		Gdx.input.setInputProcessor(inputMultiplexer);
-	}
-
-	/**
 	 * Sets the game to the lost mode when the player has lost
 	 * 
 	 * @param noAnimals true if the player lost due to losing all animals

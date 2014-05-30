@@ -333,8 +333,6 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);
 				gameScreen.resetInputProcessors();
-				//Grab the world
-				World world = gameScreen.getWorld();
 				gameInstance.setScreen(gameScreen);
 				dispose();
 			}

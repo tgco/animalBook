@@ -113,7 +113,7 @@ public class GameScreenInputHandler implements InputProcessor {
 				for(Movable movable : gameScreen.getWorld().getMovables()) {
 					if (movable.getBounds().contains(new Vector2(lastTouch.x,lastTouch.y))) {
 						float reactionScale = 100;
-						SoundHandler.playWhistle();
+						//SoundHandler.playWhistle();
 						movable.addToCurrentTarget(camCenter2d.cpy().sub(movable.getPosition()).nor().scl(reactionScale));
 					}
 				}
@@ -161,6 +161,7 @@ public class GameScreenInputHandler implements InputProcessor {
 				if(dropping.getBounds().contains(vect2)){
 
 					gameScreen.getWorld().removeFromABDrawable(dropping);
+					SoundHandler.playPickup();
 					dropping.dispose();
 				}
 			}

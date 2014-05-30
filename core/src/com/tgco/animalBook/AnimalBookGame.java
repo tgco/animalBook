@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.GameScreen;
+import com.tgco.animalBook.screens.MainMenuScreen;
+import com.tgco.animalBook.screens.OptionsScreen;
 import com.tgco.animalBook.screens.SplashScreen;
 
 public class AnimalBookGame extends Game {
@@ -39,6 +41,7 @@ public class AnimalBookGame extends Game {
 	 */
 	@Override
 	public void create () {
+
 		//Set the initial screen
 		boolean levelSize =getLevelData().size >0;
 		for(int i=0; i< 4; i++){
@@ -48,6 +51,7 @@ public class AnimalBookGame extends Game {
 		if(levelSize && getLevelData().get(0) !=null){
 			level = (Integer) getLevelData().get(0);
 		}
+		//Set the initial screen
 		setScreen(new SplashScreen(this));
 		levelHandler = new LevelHandler(level);
 		if (debugMode)

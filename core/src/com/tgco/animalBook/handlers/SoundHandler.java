@@ -11,6 +11,7 @@ public class SoundHandler {
 	private static Music marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
 	private static Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
 	private static Sound whistle = Gdx.audio.newSound(Gdx.files.internal("sounds/whistle.wav"));
+	private static Sound pickup = Gdx.audio.newSound(Gdx.files.internal("sounds/pickup.wav"));
 	
 	private static boolean soundMuted = false;
 	private static boolean musicMuted = false;
@@ -145,6 +146,21 @@ public class SoundHandler {
 			whistle.play(.1f);
 		}
 	} 
+	
+	/**
+	 * Plays the file stored as pickup.
+	 * <p>
+	 * This method checks the status of the boolean soundMuted first. If soundMuted is <code>true</code>, 
+	 * this method does nothing and simply returns. If soundMuted is <code>false</code>, this
+	 * method calls the play method of the Sound object.
+	 */
+	public static void playPickup() {
+		if (soundMuted) {
+			return;
+		} else {
+			pickup.play(1);
+		}
+	}
 	
 	/**
 	 * Changes the value of soundMuted.

@@ -80,7 +80,7 @@ public class WorldRenderer {
 		}
 		batch.end();
 
-
+		//Health bar
 		shapeRender.begin(ShapeType.Filled);
 		shapeRender.setColor(Color.BLACK);
 		shapeRender.rect(Gdx.graphics.getWidth()/2 - .046f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .073f*Gdx.graphics.getHeight(), .093f*Gdx.graphics.getWidth(), .037f*Gdx.graphics.getHeight());

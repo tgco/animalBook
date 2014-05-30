@@ -123,6 +123,7 @@ public class World {
 		if(levelSize && gameInstance.getLevelData().get(2) !=null){
 			//Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
 			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
+			reinitTextureMovable();
 		}else{
 			drawMap.put("Movable", gameInstance.getLevelHandler().addAnimals( gameInstance.getLevelHandler().getLevel()));
 		}
@@ -151,6 +152,7 @@ public class World {
 
 		if(levelSize && gameInstance.getLevelData().get(3) != null){
 			drawMap.put("Dropped", (Array<ABDrawable>) gameInstance.getLevelData().get(3));
+			reinitTextureDropped();
 		}else{
 			drawMap.put("Dropped", new Array<ABDrawable>());
 		}
@@ -365,5 +367,16 @@ public class World {
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 	}
-
+	
+	public void reinitTextureMovable(){
+		for (ABDrawable movable : drawMap.get("Movable")) {
+			((Animal)movable).resetTexture();
+		}
+	}
+	public void reinitTextureDropped(){
+		for (ABDrawable dropped : drawMap.get("Dropped")) {
+			((Dropped)dropped).resetTexture();
+		}
+	}
+	
 }

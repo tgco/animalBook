@@ -90,4 +90,13 @@ public class Dropped extends ABDrawable{
 	public boolean isDropping() {
 		return true;
 	}
+	
+	public void resetTexture() {
+		if(consume != null){
+		super.resetTexture(consume.getType().getTexturePath());
+		}else{
+			super.resetTexture(animal.getDropType().getTexturePath());
+		}
+		
+	}
 }

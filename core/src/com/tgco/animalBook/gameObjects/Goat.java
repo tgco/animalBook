@@ -50,6 +50,9 @@ public class Goat extends Animal{
 	}
 
 	
-	
+	@Override
+	public void resetTexture() {
+		super.resetTexture(texturePath);
+	}
 
 }

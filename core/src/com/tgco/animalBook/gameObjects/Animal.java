@@ -171,4 +171,6 @@ public abstract class Animal extends Movable {
 	
 	/** every animal will be able to get the dropType that it has */
 	public abstract DropType getDropType();
+	
+	public abstract void resetTexture();
 }

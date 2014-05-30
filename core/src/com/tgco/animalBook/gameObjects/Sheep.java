@@ -49,5 +49,8 @@ public class Sheep extends Animal {
 		return dropType;
 	}
 	
-
+	@Override
+	public void resetTexture() {
+		super.resetTexture(texturePath);
+	}
 }

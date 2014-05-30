@@ -8,6 +8,7 @@ package com.tgco.animalBook;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.utils.Array;
+import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.GameScreen;
 import com.tgco.animalBook.screens.SplashScreen;
@@ -23,6 +24,15 @@ public class AnimalBookGame extends Game {
 	//Testing new control system (taps)
 	public static final boolean tapControls = true;
 	private static Array<Object> LevelData = new Array<Object>(4);
+	
+	/**
+	 * The current level being played
+	 */
+	private static int level = 1;
+	/**
+	 * Load all information that differs between levels
+	 */
+	private LevelHandler levelHandler;
 	/**
 	 * every game starts with the create function.
 	 * this sets the initial screen to splash screen
@@ -30,11 +40,16 @@ public class AnimalBookGame extends Game {
 	@Override
 	public void create () {
 		//Set the initial screen
-		
+		boolean levelSize =getLevelData().size >0;
 		for(int i=0; i< 4; i++){
-			LevelData.add(null);
+			LevelData.insert(i, null);
+		}
+		
+		if(levelSize && getLevelData().get(0) !=null){
+			level = (Integer) getLevelData().get(0);
 		}
 		setScreen(new SplashScreen(this));
+		levelHandler = new LevelHandler(level);
 		if (debugMode)
 			fpsLogger = new FPSLogger();
 	}
@@ -108,5 +123,13 @@ public class AnimalBookGame extends Game {
 	
 	public void addToDatalevel(Object obj, int pos){
 		LevelData.set(pos, obj);
+	}
+
+	public LevelHandler getLevelHandler() {
+		return levelHandler;
+	}
+
+	public void addToLevel(int i) {
+		levelHandler.addLevel();
 	}
 }

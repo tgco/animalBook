@@ -139,7 +139,7 @@ public class LevelHandler {
 	 * @return		the speed for the camera
 	 */
 	public float returnCameraSpeed(int level) {
-		return 2*level;
+		return .2f*level;
 	}
 
 	/**

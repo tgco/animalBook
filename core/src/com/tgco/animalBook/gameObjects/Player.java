@@ -120,5 +120,13 @@ public class Player extends Movable {
 	public void subtractPlayerMoney(float playerMoney) {
 		this.playerMoney -= playerMoney;
 	}
-
+	public void resetPlayerPosition(){
+		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/8);
+		previousTarget = position.cpy();
+		currentTarget = previousTarget.cpy();
+		//width = .065f*Gdx.graphics.getWidth();
+		//height = .21f*Gdx.graphics.getHeight();
+		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
+		super.resetTexture(texturePath);
+	}
 }

@@ -117,5 +117,7 @@ public abstract class ABDrawable {
 	public float getWidth() {
 		return width;
 	}
-
+	public void resetTexture(String texturePath) {
+		this.texture = new Texture(Gdx.files.internal(texturePath));	
+	}
 }

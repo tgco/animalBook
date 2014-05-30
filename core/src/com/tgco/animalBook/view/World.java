@@ -114,17 +114,18 @@ public class World {
 		boolean levelSize = gameInstance.getLevelData().size >0;
 		// spot 1 is current level
 		//spot 2 is player			
-		//spot 3 is storing movable array
+		
 		//spot 4 is storing dropped items array
 		
 		if(levelSize && gameInstance.getLevelData().get(0) !=null){
 			level = (Integer) gameInstance.getLevelData().get(0);
-			Gdx.app.log("My Tag", "the level is " + level);
 		}
 		worldRender = new WorldRenderer();
 		levelHandler = new LevelHandler(level);
 		
+		//spot 3 is storing movable array
 		if(levelSize && gameInstance.getLevelData().get(2) !=null){
+			//Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
 			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
 		}else{
 			drawMap.put("Movable", levelHandler.addAnimals(level, numAnimals));
@@ -139,6 +140,7 @@ public class World {
 		cameraSpeed = levelHandler.returnCameraSpeed(level);	
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
+			player.resetPlayerPosition();
 		}else{
 			player = new Player(cameraSpeed);
 		}
@@ -201,7 +203,7 @@ public class World {
 	 * Disposes all objects that need to release memory
 	 */
 	public void dispose() {
-		for (Array<ABDrawable> drawableArrays : drawMap.values){
+		for (Array<ABDrawable> drawableArrays : drawMap.values()){
 			for (ABDrawable drawable : drawableArrays) {
 				drawable.dispose();
 			}

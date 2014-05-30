@@ -30,6 +30,10 @@ public class AnimalBookGame extends Game {
 	@Override
 	public void create () {
 		//Set the initial screen
+		
+		for(int i=0; i< 4; i++){
+			LevelData.add(null);
+		}
 		setScreen(new SplashScreen(this));
 		if (debugMode)
 			fpsLogger = new FPSLogger();
@@ -103,6 +107,6 @@ public class AnimalBookGame extends Game {
 	}
 	
 	public void addToDatalevel(Object obj, int pos){
-		LevelData.insert(pos, obj);
+		LevelData.set(pos, obj);
 	}
 }

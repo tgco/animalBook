@@ -77,7 +77,7 @@ public class LevelHandler {
 	 * @return			 an array with the correct number of the correct animal type
 	 */
 	public Array<ABDrawable> addAnimals(int level, int numAnimals) {
-
+		//Gdx.app.log("My Tag", "the numAnimals in levelHandler is " + numAnimals);
 		Array<ABDrawable> animals = new Array<ABDrawable>();
 
 		int x;
@@ -127,7 +127,6 @@ public class LevelHandler {
 
 			}
 		}
-
 		return animals;
 
 

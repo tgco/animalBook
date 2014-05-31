@@ -135,7 +135,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			font.draw(batch, "Your Money: $" + String.valueOf(gameWorld.getPlayer().getPlayerMoney()), vect.x ,vect.y );
 
 			//Draw world over background
-			gameWorld.render(batch,paused);
+			gameWorld.render(batch,paused,delta);
 			
 			batch.end();
 

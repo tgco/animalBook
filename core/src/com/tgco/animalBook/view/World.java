@@ -275,8 +275,8 @@ public class World {
 	 * 
 	 * @param speed the desired speed for the camera movement
 	 */
-	public void moveCameraUp(float speed) {
-		camera.position.y += speed;
+	public void moveCameraUp(float speed,float delta) {
+		camera.position.y += speed*(AnimalBookGame.TARGET_FRAME_RATE*delta);
 		camera.update();
 	}
 
@@ -300,10 +300,11 @@ public class World {
 	 * 
 	 * @param batch  the sprite batch that is being used for drawing
 	 * @param paused if the game is currently paused
+	 * @param delta  the time between frames
 	 */
-	public void render(SpriteBatch batch, boolean paused) {
+	public void render(SpriteBatch batch, boolean paused,float delta) {
 		if (!paused){
-			updateGameLogic();
+			updateGameLogic(delta);
 			checkLost();
 		}
 
@@ -313,8 +314,10 @@ public class World {
 
 	/**
 	 * Updates all logic between game objects and moves them if necessary
+	 * 
+	 * @param delta the time between frames on the device running
 	 */
-	public void updateGameLogic() {
+	public void updateGameLogic(float delta) {
 		
 		float speed;
 		//Health effects
@@ -329,8 +332,8 @@ public class World {
 		player.setSpeed(speed);
 		
 		//move the camera and player
-		moveCameraUp(speed);
-		player.move(speed);
+		moveCameraUp(speed,delta);
+		player.move(speed,delta);
 		
 		//Update Camera bounds
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
@@ -345,7 +348,7 @@ public class World {
 
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
-			((Movable) movable).move(speed);
+			((Movable) movable).move(speed,delta);
 			//Drop new items
 			if(rand.nextInt(100) <= 50){
 				ABDrawable dropping =  ((Animal)movable).drop();

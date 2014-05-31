@@ -8,6 +8,7 @@ package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.tgco.animalBook.AnimalBookGame;
 
 public abstract class Movable extends ABDrawable {
 	
@@ -35,11 +36,12 @@ public abstract class Movable extends ABDrawable {
 
 	/**
 	 * every movable will move after it draws in the world based on the given variables
-	 * @param cameraSpeed to relativlety move with the camera
+	 * @param cameraSpeed the current cam speed to move with the camera
+	 * @param delta		  the time between two frames
 	 */
-	public void move(float cameraSpeed) {
+	public void move(float cameraSpeed, float delta) {
 		//move bias with camera direction
-		position.y += 1.5*cameraSpeed;
+		position.y += (1.5*cameraSpeed) * (AnimalBookGame.TARGET_FRAME_RATE*delta);
 		
 		//Lerp the position to the target
 		position.lerp(previousTarget, speed*Gdx.graphics.getDeltaTime());
@@ -70,7 +72,7 @@ public abstract class Movable extends ABDrawable {
 	}
 
 	/**
-	 * overriding the ABDrawable function becuase it is a movable for the world use
+	 * overriding the ABDrawable function because it is a movable for the world use
 	 */
 	@Override
 	public boolean isMovable() {

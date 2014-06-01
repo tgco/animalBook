@@ -17,6 +17,7 @@ import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
+import com.tgco.animalBook.gameObjects.Obstacle;
 import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
@@ -45,17 +46,17 @@ public class World {
 	 * The speed the camera moves up the lane
 	 */
 	private float cameraSpeed;
-	
+
 	/**
 	 * Bounds for losing animals
 	 */
 	private Rectangle cameraBounds;
-	
+
 	/**
 	 * How far off screen an animal can be before it is lost
 	 */
 	private float tolerance;
-	
+
 	/**
 	 * The speed the camera moves up the lane when all animals have reached market
 	 */
@@ -81,7 +82,7 @@ public class World {
 	 */
 	private float laneLength;
 
-	
+
 
 	private int LongerMoneyP	= 0;
 
@@ -113,17 +114,17 @@ public class World {
 	public World(AnimalBookGame gameInstance) {
 		this.gameInstance = gameInstance;
 		drawMap = new ArrayMap<String, Array<ABDrawable>>();
-		
+
 		boolean levelSize = gameInstance.getLevelData().size >0;
 		// spot 1 is current level
 		//spot 2 is player			
-		
+
 		//spot 4 is storing dropped items array
-		
-		
+
+
 		worldRender = new WorldRenderer();
-		
-		
+
+
 		//spot 3 is storing movable array
 		if(levelSize && gameInstance.getLevelData().get(2) !=null){
 			//Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
@@ -132,17 +133,17 @@ public class World {
 		}else{
 			drawMap.put("Movable", gameInstance.getLevelHandler().addAnimals( gameInstance.getLevelHandler().getLevel()));
 		}
-		
+
 
 		//Camera initialization
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
-		
+
 		tolerance = drawMap.get("Movable").get(0).getWidth();
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
-		
+
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
 		increasedCameraSpeed = 2f*cameraSpeed;
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
@@ -151,6 +152,9 @@ public class World {
 		}else{
 			player = new Player(cameraSpeed);
 		}
+
+
+
 
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
@@ -167,6 +171,23 @@ public class World {
 		}
 		drawMap.put("Player", new Array<ABDrawable>());
 		drawMap.get("Player").add(player);
+		
+		
+		//Make the obstacles
+		Random rand = new Random();
+		Array<ABDrawable> obstacles = new Array<ABDrawable>();
+		Obstacle o;
+		for (float i = 400f; i < laneLength; i += 10f){
+			if (rand.nextInt(7) == 1){
+				o = new Obstacle();
+				o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), laneLength/1000f*i));
+				System.out.println("new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i );
+				if (o.getPosition().dst(market.getPosition()) > 250f)
+					obstacles.add(o);
+				i += 200f;
+			}
+		}
+		drawMap.put("Obstacle", obstacles);
 	}
 
 	public void addFruitfullMoneyP() {
@@ -318,7 +339,7 @@ public class World {
 	 * @param delta the time between frames on the device running
 	 */
 	public void updateGameLogic(float delta) {
-		
+
 		float speed;
 		//Health effects
 		player.decreaseHealth(.01f);
@@ -328,16 +349,16 @@ public class World {
 		} else {
 			speed = cameraSpeed*(player.getHealth()/100);
 		}
-		
+
 		player.setSpeed(speed);
-		
+
 		//move the camera and player
 		moveCameraUp(speed,delta);
 		player.move(speed,delta);
-		
+
 		//Update Camera bounds
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
-		
+
 		for (ABDrawable dropped : drawMap.get("Dropped")){
 			//Remove uncollected drops
 			if(((Dropped) dropped).getTimeLeft() <= 0){
@@ -370,9 +391,18 @@ public class World {
 		//check for collisions between the market and the animals
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			if (movable.getBounds().overlaps(market.getBounds())) {
-				 gameInstance.getLevelHandler().increaseStored();
+				gameInstance.getLevelHandler().increaseStored();
 				drawMap.get("Movable").removeValue(movable, false);
 				movable.dispose();
+			}
+		}
+
+		//check for collisions between movable and obstacles
+		for (ABDrawable movable : drawMap.get("Movable")){
+			for (ABDrawable obstacle : drawMap.get("Obstacle")){
+				if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable instanceof Player)){
+					((Movable)movable).bounce((Movable)movable, (Obstacle)obstacle);
+				}
 			}
 		}
 
@@ -382,7 +412,7 @@ public class World {
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 	}
-	
+
 	public void reinitTextureMovable(){
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			((Animal)movable).resetTexture();
@@ -393,5 +423,5 @@ public class World {
 			((Dropped)dropped).resetTexture();
 		}
 	}
-	
+
 }

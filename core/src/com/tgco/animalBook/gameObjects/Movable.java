@@ -52,7 +52,6 @@ public abstract class Movable extends ABDrawable {
 		//update bounds
 		bounds.setX(position.x - width/2);
 		bounds.setY(position.y - height/2);
-
 	}
 
 	/**
@@ -69,6 +68,22 @@ public abstract class Movable extends ABDrawable {
 	 */
 	public void setCurrentTarget(Vector2 target) {
 		currentTarget = target.cpy();
+	}
+	 /**
+	  * handles collisions between movable objects and obstacles
+	  * 
+	  * @param movable
+	  * @param obstacle
+	  */
+	public void bounce(Movable movable, Obstacle obstacle){
+		Vector2 mPos, oPos, baseVector;
+		mPos = movable.getPosition().cpy();
+		oPos = obstacle.getPosition().cpy();
+		baseVector = new Vector2(mPos.x - oPos.x, mPos.y - oPos.y);
+		float dist = mPos.dst(oPos);
+		float deg = baseVector.getAngleRad();
+		//addToCurrentTarget(new Vector2((mPos.x - oPos.x)/2, (mPos.y-oPos.y)/2));
+		addToCurrentTarget(new Vector2(((float)(dist*Math.cos((double)deg)))/4,((float)(dist*Math.sin((double)deg))/4)));
 	}
 
 	/**

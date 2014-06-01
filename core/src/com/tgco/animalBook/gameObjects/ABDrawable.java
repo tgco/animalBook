@@ -38,7 +38,7 @@ public abstract class ABDrawable {
 	}
 	
 	/**
-	 * it draws the picture with the proper varabiles for the screen
+	 * it draws the picture with the proper variables for the screen
 	 * @param batch the batch comes from the screen.
 	 */
 	public void draw(SpriteBatch batch) {

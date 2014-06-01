@@ -71,7 +71,7 @@ public class DatabaseHandler {
 			}
 	}
 	
-	public void getValue( String spot,String money, String level, String animalNum){
+	public void getValue( String spot){
 		//TODO:: run a get statement.
 		DatabaseCursor cursor = null;
 
@@ -80,7 +80,9 @@ public class DatabaseHandler {
 		} catch (SQLiteGdxException e) {
 			e.printStackTrace();
 		}
-		
+		if(cursor.next()){
+			Gdx.app.log("DataBaseText", "the cursor value is " + String.valueOf(cursor.getInt(1)));
+		}
 	}
 	
 	public void close(){

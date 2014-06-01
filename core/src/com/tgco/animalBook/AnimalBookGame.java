@@ -60,6 +60,7 @@ public class AnimalBookGame extends Game {
 		
 		
 		dbHand = new DatabaseHandler();
+		 dbHand.getValue( "0");
 	}
 
 	/**

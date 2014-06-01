@@ -8,6 +8,7 @@ package com.tgco.animalBook;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.utils.Array;
+import com.tgco.animalBook.handlers.DatabaseHandler;
 import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.GameScreen;
@@ -24,6 +25,8 @@ public class AnimalBookGame extends Game {
 	//Testing new control system (taps)
 	public static final boolean tapControls = true;
 	private static Array<Object> LevelData = new Array<Object>(4);
+	
+	private DatabaseHandler dbHand;
 	
 	/**
 	 * The current level being played
@@ -54,6 +57,9 @@ public class AnimalBookGame extends Game {
 		levelHandler = new LevelHandler(level);
 		if (debugMode)
 			fpsLogger = new FPSLogger();
+		
+		
+		dbHand = new DatabaseHandler();
 	}
 
 	/**
@@ -74,6 +80,7 @@ public class AnimalBookGame extends Game {
 		super.dispose();
 		getScreen().dispose();
 		SoundHandler.dispose();
+		dbHand.close();
 	}
 
 	/**

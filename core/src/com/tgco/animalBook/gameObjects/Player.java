@@ -7,6 +7,7 @@ package com.tgco.animalBook.gameObjects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.tgco.animalBook.AnimalBookGame;
 
 public class Player extends Movable {
 	
@@ -48,7 +49,7 @@ public class Player extends Movable {
 	}
 	
 	/**
-	 * dereases the health as the game goes on
+	 * decreases the health as the game goes on
 	 * @param amount decreases the health by this amount
 	 */
 	public void decreaseHealth(float amount) {
@@ -68,9 +69,9 @@ public class Player extends Movable {
 	 * @param camerSpeed the speed of the camera
 	 */
 	@Override
-	public void move(float cameraSpeed) {
-		position.y += speed;
-		bounds.y += speed;
+	public void move(float cameraSpeed,float delta) {
+		position.y += speed*(AnimalBookGame.TARGET_FRAME_RATE*delta);
+		bounds.y += speed*(AnimalBookGame.TARGET_FRAME_RATE*delta);
 	}
 
 	/**

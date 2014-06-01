@@ -8,6 +8,7 @@ package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.tgco.animalBook.AnimalBookGame;
 
 public abstract class Movable extends ABDrawable {
 	
@@ -35,11 +36,12 @@ public abstract class Movable extends ABDrawable {
 
 	/**
 	 * every movable will move after it draws in the world based on the given variables
-	 * @param cameraSpeed to relativlety move with the camera
+	 * @param cameraSpeed the current cam speed to move with the camera
+	 * @param delta		  the time between two frames
 	 */
-	public void move(float cameraSpeed) {
+	public void move(float cameraSpeed, float delta) {
 		//move bias with camera direction
-		position.y += 1.5*cameraSpeed;
+		position.y += (1.5*cameraSpeed) * (AnimalBookGame.TARGET_FRAME_RATE*delta);
 		
 		//Lerp the position to the target
 		position.lerp(previousTarget, speed*Gdx.graphics.getDeltaTime());
@@ -50,7 +52,6 @@ public abstract class Movable extends ABDrawable {
 		//update bounds
 		bounds.setX(position.x - width/2);
 		bounds.setY(position.y - height/2);
-
 	}
 
 	/**
@@ -68,9 +69,25 @@ public abstract class Movable extends ABDrawable {
 	public void setCurrentTarget(Vector2 target) {
 		currentTarget = target.cpy();
 	}
+	 /**
+	  * handles collisions between movable objects and obstacles
+	  * 
+	  * @param movable
+	  * @param obstacle
+	  */
+	public void bounce(Movable movable, Obstacle obstacle){
+		Vector2 mPos, oPos, baseVector;
+		mPos = movable.getPosition().cpy();
+		oPos = obstacle.getPosition().cpy();
+		baseVector = new Vector2(mPos.x - oPos.x, mPos.y - oPos.y);
+		float dist = mPos.dst(oPos);
+		float deg = baseVector.getAngleRad();
+		//addToCurrentTarget(new Vector2((mPos.x - oPos.x)/2, (mPos.y-oPos.y)/2));
+		addToCurrentTarget(new Vector2(((float)(dist*Math.cos((double)deg)))/4,((float)(dist*Math.sin((double)deg))/4)));
+	}
 
 	/**
-	 * overriding the ABDrawable function becuase it is a movable for the world use
+	 * overriding the ABDrawable function because it is a movable for the world use
 	 */
 	@Override
 	public boolean isMovable() {

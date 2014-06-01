@@ -23,7 +23,7 @@ public class Goat extends Animal{
 	/**
 	 * Path to the texture for this animal
 	 */
-	private static final String texturePath = "objectTextures/goat.jpg";
+	private static final String texturePath = "objectTextures/goat.png";
 	
 	/**
 	 * Constructor that takes a position

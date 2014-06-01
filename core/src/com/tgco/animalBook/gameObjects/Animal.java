@@ -8,9 +8,11 @@ package com.tgco.animalBook.gameObjects;
 
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
 public abstract class Animal extends Movable {
@@ -75,7 +77,10 @@ public abstract class Animal extends Movable {
 	}
 	
 	private void changeTarget(){
-		currentTarget = new Vector2(position.x + rand.nextInt(400) - 200, position.y + rand.nextInt(400) - 200);
+		int xChangeDistance = (int) (.139f*Gdx.graphics.getWidth()*AnimalBookGame.getLevel());
+		int yChangeDistance = (int) (.221f*Gdx.graphics.getHeight()*AnimalBookGame.getLevel());
+		
+		currentTarget = new Vector2(position.x + rand.nextInt(xChangeDistance) - xChangeDistance/2, position.y + rand.nextInt(yChangeDistance) - yChangeDistance/2);
 	}
 	
 	

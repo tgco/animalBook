@@ -29,6 +29,11 @@ public class AnimalBookGame extends Game {
 	private DatabaseHandler dbHand;
 	
 	/**
+	 * The target frame rate for all motion updates.  Movement is calculated relative to this frame rate.
+	 */
+	public static final float TARGET_FRAME_RATE = 50;
+	
+	/**
 	 * The current level being played
 	 */
 	private static int level = 1;
@@ -141,5 +146,9 @@ public class AnimalBookGame extends Game {
 
 	public void addToLevel(int i) {
 		levelHandler.addLevel();
+	}
+	
+	public static int getLevel() {
+		return level;
 	}
 }

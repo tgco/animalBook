@@ -139,4 +139,8 @@ public class AnimalBookGame extends Game {
 	public void addToLevel(int i) {
 		levelHandler.addLevel();
 	}
+	
+	public static int getLevel() {
+		return level;
+	}
 }

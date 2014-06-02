@@ -31,7 +31,7 @@ public class AnimalBookGame extends Game {
 	/**
 	 * The target frame rate for all motion updates.  Movement is calculated relative to this frame rate.
 	 */
-	public static final float TARGET_FRAME_RATE = 50;
+	public static final float TARGET_FRAME_RATE = 30;
 	
 	/**
 	 * The current level being played

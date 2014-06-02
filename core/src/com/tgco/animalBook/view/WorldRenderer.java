@@ -37,10 +37,10 @@ public class WorldRenderer {
 	/**
 	 * Dimensions for the progress bar and slider
 	 */
-	private static final float PROGRESS_BAR_WIDTH = 20;
-	private static final float PROGRESS_BAR_HEIGHT = 210;
-	private static final float PROGRESS_SLIDER_WIDTH = 20;
-	private static final float PROGRESS_SLIDER_HEIGHT = 10;
+	private static final float PROGRESS_BAR_WIDTH = .019f*Gdx.graphics.getWidth();
+	private static final float PROGRESS_BAR_HEIGHT = .31f*Gdx.graphics.getHeight();
+	private static final float PROGRESS_SLIDER_WIDTH = .019f*Gdx.graphics.getWidth();
+	private static final float PROGRESS_SLIDER_HEIGHT = .015f*Gdx.graphics.getHeight();
 
 
 	/**

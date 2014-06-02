@@ -37,6 +37,8 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	
 	
 	private Texture imageTexture = new Texture(Gdx.files.internal("objectTextures/eatzone.png"));
+	private Texture black = new Texture(Gdx.files.internal("primitiveTextures/black.png"));
+	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
 	
 	/**
 	 * The image that represents the drop zone for the player's eat() function
@@ -47,11 +49,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	 * DragAndDrop object that facilitates drag and drop functionality in this screen
 	 */
 	private static final DragAndDrop dnd = new DragAndDrop();
-	
-	/**
-	 * Renders player health bar
-	 */
-	private ShapeRenderer shapeRender;
 	
 	/**
 	 * instance of gameScreen
@@ -81,7 +78,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		//Rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/inventoryBackground.jpg"));
-		shapeRender = new ShapeRenderer();
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
@@ -132,6 +128,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		//draw background
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		updateHealthBar();
 		batch.end();
 
 		buttonStage.act(delta);
@@ -140,7 +137,6 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		for (int i = 0; i < numConsumables; i ++){
 			updateInventoryScreenItems(i);
 		}
-		updateHealthBar();
 	}
 
 	/**
@@ -154,7 +150,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		//reinit buttons
 		initializeInventoryInterface();
 		initializeButtons();
-		updateHealthBar();
+		//updateHealthBar();
 	}
 
 	/**
@@ -220,19 +216,15 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			}
 					);
 		}
-		updateHealthBar();
+		//updateHealthBar();
 	}
 
 	/**
 	 * Creates and maintains players health bar
 	 */
 	private void updateHealthBar() {
-		shapeRender.begin(ShapeType.Filled);
-		shapeRender.setColor(Color.BLACK);
-		shapeRender.rect(Gdx.graphics.getWidth()/2 - .046f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .073f*Gdx.graphics.getHeight(), .093f*Gdx.graphics.getWidth(), .037f*Gdx.graphics.getHeight());
-		shapeRender.setColor(Color.RED);
-		shapeRender.rect(Gdx.graphics.getWidth()/2 - .0435f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .069f*Gdx.graphics.getHeight(), 94*(gameScreen.getWorld().getPlayer().getHealth()/100), .028f*Gdx.graphics.getHeight());
-		shapeRender.end();
+		batch.draw(black,Gdx.graphics.getWidth()/2 - .046f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .073f*Gdx.graphics.getHeight(), .093f*Gdx.graphics.getWidth(), .037f*Gdx.graphics.getHeight());
+		batch.draw(red,Gdx.graphics.getWidth()/2 - .0435f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .069f*Gdx.graphics.getHeight(), 94*(gameScreen.getWorld().getPlayer().getHealth()/100), .028f*Gdx.graphics.getHeight());
 	}
 
 	/**
@@ -307,7 +299,8 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
-		shapeRender.dispose();
+		black.dispose();
+		red.dispose();
 		imageTexture.dispose();
 		for (BitmapFont font : fonts) {
 			font.dispose();

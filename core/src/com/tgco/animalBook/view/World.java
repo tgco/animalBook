@@ -112,6 +112,7 @@ public class World {
 	 * @param gameInstance reference to the running game instance
 	 */
 	public World(AnimalBookGame gameInstance) {
+
 		this.gameInstance = gameInstance;
 		drawMap = new ArrayMap<String, Array<ABDrawable>>();
 
@@ -123,7 +124,7 @@ public class World {
 
 
 		worldRender = new WorldRenderer();
-
+		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
 		//spot 3 is storing movable array
 		if(levelSize && gameInstance.getLevelData().get(2) !=null){
@@ -154,10 +155,10 @@ public class World {
 		}
 
 
-
-
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
+		
+		
 		market = new Market();
 		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength + player.getHeight()));
 		drawMap.put("Market", new Array<ABDrawable>());
@@ -169,25 +170,26 @@ public class World {
 		}else{
 			drawMap.put("Dropped", new Array<ABDrawable>());
 		}
-		drawMap.put("Player", new Array<ABDrawable>());
-		drawMap.get("Player").add(player);
-		
-		
+
 		//Make the obstacles
 		Random rand = new Random();
 		Array<ABDrawable> obstacles = new Array<ABDrawable>();
 		Obstacle o;
-		for (float i = 400f; i < laneLength; i += 10f){
-			if (rand.nextInt(7) == 1){
+		for (float i = 700f; i < laneLength; i += 10f){
+			if (rand.nextInt(AnimalBookGame.getLevel()) + 1 > 1){
 				o = new Obstacle();
-				o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), laneLength/1000f*i));
+				o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
 				System.out.println("new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i );
 				if (o.getPosition().dst(market.getPosition()) > 250f)
 					obstacles.add(o);
-				i += 200f;
+				i += 400f;
 			}
 		}
 		drawMap.put("Obstacle", obstacles);
+
+		//Add player to drawmap
+		drawMap.put("Player", new Array<ABDrawable>());
+		drawMap.get("Player").add(player);
 	}
 
 	public void addFruitfullMoneyP() {

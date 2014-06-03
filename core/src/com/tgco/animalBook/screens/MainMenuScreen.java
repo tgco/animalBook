@@ -28,7 +28,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	private Button playButton;
 	private Button optionsButton;
-	private Button testButton;
+	private Button continueButton;
 
 	public MainMenuScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
@@ -141,7 +141,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton.setWidth(MENU_BUTTON_WIDTH);
 		optionsButton.setHeight(MENU_BUTTON_HEIGHT);
 		optionsButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
-		optionsButton.setY(Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - EDGE_TOLERANCE);
+		optionsButton.setY( EDGE_TOLERANCE);
 		
 		//Test
 		//This button is just to test the story screen
@@ -152,11 +152,11 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		style.up = buttonSkin.getDrawable("buttonUnpressed");
 		style.down = buttonSkin.getDrawable("buttonPressed");
 
-		testButton = new Button(style);
-		testButton.setWidth(MENU_BUTTON_WIDTH);
-		testButton.setHeight(MENU_BUTTON_HEIGHT);
-		testButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
-		testButton.setY(EDGE_TOLERANCE);
+		continueButton = new Button(style);
+		continueButton.setWidth(MENU_BUTTON_WIDTH);
+		continueButton.setHeight(MENU_BUTTON_HEIGHT);
+		continueButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
+		continueButton.setY(  Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//Create listeners
 		playButton.addListener(new InputListener() {
@@ -167,6 +167,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				//Change the screen when the button is let go
+				gameInstance.setDataPlay();
 				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});
@@ -185,23 +186,23 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 		
-		testButton.addListener(new InputListener() {
+		continueButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				SoundHandler.pauseBackgroundMusic();
 				//Change the screen when the button is let go
-				gameInstance.setScreen(new StoryScreen(gameInstance));
+				gameInstance.setDataCont();
+				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		});
 
 		//Add to stage
 		buttonStage.addActor(playButton);
 		buttonStage.addActor(optionsButton);
-		buttonStage.addActor(testButton);
+		buttonStage.addActor(continueButton);
 		
 		inputMultiplexer.addProcessor(buttonStage);
 	}

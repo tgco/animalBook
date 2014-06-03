@@ -33,13 +33,6 @@ public class TutorialScreenInputHandler implements InputProcessor {
 	 * Distinguishes distance a touch must move to register as a drag
 	 */
 	private static float touchToDragTolerance = 50f;
-	
-	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
-	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
-	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
-	
-	private final Vector2 buttonLoc = new Vector2(EDGE_TOLERANCE, Gdx.graphics.getHeight() - BUTTON_HEIGHT);
-
 
 	/**
 	 * The distance a movable must be within in order to be influenced by a drag
@@ -158,10 +151,7 @@ public class TutorialScreenInputHandler implements InputProcessor {
 				tutorialScreen.getWorld().getCamera().unproject(vect);
 				Vector2 vect2 = new Vector2(vect.x, vect.y);
 				if(dropping.getBounds().contains(vect2)){
-					dropping.pickUp();
 					SoundHandler.playPickup();
-				}
-				if(dropping.getBounds().contains(buttonLoc)) {
 					tutorialScreen.getWorld().removeFromABDrawable(dropping);
 					dropping.dispose();
 				}

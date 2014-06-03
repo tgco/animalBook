@@ -47,7 +47,6 @@ public class AnimalBookGame extends Game {
 	 */
 	@Override
 	public void create () {
-
 		//Set the initial screen
 		boolean levelSize =getLevelData().size >0;
 		for(int i=0; i< 4; i++){
@@ -62,7 +61,6 @@ public class AnimalBookGame extends Game {
 		levelHandler = new LevelHandler(level);
 		if (debugMode)
 			fpsLogger = new FPSLogger();
-		
 		
 		dbHand = new DatabaseHandler();
 		 dbHand.getValue( "0");

@@ -178,13 +178,13 @@ public class World {
 		Array<ABDrawable> obstacles = new Array<ABDrawable>();
 		Obstacle o;
 		for (float i = 400f; i < laneLength; i += 10f){
-			if (rand.nextInt(7) == 1){
+			if (rand.nextInt(AnimalBookGame.getLevel()) + 1 > 1){
 				o = new Obstacle();
 				o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), laneLength/1000f*i));
 				System.out.println("new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i );
 				if (o.getPosition().dst(market.getPosition()) > 250f)
 					obstacles.add(o);
-				i += 200f;
+				i += 50f;
 			}
 		}
 		drawMap.put("Obstacle", obstacles);

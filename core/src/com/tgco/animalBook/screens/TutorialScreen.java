@@ -61,6 +61,25 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	boolean paused;
 
 	/**
+	 * Booleans used for tutorial progression
+	 */
+	private boolean swiped = false;
+	private boolean tapped = false;
+	private boolean pickedUp = false;
+	private boolean ate = false;
+	private boolean upgraded = false;
+
+	/**
+	 * Distance to move before screen pauses again for next part of tutorial
+	 */
+	private float moveDistance = 100;
+
+	/**
+	 * The stage of the tutorial the player is on for switch cases
+	 */
+	private int tutorialStage;
+
+	/**
 	 * Constructor using the running game instance
 	 * 
 	 * @param gameInstance a reference to the currently running game instance
@@ -69,6 +88,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		super(gameInstance);
 
 		paused = false;
+		tutorialStage = 1;
 
 		//Initialize game world
 		tutorialWorld = new TutorialWorld(gameInstance);
@@ -94,44 +114,65 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		//Process button presses
+		buttonStage.act(delta);
+
+		//render background and world
+		batch.setProjectionMatrix(tutorialWorld.getCamera().combined);
+
+		//Find the node on screen to draw grass around
+		Vector2 tileNode = findTileNodeOnScreen();
+
+		batch.begin();
 		
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		//Select the correct waiting function and draw correct words
+		waitForInput();
 
-			//Process button presses
-			buttonStage.act(delta);
+		//Draw four grass textures around the node on screen
+		batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-			//render background and world
-			batch.setProjectionMatrix(tutorialWorld.getCamera().combined);
+		//Draw players current money
+		font.setColor(Color.BLACK);
+		font.setScale(1.2f);
+		Vector3 vect = new Vector3(Gdx.graphics.getWidth()/2 +10,0 +3*EDGE_TOLERANCE,0);
+		tutorialWorld.getCamera().unproject(vect);
+		font.draw(batch, "Your Money: $" + String.valueOf(tutorialWorld.getPlayer().getPlayerMoney()), vect.x ,vect.y );
 
-			//Find the node on screen to draw grass around
-			Vector2 tileNode = findTileNodeOnScreen();
+		//Draw world over background
+		tutorialWorld.render(batch,paused,delta);
 
-			batch.begin();
+		batch.end();
 
-			//Draw four grass textures around the node on screen
-			batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		//Draw buttons over the screen
+		buttonStage.draw();
 
-			//Draw players current money
-			font.setColor(Color.BLACK);
-			font.setScale(1.2f);
-			Vector3 vect = new Vector3(Gdx.graphics.getWidth()/2 +10,0 +3*EDGE_TOLERANCE,0);
-			tutorialWorld.getCamera().unproject(vect);
-			font.draw(batch, "Your Money: $" + String.valueOf(tutorialWorld.getPlayer().getPlayerMoney()), vect.x ,vect.y );
 
-			//Draw world over background
-			tutorialWorld.render(batch,paused,delta);
-			
-			batch.end();
+	}
 
-			//Draw buttons over the screen
-			buttonStage.draw();
-		
-		
+	public void waitForInput() {
+		switch(tutorialStage) {
+		case 1:
+			waitForSwipe(batch);
+			break;
+		case 2:
+			waitForTap(batch);
+			break;
+		case 3:
+			waitForPickup(batch);
+			break;
+		case 4:
+			waitForEat(batch);
+			break;
+		case 5:
+			waitForUpgrade(batch);
+			break;
+		}
 	}
 
 	/**
@@ -262,12 +303,65 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 
-		
+
 		//add to stage for input detection
 		buttonStage.addActor(inventoryButton);
 		buttonStage.addActor(upgradeButton);
 
 		inputMultiplexer.addProcessor(buttonStage);
+	}
+
+	/**
+	 * Functions that wait for the correct gesture to move on the tutorial
+	 */
+	public void waitForSwipe(SpriteBatch batch) {
+		if (swiped) {
+			paused = false;
+			return;
+		}
+		else
+			//listen for a swipe somehow
+			return;
+	}
+
+	public void waitForTap(SpriteBatch batch) {
+		if (tapped) {
+			paused = false;
+			return;
+		}
+		else
+			//listen for a tap somehow
+			return;
+	}
+
+	public void waitForPickup(SpriteBatch batch) {
+		if (pickedUp) {
+			paused = false;
+			return;
+		}
+		else
+			//listen for a tap on item (pickup) somehow
+			return;
+	}
+
+	public void waitForEat(SpriteBatch batch) {
+		if (ate) {
+			paused = false;
+			return;
+		}
+		else
+			//listen for change to inventory screen
+			return;
+	}
+
+	public void waitForUpgrade(SpriteBatch batch) {
+		if (upgraded) {
+			paused = false;
+			return;
+		}
+		else
+			//listen for a change to upgrades screen
+			return;
 	}
 
 	/**
@@ -278,7 +372,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		super.dispose();
 		tutorialWorld.dispose();
 	}
-	
+
 	/**
 	 * Returns the instance of the world that game screen is using
 	 * 
@@ -296,7 +390,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public boolean isPaused() {
 		return paused;
 	}
-	
+
 	/**
 	 * Unused methods for detecting screen events
 	 */
@@ -320,6 +414,47 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		// TODO Auto-generated method stub
 
 	}
+
+	public boolean isSwiped() {
+		return swiped;
+	}
+
+	public void setSwiped(boolean swiped) {
+		this.swiped = swiped;
+	}
+
+	public boolean isTapped() {
+		return tapped;
+	}
+
+	public void setTapped(boolean tapped) {
+		this.tapped = tapped;
+	}
+
+	public boolean isPickedUp() {
+		return pickedUp;
+	}
+
+	public void setPickedUp(boolean pickedUp) {
+		this.pickedUp = pickedUp;
+	}
+
+	public boolean isAte() {
+		return ate;
+	}
+
+	public void setAte(boolean ate) {
+		this.ate = ate;
+	}
+
+	public boolean isUpgraded() {
+		return upgraded;
+	}
+
+	public void setUpgraded(boolean upgraded) {
+		this.upgraded = upgraded;
+	}
+
 
 
 }

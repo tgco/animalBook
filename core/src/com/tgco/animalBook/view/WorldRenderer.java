@@ -105,6 +105,43 @@ public class WorldRenderer {
 		}
 
 	}
+	
+	/**
+	 * Renders all game objects to the screen without a progress bar
+	 * 
+	 * @param batch					the sprite batch used for rendering
+	 * @param drawables				the array of drawable objects to render
+	 * @param player				the player to render
+	 * @param cam					the camera used for converting screen and world coordinates
+	 */
+	public void render(SpriteBatch batch, ArrayMap<String, Array<ABDrawable>> drawables, float playerHealth,OrthographicCamera cam) {
+		//Draw all objects
+		for (Array<ABDrawable> a : drawables.values()){
+			for (ABDrawable drawable : a) {
+				drawable.draw(batch);
+			}
+		}
+
+		SpriteBatch projectedBatch = new SpriteBatch();
+		projectedBatch.begin();
+		
+		//Health bar
+		projectedBatch.draw(black,Gdx.graphics.getWidth()/2 - .046f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .073f*Gdx.graphics.getHeight(), .093f*Gdx.graphics.getWidth(), .037f*Gdx.graphics.getHeight());
+		projectedBatch.draw(red,Gdx.graphics.getWidth()/2 - .0435f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .069f*Gdx.graphics.getHeight(), .087f*Gdx.graphics.getWidth()*(playerHealth/100), .028f*Gdx.graphics.getHeight());
+
+		projectedBatch.end();
+		projectedBatch.dispose();
+
+		//Swipes on screen
+		for (Swipe swipe : swipes) {
+			if (swipe.getLifeTime() == 0) {
+				swipes.removeValue(swipe, false);
+				swipe.dispose();
+			} else
+				swipe.draw(cam);
+		}
+
+	}
 
 	/**
 	 * Disposes of the texture objects to release memory

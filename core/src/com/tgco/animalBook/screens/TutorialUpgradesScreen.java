@@ -10,34 +10,27 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.handlers.SoundHandler;
+import com.tgco.animalBook.view.TutorialWorld;
 import com.tgco.animalBook.view.World;
 
-/**
- * The UpgradeScreen object is responsible for the upgrading of the player and of the animals
- * 
- * @author Kelly
- *
- */
-public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
+public class TutorialUpgradesScreen extends ButtonScreenAdapter implements Screen{
 
 	/**
 	 * The game screen
 	 */
-	private GameScreen gameScreen;
+	private TutorialScreen tutorialScreen;
 
 	/**
 	 * The font to be used to display data
@@ -62,7 +55,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * the world
 	 */
-	private World world;
+	private TutorialWorld tutorialWorld;
 
 	/**
 	 * Button specs
@@ -81,22 +74,22 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	 * The UpgradeScreen constructor. Sets values of upgrade costs and initializes and on screen components
 	 * 
 	 * @param gameInstance - The current game instance
-	 * @param gameScreen - The current game screen
+	 * @param tutorialScreen - The current game screen
 	 */
-	public UpgradesScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
+	public TutorialUpgradesScreen(AnimalBookGame gameInstance, TutorialScreen tutorialScreen) {
 		super(gameInstance);
 
-		this.gameScreen = gameScreen;
+		this.tutorialScreen = tutorialScreen;
 		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
 		font.setScale(.75f);
 		//Background rendering
 		batch = new SpriteBatch();
-		this.world = gameScreen.getWorld();
+		this.tutorialWorld = tutorialScreen.getWorld();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
 
-		fruitfullMoney = (int) (100*(Math.pow(2,gameScreen.getWorld().getFruitfullMoneyP())));
-		LongerMoney = (int) (500*(Math.pow(2,gameScreen.getWorld().getLongerMoneyP())));
-		MoreMoney = (int) (1000*(Math.pow(2,gameScreen.getWorld().getMoreMoneyP())));
+		fruitfullMoney = (int) (100*(Math.pow(2,tutorialScreen.getWorld().getFruitfullMoneyP())));
+		LongerMoney = (int) (500*(Math.pow(2,tutorialScreen.getWorld().getLongerMoneyP())));
+		MoreMoney = (int) (1000*(Math.pow(2,tutorialScreen.getWorld().getMoreMoneyP())));
 
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -153,19 +146,16 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		font.setColor(0, 0, 0, alpha);
 		switch(boxName){
 		case 0: 
-			font.draw(batch, "+" + String.valueOf(5) + " percent", STRING_WIDTH_FR +5, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +60);
+			font.draw(batch, "+" + String.valueOf(5), STRING_WIDTH_FR +5, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +60);
 			font.draw(batch, "$" + String.valueOf(fruitfullMoney), STRING_WIDTH_FR, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
-			font.draw(batch, "Level " + String.valueOf(gameScreen.getWorld().getFruitfullMoneyP()), STRING_WIDTH_FR, Gdx.graphics.getHeight()/2 + 3/2*BUTTON_HEIGHT+10);
 			break;
 		case 1:
 			font.draw(batch, "+" + String.format("%.2f",5/60.0) + " s", STRING_WIDTH_LD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 60);
 			font.draw(batch, "$" + String.valueOf(LongerMoney), STRING_WIDTH_LD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 40);
-			font.draw(batch, "Level " + String.valueOf(gameScreen.getWorld().getLongerMoneyP()), STRING_WIDTH_LD, Gdx.graphics.getHeight()/2 + 3/2*BUTTON_HEIGHT+10);
 			break;
 		case 2:
 			font.draw(batch, "-" + String.format("%.2f",5/60.0) + " s", STRING_WIDTH_MD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 60);
 			font.draw(batch, "$" + String.valueOf(MoreMoney),STRING_WIDTH_MD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 40);
-			font.draw(batch, "Level " + String.valueOf(gameScreen.getWorld().getMoreMoneyP()), STRING_WIDTH_MD, Gdx.graphics.getHeight()/2 + 3/2*BUTTON_HEIGHT+10);
 			break;
 		}
 
@@ -183,14 +173,14 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		font.setColor(0, 0, 0, alpha);
 		switch(boxName){
 		case 0: 
-			font.draw(batch, "current: " + String.format("%.1f",((Animal) world.getMovables().get(0)).getFertilityRate())+ " %", STRING_WIDTH_FR -15, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +20);
+			font.draw(batch, "current: " + String.format("%.1f",((Animal) tutorialWorld.getMovables().get(0)).getFertilityRate())+ " %", STRING_WIDTH_FR -15, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +20);
 
 			break;
 		case 1:
-			font.draw(batch, "current: " + String.format("%.3f",((Animal) world.getMovables().get(0)).getTimeOnGround()) + " s", STRING_WIDTH_LD-15, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +20);
+			font.draw(batch, "current: " + String.format("%.3f",((Animal) tutorialWorld.getMovables().get(0)).getTimeOnGround()) + " s", STRING_WIDTH_LD-15, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +20);
 			break;
 		case 2:
-			font.draw(batch, "current: " + String.format("%.2f",((Animal) world.getMovables().get(0)).getDropInterval()) + " s", STRING_WIDTH_MD-15, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +20);
+			font.draw(batch, "current: " + String.format("%.2f",((Animal) tutorialWorld.getMovables().get(0)).getDropInterval()) + " s", STRING_WIDTH_MD-15, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +20);
 
 			break;
 		}
@@ -202,7 +192,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 	 * Reinitializes buttons
 	 */
 	public void reinitButtons(){
-		if(world.getPlayer().getPlayerMoney() < fruitfullMoney){
+		if(tutorialWorld.getPlayer().getPlayerMoney() < fruitfullMoney){
 			fruitfullButton.setDisabled(true);
 			drawAmounts(0.5f, 0);
 			drawData(0.5f, 0);
@@ -212,7 +202,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 			drawAmounts(1f, 0);
 			drawData(1f, 0);
 		}
-		if(world.getPlayer().getPlayerMoney() < LongerMoney){
+		if(tutorialWorld.getPlayer().getPlayerMoney() < LongerMoney){
 			LongerButton.setDisabled(true);
 			drawAmounts(0.5f, 1);
 			drawData(0.5f, 1);
@@ -222,7 +212,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 			drawAmounts(1, 1);
 			drawData(1, 1);
 		}
-		if(world.getPlayer().getPlayerMoney() < MoreMoney){
+		if(tutorialWorld.getPlayer().getPlayerMoney() < MoreMoney){
 			MoreButton.setDisabled(true);
 			drawAmounts(0.5f, 2);
 			drawData(0.5f, 2);
@@ -236,7 +226,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		batch.begin();
 		font.setColor(Color.BLACK);
 		font.setScale(1.2f);
-		font.draw(batch, "Your Money: $" + String.valueOf(world.getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 -10, Gdx.graphics.getHeight() -2*EDGE_TOLERANCE);
+		font.draw(batch, "Your Money: $" + String.valueOf(tutorialWorld.getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 -10, Gdx.graphics.getHeight() -2*EDGE_TOLERANCE);
 		font.setScale(.75f);
 		batch.end();
 	}
@@ -335,8 +325,8 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);
-				gameScreen.resetInputProcessors();
-				gameInstance.setScreen(gameScreen);
+				tutorialScreen.resetInputProcessors();
+				gameInstance.setScreen(tutorialScreen);
 				dispose();
 			}
 		});
@@ -353,13 +343,13 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 					//take away player money and add more to precentage of droppings
 					//Gdx.input.setCatchBackKey(true);
 
-					Array<Movable> animals = world.getMovables();
+					Array<Movable> animals = tutorialWorld.getMovables();
 					for(Movable animal : animals){
 						((Animal) animal).upgradeFertilityRate(5);
 					}
-					world.getPlayer().subtractPlayerMoney(fruitfullMoney);
+					tutorialWorld.getPlayer().subtractPlayerMoney(fruitfullMoney);
 					fruitfullMoney += fruitfullMoney;
-					gameScreen.getWorld().addFruitfullMoneyP();
+					tutorialScreen.getWorld().addFruitfullMoneyP();
 				}
 			}
 		});
@@ -375,13 +365,13 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 					//take away player money and add more to precentage of droppings
 					//Gdx.input.setCatchBackKey(true);
 
-					Array<Movable> animals = world.getMovables();
+					Array<Movable> animals = tutorialWorld.getMovables();
 					for(Movable animal : animals){
 						((Animal) animal).upgradeTimeOnGround(5);
 					}
-					world.getPlayer().subtractPlayerMoney(LongerMoney);
+					tutorialWorld.getPlayer().subtractPlayerMoney(LongerMoney);
 					LongerMoney += LongerMoney;
-					gameScreen.getWorld().addLongerMoneyP();
+					tutorialScreen.getWorld().addLongerMoneyP();
 				}
 			}
 		});
@@ -396,27 +386,27 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 					//take away player money and add more to precentage of droppings
 					//Gdx.input.setCatchBackKey(true);
 
-					Array<Movable> animals = world.getMovables();
+					Array<Movable> animals = tutorialWorld.getMovables();
 					for(Movable animal : animals){
 						((Animal) animal).upgradeDropInterval(5);
 					}
-					world.getPlayer().subtractPlayerMoney(MoreMoney);
-					gameScreen.getWorld().addMoreMoneyP();
+					tutorialWorld.getPlayer().subtractPlayerMoney(MoreMoney);
+					tutorialScreen.getWorld().addMoreMoneyP();
 					MoreMoney += MoreMoney;
 				}
 			}
 		});
 
-		if(world.getPlayer().getPlayerMoney() < 500){
+		if(tutorialWorld.getPlayer().getPlayerMoney() < 500){
 			fruitfullButton.setDisabled(true);
 			drawAmounts(0.5f, 0);
 
 		}
-		if(world.getPlayer().getPlayerMoney() < 1000){
+		if(tutorialWorld.getPlayer().getPlayerMoney() < 1000){
 			LongerButton.setDisabled(true);
 			drawAmounts(0.5f, 1);
 		}
-		if(world.getPlayer().getPlayerMoney() < 1500){
+		if(tutorialWorld.getPlayer().getPlayerMoney() < 1500){
 			MoreButton.setDisabled(true);
 			drawAmounts(0.5f, 2);
 		}

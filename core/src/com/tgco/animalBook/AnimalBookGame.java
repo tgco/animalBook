@@ -50,35 +50,28 @@ public class AnimalBookGame extends Game {
 	 * this sets the initial screen to splash screen
 	 */
 	
+	/** DATA_PREFS is the preference file for the data of the game*/
 	private static final String DATA_PREFS = "tgco.AnimalBookGame_data";
 			
+	/** pastLevel is the original level when is started used for storing the data */
+	private int pastLevel = level;
 	@Override
 	public void create () {
 
 		//Set the initial screen
-		boolean levelSize =getLevelData().size >0;
+		
 		for(int i=0; i< 4; i++){
 			LevelData.insert(i, null);
 		}
 		
-		if(levelSize && getLevelData().get(0) !=null){
-			level = (Integer) getLevelData().get(0);
-		}
-		else{
-			Preferences prefs = Gdx.app.getPreferences("My Preferences");
-			level = prefs.getInteger("level");
-			if(level ==0)
-				level =1;
-		}
+		
+		
 		//Set the initial screen
 		setScreen(new SplashScreen(this));
-		levelHandler = new LevelHandler(level);
+		
 		if (debugMode)
 			fpsLogger = new FPSLogger();
-		
 
-		
-		
 		//DB stuff if we go this route
 		/*dbHand = new DatabaseHandler();
 		 dbHand.getValue( "0");*/
@@ -123,9 +116,12 @@ public class AnimalBookGame extends Game {
 	public void pause() {
 		super.pause();
 		Gdx.app.log("My Tagg", "The app is calling pause");
-		Preferences prefs = Gdx.app.getPreferences("My Preferences");
-		prefs.putInteger("level", levelHandler.getLevel());
-		prefs.flush();
+		if(level < levelHandler.getLevel()){
+			Gdx.app.log("My Tagg", "PastLevel: " + pastLevel + " level: " + level);
+			Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
+			prefs.putInteger("level", levelHandler.getLevel());
+			prefs.flush();
+		}
 	}
 
 	/**
@@ -171,5 +167,21 @@ public class AnimalBookGame extends Game {
 	
 	public static int getLevel() {
 		return level;
+	}
+
+	public void setDataCont() {
+			Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
+			level = prefs.getInteger("level");
+			levelHandler = new LevelHandler(level);	
+			pastLevel = level;
+	}
+	
+	public void setDataPlay(){
+		boolean levelSize =getLevelData().size >0;
+		if(levelSize && getLevelData().get(0) !=null){
+			level = (Integer) getLevelData().get(0);
+		}
+		levelHandler = new LevelHandler(level);
+		pastLevel = level;
 	}
 }

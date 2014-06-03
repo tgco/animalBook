@@ -360,8 +360,9 @@ public class World {
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
 
 		for (ABDrawable dropped : drawMap.get("Dropped")){
+			((Movable) dropped).move(cameraSpeed, delta);
 			//Remove uncollected drops
-			if(((Dropped) dropped).getTimeLeft() <= 0){
+			if((((Dropped) dropped).getTimeLeft() <= 0) && !(((Dropped) dropped).isPickedUp())){
 				drawMap.get("Dropped").removeValue(dropped, true);
 				dropped.dispose();
 			}

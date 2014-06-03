@@ -3,6 +3,7 @@ package com.tgco.animalBook.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -25,11 +26,6 @@ import com.tgco.animalBook.gameObjects.Swipe;
 public class WorldRenderer {
 
 	/**
-	 * Object that draws basic shapes used for the progress bar and health bar
-	 */
-	private ShapeRenderer shapeRender;
-
-	/**
 	 * Stores all swipes to be drawn on screen
 	 */
 	private Array<Swipe> swipes;
@@ -41,13 +37,19 @@ public class WorldRenderer {
 	private static final float PROGRESS_BAR_HEIGHT = .31f*Gdx.graphics.getHeight();
 	private static final float PROGRESS_SLIDER_WIDTH = .019f*Gdx.graphics.getWidth();
 	private static final float PROGRESS_SLIDER_HEIGHT = .015f*Gdx.graphics.getHeight();
+	
+	/**
+	 * Textures for drawing primitive rectangles
+	 */
+	private Texture black = new Texture(Gdx.files.internal("primitiveTextures/black.png"));
+	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
+	private Texture blue = new Texture(Gdx.files.internal("primitiveTextures/blue.png"));
 
 
 	/**
 	 * Default constructor
 	 */
 	public WorldRenderer() {
-		shapeRender = new ShapeRenderer();
 
 		swipes = new Array<Swipe>();
 	}
@@ -78,22 +80,19 @@ public class WorldRenderer {
 				drawable.draw(batch);
 			}
 		}
-		batch.end();
 
+		SpriteBatch projectedBatch = new SpriteBatch();
+		projectedBatch.begin();
 		//Health bar
-		shapeRender.begin(ShapeType.Filled);
-		shapeRender.setColor(Color.BLACK);
-		shapeRender.rect(Gdx.graphics.getWidth()/2 - .046f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .073f*Gdx.graphics.getHeight(), .093f*Gdx.graphics.getWidth(), .037f*Gdx.graphics.getHeight());
-		shapeRender.setColor(Color.RED);
-		shapeRender.rect(Gdx.graphics.getWidth()/2 - .0435f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .069f*Gdx.graphics.getHeight(), .087f*Gdx.graphics.getWidth()*(playerHealth/100), .028f*Gdx.graphics.getHeight());
+		projectedBatch.draw(black,Gdx.graphics.getWidth()/2 - .046f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .073f*Gdx.graphics.getHeight(), .093f*Gdx.graphics.getWidth(), .037f*Gdx.graphics.getHeight());
+		projectedBatch.draw(red,Gdx.graphics.getWidth()/2 - .0435f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .069f*Gdx.graphics.getHeight(), .087f*Gdx.graphics.getWidth()*(playerHealth/100), .028f*Gdx.graphics.getHeight());
 
 		//Progress bar
-		shapeRender.setColor(Color.CYAN);
-		shapeRender.rect((.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
-		shapeRender.setColor(Color.BLACK);
-		shapeRender.rect((.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT - PROGRESS_SLIDER_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
+		projectedBatch.draw(blue,(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
+		projectedBatch.draw(black,(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT - PROGRESS_SLIDER_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
 
-		shapeRender.end();
+		projectedBatch.end();
+		projectedBatch.dispose();
 
 		//Swipes on screen
 		
@@ -104,16 +103,16 @@ public class WorldRenderer {
 			} else
 				swipe.draw(cam);
 		}
-		 
-		batch.begin();
 
 	}
 
 	/**
-	 * Disposes of the shape render object to release memory
+	 * Disposes of the texture objects to release memory
 	 */
 	public void dispose() {
-		shapeRender.dispose();
+		black.dispose();
+		blue.dispose();
+		red.dispose();
 	}
 
 }

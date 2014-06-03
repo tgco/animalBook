@@ -13,6 +13,7 @@ import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.GameScreen;
 import com.tgco.animalBook.screens.SplashScreen;
+import com.tgco.animalBook.screens.TutorialScreen;
 
 public class AnimalBookGame extends Game {
 
@@ -57,9 +58,12 @@ public class AnimalBookGame extends Game {
 		if(levelSize && getLevelData().get(0) !=null){
 			level = (Integer) getLevelData().get(0);
 		}
-		//Set the initial screen
-		setScreen(new SplashScreen(this));
+		
 		levelHandler = new LevelHandler(level);
+		//Set the initial screen
+		//setScreen(new SplashScreen(this));
+		setScreen(new TutorialScreen(this));
+		
 		if (debugMode)
 			fpsLogger = new FPSLogger();
 		

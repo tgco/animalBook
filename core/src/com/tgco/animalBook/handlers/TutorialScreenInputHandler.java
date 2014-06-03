@@ -60,20 +60,6 @@ public class TutorialScreenInputHandler implements InputProcessor {
 	public boolean keyDown(int keycode) {
 		if(keycode == Keys.BACK){
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));
-			
-			//store the data in levelData of Game
-			
-			// spot 1 is current level
-			gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
-			
-			//spot 2 is player			
-			gameInstance.addToDatalevel(tutorialScreen.getWorld().getPlayer(),1);
-			
-			//spot 3 is storing movable array
-			gameInstance.addToDatalevel(tutorialScreen.getWorld().getMovables(),2);
-			
-			//spot 4 is storing dropped items array
-			gameInstance.addToDatalevel(tutorialScreen.getWorld().getDropped(), 3);
 
 			tutorialScreen.dispose();
 		}
@@ -138,6 +124,12 @@ public class TutorialScreenInputHandler implements InputProcessor {
 					tutorialScreen.getWorld().addSwipeToWorld(lastTouch, touch);
 					SoundHandler.playWhistle();
 					herdWithDrag(lastTouch, touch, tutorialScreen.getWorld().getMovables());
+				}
+				else {
+					tutorialScreen.getWorld().addSwipeToWorld(lastTouch, touch);
+					SoundHandler.playWhistle();
+					herdWithDrag(lastTouch, touch, tutorialScreen.getWorld().getMovables());
+					tutorialScreen.setSwiped(true);
 				}
 			}
 		}

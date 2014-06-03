@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Dropped extends Movable{
+public class Dropped extends ABDrawable{
 	
 	/** consume is 1 item it may carry */
 	private Consumable consume = null;
@@ -20,14 +20,6 @@ public class Dropped extends Movable{
 	/** how much time it has left before disappearing */
 	private double timeLeft;
 	
-	private boolean isPickedUp;
-	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
-	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
-	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
-	
-	private final Vector2 buttonLoc = new Vector2(EDGE_TOLERANCE, Gdx.graphics.getHeight() - BUTTON_HEIGHT);
-
-
 	/**
 	 *  the constructor with Consumable exists if the dropped item should house a Consumable.
 	 * @param consume is passed in a new Consumable
@@ -82,15 +74,6 @@ public class Dropped extends Movable{
 		super.draw(batch);
 		timeLeft--;
 	}
-	
-	@Override
-	public void move(float cameraSpeed, float delta) {
-		if (isPickedUp) {
-			position.lerp(buttonLoc, delta);
-		} else {
-			return;
-		}
-	}
 
  /**
   * returns the time left for this object used in the world
@@ -100,14 +83,6 @@ public class Dropped extends Movable{
 		return timeLeft;
 	}
 	
-	public void pickUp() {
-		isPickedUp = !isPickedUp;
-	}
-	
-	public boolean isPickedUp() {
-		return isPickedUp;
-	}
-
 	/**
 	 * overrides the variable in ABDrawables for the world to pick out all dropped objects.
 	 */

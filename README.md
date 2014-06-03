@@ -19,13 +19,16 @@ Go to eclipse, select import (By right clicking package explorer window), select
 
 This will take a while.
 
-if the project does not get imported because it does not know the path of the android sdk, then do these steps. 
-1) create a local.properties file in the git repo. 2) add in the android sdk path via "sdk.dir="your sdk path"" 
-3) try again and then delete the local.properties
+A few errors you may experience in setup:
 
-if the project does not compile because of the databaseHandler class, then you need to add the JARs to the build path. 
-1)right click on core, go to build Path -> configure BuildPath. 2) add in the gdx-sqlite.jar that is in the core folder, by clicking Add JARs...
-3) do this with the respected JARs in the desktop and ANdroid folder/projects.
+1) SDK location not found. When trying to build model for Gradle.
+	This is because there is no local.properties in the code that was pulled from github. Simply add in a file to the main project folder with this inside:
+		sdk.dir=Path/To/Your/SDK
+	
+	DO NOT add the file to github. 
+
+2) Errors in DatabaseHandler. 
+	This is because DatabaseHandler is dependent on an external library. There is a jar file in the core folder that needs to be added to the Build Path in order for the DatabaseHandler to work.
 
 The animalBook_Game-core contains all of the main code.
 

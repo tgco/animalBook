@@ -234,6 +234,10 @@ public class TutorialWorld {
 		//draw objects
 		worldRender.render(batch, drawMap, player.getHealth(),camera);
 	}
+	
+	/**
+	 * 
+	 */
 
 	/**
 	 * Updates all logic between game objects and moves them if necessary

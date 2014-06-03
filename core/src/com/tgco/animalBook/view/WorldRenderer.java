@@ -126,6 +126,8 @@ public class WorldRenderer {
 			}
 		}
 
+		batch.end();
+		
 		SpriteBatch projectedBatch = new SpriteBatch();
 		projectedBatch.begin();
 		
@@ -144,6 +146,8 @@ public class WorldRenderer {
 			} else
 				swipe.draw(cam);
 		}
+		
+		batch.begin();
 
 	}
 

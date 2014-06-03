@@ -33,13 +33,6 @@ public class TutorialScreenInputHandler implements InputProcessor {
 	 * Distinguishes distance a touch must move to register as a drag
 	 */
 	private static float touchToDragTolerance = 50f;
-	
-	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
-	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
-	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
-	
-	private final Vector2 buttonLoc = new Vector2(EDGE_TOLERANCE, Gdx.graphics.getHeight() - BUTTON_HEIGHT);
-
 
 	/**
 	 * The distance a movable must be within in order to be influenced by a drag
@@ -67,20 +60,6 @@ public class TutorialScreenInputHandler implements InputProcessor {
 	public boolean keyDown(int keycode) {
 		if(keycode == Keys.BACK){
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));
-			
-			//store the data in levelData of Game
-			
-			// spot 1 is current level
-			gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
-			
-			//spot 2 is player			
-			gameInstance.addToDatalevel(tutorialScreen.getWorld().getPlayer(),1);
-			
-			//spot 3 is storing movable array
-			gameInstance.addToDatalevel(tutorialScreen.getWorld().getMovables(),2);
-			
-			//spot 4 is storing dropped items array
-			gameInstance.addToDatalevel(tutorialScreen.getWorld().getDropped(), 3);
 
 			tutorialScreen.dispose();
 		}
@@ -146,6 +125,12 @@ public class TutorialScreenInputHandler implements InputProcessor {
 					SoundHandler.playWhistle();
 					herdWithDrag(lastTouch, touch, tutorialScreen.getWorld().getMovables());
 				}
+				else {
+					tutorialScreen.getWorld().addSwipeToWorld(lastTouch, touch);
+					SoundHandler.playWhistle();
+					herdWithDrag(lastTouch, touch, tutorialScreen.getWorld().getMovables());
+					tutorialScreen.setSwiped(true);
+				}
 			}
 		}
 
@@ -158,10 +143,7 @@ public class TutorialScreenInputHandler implements InputProcessor {
 				tutorialScreen.getWorld().getCamera().unproject(vect);
 				Vector2 vect2 = new Vector2(vect.x, vect.y);
 				if(dropping.getBounds().contains(vect2)){
-					dropping.pickUp();
 					SoundHandler.playPickup();
-				}
-				if(dropping.getBounds().contains(buttonLoc)) {
 					tutorialScreen.getWorld().removeFromABDrawable(dropping);
 					dropping.dispose();
 				}

@@ -18,6 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.gameObjects.Consumable;
+import com.tgco.animalBook.gameObjects.Consumable.DropType;
+import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.handlers.TutorialScreenInputHandler;
@@ -72,7 +75,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Distance to move before screen pauses again for next part of tutorial
 	 */
-	private float moveDistance = 50;
+	private float moveDistance = 70;
 	private float moved = 0;
 
 	/**
@@ -132,8 +135,6 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 		batch.begin();
 
-		//Select the correct waiting function and draw correct words
-		waitForInput();
 
 		//Draw four grass textures around the node on screen
 		batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -155,6 +156,11 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 		//Draw buttons over the screen
 		buttonStage.draw();
+
+		//Select the correct waiting function and draw correct words
+		if (paused) {
+			waitForInput();
+		}
 
 
 	}
@@ -180,11 +186,13 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	public void updateTutorialLogic(float delta) {
-		if (!paused)
+		if (!paused) 
 			moved += AnimalBookGame.TARGET_FRAME_RATE*delta;
 
-		if (moved % moveDistance <= 5)
+		if ((moveDistance - moved) <= .5) {
 			paused = true;
+			moved = 0;
+		}
 	}
 
 	/**
@@ -300,6 +308,11 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseBackgroundMusic();
 				gameInstance.setScreen(new TutorialUpgradesScreen(gameInstance,TutorialScreen.this));
+				if (ate) {
+					upgraded = true;
+					//spawn these for the return to game tutorial
+					tutorialWorld.spawnObstacleAndMarket();
+				}
 			}
 		});
 
@@ -312,6 +325,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .1);
 				gameInstance.setScreen(new TutorialInventoryScreen(gameInstance,TutorialScreen.this));
+				if (swiped && tapped & pickedUp)
+					ate = true;
 			}
 		});
 
@@ -329,51 +344,76 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public void waitForSwipe(SpriteBatch batch) {
 		if (swiped) {
 			paused = false;
+			if (tutorialStage == 1)
+				tutorialStage += 1;
 			return;
 		}
-		else
+		else {
 			//draw text that says swipe
 			return;
+		}
 	}
 
 	public void waitForTap(SpriteBatch batch) {
 		if (tapped) {
 			paused = false;
+			if (tutorialStage == 2)
+				tutorialStage += 1;
 			return;
 		}
-		else
+		else {
 			//draw text that says tap a goose
 			return;
+		}
 	}
 
 	public void waitForPickup(SpriteBatch batch) {
 		if (pickedUp) {
 			paused = false;
+			tutorialWorld.removeSpawnedEgg();
+			if (tutorialStage == 3)
+				tutorialStage += 1;
 			return;
 		}
 		else
 			//draw text that says tap an egg
-			return;
+			tutorialWorld.spawnEgg();
+		return;
 	}
 
 	public void waitForEat(SpriteBatch batch) {
 		if (ate) {
 			paused = false;
+			if (tutorialStage == 4)
+				tutorialStage += 1;
 			return;
 		}
-		else
+		else {
+			tutorialWorld.getPlayer().setHealth(50f);
+			if(tutorialWorld.getPlayer().getInventory().getInventory().get(DropType.EGG).size == 0) {
+				for (int i = 0; i < 5; i++) {
+					tutorialWorld.getPlayer().getInventory().addItem(new Consumable(DropType.EGG));
+				}
+			}
 			//Draw text that says go to inventory to eat
 			return;
+		}
 	}
 
 	public void waitForUpgrade(SpriteBatch batch) {
 		if (upgraded) {
 			paused = false;
+			//Continuously runs when player is told to herd into the market to end the tutorial
+			tutorialWorld.getPlayer().setHealth(100f);
 			return;
 		}
-		else
+		else {
+			if (tutorialWorld.getPlayer().getPlayerMoney() == 0) {
+				tutorialWorld.getPlayer().addPlayerMoney(1000);
+			}
 			//draw text that says go to upgrades screen to spend money
 			return;
+		}
 	}
 
 	/**
@@ -427,6 +467,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 	}
 
+
 	public boolean isSwiped() {
 		return swiped;
 	}
@@ -465,6 +506,14 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 	public void setUpgraded(boolean upgraded) {
 		this.upgraded = upgraded;
+	}
+
+	public int getTutorialStage() {
+		return tutorialStage;
+	}
+
+	public void incrementTutorialStage() {
+		tutorialStage += 1;
 	}
 
 

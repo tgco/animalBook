@@ -16,7 +16,10 @@ import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
+import com.tgco.animalBook.gameObjects.Obstacle;
 import com.tgco.animalBook.gameObjects.Player;
+import com.tgco.animalBook.handlers.SoundHandler;
+import com.tgco.animalBook.screens.MarketScreen;
 
 public class TutorialWorld {
 
@@ -78,6 +81,11 @@ public class TutorialWorld {
 	private WorldRenderer worldRender;
 
 	/**
+	 * Boolean for generating obstacle and market once during tutorial
+	 */
+	private boolean generatedMarketAndObstacle = false;
+
+	/**
 	 * Constructor with game instance
 	 * 
 	 * @param gameInstance reference to the running game instance
@@ -100,9 +108,10 @@ public class TutorialWorld {
 		increasedCameraSpeed = 2f*cameraSpeed;
 
 		player = new Player(cameraSpeed);
-		
+
 		drawMap.put("Movable", gameInstance.getLevelHandler().addAnimals(1));
 		drawMap.put("Dropped", new Array<ABDrawable>());
+		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.put("Obstacle", new Array<ABDrawable>());
 		drawMap.put("Player", new Array<ABDrawable>());
 		drawMap.get("Player").add(player);
@@ -234,7 +243,7 @@ public class TutorialWorld {
 		//draw objects
 		worldRender.render(batch, drawMap, player.getHealth(),camera);
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -262,53 +271,37 @@ public class TutorialWorld {
 		moveCameraUp(speed,delta);
 		player.move(speed,delta);
 
-
-		/*for (ABDrawable dropped : drawMap.get("Dropped")){
-			((Movable) dropped).move(cameraSpeed, delta);
-			//Remove uncollected drops
-			if((((Dropped) dropped).getTimeLeft() <= 0) && !(((Dropped) dropped).isPickedUp())){
-				drawMap.get("Dropped").removeValue(dropped, true);
-				dropped.dispose();
-			}
-		}*/
-
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
-			/*
-			//Drop new items
-			if(rand.nextInt(100) <= 50){
-				ABDrawable dropping =  ((Animal)movable).drop();
-				if(dropping != null){
-					drawMap.get("Dropped").add(dropping);
-				}
-			}
-			 */
 		}		
 
-		//check for collisions between the market and the animals
-		/*for (ABDrawable movable : drawMap.get("Movable")) {
-			if (movable.getBounds().overlaps(market.getBounds())) {
-				gameInstance.getLevelHandler().increaseStored();
-				drawMap.get("Movable").removeValue(movable, false);
-				movable.dispose();
-			}
-		}*/
-
-		//check for collisions between movable and obstacles
-		/*for (ABDrawable movable : drawMap.get("Movable")){
-			for (ABDrawable obstacle : drawMap.get("Obstacle")){
-				if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable instanceof Player)){
-					((Movable)movable).bounce((Movable)movable, (Obstacle)obstacle);
+		if (generatedMarketAndObstacle) {
+			//check for collisions between the market and the animals
+			for (ABDrawable movable : drawMap.get("Movable")) {
+				if (movable.getBounds().overlaps(market.getBounds())) {
+					gameInstance.getLevelHandler().increaseStored();
+					drawMap.get("Movable").removeValue(movable, false);
+					movable.dispose();
 				}
 			}
-		}*/
 
-		//check if player reached market
-		/*if (player.getBounds().overlaps(market.getBounds())) {
-			SoundHandler.pauseBackgroundMusic();
-			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
-		}*/
+
+			//check for collisions between movable and obstacles
+			for (ABDrawable movable : drawMap.get("Movable")){
+				for (ABDrawable obstacle : drawMap.get("Obstacle")){
+					if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable instanceof Player)){
+						((Movable)movable).bounce((Movable)movable, (Obstacle)obstacle);
+					}
+				}
+			}
+
+			//check if player reached market
+			if (player.getBounds().overlaps(market.getBounds())) {
+				SoundHandler.pauseBackgroundMusic();
+				gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
+			}
+		}
 	}
 
 	public void reinitTextureMovable(){
@@ -321,5 +314,41 @@ public class TutorialWorld {
 			((Dropped)dropped).resetTexture();
 		}
 	}
+
+	/**
+	 * Spawns one egg on screen for tutorial
+	 */
+	public void spawnEgg() {
+		//Add an egg if there are none on screen at the center of the screen
+		Movable movable = (Movable) drawMap.get("Movable").get(0);
+		if (drawMap.get("Dropped").size == 0) {
+			ABDrawable dropping =  ((Animal)movable).forceDropConsumable();
+			drawMap.get("Dropped").add(dropping);
+		}
+	}
+
+	/**
+	 * Removes the tutorial egg
+	 */
+	public void removeSpawnedEgg() {
+		drawMap.get("Dropped").get(0).dispose();
+		drawMap.get("Dropped").clear();
+	}
+
+	/**
+	 * Spawns the market and obstacle for the tutorial
+	 */
+	public void spawnObstacleAndMarket() {
+		if (!generatedMarketAndObstacle) {
+			market = new Market();
+			Obstacle obstacle = new Obstacle();
+			market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + Gdx.graphics.getHeight()));
+			obstacle.setPosition(new Vector2(market.getPosition().cpy().x,market.getPosition().y - Gdx.graphics.getHeight()/3));
+			drawMap.get("Market").add(market);
+			drawMap.get("Obstacle").add(obstacle);
+			generatedMarketAndObstacle = true;
+		}
+	}
+
 
 }

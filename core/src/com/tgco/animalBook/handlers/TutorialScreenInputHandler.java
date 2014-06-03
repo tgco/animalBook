@@ -18,7 +18,7 @@ public class TutorialScreenInputHandler implements InputProcessor {
 	 * Reference to the game instance in order to change the current screen
 	 */
 	private AnimalBookGame gameInstance;
-	
+
 	/**
 	 * Reference to the game screen in order to operate on game objects
 	 */
@@ -33,11 +33,11 @@ public class TutorialScreenInputHandler implements InputProcessor {
 	 * Distinguishes distance a touch must move to register as a drag
 	 */
 	private static float touchToDragTolerance = 50f;
-	
+
 	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
-	
+
 	private final Vector2 buttonLoc = new Vector2(EDGE_TOLERANCE, Gdx.graphics.getHeight() - BUTTON_HEIGHT);
 
 
@@ -89,12 +89,12 @@ public class TutorialScreenInputHandler implements InputProcessor {
 			//unproject to world coordinates
 			tutorialScreen.getWorld().getCamera().unproject(lastTouch);
 
-			if (AnimalBookGame.tapControls) {
+			if (!tutorialScreen.isPaused()) {
 				//Influence geese to the camera center if touched
 				Vector3 camCenter = new Vector3(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
 				tutorialScreen.getWorld().getCamera().unproject(camCenter);
 				Vector2 camCenter2d = new Vector2(camCenter.x,camCenter.y);
-				
+
 				for(Movable movable : tutorialScreen.getWorld().getMovables()) {
 					if (movable.getBounds().contains(new Vector2(lastTouch.x,lastTouch.y))) {
 						float reactionScale = 200;
@@ -102,10 +102,25 @@ public class TutorialScreenInputHandler implements InputProcessor {
 						movable.addToCurrentTarget(camCenter2d.cpy().sub(movable.getPosition()).nor().scl(reactionScale));
 					}
 				}
+			} else if (!tutorialScreen.isTapped() && tutorialScreen.isSwiped()) {
+				//Influence geese to the camera center if touched
+				Vector3 camCenter = new Vector3(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
+				tutorialScreen.getWorld().getCamera().unproject(camCenter);
+				Vector2 camCenter2d = new Vector2(camCenter.x,camCenter.y);
+
+				for(Movable movable : tutorialScreen.getWorld().getMovables()) {
+					if (movable.getBounds().contains(new Vector2(lastTouch.x,lastTouch.y))) {
+						float reactionScale = 200;
+						//SoundHandler.playWhistle();
+						movable.addToCurrentTarget(camCenter2d.cpy().sub(movable.getPosition()).nor().scl(reactionScale));
+						tutorialScreen.setTapped(true);
+					}
+				}
+				
 			}
 
 		}
-		
+
 		return false;
 	}
 
@@ -132,7 +147,7 @@ public class TutorialScreenInputHandler implements InputProcessor {
 					SoundHandler.playWhistle();
 					herdWithDrag(lastTouch, touch, tutorialScreen.getWorld().getMovables());
 				}
-				else {
+				else if (!tutorialScreen.isSwiped()){
 					tutorialScreen.getWorld().addSwipeToWorld(lastTouch, touch);
 					SoundHandler.playWhistle();
 					herdWithDrag(lastTouch, touch, tutorialScreen.getWorld().getMovables());
@@ -157,9 +172,23 @@ public class TutorialScreenInputHandler implements InputProcessor {
 					tutorialScreen.getWorld().removeFromABDrawable(dropping);
 					dropping.dispose();
 				}
+			} else if (!tutorialScreen.isPickedUp() && tutorialScreen.isTapped()) {
+				Vector3 vect = new Vector3(screenX,screenY,0);
+				//unproject operations
+				tutorialScreen.getWorld().getCamera().unproject(vect);
+				Vector2 vect2 = new Vector2(vect.x, vect.y);
+				if(dropping.getBounds().contains(vect2)){
+					dropping.pickUp();
+					SoundHandler.playPickup();
+					tutorialScreen.setPickedUp(true);
+				}
+				if(dropping.getBounds().contains(buttonLoc)) {
+					tutorialScreen.getWorld().removeFromABDrawable(dropping);
+					dropping.dispose();
+				}
 			}
 		}
-		
+
 		//Rest the lastTouch so touchDown will grab a new touch next time
 		lastTouch = null;
 		//False so other methods can interact with the touch still (buttons)
@@ -189,7 +218,7 @@ public class TutorialScreenInputHandler implements InputProcessor {
 			positionCenter = movable.getPosition();
 			//find perpendicular projection of the position minus center onto unit vector
 			perpProjection = (positionCenter.cpy().sub(dragCenter)).cpy().sub(dragUnitVector.cpy().scl((positionCenter.cpy().sub(dragCenter)).cpy().dot(dragUnitVector.cpy())));
-			
+
 			if (perpProjection.cpy().len() != 0) {
 				if (positionCenter.cpy().sub(dragCenter).len() < HERD_TOLERANCE){
 
@@ -197,7 +226,7 @@ public class TutorialScreenInputHandler implements InputProcessor {
 					float reactionScale = 70000 * 1/positionCenter.cpy().sub(dragCenter).len();
 
 					movable.addToCurrentTarget(perpProjection.cpy().nor().scl(reactionScale));
-					
+
 					//Add a line to draw the direction the goose was influenced
 					//gameScreen.getWorld().addSwipeToWorld(new Vector3(positionCenter.x,positionCenter.y,0), new Vector3(positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).x,positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).y,0));
 				}
@@ -205,7 +234,7 @@ public class TutorialScreenInputHandler implements InputProcessor {
 		}
 
 	}
-	
+
 	/**
 	 * Unused input detection functions
 	 */

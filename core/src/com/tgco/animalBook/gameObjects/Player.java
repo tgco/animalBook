@@ -130,4 +130,8 @@ public class Player extends Movable {
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 		super.resetTexture(texturePath);
 	}
+	
+	public void setHealth(float health) {
+		this.playerHealth = health;
+	}
 }

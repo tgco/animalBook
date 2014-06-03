@@ -183,7 +183,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		if (!paused)
 			moved += AnimalBookGame.TARGET_FRAME_RATE*delta;
 
-		if (moved % moveDistance <= 1)
+		if (moved % moveDistance <= 5)
 			paused = true;
 	}
 

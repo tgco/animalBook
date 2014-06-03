@@ -132,6 +132,12 @@ public class TutorialScreenInputHandler implements InputProcessor {
 					SoundHandler.playWhistle();
 					herdWithDrag(lastTouch, touch, tutorialScreen.getWorld().getMovables());
 				}
+				else {
+					tutorialScreen.getWorld().addSwipeToWorld(lastTouch, touch);
+					SoundHandler.playWhistle();
+					herdWithDrag(lastTouch, touch, tutorialScreen.getWorld().getMovables());
+					tutorialScreen.setSwiped(true);
+				}
 			}
 		}
 

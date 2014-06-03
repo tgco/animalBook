@@ -57,14 +57,11 @@ public class AnimalBookGame extends Game {
 	private int pastLevel = level;
 	@Override
 	public void create () {
-		//Set the initial screen
 		
 		for(int i=0; i< 4; i++){
 			LevelData.insert(i, null);
 		}
-		
-		
-		
+	
 		//Set the initial screen
 		setScreen(new SplashScreen(this));
 		

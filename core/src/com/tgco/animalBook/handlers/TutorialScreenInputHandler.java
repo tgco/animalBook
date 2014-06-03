@@ -1,27 +1,18 @@
 package com.tgco.animalBook.handlers;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.gameObjects.Movable;
-import com.tgco.animalBook.screens.GameScreen;
 import com.tgco.animalBook.screens.MainMenuScreen;
 import com.tgco.animalBook.screens.TutorialScreen;
 
-/**
- * Handles input to create touch controls for the game screen, 
- * and implements logic for influencing animals with a swipe gesture.
- * 
- * @author
- * 
- * 
- */
-public class GameScreenInputHandler implements InputProcessor {
+public class TutorialScreenInputHandler implements InputProcessor {
 
 	/**
 	 * Reference to the game instance in order to change the current screen
@@ -31,7 +22,7 @@ public class GameScreenInputHandler implements InputProcessor {
 	/**
 	 * Reference to the game screen in order to operate on game objects
 	 */
-	private GameScreen gameScreen;
+	private TutorialScreen tutorialScreen;
 
 	/**
 	 * Holds the location of the last touch on screen
@@ -59,11 +50,11 @@ public class GameScreenInputHandler implements InputProcessor {
 	 * Constructor that takes the needed references
 	 * 
 	 * @param gameInstance	reference to the running game instance
-	 * @param gameScreen	reference to the current game screen
+	 * @param tutorialScreen	reference to the current game screen
 	 */
-	public GameScreenInputHandler(AnimalBookGame gameInstance, GameScreen gameScreen) {
+	public TutorialScreenInputHandler(AnimalBookGame gameInstance, TutorialScreen tutorialScreen) {
 		this.gameInstance = gameInstance;
-		this.gameScreen = gameScreen;
+		this.tutorialScreen = tutorialScreen;
 	}
 
 	/**
@@ -83,15 +74,15 @@ public class GameScreenInputHandler implements InputProcessor {
 			gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
 			
 			//spot 2 is player			
-			gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
+			gameInstance.addToDatalevel(tutorialScreen.getWorld().getPlayer(),1);
 			
 			//spot 3 is storing movable array
-			gameInstance.addToDatalevel(gameScreen.getWorld().getMovables(),2);
+			gameInstance.addToDatalevel(tutorialScreen.getWorld().getMovables(),2);
 			
 			//spot 4 is storing dropped items array
-			gameInstance.addToDatalevel(gameScreen.getWorld().getDropped(), 3);
+			gameInstance.addToDatalevel(tutorialScreen.getWorld().getDropped(), 3);
 
-			gameScreen.dispose();
+			tutorialScreen.dispose();
 		}
 		return false;
 	}
@@ -110,15 +101,15 @@ public class GameScreenInputHandler implements InputProcessor {
 		if (lastTouch == null) {
 			lastTouch = new Vector3(screenX,screenY,0);
 			//unproject to world coordinates
-			gameScreen.getWorld().getCamera().unproject(lastTouch);
+			tutorialScreen.getWorld().getCamera().unproject(lastTouch);
 
 			if (AnimalBookGame.tapControls) {
 				//Influence geese to the camera center if touched
 				Vector3 camCenter = new Vector3(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
-				gameScreen.getWorld().getCamera().unproject(camCenter);
+				tutorialScreen.getWorld().getCamera().unproject(camCenter);
 				Vector2 camCenter2d = new Vector2(camCenter.x,camCenter.y);
 				
-				for(Movable movable : gameScreen.getWorld().getMovables()) {
+				for(Movable movable : tutorialScreen.getWorld().getMovables()) {
 					if (movable.getBounds().contains(new Vector2(lastTouch.x,lastTouch.y))) {
 						float reactionScale = 200;
 						//SoundHandler.playWhistle();
@@ -144,34 +135,34 @@ public class GameScreenInputHandler implements InputProcessor {
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		Vector3 touch = new Vector3(screenX,screenY,0);
 		//unproject touch to world coordinates
-		gameScreen.getWorld().getCamera().unproject(touch);
+		tutorialScreen.getWorld().getCamera().unproject(touch);
 
 		//Determine if drag is registered
 		if (lastTouch != null) {
 			if ( touch.cpy().sub(lastTouch.cpy()).len() > touchToDragTolerance ) {
 				//Drag gesture is detected, create an influence barrier between touch and last touch
-				if (!gameScreen.isPaused()) {
-					gameScreen.getWorld().addSwipeToWorld(lastTouch, touch);
+				if (!tutorialScreen.isPaused()) {
+					tutorialScreen.getWorld().addSwipeToWorld(lastTouch, touch);
 					SoundHandler.playWhistle();
-					herdWithDrag(lastTouch, touch, gameScreen.getWorld().getMovables());
+					herdWithDrag(lastTouch, touch, tutorialScreen.getWorld().getMovables());
 				}
 			}
 		}
 
 		//Remove dropped items that were touched
-		for (int i = 0; i < gameScreen.getWorld().getDropped().size ; i++){
-			Dropped dropping = 	gameScreen.getWorld().getDropped().get(i);
-			if (!gameScreen.isPaused()){
+		for (int i = 0; i < tutorialScreen.getWorld().getDropped().size ; i++){
+			Dropped dropping = 	tutorialScreen.getWorld().getDropped().get(i);
+			if (!tutorialScreen.isPaused()){
 				Vector3 vect = new Vector3(screenX,screenY,0);
 				//unproject operations
-				gameScreen.getWorld().getCamera().unproject(vect);
+				tutorialScreen.getWorld().getCamera().unproject(vect);
 				Vector2 vect2 = new Vector2(vect.x, vect.y);
 				if(dropping.getBounds().contains(vect2)){
 					dropping.pickUp();
 					SoundHandler.playPickup();
 				}
 				if(dropping.getBounds().contains(buttonLoc)) {
-					gameScreen.getWorld().removeFromABDrawable(dropping);
+					tutorialScreen.getWorld().removeFromABDrawable(dropping);
 					dropping.dispose();
 				}
 			}

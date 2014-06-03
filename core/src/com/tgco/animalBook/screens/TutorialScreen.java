@@ -72,7 +72,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Distance to move before screen pauses again for next part of tutorial
 	 */
-	private float moveDistance = 100;
+	private float moveDistance = 50;
+	private float moved = 0;
 
 	/**
 	 * The stage of the tutorial the player is on for switch cases
@@ -114,6 +115,9 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
+
+		updateTutorialLogic(delta);
+
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -127,7 +131,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		Vector2 tileNode = findTileNodeOnScreen();
 
 		batch.begin();
-		
+
 		//Select the correct waiting function and draw correct words
 		waitForInput();
 
@@ -173,6 +177,14 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			waitForUpgrade(batch);
 			break;
 		}
+	}
+
+	public void updateTutorialLogic(float delta) {
+		if (!paused)
+			moved += AnimalBookGame.TARGET_FRAME_RATE*delta;
+
+		if (moved % moveDistance <= 1)
+			paused = true;
 	}
 
 	/**
@@ -320,7 +332,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else
-			//listen for a swipe somehow
+			//draw text that says swipe
 			return;
 	}
 
@@ -330,7 +342,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else
-			//listen for a tap somehow
+			//draw text that says tap a goose
 			return;
 	}
 
@@ -340,7 +352,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else
-			//listen for a tap on item (pickup) somehow
+			//draw text that says tap an egg
 			return;
 	}
 
@@ -350,7 +362,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else
-			//listen for change to inventory screen
+			//Draw text that says go to inventory to eat
 			return;
 	}
 
@@ -360,7 +372,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else
-			//listen for a change to upgrades screen
+			//draw text that says go to upgrades screen to spend money
 			return;
 	}
 

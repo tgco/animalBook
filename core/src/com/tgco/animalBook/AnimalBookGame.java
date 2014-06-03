@@ -57,7 +57,6 @@ public class AnimalBookGame extends Game {
 	private int pastLevel = level;
 	@Override
 	public void create () {
-
 		//Set the initial screen
 		
 		for(int i=0; i< 4; i++){
@@ -75,6 +74,7 @@ public class AnimalBookGame extends Game {
 		//DB stuff if we go this route
 		/*dbHand = new DatabaseHandler();
 		 dbHand.getValue( "0");*/
+
 	}
 
 	/**

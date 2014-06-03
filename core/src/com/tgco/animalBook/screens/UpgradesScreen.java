@@ -154,15 +154,18 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		switch(boxName){
 		case 0: 
 			font.draw(batch, "+" + String.valueOf(5), STRING_WIDTH_FR +5, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +60);
-			font.draw(batch, "$" + String.valueOf(fruitfullMoney), STRING_WIDTH_FR, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
+			//font.draw(batch, "$" + String.valueOf(fruitfullMoney), STRING_WIDTH_FR, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
+			font.draw(batch, "$" + String.valueOf(gameScreen.getWorld().getFruitfullMoneyP()), STRING_WIDTH_FR, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
 			break;
 		case 1:
 			font.draw(batch, "+" + String.format("%.2f",5/60.0) + " s", STRING_WIDTH_LD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 60);
-			font.draw(batch, "$" + String.valueOf(LongerMoney), STRING_WIDTH_LD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 40);
+			//font.draw(batch, "$" + String.valueOf(LongerMoney), STRING_WIDTH_LD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 40);
+			font.draw(batch, "$" + String.valueOf(gameScreen.getWorld().getLongerMoneyP()), STRING_WIDTH_LD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
 			break;
 		case 2:
 			font.draw(batch, "-" + String.format("%.2f",5/60.0) + " s", STRING_WIDTH_MD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 60);
-			font.draw(batch, "$" + String.valueOf(MoreMoney),STRING_WIDTH_MD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 40);
+			//font.draw(batch, "$" + String.valueOf(MoreMoney),STRING_WIDTH_MD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE + 40);
+			font.draw(batch, "$" + String.valueOf(gameScreen.getWorld().getMoreMoneyP()), STRING_WIDTH_MD, Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE +40);
 			break;
 		}
 

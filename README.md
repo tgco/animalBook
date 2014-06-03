@@ -19,6 +19,15 @@ Go to eclipse, select import (By right clicking package explorer window), select
 
 This will take a while.
 
+A few errors you may experience in setup:
+
+1) SDK location not found. When trying to build model for Gradle.
+	This is because there is no local.properties in the code that was pulled from github. Simply add in a file to the main project folder with this inside:
+		sdk.dir=Path/To/Your/SDK
+
+2) Errors in DatabaseHandler. 
+	This is because DatabaseHandler is dependent on an external library. There is a jar file in the core folder that needs to be added to the Build Path in order for the DatabaseHandler to work.
+
 The animalBook_Game-core contains all of the main code.
 
 To run android, launch from animalBook_Game-android, to launch desktop, launch animalBook_Game-desktop, etc.

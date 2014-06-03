@@ -80,7 +80,9 @@ public class WorldRenderer {
 				drawable.draw(batch);
 			}
 		}
-
+		
+		batch.end();
+		
 		SpriteBatch projectedBatch = new SpriteBatch();
 		projectedBatch.begin();
 		//Health bar
@@ -93,7 +95,7 @@ public class WorldRenderer {
 
 		projectedBatch.end();
 		projectedBatch.dispose();
-
+		
 		//Swipes on screen
 		
 		for (Swipe swipe : swipes) {
@@ -103,6 +105,8 @@ public class WorldRenderer {
 			} else
 				swipe.draw(cam);
 		}
+		
+		batch.begin();
 
 	}
 	
@@ -111,10 +115,10 @@ public class WorldRenderer {
 	 * 
 	 * @param batch					the sprite batch used for rendering
 	 * @param drawables				the array of drawable objects to render
-	 * @param player				the player to render
+	 * @param playerHealth			the player health to render
 	 * @param cam					the camera used for converting screen and world coordinates
 	 */
-	public void render(SpriteBatch batch, ArrayMap<String, Array<ABDrawable>> drawables, float playerHealth,OrthographicCamera cam) {
+	public void render(SpriteBatch batch, ArrayMap<String, Array<ABDrawable>> drawables, float playerHealth, OrthographicCamera cam) {
 		//Draw all objects
 		for (Array<ABDrawable> a : drawables.values()){
 			for (ABDrawable drawable : a) {

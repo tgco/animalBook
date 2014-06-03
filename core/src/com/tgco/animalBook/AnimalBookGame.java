@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.utils.Array;
+import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.DatabaseHandler;
 import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
@@ -28,7 +29,7 @@ public class AnimalBookGame extends Game {
 	public static final boolean tapControls = true;
 	
 	
-	private static Array<Object> LevelData = new Array<Object>(4);
+	private static Array<Object> levelData = new Array<Object>(4);
 	
 	private DatabaseHandler dbHand;
 	
@@ -59,7 +60,7 @@ public class AnimalBookGame extends Game {
 	public void create () {
 		
 		for(int i=0; i< 4; i++){
-			LevelData.insert(i, null);
+			levelData.insert(i, null);
 		}
 	
 		//Set the initial screen
@@ -117,6 +118,12 @@ public class AnimalBookGame extends Game {
 			Gdx.app.log("My Tagg", "PastLevel: " + pastLevel + " level: " + level);
 			Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 			prefs.putInteger("level", levelHandler.getLevel());
+			
+			//getPlayer data
+			prefs.putInteger("money", ((Player) levelData.get(1)).getPlayerMoney());
+			prefs.putFloat("health", ((Player) levelData.get(1)).getHealth());
+			
+			
 			prefs.flush();
 		}
 	}
@@ -147,11 +154,11 @@ public class AnimalBookGame extends Game {
 	}
 
 	public Array<Object> getLevelData() {
-		return LevelData;
+		return levelData;
 	}
 	
 	public void addToDatalevel(Object obj, int pos){
-		LevelData.set(pos, obj);
+		levelData.set(pos, obj);
 	}
 
 	public LevelHandler getLevelHandler() {

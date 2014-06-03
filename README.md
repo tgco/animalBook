@@ -24,6 +24,8 @@ A few errors you may experience in setup:
 1) SDK location not found. When trying to build model for Gradle.
 	This is because there is no local.properties in the code that was pulled from github. Simply add in a file to the main project folder with this inside:
 		sdk.dir=Path/To/Your/SDK
+	
+	DO NOT add the file to github. 
 
 2) Errors in DatabaseHandler. 
 	This is because DatabaseHandler is dependent on an external library. There is a jar file in the core folder that needs to be added to the Build Path in order for the DatabaseHandler to work.

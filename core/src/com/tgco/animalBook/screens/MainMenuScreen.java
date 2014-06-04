@@ -12,12 +12,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
@@ -29,6 +31,9 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	private Button playButton;
 	private Button optionsButton;
 	private Button continueButton;
+	
+	private static final double REGION_HEIGHT = BUTTON_HEIGHT*1.25f;
+	private static final double REGION_WIDTH = BUTTON_WIDTH*3.1f;
 
 	public MainMenuScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
@@ -143,21 +148,28 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
 		optionsButton.setY( EDGE_TOLERANCE);
 		
-		//Test
 		//This button is just to test the story screen
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/continueButton.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/continueButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 		style = new ButtonStyle();
 		style.up = buttonSkin.getDrawable("buttonUnpressed");
 		style.down = buttonSkin.getDrawable("buttonPressed");
+		TextureRegion trContinueButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/mainMenu/continueButtonDis.png")) );
+
+		trContinueButton.setRegionHeight((int) (REGION_HEIGHT));
+		trContinueButton.setRegionWidth((int) (REGION_WIDTH));
+
+		style.disabled = new TextureRegionDrawable(trContinueButton);
 
 		continueButton = new Button(style);
 		continueButton.setWidth(MENU_BUTTON_WIDTH);
 		continueButton.setHeight(MENU_BUTTON_HEIGHT);
 		continueButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
 		continueButton.setY(  Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - EDGE_TOLERANCE);
-
+		if(!gameInstance.isContinueable()){
+			continueButton.setDisabled(true);
+		}
 		//Create listeners
 		playButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -197,10 +209,12 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				if(!continueButton.isDisabled()){
 				SoundHandler.playButtonClick();
 				//Change the screen when the button is let go
 				gameInstance.setDataCont();
 				gameInstance.setScreen(new GameScreen(gameInstance));
+				}
 			}
 		});
 

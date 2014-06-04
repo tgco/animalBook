@@ -170,6 +170,7 @@ public class GameScreenInputHandler implements InputProcessor {
 						gameScreen.getWorld().removeFromABDrawable(dropping);
 						dropping.dispose();
 					} else {
+						gameScreen.getWorld().addToInventory(dropping);
 						dropping.pickUp();
 					}
 				}

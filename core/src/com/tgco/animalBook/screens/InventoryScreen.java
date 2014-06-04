@@ -238,7 +238,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 		fonts[consumableIndex].setColor(55,55,55,1f);
 		fonts[consumableIndex].draw(batch,
 				"x" + String.valueOf(gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size),
-				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex + BUTTON_WIDTH/4,
+				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex,
 				Gdx.graphics.getHeight()/2 + 16);
 		batch.end();
 	}

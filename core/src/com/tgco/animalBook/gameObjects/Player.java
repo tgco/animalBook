@@ -131,8 +131,14 @@ public class Player extends Movable {
 		super.resetTexture(texturePath);
 	}
 
+
 	public void setValues(float health, int money) {
 		this.playerHealth = health;
 		this.playerMoney = money;
+}
+	
+	//TODO:: Ben - not sure where this is called
+	public void setHealth(float health) {
+		this.playerHealth = health;
 	}
 }

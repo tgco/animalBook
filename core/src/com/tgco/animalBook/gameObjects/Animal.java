@@ -127,6 +127,29 @@ public abstract class Animal extends Movable {
 	}
 	
 	/**
+	 * Create a consumable every time for tutorial purposes
+	 * 
+	 * @return ABDrawable which is a consumable to the Dropped class
+	 */
+	public ABDrawable forceDropConsumable() {
+	
+				if (this.getClass().equals(Goose.class))
+					return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Pig.class))
+					return new Dropped(new Consumable(Consumable.DropType.values()[1]), this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Goat.class))
+					return new Dropped(new Consumable(Consumable.DropType.values()[2]), this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Sheep.class))
+					return new Dropped(new Consumable(Consumable.DropType.values()[3]), this.position.cpy(), timeOnGround);
+				else if (this.getClass().equals(Cow.class))
+					return new Dropped(new Consumable(Consumable.DropType.values()[4]), this.position.cpy(), timeOnGround);
+				else
+					return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
+	
+		
+	}
+	
+	/**
 	 * used for upgradesScreen
 	 * @return fertilityRate
 	 */

@@ -95,6 +95,10 @@ public class World {
 	 * The main player
 	 */
 	private Player player;
+	
+	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
+	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
+	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
 
 	/**
 	 * Generates random numbers for probability
@@ -360,13 +364,22 @@ public class World {
 
 		//Update Camera bounds
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
+		
+		Vector3 buttonLoc = new Vector3(EDGE_TOLERANCE + BUTTON_WIDTH/2, 
+				Gdx.graphics.getHeight() - 2*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
+		gameInstance.getGameScreen().getWorld().getCamera().unproject(buttonLoc);
+		Vector2 buttonLoc2 = new Vector2();
 
 		for (ABDrawable dropped : drawMap.get("Dropped")){
+			gameInstance.getGameScreen().getWorld().getCamera().unproject(buttonLoc);
+			buttonLoc2.x = buttonLoc.x;
+			buttonLoc2.y = buttonLoc.y;
 			//Remove uncollected drops
-			if((((Dropped) dropped).getTimeLeft() <= 0)){
+			if((((Dropped) dropped).getTimeLeft() <= 0) && !((Dropped) dropped).isPickedUp()){
 				drawMap.get("Dropped").removeValue(dropped, true);
 				dropped.dispose();
 			}
+			((Dropped) dropped).droppedMove(buttonLoc2, delta);
 		}
 
 		for (ABDrawable movable : drawMap.get("Movable")) {

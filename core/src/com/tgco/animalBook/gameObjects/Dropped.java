@@ -20,6 +20,8 @@ public class Dropped extends ABDrawable{
 	/** how much time it has left before disappearing */
 	private double timeLeft;
 	
+	private boolean pickedUp;
+	
 	/**
 	 *  the constructor with Consumable exists if the dropped item should house a Consumable.
 	 * @param consume is passed in a new Consumable
@@ -34,6 +36,7 @@ public class Dropped extends ABDrawable{
 		height = .044f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 		this.timeLeft = timeLeft;
+		this.pickedUp = false;
 
 	}
 	 /**
@@ -63,6 +66,22 @@ public class Dropped extends ABDrawable{
 		else{
 			return consume;
 		}
+	}
+	
+	public void droppedMove(Vector2 pos, float delta) {
+		if (pickedUp) {
+			position.lerp(pos, delta);
+		} else {
+			return;
+		}
+	}
+	
+	public void pickUp() {
+		pickedUp = true;
+	}
+	
+	public boolean isPickedUp() {
+		return pickedUp;
 	}
 
 	/** 

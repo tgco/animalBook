@@ -67,7 +67,7 @@ public class TutorialInventoryScreen extends ButtonScreenAdapter implements Scre
 
 		//Rendering
 		batch = new SpriteBatch();
-		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/inventoryBackground.jpg"));
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/tutorialInventoryBackground.jpg"));
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 

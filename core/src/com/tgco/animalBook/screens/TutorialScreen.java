@@ -84,6 +84,11 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	private int tutorialStage;
 
 	/**
+	 * overlays the instructions for the tutorial
+	 */
+	private Texture overlay;
+
+	/**
 	 * Constructor using the running game instance
 	 * 
 	 * @param gameInstance a reference to the currently running game instance
@@ -152,15 +157,16 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		//Draw world over background
 		tutorialWorld.render(batch,paused,delta);
 
+
+		//Select the correct waiting function and draw correct words
+		if (paused || tutorialStage == 5) {
+			waitForInput();
+		}
+
 		batch.end();
 
 		//Draw buttons over the screen
 		buttonStage.draw();
-
-		//Select the correct waiting function and draw correct words
-		if (paused) {
-			waitForInput();
-		}
 
 
 	}
@@ -349,7 +355,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else {
-			//draw text that says swipe
+			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage2.png"));
+			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			return;
 		}
 	}
@@ -362,7 +369,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else {
-			//draw text that says tap a goose
+			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage3.png"));
+			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			return;
 		}
 	}
@@ -376,8 +384,9 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else
-			//draw text that says tap an egg
-			tutorialWorld.spawnEgg();
+			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage4.png"));
+		batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		tutorialWorld.spawnEgg();
 		return;
 	}
 
@@ -389,6 +398,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else {
+			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage5.png"));
+			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			tutorialWorld.getPlayer().setHealth(50f);
 			if(tutorialWorld.getPlayer().getInventory().getInventory().get(DropType.EGG).size == 0) {
 				for (int i = 0; i < 5; i++) {
@@ -405,13 +416,16 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			paused = false;
 			//Continuously runs when player is told to herd into the market to end the tutorial
 			tutorialWorld.getPlayer().setHealth(100f);
+			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage7.png"));
+			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			return;
 		}
 		else {
 			if (tutorialWorld.getPlayer().getPlayerMoney() == 0) {
 				tutorialWorld.getPlayer().addPlayerMoney(1000);
 			}
-			//draw text that says go to upgrades screen to spend money
+			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage6.png"));
+			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			return;
 		}
 	}

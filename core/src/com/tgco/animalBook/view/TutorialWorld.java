@@ -19,7 +19,9 @@ import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Obstacle;
 import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.SoundHandler;
+import com.tgco.animalBook.screens.GameScreen;
 import com.tgco.animalBook.screens.MarketScreen;
+import com.tgco.animalBook.screens.TutorialScreen;
 
 public class TutorialWorld {
 
@@ -298,8 +300,11 @@ public class TutorialWorld {
 
 			//check if player reached market
 			if (player.getBounds().overlaps(market.getBounds())) {
-				SoundHandler.pauseBackgroundMusic();
-				gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
+				//SoundHandler.pauseBackgroundMusic();
+				//gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
+				//Change the screen when the button is let go
+				gameInstance.setDataPlay();
+				gameInstance.setScreen(new GameScreen(gameInstance));
 			}
 		}
 	}

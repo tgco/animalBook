@@ -85,7 +85,7 @@ public class TutorialUpgradesScreen extends ButtonScreenAdapter implements Scree
 		//Background rendering
 		batch = new SpriteBatch();
 		this.tutorialWorld = tutorialScreen.getWorld();
-		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/tutorialUpgradesScreenBackground.png"));
 
 		fruitfullMoney = (int) (100*(Math.pow(2,tutorialScreen.getWorld().getFruitfullMoneyP())));
 		LongerMoney = (int) (500*(Math.pow(2,tutorialScreen.getWorld().getLongerMoneyP())));

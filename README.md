@@ -9,7 +9,7 @@ Run eclipse and select Github directory for workbench.
 Go to Help>Install New Software...
 Then enter the following in the "Work with: " field:
 http://dist.springsource.com/release/TOOLS/gradle
-Install the software
+Install the Gradle IDE (under Extensions / Gradle Integration)
 
 Pull animalBook-Game from Github into Github directory. DO NOT pull "local.properties" file. You will get an error.
 Clone URL:

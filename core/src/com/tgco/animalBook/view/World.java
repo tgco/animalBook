@@ -344,7 +344,7 @@ public class World {
 		//Update Camera bounds
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
 		Vector3 buttonLoc = new Vector3(EDGE_TOLERANCE + BUTTON_WIDTH/2, 
-				 -1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
+				 1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
 		camera.unproject(buttonLoc);
 		Vector2 buttonLoc2 = new Vector2();
 
@@ -356,6 +356,11 @@ public class World {
 			//Remove uncollected drops
 			if((((Dropped) dropped).getTimeLeft() <= 0) && !((Dropped) dropped).isPickedUp()){
 				drawMap.get("Dropped").removeValue(dropped, true);
+				dropped.dispose();
+			}
+			if(((Dropped) dropped).getPosition() == buttonLoc2.cpy()) {
+				Gdx.app.log("Inventory: ", "Added a dropped");
+				removeFromABDrawable(dropped);
 				dropped.dispose();
 			}
 			

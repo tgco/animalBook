@@ -300,6 +300,11 @@ public class World {
 		}
 		drawMap.get("Dropped").removeValue(dropped, true);
 	}
+	
+	//FOR TESTING PURPOSES ONLY
+	public void addToInventory(ABDrawable dropped) {
+		player.getInventory().addItem((Consumable) ((Dropped) dropped).getDropped());
+	}
 
 	/**
 	 * Updates game logic and begins all drawing
@@ -347,9 +352,13 @@ public class World {
 				 1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
 		camera.unproject(buttonLoc);
 		Vector2 buttonLoc2 = new Vector2();
+		Rectangle buttonBounds = new Rectangle();
 
 		for (ABDrawable dropped : drawMap.get("Dropped")){
-			//gameInstance.getGameScreen().getWorld().getCamera().unproject(buttonLoc);
+			buttonBounds.x = buttonLoc.x;
+			buttonBounds.y = buttonLoc.y;
+			buttonBounds.width = BUTTON_WIDTH;
+			buttonBounds.height = BUTTON_HEIGHT;
 			buttonLoc2.x = buttonLoc.x;
 			buttonLoc2.y = buttonLoc.y;
 			((Dropped) dropped).droppedMove(buttonLoc2.cpy(), delta);
@@ -358,7 +367,9 @@ public class World {
 				drawMap.get("Dropped").removeValue(dropped, true);
 				dropped.dispose();
 			}
-			if(((Dropped) dropped).getPosition() == buttonLoc2.cpy()) {
+			//Gdx.app.log("Location: ", ((Dropped) dropped).getPosition().toString());
+			//Gdx.app.log("Button: ", buttonBounds.toString());
+			if(buttonBounds.overlaps(((Dropped) dropped).getBounds())) {
 				Gdx.app.log("Inventory: ", "Added a dropped");
 				removeFromABDrawable(dropped);
 				dropped.dispose();

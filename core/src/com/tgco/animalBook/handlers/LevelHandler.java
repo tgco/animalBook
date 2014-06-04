@@ -157,8 +157,7 @@ public class LevelHandler {
 	 */
 	public float returnLaneLength(int level) {
 
-		//return 1500 + 2000*(level - 1);
-		return 500;
+		return 1500 + 2000*(level - 1);
 	}
 	
 	/**

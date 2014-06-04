@@ -56,7 +56,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 	private GameScreen gameScreen;
 	
 	/**
-	 * Button for leaving the inventory scren
+	 * Button for leaving the inventory screen
 	 */
 	private Button leaveButton;
 	

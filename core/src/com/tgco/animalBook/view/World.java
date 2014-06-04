@@ -358,6 +358,11 @@ public class World {
 				drawMap.get("Dropped").removeValue(dropped, true);
 				dropped.dispose();
 			}
+			if(((Dropped) dropped).getPosition() == buttonLoc2.cpy()) {
+				Gdx.app.log("Inventory: ", "Added a dropped");
+				removeFromABDrawable(dropped);
+				dropped.dispose();
+			}
 			
 		}
 

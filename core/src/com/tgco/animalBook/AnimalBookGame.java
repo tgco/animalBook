@@ -135,6 +135,11 @@ public class AnimalBookGame extends Game {
 			prefs.putInteger("Fruitfulness", levelHandler.getFruitfullMoneyP());
 			prefs.putInteger("More", levelHandler.getMoreMoneyP());
 			prefs.putInteger("Longer", levelHandler.getLongerMoneyP());
+				
+			//app settings
+			prefs.putBoolean("music", SoundHandler.isMusicMuted());
+			prefs.putBoolean("sound", SoundHandler.isSoundMuted());
+			prefs.putBoolean("tutorial", levelHandler.isDoTutorial());
 			
 			prefs.flush();
 		}
@@ -231,6 +236,10 @@ public class AnimalBookGame extends Game {
 			levelHandler.setLongerMoneyP(prefs.getInteger("Longer"));
 			
 			
+			//app settings
+			SoundHandler.setMusicMuted(prefs.getBoolean("music"));
+			SoundHandler.setSoundMuted(prefs.getBoolean("sound"));
+			levelHandler.setDoTutorial(prefs.getBoolean("tutorial"));
 			
 	}
 	

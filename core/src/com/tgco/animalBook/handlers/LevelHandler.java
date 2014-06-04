@@ -50,6 +50,8 @@ public class LevelHandler {
 	private int LongerMoneyP	= 0;
 	
 	private int MoreMoneyP		= 0;
+	
+	private boolean doTutorial = true;
 
 	/**
 	 * Constructor that takes the level in order to initialize pass amounts
@@ -244,6 +246,14 @@ public class LevelHandler {
 
 	public void setMoreMoneyP(int more) {
 		MoreMoneyP = more;
+	}
+
+	public boolean isDoTutorial() {
+		return doTutorial;
+	}
+
+	public void setDoTutorial(boolean doTutorial) {
+		this.doTutorial = doTutorial;
 	}
 
 	

@@ -39,6 +39,19 @@ public class LevelHandler {
 	 * Number of animals the player will start with next level
 	 */
 	private int nextLevelStart;
+	
+	/**
+	 * Number of times each upgrade button has been pressed
+	 */
+	private int fruitfullMoneyP	= 0;
+	
+
+
+	private int LongerMoneyP	= 0;
+	
+	private int MoreMoneyP		= 0;
+	
+	private boolean doTutorial = true;
 
 	/**
 	 * Constructor that takes the level in order to initialize pass amounts
@@ -157,7 +170,7 @@ public class LevelHandler {
 	 */
 	public float returnLaneLength(int level) {
 
-		return 1500 + 2000*(level - 1);
+		return 1300 + 2000*(level - 1);
 	}
 	
 	/**
@@ -190,7 +203,58 @@ public class LevelHandler {
 	public int getLevel(){
 		return level;
 	}
+	
+	public int getFruitfullMoneyP() {
+		return fruitfullMoneyP;
+	}
+
+	public int getLongerMoneyP() {
+		return LongerMoneyP;
+	}
+
+	public int getMoreMoneyP() {
+		return MoreMoneyP;
+	}
+	
 	public void addLevel(){
 		level++;
 	}
+	
+	public void setNextLevelStart(int nextStart) {
+		nextLevelStart = nextStart;
+	}
+	
+	public void addFruitfullMoneyP() {
+		this.fruitfullMoneyP += 1;
+	}
+
+	public void addLongerMoneyP() {
+		LongerMoneyP += 1;
+	}
+
+	public void addMoreMoneyP() {
+		MoreMoneyP += 1;
+	}
+	
+	public void setFruitfullMoneyP(int fruitfull) {
+		this.fruitfullMoneyP = fruitfull;
+	}
+
+	public void setLongerMoneyP(int longer) {
+		LongerMoneyP = longer;
+	}
+
+	public void setMoreMoneyP(int more) {
+		MoreMoneyP = more;
+	}
+
+	public boolean isDoTutorial() {
+		return doTutorial;
+	}
+
+	public void setDoTutorial(boolean doTutorial) {
+		this.doTutorial = doTutorial;
+	}
+
+	
 }

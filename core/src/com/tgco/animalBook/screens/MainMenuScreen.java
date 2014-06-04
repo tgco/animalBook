@@ -168,8 +168,12 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				//Change the screen when the button is let go
 				gameInstance.setDataPlay();
-				//gameInstance.setScreen(new GameScreen(gameInstance));
-				gameInstance.setScreen(new TutorialScreen(gameInstance)); //FOR TESTING TUTORIAL
+				if(!gameInstance.getLevelHandler().isDoTutorial()){
+					gameInstance.setScreen(new TutorialScreen(gameInstance));
+				}else{
+					gameInstance.setScreen(new GameScreen(gameInstance));
+				}
+				//gameInstance.setScreen(new TutorialScreen(gameInstance)); //FOR TESTING TUTORIAL
 			}
 		});
 

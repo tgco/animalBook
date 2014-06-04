@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.screens.GameScreen;
@@ -47,6 +48,10 @@ public class GameScreenInputHandler implements InputProcessor {
 	 * The distance a movable must be within in order to be influenced by a drag
 	 */
 	private static final float HERD_TOLERANCE = 300f;
+	
+	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
+	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
+	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
 
 	/**
 	 * Constructor that takes the needed references
@@ -161,8 +166,13 @@ public class GameScreenInputHandler implements InputProcessor {
 				Vector2 vect2 = new Vector2(vect.x, vect.y);
 				if(dropping.getBounds().contains(vect2)){
 					SoundHandler.playPickup();
-					gameScreen.getWorld().removeFromABDrawable(dropping);
-					dropping.dispose();
+					if (dropping.getDropped() instanceof Animal) {
+						gameScreen.getWorld().removeFromABDrawable(dropping);
+						dropping.dispose();
+					} else {
+						gameScreen.getWorld().addToInventory(dropping);
+						dropping.pickUp();
+					}
 				}
 			}
 		}

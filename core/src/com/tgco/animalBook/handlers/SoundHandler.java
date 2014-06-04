@@ -219,4 +219,22 @@ public class SoundHandler {
 		whistle.dispose();
 		pickup.dispose();
 	}
+
+	public static boolean isSoundMuted() {
+		return soundMuted;
+	}
+
+	public static boolean isMusicMuted() {
+		return musicMuted;
+	}
+
+	public static void setSoundMuted(boolean soundMuted) {
+		SoundHandler.soundMuted = soundMuted;
+	}
+
+	public static void setMusicMuted(boolean musicMuted) {
+		SoundHandler.musicMuted = musicMuted;
+	}
+	
+	
 }

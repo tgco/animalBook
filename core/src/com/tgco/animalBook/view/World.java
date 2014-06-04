@@ -5,6 +5,8 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -19,7 +21,6 @@ import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Obstacle;
 import com.tgco.animalBook.gameObjects.Player;
-import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.MarketScreen;
 
@@ -67,10 +68,7 @@ public class World {
 	 */
 	private ArrayMap<String, Array<ABDrawable>> drawMap;
 
-	/**
-	 * Number of times each upgrade button has been pressed
-	 */
-	private int fruitfullMoneyP	= 0;
+
 
 	/**
 	 * Reference to the running game instance
@@ -84,17 +82,19 @@ public class World {
 
 
 
-	private int LongerMoneyP	= 0;
-
 	/**
 	 * Market located at end of the game level
 	 */
 	private Market market;
-	private int MoreMoneyP		= 0;
+	
 	/**
 	 * The main player
 	 */
 	private Player player;
+	
+	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
+	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
+	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
 
 	/**
 	 * Generates random numbers for probability
@@ -146,7 +146,11 @@ public class World {
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
-		increasedCameraSpeed = 2f*cameraSpeed;
+		if(gameInstance.getLevelHandler().getLevel()>1){
+			increasedCameraSpeed = 2f*cameraSpeed;
+		}else{
+			increasedCameraSpeed = 3f*cameraSpeed;
+		}
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
 			player.resetPlayerPosition();
@@ -192,18 +196,7 @@ public class World {
 		drawMap.get("Player").add(player);
 	}
 
-	public void addFruitfullMoneyP() {
-		this.fruitfullMoneyP += 1;
-	}
-
-	public void addLongerMoneyP() {
-		LongerMoneyP += 1;
-	}
-
-	public void addMoreMoneyP() {
-		MoreMoneyP += 1;
-	}
-
+	
 	/**
 	 * Adds a swipe line to the world so it will be rendered
 	 * 
@@ -264,17 +257,7 @@ public class World {
 		return droppings;
 	}
 
-	public int getFruitfullMoneyP() {
-		return fruitfullMoneyP;
-	}
-
-	public int getLongerMoneyP() {
-		return LongerMoneyP;
-	}
-
-	public int getMoreMoneyP() {
-		return MoreMoneyP;
-	}
+	
 
 	/**
 	 * Finds which drawables are movable, casts them to movable and returns them in an array
@@ -316,6 +299,11 @@ public class World {
 			player.getInventory().addItem((Consumable) ((Dropped) dropped).getDropped());
 		}
 		drawMap.get("Dropped").removeValue(dropped, true);
+	}
+	
+	//FOR TESTING PURPOSES ONLY
+	public void addToInventory(ABDrawable dropped) {
+		player.getInventory().addItem((Consumable) ((Dropped) dropped).getDropped());
 	}
 
 	/**
@@ -360,13 +348,33 @@ public class World {
 
 		//Update Camera bounds
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
+		Vector3 buttonLoc = new Vector3(EDGE_TOLERANCE + BUTTON_WIDTH/2, 
+				 1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
+		camera.unproject(buttonLoc);
+		Vector2 buttonLoc2 = new Vector2();
+		Rectangle buttonBounds = new Rectangle();
 
 		for (ABDrawable dropped : drawMap.get("Dropped")){
+			buttonBounds.x = buttonLoc.x;
+			buttonBounds.y = buttonLoc.y;
+			buttonBounds.width = BUTTON_WIDTH;
+			buttonBounds.height = BUTTON_HEIGHT;
+			buttonLoc2.x = buttonLoc.x;
+			buttonLoc2.y = buttonLoc.y;
+			((Dropped) dropped).droppedMove(buttonLoc2.cpy(), delta);
 			//Remove uncollected drops
-			if((((Dropped) dropped).getTimeLeft() <= 0)){
+			if((((Dropped) dropped).getTimeLeft() <= 0) && !((Dropped) dropped).isPickedUp()){
 				drawMap.get("Dropped").removeValue(dropped, true);
 				dropped.dispose();
 			}
+			//Gdx.app.log("Location: ", ((Dropped) dropped).getPosition().toString());
+			//Gdx.app.log("Button: ", buttonBounds.toString());
+			if(buttonBounds.overlaps(((Dropped) dropped).getBounds())) {
+				Gdx.app.log("Inventory: ", "Added a dropped");
+				removeFromABDrawable(dropped);
+				dropped.dispose();
+			}
+			
 		}
 
 		for (ABDrawable movable : drawMap.get("Movable")) {

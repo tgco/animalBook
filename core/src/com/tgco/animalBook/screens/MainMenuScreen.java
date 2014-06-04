@@ -145,7 +145,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		
 		//Test
 		//This button is just to test the story screen
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/button.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/continueButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 		style = new ButtonStyle();

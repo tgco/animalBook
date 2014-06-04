@@ -5,6 +5,8 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -19,7 +21,6 @@ import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Obstacle;
 import com.tgco.animalBook.gameObjects.Player;
-import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.MarketScreen;
 
@@ -342,22 +343,22 @@ public class World {
 
 		//Update Camera bounds
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
-		
 		Vector3 buttonLoc = new Vector3(EDGE_TOLERANCE + BUTTON_WIDTH/2, 
-				Gdx.graphics.getHeight() - 2*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
-		gameInstance.getGameScreen().getWorld().getCamera().unproject(buttonLoc);
+				 -1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
+		camera.unproject(buttonLoc);
 		Vector2 buttonLoc2 = new Vector2();
 
 		for (ABDrawable dropped : drawMap.get("Dropped")){
-			gameInstance.getGameScreen().getWorld().getCamera().unproject(buttonLoc);
+			//gameInstance.getGameScreen().getWorld().getCamera().unproject(buttonLoc);
 			buttonLoc2.x = buttonLoc.x;
 			buttonLoc2.y = buttonLoc.y;
+			((Dropped) dropped).droppedMove(buttonLoc2.cpy(), delta);
 			//Remove uncollected drops
 			if((((Dropped) dropped).getTimeLeft() <= 0) && !((Dropped) dropped).isPickedUp()){
 				drawMap.get("Dropped").removeValue(dropped, true);
 				dropped.dispose();
 			}
-			((Dropped) dropped).droppedMove(buttonLoc2, delta);
+			
 		}
 
 		for (ABDrawable movable : drawMap.get("Movable")) {

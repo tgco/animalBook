@@ -44,7 +44,7 @@ public class AnimalBookGame extends Game {
 	/**
 	 * The current level being played
 	 */
-	private static int level = 5;
+	private static int level = 1;
 	/**
 	 * Load all information that differs between levels
 	 */
@@ -142,6 +142,7 @@ public class AnimalBookGame extends Game {
 			prefs.putBoolean("tutorial", levelHandler.isDoTutorial());
 			
 			prefs.flush();
+			Gdx.app.log("My Tagg", "After flush of save");
 		}
 	}
 

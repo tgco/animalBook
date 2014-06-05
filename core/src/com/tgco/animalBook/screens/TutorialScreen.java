@@ -364,6 +364,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public void waitForTap(SpriteBatch batch) {
 		if (tapped) {
 			paused = false;
+			overlay.dispose();
 			if (tutorialStage == 2)
 				tutorialStage += 1;
 			return;
@@ -378,6 +379,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public void waitForPickup(SpriteBatch batch) {
 		if (pickedUp) {
 			paused = false;
+			overlay.dispose();
 			tutorialWorld.removeSpawnedEgg();
 			if (tutorialStage == 3)
 				tutorialStage += 1;
@@ -393,6 +395,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public void waitForEat(SpriteBatch batch) {
 		if (ate) {
 			paused = false;
+			overlay.dispose();
 			if (tutorialStage == 4)
 				tutorialStage += 1;
 			return;
@@ -414,6 +417,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public void waitForUpgrade(SpriteBatch batch) {
 		if (upgraded) {
 			paused = false;
+			overlay.dispose();
 			//Continuously runs when player is told to herd into the market to end the tutorial
 			tutorialWorld.getPlayer().setHealth(100f);
 			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage7.png"));

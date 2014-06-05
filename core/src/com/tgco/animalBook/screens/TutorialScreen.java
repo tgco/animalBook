@@ -345,7 +345,6 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				SoundHandler.pauseBackgroundMusic();
 				gameInstance.getLevelHandler().setDoTutorial(false);
 				gameInstance.setScreen(new GameScreen(gameInstance));
 				dispose();

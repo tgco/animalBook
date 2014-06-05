@@ -18,8 +18,8 @@ public class Obstacle extends ABDrawable {
 	public Obstacle() {
 		super(texturePath);
 		
-		width = .185f*Gdx.graphics.getWidth();
-		height = .294f*Gdx.graphics.getHeight();
+		width = 2/3*.185f*Gdx.graphics.getWidth();
+		height = 2/3*.294f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 }

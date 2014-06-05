@@ -110,7 +110,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer.addProcessor(touchControls);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		Gdx.input.setCatchBackKey(true);
-		
+
 		//Initial overlay
 		overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage1.png"));
 	}
@@ -161,7 +161,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		if (paused || tutorialStage == 5) {
 			waitForInput();
 		}
-		
+
 		//Initial message
 		if (tutorialStage == 0) {
 			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -200,8 +200,11 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			moved += AnimalBookGame.TARGET_FRAME_RATE*delta;
 
 		if ((moveDistance - moved) <= .5) {
-			if (tutorialStage == 0)
+			if (tutorialStage == 0) {
 				tutorialStage++;
+				overlay.dispose();
+				overlay = null;
+			}
 			paused = true;
 			moved = 0;
 		}
@@ -314,6 +317,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 					upgraded = true;
 					//spawn these for the return to game tutorial
 					tutorialWorld.spawnObstacleAndMarket();
+					overlay.dispose();
+					overlay = null;
 				}
 				gameInstance.setScreen(new TutorialUpgradesScreen(gameInstance,TutorialScreen.this));
 			}
@@ -362,13 +367,16 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public void waitForSwipe(SpriteBatch batch) {
 		if (swiped) {
 			paused = false;
+			overlay.dispose();
+			overlay = null;
 			if (tutorialStage == 1)
 				tutorialStage += 1;
 			return;
 		}
 		else {
-			overlay.dispose();
-			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage2.png"));
+			if (overlay == null) {
+				overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage2.png"));
+			}
 			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			return;
 		}
@@ -378,13 +386,15 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		if (tapped) {
 			paused = false;
 			overlay.dispose();
+			overlay = null;
 			if (tutorialStage == 2)
 				tutorialStage += 1;
 			return;
 		}
 		else {
-			overlay.dispose();
-			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage3.png"));
+			if (overlay == null) {
+				overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage3.png"));
+			}
 			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			return;
 		}
@@ -394,14 +404,16 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		if (pickedUp) {
 			paused = false;
 			overlay.dispose();
+			overlay = null;
 			tutorialWorld.removeSpawnedEgg();
 			if (tutorialStage == 3)
 				tutorialStage += 1;
 			return;
 		}
 		else {
-			overlay.dispose();
-			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage4.png"));
+			if (overlay == null) {
+				overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage4.png"));
+			}
 			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			tutorialWorld.spawnEgg();
 		}
@@ -412,13 +424,15 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		if (ate) {
 			paused = false;
 			overlay.dispose();
+			overlay = null;
 			if (tutorialStage == 4)
 				tutorialStage += 1;
 			return;
 		}
 		else {
-			overlay.dispose();
-			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage5.png"));
+			if (overlay == null) {
+				overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage5.png"));
+			}
 			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			tutorialWorld.getPlayer().setHealth(50f);
 			if(tutorialWorld.getPlayer().getInventory().getInventory().get(DropType.EGG).size == 0) {
@@ -434,10 +448,11 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public void waitForUpgrade(SpriteBatch batch) {
 		if (upgraded) {
 			paused = false;
-			overlay.dispose();
 			//Continuously runs when player is told to herd into the market to end the tutorial
 			tutorialWorld.getPlayer().setHealth(100f);
-			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage7.png"));
+			if (overlay == null) {
+				overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage7.png"));
+			}
 			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			return;
 		}
@@ -445,8 +460,9 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			if (tutorialWorld.getPlayer().getPlayerMoney() == 0) {
 				tutorialWorld.getPlayer().addPlayerMoney(1000);
 			}
-			overlay.dispose();
-			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage6.png"));
+			if (overlay == null) {
+				overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage6.png"));
+			}
 			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			return;
 		}

@@ -321,7 +321,7 @@ public class World {
 		}
 
 		//draw objects
-		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera);
+		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera,delta);
 	}
 
 	/**

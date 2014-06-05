@@ -37,7 +37,7 @@ public class WorldRenderer {
 	private static final float PROGRESS_BAR_HEIGHT = .31f*Gdx.graphics.getHeight();
 	private static final float PROGRESS_SLIDER_WIDTH = .019f*Gdx.graphics.getWidth();
 	private static final float PROGRESS_SLIDER_HEIGHT = .015f*Gdx.graphics.getHeight();
-	
+
 	/**
 	 * Textures for drawing primitive rectangles
 	 */
@@ -72,17 +72,18 @@ public class WorldRenderer {
 	 * @param player				the player to render
 	 * @param progressPercentage	the percentage of the game lane covered to render progress
 	 * @param cam					the camera used for converting screen and world coordinates
+	 * @param delta					the time between frames
 	 */
-	public void render(SpriteBatch batch, ArrayMap<String, Array<ABDrawable>> drawables, float playerHealth, float progressPercentage,OrthographicCamera cam) {
+	public void render(SpriteBatch batch, ArrayMap<String, Array<ABDrawable>> drawables, float playerHealth, float progressPercentage,OrthographicCamera cam,float delta) {
 		//Draw all objects
 		for (Array<ABDrawable> a : drawables.values()){
 			for (ABDrawable drawable : a) {
 				drawable.draw(batch);
 			}
 		}
-		
+
 		batch.end();
-		
+
 		SpriteBatch projectedBatch = new SpriteBatch();
 		projectedBatch.begin();
 		//Health bar
@@ -95,21 +96,20 @@ public class WorldRenderer {
 
 		projectedBatch.end();
 		projectedBatch.dispose();
-		
+
+
+		batch.begin();
 		//Swipes on screen
-		
 		for (Swipe swipe : swipes) {
-			if (swipe.getLifeTime() == 0) {
+			if (swipe.getLifeTime() <= 1f) {
 				swipes.removeValue(swipe, false);
 				swipe.dispose();
 			} else
-				swipe.draw(cam);
+				swipe.draw(batch,delta);
 		}
-		
-		batch.begin();
 
 	}
-	
+
 	/**
 	 * Renders all game objects to the screen without a progress bar
 	 * 
@@ -117,8 +117,9 @@ public class WorldRenderer {
 	 * @param drawables				the array of drawable objects to render
 	 * @param playerHealth			the player health to render
 	 * @param cam					the camera used for converting screen and world coordinates
+	 * @param delta					the time between frames
 	 */
-	public void render(SpriteBatch batch, ArrayMap<String, Array<ABDrawable>> drawables, float playerHealth, OrthographicCamera cam) {
+	public void render(SpriteBatch batch, ArrayMap<String, Array<ABDrawable>> drawables, float playerHealth, OrthographicCamera cam, float delta) {
 		//Draw all objects
 		for (Array<ABDrawable> a : drawables.values()){
 			for (ABDrawable drawable : a) {
@@ -127,10 +128,10 @@ public class WorldRenderer {
 		}
 
 		batch.end();
-		
+
 		SpriteBatch projectedBatch = new SpriteBatch();
 		projectedBatch.begin();
-		
+
 		//Health bar
 		projectedBatch.draw(black,Gdx.graphics.getWidth()/2 - .046f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .073f*Gdx.graphics.getHeight(), .093f*Gdx.graphics.getWidth(), .037f*Gdx.graphics.getHeight());
 		projectedBatch.draw(red,Gdx.graphics.getWidth()/2 - .0435f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .069f*Gdx.graphics.getHeight(), .087f*Gdx.graphics.getWidth()*(playerHealth/100), .028f*Gdx.graphics.getHeight());
@@ -138,16 +139,17 @@ public class WorldRenderer {
 		projectedBatch.end();
 		projectedBatch.dispose();
 
+
+
+		batch.begin();
 		//Swipes on screen
 		for (Swipe swipe : swipes) {
-			if (swipe.getLifeTime() == 0) {
+			if (swipe.getLifeTime() <= 1f) {
 				swipes.removeValue(swipe, false);
 				swipe.dispose();
 			} else
-				swipe.draw(cam);
+				swipe.draw(batch,delta);
 		}
-		
-		batch.begin();
 
 	}
 

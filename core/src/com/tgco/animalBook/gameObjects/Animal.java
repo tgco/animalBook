@@ -30,6 +30,9 @@ public abstract class Animal extends Movable {
 
 	/** a counter to reflect the amount of frames have gone by to determine when to move the animal */
 	private float changeTargetCount = 0f;
+	
+	/** a counter to reflect the amount of frames before an animal will drop an item */
+	private int dropCount = 0;
 
 	/** every animal has a different item that is dropped */
 	private DropType dropType;
@@ -60,6 +63,7 @@ public abstract class Animal extends Movable {
 		dropInterval = 400;
 		timeOnGround = 120;
 
+		dropCount = 0;
 
 		rand = new Random();
 	}
@@ -78,6 +82,7 @@ public abstract class Animal extends Movable {
 		}
 
 		changeTargetCount += AnimalBookGame.TARGET_FRAME_RATE*delta;
+		dropCount++;
 	}
 
 	private void changeTarget(){
@@ -94,8 +99,9 @@ public abstract class Animal extends Movable {
 	 * @return ABDrawable which is either an animal or consumable to the Dropped class
 	 */
 	public ABDrawable drop() {
-
-		if(changeTargetCount % dropInterval ==0){
+		
+		
+		if(dropCount  % dropInterval == 0){
 			if(rand.nextInt(100) < fertilityRate){
 				if (this.getClass().equals(Goose.class)) 
 					return new Dropped(new Goose(this.position.cpy()),this.position.cpy(), timeOnGround);

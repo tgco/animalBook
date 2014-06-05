@@ -212,7 +212,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		playButton = new Button(playButtonStyle);
 		playButton.setWidth(BUTTON_WIDTH);
 		playButton.setHeight(BUTTON_HEIGHT);
-		playButton.setX(EDGE_TOLERANCE);
+		playButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
 		playButton.setY(EDGE_TOLERANCE);
 
 		//CURRENT LEVEL ANIMAL BUTTON

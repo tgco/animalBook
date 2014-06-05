@@ -296,7 +296,6 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 					gameInstance.addToLevel(1);
 					
 					// spot 1 is current level
-					gameInstance.getLevelHandler().resetStoredAmount();
 					gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
 					
 					//spot 2 is player		
@@ -330,7 +329,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);		
 				
-				//gameInstance.getLevelHandler().resetStoredAmount();
+				gameInstance.getLevelHandler().resetStoredAmount();
 				
 				gameScreen.resetInputProcessors();
 				gameScreen.dispose();

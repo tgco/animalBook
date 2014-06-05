@@ -75,7 +75,6 @@ public class GameScreenInputHandler implements InputProcessor {
 	public boolean keyDown(int keycode) {
 		if(keycode == Keys.BACK){
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));
-
 			//store the data in levelData of Game
 
 			// spot 1 is current level

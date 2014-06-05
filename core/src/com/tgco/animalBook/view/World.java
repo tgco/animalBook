@@ -86,12 +86,12 @@ public class World {
 	 * Market located at end of the game level
 	 */
 	private Market market;
-	
+
 	/**
 	 * The main player
 	 */
 	private Player player;
-	
+
 	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
@@ -151,7 +151,7 @@ public class World {
 		}
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
-			player.resetPlayerPosition();
+				player.resetPlayerPosition();
 		}else{
 			player = new Player(cameraSpeed);
 		}
@@ -159,8 +159,8 @@ public class World {
 
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
-		
-		
+
+
 		market = new Market();
 		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength + player.getHeight()));
 		drawMap.put("Market", new Array<ABDrawable>());
@@ -193,14 +193,14 @@ public class World {
 			}
 			drawMap.put("Obstacle", obstacles);
 		}
-		
-		
+
+
 		//Add player to drawmap
 		drawMap.put("Player", new Array<ABDrawable>());
 		drawMap.get("Player").add(player);
 	}
 
-	
+
 	/**
 	 * Adds a swipe line to the world so it will be rendered
 	 * 
@@ -261,7 +261,7 @@ public class World {
 		return droppings;
 	}
 
-	
+
 
 	/**
 	 * Finds which drawables are movable, casts them to movable and returns them in an array
@@ -348,7 +348,7 @@ public class World {
 		//Update Camera bounds
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
 		Vector3 buttonLoc = new Vector3(EDGE_TOLERANCE + BUTTON_WIDTH/2, 
-				 1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
+				1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
 		camera.unproject(buttonLoc);
 		Vector2 buttonLoc2 = new Vector2();
 		Rectangle buttonBounds = new Rectangle();
@@ -372,7 +372,7 @@ public class World {
 				removeFromABDrawable(dropped);
 				dropped.dispose();
 			}
-			
+
 		}
 
 		for (ABDrawable movable : drawMap.get("Movable")) {
@@ -427,7 +427,7 @@ public class World {
 			((Animal)movable).resetTexture();
 		}
 	}
-	
+
 	public void reinitTextureDropped(){
 		for (ABDrawable dropped : drawMap.get("Dropped")) {
 			((Dropped)dropped).resetTexture();

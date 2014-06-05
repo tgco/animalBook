@@ -310,7 +310,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 					gameScreen.resetInputProcessors();
 					gameScreen.dispose();
 					gameInstance.setScreen(new GameScreen(gameInstance));
-					
+					dispose();
 					
 				}
 			}

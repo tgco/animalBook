@@ -51,6 +51,9 @@ public class LevelHandler {
 	
 	private int MoreMoneyP		= 0;
 	
+	/**
+	 * Boolean to determine if the tutorial should be played
+	 */
 	private boolean doTutorial = true;
 
 	/**

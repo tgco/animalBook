@@ -27,13 +27,9 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 	private TutorialScreen tutorialGameScreen;
 
 	//buttons
-	private Button nextLevelButton;
 	private Button levelAnimalButton;
 	private Button nextLevelAnimalButton;
-	private Button retryButton;
-
-	private static final double REGION_HEIGHT = BUTTON_HEIGHT*3.76f;
-	private static final double REGION_WIDTH = BUTTON_WIDTH*3.76f;
+	private Button playButton;
 
 	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
 	private BitmapFont font;
@@ -57,7 +53,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 
 		//Background rendering
 		batch = new SpriteBatch();
-		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/tutorialMarketScreenBackground.png"));
 
 		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
 
@@ -111,7 +107,6 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		for (int i = 0; i < numConsumables; i ++){
 			updateMarketScreenItems(i);
 		}
-		reinitButtons();
 
 	}
 
@@ -134,14 +129,6 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		initializeButtons();
 	}
 
-	private void reinitButtons() {
-		if(gameInstance.getLevelHandler().getNextLevelStart() < gameInstance.getLevelHandler().getPassLevelAmount()){
-			nextLevelButton.setDisabled(true);
-		}
-		else{
-			nextLevelButton.setDisabled(false);
-		}
-	}
 
 	private void initializeMarketInterface() {
 		for (int i = 0; i < Consumable.DropType.values().length; i++){
@@ -213,42 +200,20 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 	@Override
 	protected void initializeButtons() {
 
-		//NEXT LEVEL BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/nextLevelButton.atlas"));
+		//PLAY BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/tutorialScreen/playButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
-		ButtonStyle nextLevelButtonStyle = new ButtonStyle();
-		nextLevelButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		nextLevelButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		ButtonStyle playButtonStyle = new ButtonStyle();
+		playButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		playButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
-		TextureRegion trNextLevelButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/marketScreen/nextLevelButtonDis.png")));
-
-		trNextLevelButton.setRegionHeight((int) (REGION_HEIGHT));
-		trNextLevelButton.setRegionWidth((int) (REGION_WIDTH));
-
-		nextLevelButtonStyle.disabled = new TextureRegionDrawable(trNextLevelButton);
-
-		nextLevelButton = new Button(nextLevelButtonStyle);
-		nextLevelButton.setWidth(BUTTON_WIDTH);
-		nextLevelButton.setHeight(BUTTON_HEIGHT);
-		nextLevelButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
-		nextLevelButton.setY(EDGE_TOLERANCE);
-
-		//RETRY PREVIOUS LEVEL BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/retryButton.atlas"));
-		buttonSkin = new Skin();
-		buttonSkin.addRegions(atlas);
-
-		ButtonStyle retryButtonStyle = new ButtonStyle();
-		retryButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		retryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-
-		retryButton = new Button(retryButtonStyle);
-		retryButton.setWidth(BUTTON_WIDTH);
-		retryButton.setHeight(BUTTON_HEIGHT);
-		retryButton.setX(EDGE_TOLERANCE);
-		retryButton.setY(EDGE_TOLERANCE);
+		playButton = new Button(playButtonStyle);
+		playButton.setWidth(BUTTON_WIDTH);
+		playButton.setHeight(BUTTON_HEIGHT);
+		playButton.setX(EDGE_TOLERANCE);
+		playButton.setY(EDGE_TOLERANCE);
 
 		//CURRENT LEVEL ANIMAL BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("objectTextures/gooseButton.atlas"));
@@ -280,43 +245,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		nextLevelAnimalButton.setX(Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2);
 		nextLevelAnimalButton.setY(Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
-		//LISTENERS
-		nextLevelButton.addListener(new InputListener() {
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
-
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				if(!nextLevelButton.isDisabled()) {
-					SoundHandler.playButtonClick();
-					SoundHandler.pauseMarketBackgroundMusic();
-					SoundHandler.playBackgroundMusic(true);
-					
-					gameInstance.addToLevel(1);
-					
-					// spot 1 is current level
-					gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
-					
-					//spot 2 is player money			
-					gameInstance.addToDatalevel(tutorialGameScreen.getWorld().getPlayer(),1);
-					
-					//spot 3 is storing movable array
-					gameInstance.addToDatalevel(null,2);
-					
-					//spot 4 is storing dropped items array
-					gameInstance.addToDatalevel(null, 3);
-					
-					
-					tutorialGameScreen.resetInputProcessors();
-					tutorialGameScreen.dispose();
-					gameInstance.setScreen(new GameScreen(gameInstance));
-					
-					
-				}
-			}
-		});
-
-		retryButton.addListener(new InputListener() {
+		playButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
@@ -324,11 +253,11 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseMarketBackgroundMusic();
-				SoundHandler.playBackgroundMusic(true);			
-				tutorialGameScreen.resetInputProcessors();
+				SoundHandler.playBackgroundMusic(true);	
+				gameInstance.getLevelHandler().setDoTutorial(false);
 				tutorialGameScreen.dispose();
 				gameInstance.setScreen(new GameScreen(gameInstance));
-
+				dispose();
 			}
 		});
 
@@ -348,12 +277,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 			}
 		});
 
-		if(gameInstance.getLevelHandler().getNextLevelStart() <gameInstance.getLevelHandler().getPassLevelAmount()){
-			nextLevelButton.setDisabled(true);
-		}
-
-		buttonStage.addActor(nextLevelButton);
-		buttonStage.addActor(retryButton);
+		buttonStage.addActor(playButton);
 		buttonStage.addActor(levelAnimalButton);
 		buttonStage.addActor(nextLevelAnimalButton);
 

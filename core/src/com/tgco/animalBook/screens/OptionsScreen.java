@@ -93,8 +93,14 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		buttonSkin.addRegions(atlas);
 		
 		ButtonStyle soundButtonStyle = new ButtonStyle();
-		soundButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		soundButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		
+		if (SoundHandler.isSoundMuted()) {
+			soundButtonStyle.up = buttonSkin.getDrawable("muted");
+			soundButtonStyle.checked = buttonSkin.getDrawable("unmuted");
+		} else {
+			soundButtonStyle.up = buttonSkin.getDrawable("unmuted");
+			soundButtonStyle.checked = buttonSkin.getDrawable("muted");
+		}
 		
 		soundButton = new Button(soundButtonStyle);
 		soundButton.setWidth(BUTTON_WIDTH);
@@ -108,8 +114,14 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		buttonSkin.addRegions(atlas);
 		
 		ButtonStyle musicButtonStyle = new ButtonStyle();
-		musicButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		musicButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		
+		if (SoundHandler.isMusicMuted()) {
+			musicButtonStyle.up = buttonSkin.getDrawable("muted");
+			musicButtonStyle.checked = buttonSkin.getDrawable("unmuted");
+		} else {
+			musicButtonStyle.up = buttonSkin.getDrawable("unmuted");
+			musicButtonStyle.checked = buttonSkin.getDrawable("muted");
+		}
 		
 		musicButton = new Button(musicButtonStyle);
 		musicButton.setWidth(BUTTON_WIDTH);
@@ -159,8 +171,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		resetButton = new Button(resetButtonStyle);
 		resetButton.setWidth(BUTTON_WIDTH);
 		resetButton.setHeight(BUTTON_HEIGHT);
-		resetButton.setX(Gdx.graphics.getWidth()/2);
-		resetButton.setY(Gdx.graphics.getHeight()/2);
+		resetButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
+		resetButton.setY(Gdx.graphics.getHeight()/2 - BUTTON_HEIGHT/2);
 		
 		//LISTENERS
 		soundButton.addListener(new InputListener() {

@@ -29,7 +29,7 @@ public abstract class Animal extends Movable {
 	private double timeOnGround;
 	
 	/** a counter to reflect the amount of frames have gone by to determine when to move the animal */
-	private int changeTargetCount = 0;
+	private float changeTargetCount = 0f;
 	
 	/** every animal has a different item that is dropped */
 	private DropType dropType;
@@ -65,19 +65,18 @@ public abstract class Animal extends Movable {
 	}
 	
 	/**
-	 * draw is done every frame. It draws and then decides if it should move with a 75%  chance after 5/6 of a second
+	 * Overridden to allow animal to possibly choose a new target
 	 */
 	@Override
-	public void draw(SpriteBatch batch) {
-		super.draw(batch);
+	public void move(float cameraSpeed, float delta) {
+		super.move(cameraSpeed, delta);
 		
-		
-		if(changeTargetCount % 50 == 0 && rand.nextInt(100) < 75){
+		if(changeTargetCount % 25 < 0.5 && rand.nextInt(100) < 75){
 
 			changeTarget();	
 		}
 		
-		changeTargetCount++;
+		changeTargetCount += AnimalBookGame.TARGET_FRAME_RATE*delta;
 	}
 	
 	private void changeTarget(){

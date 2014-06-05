@@ -240,6 +240,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		eatButton.setHeight(BUTTON_HEIGHT);
 		eatButton.setX(EDGE_TOLERANCE);
 		eatButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT);
+		eatButton.setColor(Color.CLEAR);
 
 		//PAUSE BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/pauseButton.atlas"));

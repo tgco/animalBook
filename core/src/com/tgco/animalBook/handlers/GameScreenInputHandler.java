@@ -141,19 +141,6 @@ public class GameScreenInputHandler implements InputProcessor {
 	 */
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if (gameScreen.inMenu()){
-			boolean keepMenu = false;
-			for (Actor a : gameScreen.getScreenActors()){
-				if (screenX > a.getX() 
-						&& screenX < a.getX() + a.getWidth()
-						&& screenY > a.getY()
-						&& screenY < a.getY() + a.getHeight() 
-						&& a != gameScreen.getAlexButton()){
-					keepMenu = true;
-				}
-			}
-			gameScreen.handleMenu(keepMenu);
-		}
 		Vector3 touch = new Vector3(screenX,screenY,0);
 		//unproject touch to world coordinates
 		gameScreen.getWorld().getCamera().unproject(touch);
@@ -162,7 +149,7 @@ public class GameScreenInputHandler implements InputProcessor {
 		if (lastTouch != null) {
 			if ( touch.cpy().sub(lastTouch.cpy()).len() > touchToDragTolerance ) {
 				//Drag gesture is detected, create an influence barrier between touch and last touch
-				if (!gameScreen.inMenu()) {
+				if (!gameScreen.isPaused()) {
 					gameScreen.getWorld().addSwipeToWorld(lastTouch, touch);
 					SoundHandler.playWhistle();
 					herdWithDrag(lastTouch, touch, gameScreen.getWorld().getMovables());
@@ -173,7 +160,7 @@ public class GameScreenInputHandler implements InputProcessor {
 		//Remove dropped items that were touched
 		for (int i = 0; i < gameScreen.getWorld().getDropped().size ; i++){
 			Dropped dropping = 	gameScreen.getWorld().getDropped().get(i);
-			if (!gameScreen.inMenu()){
+			if (!gameScreen.isPaused()){
 				Vector3 vect = new Vector3(screenX,screenY,0);
 				//unproject operations
 				gameScreen.getWorld().getCamera().unproject(vect);

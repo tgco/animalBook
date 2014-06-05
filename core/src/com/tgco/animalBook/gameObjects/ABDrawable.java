@@ -16,6 +16,7 @@ public abstract class ABDrawable {
 	
 	/** texture is the picture of each item */
 	protected Texture texture;
+	protected String texturePath;
 	
 	/** width and height need to be float for batch.draw()  */
 	protected float width, height;
@@ -31,6 +32,7 @@ public abstract class ABDrawable {
 	 */
 	public ABDrawable(String texturePath) {
 		this.texture = new Texture(Gdx.files.internal(texturePath));
+		this.texturePath = texturePath;
 		position = new Vector2();
 		width = .093f*Gdx.graphics.getWidth();
 		height = .147f*Gdx.graphics.getHeight();
@@ -117,6 +119,11 @@ public abstract class ABDrawable {
 	public float getWidth() {
 		return width;
 	}
+	
+	public String getTexturePath() {
+		return texturePath;
+	}
+	
 	public void resetTexture(String texturePath) {
 		this.texture = new Texture(Gdx.files.internal(texturePath));	
 	}

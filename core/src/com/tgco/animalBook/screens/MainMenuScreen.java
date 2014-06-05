@@ -24,27 +24,27 @@ import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
 public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
-	
+
 	/**
 	 * buttons for the user to click on 
 	 */
 	private Button playButton;
 	private Button optionsButton;
 	private Button continueButton;
-	
+
 	private static final double REGION_HEIGHT = BUTTON_HEIGHT*1.25f;
 	private static final double REGION_WIDTH = BUTTON_WIDTH*3.1f;
 
 	public MainMenuScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
-		
+
 		//Background rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/mainback.png"));
-		
+
 		//libgdx should not catch the back key, the device should catch the back button
 		Gdx.input.setCatchBackKey(false);
-		
+
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
@@ -59,12 +59,12 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		//clear screen
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
 		//render background
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.end();
-				
+
 		//process button input
 		buttonStage.act(delta);
 
@@ -118,7 +118,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	protected void initializeButtons() {
-		
+
 		//create style for play button
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/button.atlas"));
 		buttonSkin = new Skin();
@@ -141,13 +141,13 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		style = new ButtonStyle();
 		style.up = buttonSkin.getDrawable("buttonUnpressed");
 		style.down = buttonSkin.getDrawable("buttonPressed");
-		
+
 		optionsButton = new Button(style);
 		optionsButton.setWidth(MENU_BUTTON_WIDTH);
 		optionsButton.setHeight(MENU_BUTTON_HEIGHT);
 		optionsButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
 		optionsButton.setY( EDGE_TOLERANCE);
-		
+
 		//This button is just to test the story screen
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/continueButton.atlas"));
 		buttonSkin = new Skin();
@@ -180,12 +180,11 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				//Change the screen when the button is let go
 				gameInstance.setDataPlay();
-				if(gameInstance.getLevelHandler().isDoTutorial()){
+				if(!gameInstance.getLevelHandler().isDoTutorial()){
 					gameInstance.setScreen(new TutorialScreen(gameInstance));
 				}else{
 					gameInstance.setScreen(new GameScreen(gameInstance));
 				}
-				//gameInstance.setScreen(new TutorialScreen(gameInstance)); //FOR TESTING TUTORIAL
 			}
 		});
 
@@ -202,7 +201,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 				dispose();
 			}
 		});
-		
+
 		continueButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -210,10 +209,10 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!continueButton.isDisabled()){
-				SoundHandler.playButtonClick();
-				//Change the screen when the button is let go
-				gameInstance.setDataCont();
-				gameInstance.setScreen(new GameScreen(gameInstance));
+					SoundHandler.playButtonClick();
+					//Change the screen when the button is let go
+					gameInstance.setDataCont();
+					gameInstance.setScreen(new GameScreen(gameInstance));
 				}
 			}
 		});
@@ -222,7 +221,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.addActor(playButton);
 		buttonStage.addActor(optionsButton);
 		buttonStage.addActor(continueButton);
-		
+
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 

@@ -180,7 +180,7 @@ public class World {
 		Array<ABDrawable> obstacles = new Array<ABDrawable>();
 		Obstacle o;
 		for (float i = 700f; i < laneLength; i += 10f){
-			if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) + 1 > 1){
+			if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) > 0 && rand.nextInt(1) == 0){
 				o = new Obstacle();
 				o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
 				System.out.println("new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i );
@@ -190,7 +190,6 @@ public class World {
 			}
 		}
 		drawMap.put("Obstacle", obstacles);
-
 		//Add player to drawmap
 		drawMap.put("Player", new Array<ABDrawable>());
 		drawMap.get("Player").add(player);
@@ -300,11 +299,6 @@ public class World {
 		}
 		drawMap.get("Dropped").removeValue(dropped, true);
 	}
-	
-	//FOR TESTING PURPOSES ONLY
-	public void addToInventory(ABDrawable dropped) {
-		player.getInventory().addItem((Consumable) ((Dropped) dropped).getDropped());
-	}
 
 	/**
 	 * Updates game logic and begins all drawing
@@ -355,10 +349,10 @@ public class World {
 		Rectangle buttonBounds = new Rectangle();
 
 		for (ABDrawable dropped : drawMap.get("Dropped")){
-			buttonBounds.x = buttonLoc.x;
-			buttonBounds.y = buttonLoc.y;
-			buttonBounds.width = BUTTON_WIDTH;
-			buttonBounds.height = BUTTON_HEIGHT;
+			buttonBounds.setX(buttonLoc.x - BUTTON_WIDTH/2);
+			buttonBounds.setY(buttonLoc.y - BUTTON_HEIGHT);
+			buttonBounds.setWidth(BUTTON_WIDTH);
+			buttonBounds.setHeight(BUTTON_HEIGHT);
 			buttonLoc2.x = buttonLoc.x;
 			buttonLoc2.y = buttonLoc.y;
 			((Dropped) dropped).droppedMove(buttonLoc2.cpy(), delta);
@@ -367,9 +361,9 @@ public class World {
 				drawMap.get("Dropped").removeValue(dropped, true);
 				dropped.dispose();
 			}
-			//Gdx.app.log("Location: ", ((Dropped) dropped).getPosition().toString());
-			//Gdx.app.log("Button: ", buttonBounds.toString());
-			if(buttonBounds.overlaps(((Dropped) dropped).getBounds())) {
+			Gdx.app.log("Location: ", ((Dropped) dropped).getPosition().toString());
+			Gdx.app.log("Button: ", buttonBounds.toString());
+			if(buttonBounds.contains(((Dropped) dropped).getPosition())) {
 				Gdx.app.log("Inventory: ", "Added a dropped");
 				removeFromABDrawable(dropped);
 				dropped.dispose();
@@ -381,7 +375,7 @@ public class World {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
 			//Drop new items
-			if(rand.nextInt(100) <= 50){
+			if(rand.nextInt(100) <= 50 && drawMap.get("Movable").size <= 30){
 				ABDrawable dropping =  ((Animal)movable).drop();
 				if(dropping != null){
 					drawMap.get("Dropped").add(dropping);

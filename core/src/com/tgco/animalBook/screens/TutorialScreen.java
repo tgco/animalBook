@@ -47,11 +47,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	private Button inventoryButton;
 	private Button upgradeButton;
-
-	/**
-	 * Reference to the upgrades screen to pass along values about the game world
-	 */
-	private UpgradesScreen upgradeScreen;
+	private Button skipButton;
 
 	/**
 	 * The font used when rendering strings
@@ -263,7 +259,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		upgradeButton.setWidth(BUTTON_WIDTH);
 		upgradeButton.setHeight(BUTTON_HEIGHT);
 		upgradeButton.setX(EDGE_TOLERANCE);
-		upgradeButton.setY(Gdx.graphics.getHeight() - 3*BUTTON_HEIGHT - 2*EDGE_TOLERANCE);
+		upgradeButton.setY(Gdx.graphics.getHeight() - 3*BUTTON_HEIGHT - 3*EDGE_TOLERANCE);
 
 		//INVENTORY BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/inventoryButton.atlas"));
@@ -278,31 +274,22 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		inventoryButton.setWidth(BUTTON_WIDTH);
 		inventoryButton.setHeight(BUTTON_HEIGHT);
 		inventoryButton.setX(EDGE_TOLERANCE);
-		inventoryButton.setY(Gdx.graphics.getHeight() - 2*BUTTON_HEIGHT - EDGE_TOLERANCE);
+		inventoryButton.setY(Gdx.graphics.getHeight() - 2*BUTTON_HEIGHT - 2*EDGE_TOLERANCE);
 
-		//EAT BUTTON
-		//TEMP FOR TESTING
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/eatButton.atlas"));
+		//SKIP BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/tutorialScreen/buttonSkip.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
-		ButtonStyle eatButtonStyle = new ButtonStyle();
-		eatButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		eatButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-
-		//PAUSE BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/pauseButton.atlas"));
-		buttonSkin = new Skin();
-		buttonSkin.addRegions(atlas);
-
-		ButtonStyle pauseButtonStyle = new ButtonStyle();
-		if (!paused) {
-			pauseButtonStyle.up = buttonSkin.getDrawable("pauseButton");
-			pauseButtonStyle.checked = buttonSkin.getDrawable("playButton");
-		} else {
-			pauseButtonStyle.up = buttonSkin.getDrawable("playButton");
-			pauseButtonStyle.checked = buttonSkin.getDrawable("pauseButton");
-		}
+		ButtonStyle skipButtonStyle = new ButtonStyle();
+		skipButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		skipButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		
+		skipButton = new Button(skipButtonStyle);
+		skipButton.setWidth(BUTTON_WIDTH);
+		skipButton.setHeight(BUTTON_HEIGHT);
+		skipButton.setX(EDGE_TOLERANCE);
+		skipButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//LISTENERS
 		upgradeButton.addListener(new InputListener() {
@@ -335,11 +322,25 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 					ate = true;
 			}
 		});
+		
+		skipButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				SoundHandler.pauseBackgroundMusic();
+				gameInstance.setScreen(new GameScreen(gameInstance));
+				dispose();
+			}
+		});
 
 
 		//add to stage for input detection
 		buttonStage.addActor(inventoryButton);
 		buttonStage.addActor(upgradeButton);
+		buttonStage.addActor(skipButton);
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}

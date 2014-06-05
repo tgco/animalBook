@@ -55,7 +55,7 @@ public class LevelHandler {
 	/**
 	 * Boolean to determine if the tutorial should be played
 	 */
-	private boolean doTutorial = true;
+	private static boolean doTutorial = true;
 
 	/**
 	 * Constructor that takes the level in order to initialize pass amounts

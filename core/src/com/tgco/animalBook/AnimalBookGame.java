@@ -191,6 +191,7 @@ public class AnimalBookGame extends Game {
 
 	public void addToLevel(int i) {
 		levelHandler.addLevel();
+		levelHandler.resetStoredAmount();
 	}
 	
 	public static int getLevel() {

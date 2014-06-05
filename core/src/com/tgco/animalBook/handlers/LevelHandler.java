@@ -174,6 +174,7 @@ public class LevelHandler {
 	 */
 	public float returnLaneLength(int level) {
 		
+		//return 500;
 		return 1300 + 2000*(level - 1);
 	}
 	
@@ -196,12 +197,20 @@ public class LevelHandler {
 		return storedAmount;
 	}
 	
+	public void resetStoredAmount(){
+		storedAmount = 0;
+	}
+	
 	public int getPassLevelAmount() {
 		return passLevelAmount;
 	}
 	
 	public int getNextLevelStart() {
 		return nextLevelStart;
+	}
+	
+	public void resetNextLevelStart() {
+		nextLevelStart = 0;
 	}
 	
 	public FileHandle currentLevelTexture() {
@@ -254,6 +263,23 @@ public class LevelHandler {
 	
 	public void addLevel(){
 		level++;
+		switch(level) {
+		case 1:
+			passLevelAmount = 5;
+			break;
+		case 2:
+			passLevelAmount = 10;
+			break;
+		case 3:
+			passLevelAmount = 15;
+			break;
+		case 4:
+			passLevelAmount = 20;
+			break;
+		case 5:
+			passLevelAmount = 25;
+			break;
+		}
 	}
 	
 	public void setNextLevelStart(int nextStart) {

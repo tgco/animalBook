@@ -27,8 +27,6 @@ public class AnimalBookGame extends Game {
 	/** debug variables */
 	public static final Boolean debugMode = true;
 	private FPSLogger fpsLogger;
-	//Testing new control system (taps)
-	public static final boolean tapControls = true;
 	
 	
 	private static Array<Object> levelData = new Array<Object>(4);

@@ -28,7 +28,7 @@ public class GameScreenInputHandler implements InputProcessor {
 	 * Reference to the game instance in order to change the current screen
 	 */
 	private AnimalBookGame gameInstance;
-	
+
 	/**
 	 * Reference to the game screen in order to operate on game objects
 	 */
@@ -48,7 +48,7 @@ public class GameScreenInputHandler implements InputProcessor {
 	 * The distance a movable must be within in order to be influenced by a drag
 	 */
 	private static final float HERD_TOLERANCE = 300f;
-	
+
 	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
@@ -74,18 +74,18 @@ public class GameScreenInputHandler implements InputProcessor {
 	public boolean keyDown(int keycode) {
 		if(keycode == Keys.BACK){
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));
-			
+
 			//store the data in levelData of Game
-			
+
 			// spot 1 is current level
 			gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
-			
+
 			//spot 2 is player			
 			gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
-			
+
 			//spot 3 is storing movable array
 			gameInstance.addToDatalevel(gameScreen.getWorld().getMovables(),2);
-			
+
 			//spot 4 is storing dropped items array
 			gameInstance.addToDatalevel(gameScreen.getWorld().getDropped(), 3);
 
@@ -110,23 +110,23 @@ public class GameScreenInputHandler implements InputProcessor {
 			//unproject to world coordinates
 			gameScreen.getWorld().getCamera().unproject(lastTouch);
 
-			if (AnimalBookGame.tapControls) {
-				//Influence geese to the camera center if touched
-				Vector3 camCenter = new Vector3(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
-				gameScreen.getWorld().getCamera().unproject(camCenter);
-				Vector2 camCenter2d = new Vector2(camCenter.x,camCenter.y);
-				
-				for(Movable movable : gameScreen.getWorld().getMovables()) {
-					if (movable.getBounds().contains(new Vector2(lastTouch.x,lastTouch.y))) {
-						float reactionScale = 200;
-						//SoundHandler.playWhistle();
-						movable.addToCurrentTarget(camCenter2d.cpy().sub(movable.getPosition()).nor().scl(reactionScale));
-					}
+
+			//Influence geese to the camera center if touched
+			Vector3 camCenter = new Vector3(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
+			gameScreen.getWorld().getCamera().unproject(camCenter);
+			Vector2 camCenter2d = new Vector2(camCenter.x,camCenter.y);
+
+			for(Movable movable : gameScreen.getWorld().getMovables()) {
+				if (movable.getBounds().contains(new Vector2(lastTouch.x,lastTouch.y))) {
+					float reactionScale = 200;
+					//SoundHandler.playWhistle();
+					movable.addToCurrentTarget(camCenter2d.cpy().sub(movable.getPosition()).nor().scl(reactionScale));
 				}
 			}
 
+
 		}
-		
+
 		return false;
 	}
 
@@ -175,7 +175,7 @@ public class GameScreenInputHandler implements InputProcessor {
 				}
 			}
 		}
-		
+
 		//Rest the lastTouch so touchDown will grab a new touch next time
 		lastTouch = null;
 		//False so other methods can interact with the touch still (buttons)
@@ -205,7 +205,7 @@ public class GameScreenInputHandler implements InputProcessor {
 			positionCenter = movable.getPosition();
 			//find perpendicular projection of the position minus center onto unit vector
 			perpProjection = (positionCenter.cpy().sub(dragCenter)).cpy().sub(dragUnitVector.cpy().scl((positionCenter.cpy().sub(dragCenter)).cpy().dot(dragUnitVector.cpy())));
-			
+
 			if (perpProjection.cpy().len() != 0) {
 				if (positionCenter.cpy().sub(dragCenter).len() < HERD_TOLERANCE){
 
@@ -213,7 +213,7 @@ public class GameScreenInputHandler implements InputProcessor {
 					float reactionScale = 70000 * 1/positionCenter.cpy().sub(dragCenter).len();
 
 					movable.addToCurrentTarget(perpProjection.cpy().nor().scl(reactionScale));
-					
+
 					//Add a line to draw the direction the goose was influenced
 					//gameScreen.getWorld().addSwipeToWorld(new Vector3(positionCenter.x,positionCenter.y,0), new Vector3(positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).x,positionCenter.cpy().add(perpProjection.cpy().nor().scl(reactionScale)).y,0));
 				}
@@ -221,7 +221,7 @@ public class GameScreenInputHandler implements InputProcessor {
 		}
 
 	}
-	
+
 	/**
 	 * Unused input detection functions
 	 */

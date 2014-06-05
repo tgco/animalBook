@@ -46,11 +46,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Button eatButton;
 
 	/**
-	 * Reference to the upgrades screen to pass along values about the game world
-	 */
-	private UpgradesScreen upgradeScreen;
-
-	/**
 	 * Stage to draw the screen once the player has lost
 	 */
 	private Stage popupStage;

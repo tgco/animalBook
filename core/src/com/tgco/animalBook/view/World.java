@@ -375,7 +375,7 @@ public class World {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
 			//Drop new items
-			if(rand.nextInt(100) <= 50){
+			if(rand.nextInt(100) <= 50 && drawMap.get("Animal").size <= 30){
 				ABDrawable dropping =  ((Animal)movable).drop();
 				if(dropping != null){
 					drawMap.get("Dropped").add(dropping);

@@ -176,20 +176,27 @@ public class World {
 		}
 
 		//Make the obstacles
-		Random rand = new Random();
-		Array<ABDrawable> obstacles = new Array<ABDrawable>();
-		Obstacle o;
-		for (float i = 700f; i < laneLength; i += 10f){
-			if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) > 0 && rand.nextInt(1) == 0){
-				o = new Obstacle();
-				o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
-				System.out.println("new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i );
-				if (o.getPosition().dst(market.getPosition()) > 250f)
-					obstacles.add(o);
-				i += 400f;
+		if(levelSize && gameInstance.getLevelData().get(4) !=null){
+			drawMap.put("Obstacle", (Array<ABDrawable>) gameInstance.getLevelData().get(4));
+			reinitTextureObstacle();
+		}else{
+			Random rand = new Random();
+			Array<ABDrawable> obstacles = new Array<ABDrawable>();
+			Obstacle o;
+			for (float i = 700f; i < laneLength; i += 10f){
+				if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) > 0 && rand.nextInt(1) == 0){
+					o = new Obstacle();
+					o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
+					System.out.println("new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i );
+					if (o.getPosition().dst(market.getPosition()) > 250f)
+						obstacles.add(o);
+					i += 400f;
+				}
 			}
+			drawMap.put("Obstacle", obstacles);
 		}
-		drawMap.put("Obstacle", obstacles);
+		
+		
 		//Add player to drawmap
 		drawMap.put("Player", new Array<ABDrawable>());
 		drawMap.get("Player").add(player);
@@ -422,10 +429,24 @@ public class World {
 			((Animal)movable).resetTexture();
 		}
 	}
+	
 	public void reinitTextureDropped(){
 		for (ABDrawable dropped : drawMap.get("Dropped")) {
 			((Dropped)dropped).resetTexture();
 		}
+	}
+
+	public void reinitTextureObstacle(){
+		for (ABDrawable obstacle : drawMap.get("Obstacle")) {
+			((Obstacle) obstacle).resetText();
+		}
+	}
+	public Array<Obstacle> getObstacles() {
+		Array<Obstacle> obstacles = new Array<Obstacle>();
+		for (ABDrawable aBDrawable : drawMap.get("Obstacle")) {
+			obstacles.add((Obstacle) aBDrawable);
+		}
+		return obstacles;
 	}
 
 }

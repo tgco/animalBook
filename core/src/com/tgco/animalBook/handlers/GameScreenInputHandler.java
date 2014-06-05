@@ -88,6 +88,8 @@ public class GameScreenInputHandler implements InputProcessor {
 
 			//spot 4 is storing dropped items array
 			gameInstance.addToDatalevel(gameScreen.getWorld().getDropped(), 3);
+			
+			gameInstance.addToDatalevel(gameScreen.getWorld().getObstacles(), 4);
 
 			gameScreen.dispose();
 		}

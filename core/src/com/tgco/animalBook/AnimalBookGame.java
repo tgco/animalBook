@@ -29,7 +29,7 @@ public class AnimalBookGame extends Game {
 	private FPSLogger fpsLogger;
 	
 	
-	private static Array<Object> levelData = new Array<Object>(4);
+	private static Array<Object> levelData = new Array<Object>(5);
 	
 	
 	private DatabaseHandler dbHand;
@@ -62,7 +62,7 @@ public class AnimalBookGame extends Game {
 	@Override
 	public void create () {
 		
-		for(int i=0; i< 4; i++){
+		for(int i=0; i< 5; i++){
 			levelData.insert(i, null);
 		}
 	

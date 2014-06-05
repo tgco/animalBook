@@ -22,7 +22,7 @@ import com.tgco.animalBook.screens.SplashScreen;
 public class AnimalBookGame extends Game {
 
 	/**Version string  */
-	public static final String version = "0.2.0";
+	public static final String version = "0.7.0";
 
 	/** debug variables */
 	public static final Boolean debugMode = true;
@@ -266,5 +266,28 @@ public class AnimalBookGame extends Game {
 		return continueable;
 	}
 	
-	
+	public void resetData(){
+		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
+		prefs.putInteger("level", 0);
+		
+		//Player data
+		prefs.putInteger("money", 0);
+		prefs.putFloat("health", 0);
+		prefs.putInteger("Eggs", 0);
+		prefs.putInteger("Bacon", 0);
+		prefs.putInteger("Cheese", 0);
+		prefs.putInteger("Wool", 0);
+		prefs.putInteger("Milk", 0);
+		
+		//animal data,   0 = fruitfullness, 1=dropInterval, 2=duration
+		prefs.putInteger("numAnimals", 0);
+		prefs.putInteger("Fruitfulness", 0);
+		prefs.putInteger("More", 0);
+		prefs.putInteger("Longer", 0);
+			
+		//app settings
+		prefs.putBoolean("tutorial", true);
+		
+		prefs.flush();
+	}
 }

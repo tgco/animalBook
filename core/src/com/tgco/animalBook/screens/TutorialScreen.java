@@ -93,7 +93,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		super(gameInstance);
 
 		paused = false;
-		tutorialStage = 1;
+		tutorialStage = 0;
 
 		//Initialize game world
 		tutorialWorld = new TutorialWorld(gameInstance);
@@ -110,6 +110,9 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer.addProcessor(touchControls);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		Gdx.input.setCatchBackKey(true);
+		
+		//Initial overlay
+		overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage1.png"));
 	}
 
 	/**
@@ -158,6 +161,11 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		if (paused || tutorialStage == 5) {
 			waitForInput();
 		}
+		
+		//Initial message
+		if (tutorialStage == 0) {
+			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		}
 
 		batch.end();
 
@@ -192,6 +200,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			moved += AnimalBookGame.TARGET_FRAME_RATE*delta;
 
 		if ((moveDistance - moved) <= .5) {
+			if (tutorialStage == 0)
+				tutorialStage++;
 			paused = true;
 			moved = 0;
 		}
@@ -284,7 +294,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		ButtonStyle skipButtonStyle = new ButtonStyle();
 		skipButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		skipButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		
+
 		skipButton = new Button(skipButtonStyle);
 		skipButton.setWidth(BUTTON_WIDTH);
 		skipButton.setHeight(BUTTON_HEIGHT);
@@ -322,7 +332,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 					ate = true;
 			}
 		});
-		
+
 		skipButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -331,6 +341,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseBackgroundMusic();
+				gameInstance.getLevelHandler().setDoTutorial(false);
 				gameInstance.setScreen(new GameScreen(gameInstance));
 				dispose();
 			}
@@ -356,6 +367,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else {
+			overlay.dispose();
 			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage2.png"));
 			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			return;
@@ -371,6 +383,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else {
+			overlay.dispose();
 			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage3.png"));
 			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			return;
@@ -386,10 +399,12 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 				tutorialStage += 1;
 			return;
 		}
-		else
+		else {
+			overlay.dispose();
 			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage4.png"));
-		batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		tutorialWorld.spawnEgg();
+			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			tutorialWorld.spawnEgg();
+		}
 		return;
 	}
 
@@ -402,6 +417,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			return;
 		}
 		else {
+			overlay.dispose();
 			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage5.png"));
 			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			tutorialWorld.getPlayer().setHealth(50f);
@@ -429,6 +445,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			if (tutorialWorld.getPlayer().getPlayerMoney() == 0) {
 				tutorialWorld.getPlayer().addPlayerMoney(1000);
 			}
+			overlay.dispose();
 			overlay = new Texture(Gdx.files.internal("tutorialMessages/tutMessage6.png"));
 			batch.draw(overlay, tutorialWorld.getCamera().position.x - Gdx.graphics.getWidth()/2, tutorialWorld.getCamera().position.y - Gdx.graphics.getHeight()/2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			return;

@@ -17,26 +17,26 @@ import com.tgco.animalBook.gameObjects.Consumable.DropType;
 import com.tgco.animalBook.handlers.LevelHandler;
 
 public abstract class Animal extends Movable {
-	
+
 	/**
 	 * rate in percent that a child animal is spawned instead of a consumable
 	 */
 	private double fertilityRate;
-	
+
 	/** interval between drop chances */
 	private double dropInterval;
 	/** the time it stays on the ground until it disappears */
 	private double timeOnGround;
-	
+
 	/** a counter to reflect the amount of frames have gone by to determine when to move the animal */
 	private float changeTargetCount = 0f;
-	
+
 	/** every animal has a different item that is dropped */
 	private DropType dropType;
-	
+
 	/** rand is used to created random movement of the animal */
 	protected Random rand;
-	
+
 	private int  animalLevel;
 
 	/**
@@ -51,7 +51,7 @@ public abstract class Animal extends Movable {
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
 		this.animalLevel = animalLevel;
-		
+
 		//leeway for collection
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 
@@ -60,40 +60,41 @@ public abstract class Animal extends Movable {
 		dropInterval = 400;
 		timeOnGround = 120;
 
-		
+
 		rand = new Random();
 	}
-	
+
 	/**
 	 * Overridden to allow animal to possibly choose a new target
 	 */
 	@Override
 	public void move(float cameraSpeed, float delta) {
 		super.move(cameraSpeed, delta);
-		
-		if(changeTargetCount % 25 < 0.5 && rand.nextInt(100) < 75){
 
-			changeTarget();	
+		if (changeTargetCount > 30) {
+			changeTargetCount = 0f;
+			if (rand.nextInt(100) < 75)
+				changeTarget();
 		}
-		
+
 		changeTargetCount += AnimalBookGame.TARGET_FRAME_RATE*delta;
 	}
-	
+
 	private void changeTarget(){
 		int xChangeDistance = (int) (.139f*Gdx.graphics.getWidth()*animalLevel);
 		int yChangeDistance = (int) (.221f*Gdx.graphics.getHeight()*animalLevel);
-		
+
 		currentTarget = new Vector2(position.x + rand.nextInt(xChangeDistance) - xChangeDistance/2, position.y + rand.nextInt(yChangeDistance) - yChangeDistance/2);
 	}
-	
-	
+
+
 	/**
 	 * Create a consumable or new animal based on which animal the parent is.
 	 * 
 	 * @return ABDrawable which is either an animal or consumable to the Dropped class
 	 */
 	public ABDrawable drop() {
-		
+
 		if(changeTargetCount % dropInterval ==0){
 			if(rand.nextInt(100) < fertilityRate){
 				if (this.getClass().equals(Goose.class)) 
@@ -128,30 +129,30 @@ public abstract class Animal extends Movable {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Create a consumable every time for tutorial purposes
 	 * 
 	 * @return ABDrawable which is a consumable to the Dropped class
 	 */
 	public ABDrawable forceDropConsumable() {
-	
-				if (this.getClass().equals(Goose.class))
-					return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
-				else if (this.getClass().equals(Pig.class))
-					return new Dropped(new Consumable(Consumable.DropType.values()[1]), this.position.cpy(), timeOnGround);
-				else if (this.getClass().equals(Goat.class))
-					return new Dropped(new Consumable(Consumable.DropType.values()[2]), this.position.cpy(), timeOnGround);
-				else if (this.getClass().equals(Sheep.class))
-					return new Dropped(new Consumable(Consumable.DropType.values()[3]), this.position.cpy(), timeOnGround);
-				else if (this.getClass().equals(Cow.class))
-					return new Dropped(new Consumable(Consumable.DropType.values()[4]), this.position.cpy(), timeOnGround);
-				else
-					return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
-	
-		
+
+		if (this.getClass().equals(Goose.class))
+			return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
+		else if (this.getClass().equals(Pig.class))
+			return new Dropped(new Consumable(Consumable.DropType.values()[1]), this.position.cpy(), timeOnGround);
+		else if (this.getClass().equals(Goat.class))
+			return new Dropped(new Consumable(Consumable.DropType.values()[2]), this.position.cpy(), timeOnGround);
+		else if (this.getClass().equals(Sheep.class))
+			return new Dropped(new Consumable(Consumable.DropType.values()[3]), this.position.cpy(), timeOnGround);
+		else if (this.getClass().equals(Cow.class))
+			return new Dropped(new Consumable(Consumable.DropType.values()[4]), this.position.cpy(), timeOnGround);
+		else
+			return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
+
+
 	}
-	
+
 	/**
 	 * used for upgradesScreen
 	 * @return fertilityRate
@@ -175,7 +176,7 @@ public abstract class Animal extends Movable {
 	public double getTimeOnGround() {
 		return timeOnGround /60.0;
 	}
-	
+
 	/**
 	 *  used with the upgradesScreen to increase the fertility of the animal
 	 * @param fertilityRate the amount to add to the fertilityRate of the animal
@@ -199,9 +200,9 @@ public abstract class Animal extends Movable {
 	public void upgradeTimeOnGround(double timeOnGround) {
 		this.timeOnGround += timeOnGround;
 	}
-	
+
 	/** every animal will be able to get the dropType that it has */
 	public abstract DropType getDropType();
-	
+
 	public abstract void resetTexture();
 }

@@ -46,7 +46,7 @@ public class TutorialInventoryScreen extends ButtonScreenAdapter implements Scre
 	private TutorialScreen tutorialScreen;
 	
 	/**
-	 * Button for leaving the inventory scren
+	 * Button for leaving the inventory screen
 	 */
 	private Button leaveButton;
 	

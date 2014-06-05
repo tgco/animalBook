@@ -244,7 +244,7 @@ public class TutorialWorld {
 		}
 
 		//draw objects
-		worldRender.render(batch, drawMap, player.getHealth(),camera);
+		worldRender.render(batch, drawMap, player.getHealth(),camera,delta);
 	}
 
 	/**

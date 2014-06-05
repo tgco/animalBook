@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.tgco.animalBook.AnimalBookGame;
 
 
 /**
@@ -34,7 +35,7 @@ public class Swipe {
 	/**
 	 * The amount of time the swipe is drawn on screen
 	 */
-	private int lifeTime;
+	private float lifeTime;
 
 	/**
 	 * Texture that swipes are drawn in
@@ -55,7 +56,7 @@ public class Swipe {
 	public Swipe(Vector2 begin, Vector2 end) {
 		this.begin = begin;
 		this.end = end;
-		lifeTime = 100;
+		lifeTime = 100f;
 
 		//Find length of swipe and rotation setup sprite
 		float length = end.cpy().sub(begin).len();
@@ -69,24 +70,19 @@ public class Swipe {
 	/**
 	 * Draws the swipes to the screen using world coordinates
 	 * 
-	 * @param cam the camera used to view the world in order to draw in world coordinates
+	 * @param unprojectedBatch 		the sprite batch that draws in world coordinates
+	 * @param delta					the time between frames
 	 */
-	public void draw(OrthographicCamera cam) {
-
-		SpriteBatch batch = new SpriteBatch();
-		batch.setProjectionMatrix(cam.combined);
-		batch.begin();
-		sprite.draw(batch,(lifeTime/100f));
-		batch.end();
-		batch.dispose();
-		lifeTime -= 1;
+	public void draw(SpriteBatch unprojectedBatch,float delta) {
+		sprite.draw(unprojectedBatch,(lifeTime/100f));
+		lifeTime -= (AnimalBookGame.TARGET_FRAME_RATE*delta);
 	}
 
 	/**
 	 * Returns the lifetime left for this swipe
 	 * @return		the value remaining for the lifetime of this swipe
 	 */
-	public int getLifeTime() {
+	public float getLifeTime() {
 		return lifeTime;
 	}
 

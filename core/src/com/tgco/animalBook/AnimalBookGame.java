@@ -255,7 +255,7 @@ public class AnimalBookGame extends Game {
 	}
 	
 	public void setDataPlay(){
-		boolean levelSize =getLevelData().size >0;
+		boolean levelSize = getLevelData().size >0;
 		if(levelSize && getLevelData().get(0) !=null){
 			level = (Integer) getLevelData().get(0);
 		}

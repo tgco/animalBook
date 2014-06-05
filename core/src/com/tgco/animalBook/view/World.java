@@ -116,12 +116,10 @@ public class World {
 		this.gameInstance = gameInstance;
 		drawMap = new ArrayMap<String, Array<ABDrawable>>();
 
-		boolean levelSize = gameInstance.getLevelData().size >0;
+		boolean levelSize = gameInstance.getLevelData().size > 0;
 		// spot 1 is current level
 		//spot 2 is player			
-
 		//spot 4 is storing dropped items array
-
 
 		worldRender = new WorldRenderer();
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());

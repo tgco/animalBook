@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
+import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.SoundHandler;
 
 public class MarketScreen extends ButtonScreenAdapter implements Screen {
@@ -295,9 +296,10 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 					gameInstance.addToLevel(1);
 					
 					// spot 1 is current level
+					gameInstance.getLevelHandler().resetStoredAmount();
 					gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
 					
-					//spot 2 is player			
+					//spot 2 is player		
 					gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
 					
 					//spot 3 is storing movable array
@@ -328,7 +330,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);		
 				
-				gameInstance.getLevelHandler().resetStoredAmount();
+				//gameInstance.getLevelHandler().resetStoredAmount();
 				
 				gameScreen.resetInputProcessors();
 				gameScreen.dispose();

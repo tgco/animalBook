@@ -90,7 +90,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 				if (payload.getObject() instanceof Consumable)
-					if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL){
+					if ((((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL) || (gameScreen.getWorld().getPlayer().getHealth() == 100)){
 						this.getActor().setColor(Color.RED);
 						return false;
 					}

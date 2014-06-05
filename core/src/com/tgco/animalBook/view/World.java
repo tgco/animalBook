@@ -314,7 +314,7 @@ public class World {
 		}
 
 		//draw objects
-		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera);
+		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera,delta);
 	}
 
 	/**
@@ -361,8 +361,7 @@ public class World {
 				drawMap.get("Dropped").removeValue(dropped, true);
 				dropped.dispose();
 			}
-			Gdx.app.log("Location: ", ((Dropped) dropped).getPosition().toString());
-			Gdx.app.log("Button: ", buttonBounds.toString());
+
 			if(buttonBounds.contains(((Dropped) dropped).getPosition())) {
 				Gdx.app.log("Inventory: ", "Added a dropped");
 				removeFromABDrawable(dropped);
@@ -413,6 +412,7 @@ public class World {
 		//check if player reached market
 		if (player.getBounds().overlaps(market.getBounds())) {
 			SoundHandler.pauseBackgroundMusic();
+			gameInstance.getLevelHandler().resetNextLevelStart();
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 	}

@@ -23,6 +23,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	private Button musicButton;
 	private Button mainMenuButton;
 	private Button helpButton;
+	private Button resetButton;
 	
 	/**
 	 * Constructs a new Options Screen with a game instance
@@ -146,6 +147,21 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		helpButton.setX(EDGE_TOLERANCE);
 		helpButton.setY(EDGE_TOLERANCE);
 		
+		//RESET BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/resetButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+				
+		ButtonStyle resetButtonStyle = new ButtonStyle();
+		resetButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		resetButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+					
+		resetButton = new Button(resetButtonStyle);
+		resetButton.setWidth(BUTTON_WIDTH);
+		resetButton.setHeight(BUTTON_HEIGHT);
+		resetButton.setX(Gdx.graphics.getWidth()/2);
+		resetButton.setY(Gdx.graphics.getHeight()/2);
+		
 		//LISTENERS
 		soundButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -194,10 +210,22 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 		
+		helpButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				//TODO STUFF
+			
+			}
+		});
+		
 		buttonStage.addActor(soundButton);
 		buttonStage.addActor(musicButton);
 		buttonStage.addActor(mainMenuButton);
 		buttonStage.addActor(helpButton);
+		buttonStage.addActor(resetButton);
 		
 		inputMultiplexer.addProcessor(buttonStage);
 	}

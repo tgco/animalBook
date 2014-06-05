@@ -324,7 +324,10 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseMarketBackgroundMusic();
-				SoundHandler.playBackgroundMusic(true);			
+				SoundHandler.playBackgroundMusic(true);		
+				
+				gameInstance.getLevelHandler().resetStoredAmount();
+				
 				gameScreen.resetInputProcessors();
 				gameScreen.dispose();
 				gameInstance.setScreen(new GameScreen(gameInstance));

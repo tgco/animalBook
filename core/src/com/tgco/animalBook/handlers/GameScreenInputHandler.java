@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Animal;
@@ -88,6 +89,8 @@ public class GameScreenInputHandler implements InputProcessor {
 
 			//spot 4 is storing dropped items array
 			gameInstance.addToDatalevel(gameScreen.getWorld().getDropped(), 3);
+			
+			gameInstance.addToDatalevel(gameScreen.getWorld().getObstacles(), 4);
 
 			gameScreen.dispose();
 		}

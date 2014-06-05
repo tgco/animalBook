@@ -297,7 +297,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 					// spot 1 is current level
 					gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
 					
-					//spot 2 is player money			
+					//spot 2 is player			
 					gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
 					
 					//spot 3 is storing movable array
@@ -305,6 +305,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 					
 					//spot 4 is storing dropped items array
 					gameInstance.addToDatalevel(null, 3);
+					
+					gameInstance.addToDatalevel(null, 4);
 					
 					
 					gameScreen.resetInputProcessors();

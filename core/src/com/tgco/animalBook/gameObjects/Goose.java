@@ -32,7 +32,7 @@ public class Goose extends Animal {
 	 * @param pos the desired position in world coordinates for this animal
 	 */
 	public Goose(Vector2 pos) {
-		super(texturePath, pos);
+		super(texturePath, pos, 1);
 		speed = 1/10f;
 
 		width = .093f*Gdx.graphics.getWidth();

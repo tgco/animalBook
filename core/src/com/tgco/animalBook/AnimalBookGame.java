@@ -58,6 +58,8 @@ public class AnimalBookGame extends Game {
 	
 	/** DATA_PREFS is the preference file for the data of the game*/
 	private static final String DATA_PREFS = "tgco.AnimalBookGame_data";
+	
+	private boolean continueable = false;
 			
 	@Override
 	public void create () {
@@ -75,7 +77,12 @@ public class AnimalBookGame extends Game {
 		//DB stuff if we go this route
 		/*dbHand = new DatabaseHandler();
 		 dbHand.getValue( "0");*/
-
+		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
+		int lev = prefs.getInteger("level");
+		
+		if(lev >0 ){
+			continueable = true;
+		}
 	}
 
 	/**
@@ -252,4 +259,10 @@ public class AnimalBookGame extends Game {
 		levelHandler = new LevelHandler(level);
 		
 	}
+
+	public boolean isContinueable() {
+		return continueable;
+	}
+	
+	
 }

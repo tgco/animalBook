@@ -11,12 +11,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
@@ -40,15 +45,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Each button used on the game screen user interface overlay
 	 */
-	private Button inventoryButton;
-	private Button upgradeButton;
-	private Button pauseButton;
-	private Button eatButton;
+	private Button alexButton;
 
-	/**
-	 * Reference to the upgrades screen to pass along values about the game world
-	 */
-	private UpgradesScreen upgradeScreen;
+	private VerticalGroup menuGroup;
+	private Image menuGroupImage;
+
+	private HorizontalGroup inventoryGroup;
+	private HorizontalGroup upgradeGroup;
+	private HorizontalGroup optionGroup;
 
 	/**
 	 * Stage to draw the screen once the player has lost
@@ -65,10 +69,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	private BitmapFont font;
 
-	/**
-	 * Determines if the game is paused
-	 */
-	boolean paused;
+	
 
 	/**
 	 * Constructor using the running game instance
@@ -79,7 +80,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		super(gameInstance);
 
 		popupStage = new Stage();
-		paused = false;
 
 		//Initialize game world
 		gameWorld = new World(gameInstance);
@@ -135,8 +135,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			font.draw(batch, "Your Money: $" + String.valueOf(gameWorld.getPlayer().getPlayerMoney()), vect.x ,vect.y );
 
 			//Draw world over background
-			gameWorld.render(batch,paused,delta);
-			
+			gameWorld.render(batch,alexButton.isChecked(),delta);
+
 			batch.end();
 
 			//Draw buttons over the screen
@@ -200,128 +200,69 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	protected void initializeButtons() {
 
-		//UPGRADE BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/upgradeButton.atlas"));
+
+		//ALEXBUTTON BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/playerButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
-		ButtonStyle upgradeButtonStyle = new ButtonStyle();
-		upgradeButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		upgradeButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		ButtonStyle alexButtonStyle = new ButtonStyle();
+		alexButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		alexButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
-		upgradeButton = new Button(upgradeButtonStyle);
-		upgradeButton.setWidth(BUTTON_WIDTH);
-		upgradeButton.setHeight(BUTTON_HEIGHT);
-		upgradeButton.setX(EDGE_TOLERANCE);
-		upgradeButton.setY(Gdx.graphics.getHeight() - 3*BUTTON_HEIGHT - 2*EDGE_TOLERANCE);
-
-		//INVENTORY BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/inventoryButton.atlas"));
-		buttonSkin = new Skin();
-		buttonSkin.addRegions(atlas);
-
-		ButtonStyle inventoryButtonStyle = new ButtonStyle();
-		inventoryButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-
-		inventoryButton = new Button(inventoryButtonStyle);
-		inventoryButton.setWidth(BUTTON_WIDTH);
-		inventoryButton.setHeight(BUTTON_HEIGHT);
-		inventoryButton.setX(EDGE_TOLERANCE);
-		inventoryButton.setY(Gdx.graphics.getHeight() - 2*BUTTON_HEIGHT - EDGE_TOLERANCE);
-
-		//EAT BUTTON
-		//TEMP FOR TESTING
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/eatButton.atlas"));
-		buttonSkin = new Skin();
-		buttonSkin.addRegions(atlas);
-
-		ButtonStyle eatButtonStyle = new ButtonStyle();
-		eatButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		eatButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-
-		eatButton = new Button(eatButtonStyle);
-		eatButton.setWidth(BUTTON_WIDTH);
-		eatButton.setHeight(BUTTON_HEIGHT);
-		eatButton.setX(EDGE_TOLERANCE);
-		eatButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT);
-
-		//PAUSE BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/pauseButton.atlas"));
-		buttonSkin = new Skin();
-		buttonSkin.addRegions(atlas);
-
-		ButtonStyle pauseButtonStyle = new ButtonStyle();
-		if (!paused) {
-			pauseButtonStyle.up = buttonSkin.getDrawable("pauseButton");
-			pauseButtonStyle.checked = buttonSkin.getDrawable("playButton");
-		} else {
-			pauseButtonStyle.up = buttonSkin.getDrawable("playButton");
-			pauseButtonStyle.checked = buttonSkin.getDrawable("pauseButton");
-		}
-
-		pauseButton = new Button(pauseButtonStyle);
-		pauseButton.setWidth(BUTTON_WIDTH);
-		pauseButton.setHeight(BUTTON_HEIGHT);
-		pauseButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
-		pauseButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
-
-		//LISTENERS
-		upgradeButton.addListener(new InputListener() {
+		alexButton = new Button(alexButtonStyle);
+		alexButton.setWidth(BUTTON_WIDTH);
+		alexButton.setHeight(BUTTON_HEIGHT);
+		alexButton.setX(EDGE_TOLERANCE);
+		alexButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		alexButton.setChecked(false);
+		alexButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
-
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				SoundHandler.playButtonClick();
-				SoundHandler.pauseBackgroundMusic();
-				gameInstance.setScreen(new UpgradesScreen(gameInstance,GameScreen.this));
-			}
-		});
-
-		inventoryButton.addListener(new InputListener() {
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
-
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .1);
-				gameInstance.setScreen(new InventoryScreen(gameInstance,GameScreen.this));
+				handleMenu(alexButton.isChecked());
 			}
 		});
 
-		eatButton.addListener(new InputListener() {
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
+		//initialize all menuGroup buttons
+		menuGroup = new VerticalGroup();
+		menuGroup.left();
+		menuGroup.setPosition(alexButton.getX(), alexButton.getY());
+		menuGroup.setColor(Color.BLACK);
+		menuGroup.setSize(alexButton.getWidth(), Gdx.graphics.getHeight());
+		
+		menuGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+		menuGroupImage.setPosition(alexButton.getX(), 0);
+		menuGroupImage.setSize(alexButton.getWidth(), alexButton.getY());
+		
+		inventoryGroup = new HorizontalGroup();
 
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				SoundHandler.playButtonClick();
-				gameWorld.getPlayer().eat(10f);
-				gameWorld.getPlayer().addPlayerMoney(100);
-			}
-		});
+		upgradeGroup = new HorizontalGroup();
 
-		pauseButton.addListener(new InputListener() {
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
+		optionGroup = new HorizontalGroup();
 
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				SoundHandler.playButtonClick();
-				SoundHandler.changeBackgroundVolume((float) .1);
-				paused = !paused;
-			}
-		});
+		
 
-		//add to stage for input detection
-		buttonStage.addActor(inventoryButton);
-		buttonStage.addActor(upgradeButton);
-		buttonStage.addActor(pauseButton);
-		buttonStage.addActor(eatButton);
 
+
+
+
+		buttonStage.addActor(alexButton);
 		inputMultiplexer.addProcessor(buttonStage);
+	}
+
+	public void handleMenu(boolean checked) {
+		if (checked){
+			buttonStage.addActor(menuGroupImage);
+			buttonStage.addActor(menuGroup);
+		}
+		else{
+			menuGroupImage.remove();
+			menuGroup.remove();
+		}
 	}
 
 	/**
@@ -346,7 +287,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		popupStage.addActor(lostD);
 		inputMultiplexer.addProcessor(popupStage);
 	}
-	
+
 	/**
 	 * Returns the instance of the world that game screen is using
 	 * 
@@ -356,15 +297,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		return gameWorld;
 	}
 
-	/**
-	 * Returns if the game is currently paused
-	 * 
-	 * @return		true if the game is paused
-	 */
-	public boolean isPaused() {
-		return paused;
-	}
-	
 	/**
 	 * Unused methods for detecting screen events
 	 */
@@ -378,15 +310,21 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
+	public void pause() {}
 
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
+	public void resume() {}
 
+	public Button getAlexButton() {
+		return alexButton;
+	}
+
+	public boolean inMenu() {
+		return alexButton.isChecked();
+	}
+
+	public Array<Actor> getScreenActors() {
+		return buttonStage.getActors();
 	}
 
 }

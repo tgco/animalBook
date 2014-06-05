@@ -180,7 +180,7 @@ public class World {
 		Array<ABDrawable> obstacles = new Array<ABDrawable>();
 		Obstacle o;
 		for (float i = 700f; i < laneLength; i += 10f){
-			if (rand.nextInt(AnimalBookGame.getLevel()) > 0 && rand.nextInt(1) == 0){
+			if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) > 0 && rand.nextInt(1) == 0){
 				o = new Obstacle();
 				o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
 				System.out.println("new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i );

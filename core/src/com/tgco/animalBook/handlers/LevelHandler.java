@@ -173,6 +173,7 @@ public class LevelHandler {
 	 * @return		the length of the lane for the specified level
 	 */
 	public float returnLaneLength(int level) {
+
 		
 		//return 500;
 		return 1300 + 2000*(level - 1);

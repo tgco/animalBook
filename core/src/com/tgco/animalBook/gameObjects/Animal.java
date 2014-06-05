@@ -24,7 +24,7 @@ public abstract class Animal extends Movable {
 	
 	/** interval between drop chances */
 	private double dropInterval;
-	/** the time it stays on the ground until it disappers */
+	/** the time it stays on the ground until it disappears */
 	private double timeOnGround;
 	
 	/** a counter to reflect the amount of frames have gone by to determine when to move the animal */

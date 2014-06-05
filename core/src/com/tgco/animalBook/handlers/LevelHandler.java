@@ -1,6 +1,7 @@
 package com.tgco.animalBook.handlers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.gameObjects.ABDrawable;
@@ -169,8 +170,8 @@ public class LevelHandler {
 	 * @return		the length of the lane for the specified level
 	 */
 	public float returnLaneLength(int level) {
-
-		return 1300 + 2000*(level - 1);
+		return 500;
+		//return 1300 + 2000*(level - 1);
 	}
 	
 	/**
@@ -198,6 +199,38 @@ public class LevelHandler {
 	
 	public int getNextLevelStart() {
 		return nextLevelStart;
+	}
+	
+	public FileHandle currentLevelTexture() {
+		switch(level) {
+		case 1 :
+			return Gdx.files.internal("objectTextures/gooseButton.atlas");
+		case 2 :
+			return Gdx.files.internal("objectTextures/pigButton.atlas");
+		case 3 :
+			return Gdx.files.internal("objectTextures/goatButton.atlas");
+		case 4 :
+			return Gdx.files.internal("objectTextures/sheepButton.atlas");
+		case 5 :
+			return Gdx.files.internal("objectTextures/cowButton.atlas");
+		}
+		return null;
+	}
+	
+	public FileHandle nextLevelTexture() {
+		switch(level) {
+		case 1 :
+			return Gdx.files.internal("objectTextures/pigButton.atlas");
+		case 2 :
+			return Gdx.files.internal("objectTextures/goatButton.atlas");
+		case 3 :
+			return Gdx.files.internal("objectTextures/sheepButton.atlas");
+		case 4 :
+			return Gdx.files.internal("objectTextures/cowButton.atlas");
+		case 5 :
+			return Gdx.files.internal("objectTextures/gooseButton.atlas"); //SHOULD BE THE BOOK TEXTURE
+		}
+		return null;
 	}
 	
 	public int getLevel(){

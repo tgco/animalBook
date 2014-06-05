@@ -1,0 +1,19 @@
+
+sheep.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+buttonPressed
+  rotate: false
+  xy: 0, 0
+  size: 27, 33
+  orig: 27, 33
+  offset: 0, 0
+  index: -1
+buttonUnpressed
+  rotate: false
+  xy: 0, 0
+  size: 27, 33
+  orig: 27, 33
+  offset: 0, 0
+  index: -1

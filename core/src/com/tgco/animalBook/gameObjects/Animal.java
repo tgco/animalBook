@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
+import com.tgco.animalBook.handlers.LevelHandler;
 
 public abstract class Animal extends Movable {
 	
@@ -24,7 +25,7 @@ public abstract class Animal extends Movable {
 	
 	/** interval between drop chances */
 	private double dropInterval;
-	/** the time it stays on the ground until it disappers */
+	/** the time it stays on the ground until it disappears */
 	private double timeOnGround;
 	
 	/** a counter to reflect the amount of frames have gone by to determine when to move the animal */
@@ -35,6 +36,8 @@ public abstract class Animal extends Movable {
 	
 	/** rand is used to created random movement of the animal */
 	protected Random rand;
+	
+	private int  animalLevel;
 
 	/**
 	 * animal construct which every child must have a string to it's picture which is needed for ABDrawbles
@@ -42,11 +45,12 @@ public abstract class Animal extends Movable {
 	 * @param texturePath the string path to the picture
 	 * @param position the starting position when the animal is created
 	 */
-	public Animal(String texturePath, Vector2 position) {
+	public Animal(String texturePath, Vector2 position, int animalLevel) {
 		super(texturePath);
 		this.position = position;
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
+		this.animalLevel = animalLevel;
 		
 		//leeway for collection
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
@@ -77,8 +81,8 @@ public abstract class Animal extends Movable {
 	}
 	
 	private void changeTarget(){
-		int xChangeDistance = (int) (.139f*Gdx.graphics.getWidth()*AnimalBookGame.getLevel());
-		int yChangeDistance = (int) (.221f*Gdx.graphics.getHeight()*AnimalBookGame.getLevel());
+		int xChangeDistance = (int) (.139f*Gdx.graphics.getWidth()*animalLevel);
+		int yChangeDistance = (int) (.221f*Gdx.graphics.getHeight()*animalLevel);
 		
 		currentTarget = new Vector2(position.x + rand.nextInt(xChangeDistance) - xChangeDistance/2, position.y + rand.nextInt(yChangeDistance) - yChangeDistance/2);
 	}

@@ -180,7 +180,7 @@ public class World {
 		Array<ABDrawable> obstacles = new Array<ABDrawable>();
 		Obstacle o;
 		for (float i = 700f; i < laneLength; i += 10f){
-			if (rand.nextInt(AnimalBookGame.getLevel()) > 0 && rand.nextInt(1) == 0){
+			if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) > 0 && rand.nextInt(1) == 0){
 				o = new Obstacle();
 				o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
 				System.out.println("new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i );
@@ -361,8 +361,7 @@ public class World {
 				drawMap.get("Dropped").removeValue(dropped, true);
 				dropped.dispose();
 			}
-			Gdx.app.log("Location: ", ((Dropped) dropped).getPosition().toString());
-			Gdx.app.log("Button: ", buttonBounds.toString());
+
 			if(buttonBounds.contains(((Dropped) dropped).getPosition())) {
 				Gdx.app.log("Inventory: ", "Added a dropped");
 				removeFromABDrawable(dropped);
@@ -375,7 +374,7 @@ public class World {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
 			//Drop new items
-			if(rand.nextInt(100) <= 50 && drawMap.get("Animal").size <= 30){
+			if(rand.nextInt(100) <= 50 && drawMap.get("Movable").size <= 30){
 				ABDrawable dropping =  ((Animal)movable).drop();
 				if(dropping != null){
 					drawMap.get("Dropped").add(dropping);
@@ -413,6 +412,7 @@ public class World {
 		//check if player reached market
 		if (player.getBounds().overlaps(market.getBounds())) {
 			SoundHandler.pauseBackgroundMusic();
+			gameInstance.getLevelHandler().resetNextLevelStart();
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 	}

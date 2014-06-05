@@ -1,0 +1,19 @@
+
+goat.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+buttonPressed
+  rotate: false
+  xy: 0, 0
+  size: 64, 63
+  orig: 64, 63
+  offset: 0, 0
+  index: -1
+buttonUnpressed
+  rotate: false
+  xy: 0, 0
+  size: 64, 63
+  orig: 64, 63
+  offset: 0, 0
+  index: -1

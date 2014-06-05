@@ -42,7 +42,7 @@ public class AnimalBookGame extends Game {
 	/**
 	 * The current level being played
 	 */
-	private static int level = 1;
+	private  int level = 1;
 	/**
 	 * Load all information that differs between levels
 	 */
@@ -122,6 +122,13 @@ public class AnimalBookGame extends Game {
 	public void pause() {
 		super.pause();
 		Gdx.app.log("My Tagg", "The app is calling pause");
+		if(levelHandler != null){
+			Gdx.app.log("My Tagg", "the level is " + level);
+			setPrefsToFile();
+		}
+	}
+
+	public void setPrefsToFile(){
 		if(level < levelHandler.getLevel()){
 			Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 			prefs.putInteger("level", levelHandler.getLevel());
@@ -150,7 +157,6 @@ public class AnimalBookGame extends Game {
 			Gdx.app.log("My Tagg", "After flush of save");
 		}
 	}
-
 	/**
 	 * life cycle of the app in which the loading of the data will go here
 	 */
@@ -191,11 +197,10 @@ public class AnimalBookGame extends Game {
 
 	public void addToLevel(int i) {
 		levelHandler.addLevel();
+		levelHandler.resetStoredAmount();
 	}
 	
-	public static int getLevel() {
-		return level;
-	}
+
 
 	public void setDataCont() {
 			Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);

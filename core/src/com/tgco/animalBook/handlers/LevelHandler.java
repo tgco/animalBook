@@ -1,6 +1,7 @@
 package com.tgco.animalBook.handlers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.gameObjects.ABDrawable;
@@ -173,6 +174,8 @@ public class LevelHandler {
 	 */
 	public float returnLaneLength(int level) {
 
+		
+		//return 500;
 		return 1300 + 2000*(level - 1);
 	}
 	
@@ -195,12 +198,52 @@ public class LevelHandler {
 		return storedAmount;
 	}
 	
+	public void resetStoredAmount(){
+		storedAmount = 0;
+	}
+	
 	public int getPassLevelAmount() {
 		return passLevelAmount;
 	}
 	
 	public int getNextLevelStart() {
 		return nextLevelStart;
+	}
+	
+	public void resetNextLevelStart() {
+		nextLevelStart = 0;
+	}
+	
+	public FileHandle currentLevelTexture() {
+		switch(level) {
+		case 1 :
+			return Gdx.files.internal("objectTextures/gooseButton.atlas");
+		case 2 :
+			return Gdx.files.internal("objectTextures/pigButton.atlas");
+		case 3 :
+			return Gdx.files.internal("objectTextures/goatButton.atlas");
+		case 4 :
+			return Gdx.files.internal("objectTextures/sheepButton.atlas");
+		case 5 :
+			return Gdx.files.internal("objectTextures/cowButton.atlas");
+		}
+		return null;
+	}
+	
+	public FileHandle nextLevelTexture() {
+		switch(level) {
+		case 1 :
+			return Gdx.files.internal("objectTextures/pigButton.atlas");
+		case 2 :
+			return Gdx.files.internal("objectTextures/goatButton.atlas");
+		case 3 :
+			return Gdx.files.internal("objectTextures/sheepButton.atlas");
+		case 4 :
+			return Gdx.files.internal("objectTextures/cowButton.atlas");
+		case 5 :
+			return Gdx.files.internal("objectTextures/gooseButton.atlas"); //SHOULD BE THE BOOK TEXTURE
+		}
+		return null;
 	}
 	
 	public int getLevel(){
@@ -221,6 +264,23 @@ public class LevelHandler {
 	
 	public void addLevel(){
 		level++;
+		switch(level) {
+		case 1:
+			passLevelAmount = 5;
+			break;
+		case 2:
+			passLevelAmount = 10;
+			break;
+		case 3:
+			passLevelAmount = 15;
+			break;
+		case 4:
+			passLevelAmount = 20;
+			break;
+		case 5:
+			passLevelAmount = 25;
+			break;
+		}
 	}
 	
 	public void setNextLevelStart(int nextStart) {

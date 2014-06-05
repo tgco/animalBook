@@ -251,7 +251,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		retryButton.setY(EDGE_TOLERANCE);
 
 		//CURRENT LEVEL ANIMAL BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal(/*gameInstance.getLevelHandler().currentLevelTexture()*/"objectTextures/gooseButton.atlas"));
+		atlas = new TextureAtlas(gameInstance.getLevelHandler().currentLevelTexture());
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
@@ -266,7 +266,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		levelAnimalButton.setY(Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//NEXT LEVEL ANIMAL BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal(/*gameInstance.getLevelHandler().nextLevelTexture()*/"objectTextures/pigButton.atlas"));
+		atlas = new TextureAtlas(gameInstance.getLevelHandler().nextLevelTexture());
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
@@ -324,7 +324,10 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseMarketBackgroundMusic();
-				SoundHandler.playBackgroundMusic(true);			
+				SoundHandler.playBackgroundMusic(true);		
+				
+				gameInstance.getLevelHandler().resetStoredAmount();
+				
 				gameScreen.resetInputProcessors();
 				gameScreen.dispose();
 				gameInstance.setScreen(new GameScreen(gameInstance));

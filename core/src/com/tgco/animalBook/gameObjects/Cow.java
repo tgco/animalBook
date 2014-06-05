@@ -31,7 +31,7 @@ public class Cow extends Animal {
 	 * @param pos the location in world coordinates that the animal is located at
 	 */
 	public Cow(Vector2 pos) {
-		super(texturePath, pos);
+		super(texturePath, pos, 5);
 		
 		speed = 1/14f;
 		width = .139f*Gdx.graphics.getWidth();

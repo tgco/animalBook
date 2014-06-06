@@ -278,6 +278,18 @@ public class TutorialWorld {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
 		}		
+		
+		//Bounce animals off of each other
+		Array<ABDrawable> movables = drawMap.get("Movable");
+		for (int i = 0; i < movables.size; i ++) {
+			for (int j = i + 1; j < movables.size; j++) {
+				//collision check
+				if (movables.get(i).getBounds().overlaps(movables.get(j).getBounds())) {
+					if (movables.get(i).getPosition().cpy().dst(movables.get(j).getPosition().cpy()) < 2f*movables.get(i).getHeight()/3f)
+						((Movable)movables.get(i)).bounce((Movable)(movables.get(j)), null);
+				}
+			}
+		}
 
 		if (generatedMarketAndObstacle) {
 			//check for collisions between the market and the animals
@@ -293,11 +305,15 @@ public class TutorialWorld {
 			//check for collisions between movable and obstacles
 			for (ABDrawable movable : drawMap.get("Movable")){
 				for (ABDrawable obstacle : drawMap.get("Obstacle")){
-					if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable instanceof Player)){
-						((Movable)movable).bounce((Movable)movable, (Obstacle)obstacle);
+					if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable.getClass().equals(Player.class))) {
+						((Movable)movable).bounce(null, (Obstacle)obstacle);
+						if ((movable.getPosition().y + movable.getHeight()/2) < (obstacle.getPosition().y))
+							((Movable)movable).stopForwardBias(cameraSpeed,delta);
 					}
 				}
 			}
+			
+			
 
 			//check if player reached market
 			if (player.getBounds().overlaps(market.getBounds())) {

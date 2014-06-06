@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -19,10 +20,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
@@ -45,14 +53,16 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Each button used on the game screen user interface overlay
 	 */
-	private Button alexButton;
+	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton;
 
 	private VerticalGroup menuGroup;
 	private Image menuGroupImage;
 
-	private HorizontalGroup inventoryGroup;
-	private HorizontalGroup upgradeGroup;
-	private HorizontalGroup optionGroup;
+	private HorizontalGroup inventoryGroup, upgradesGroup, optionsGroup;
+
+	private static DragAndDrop dnd;
+
+	private static boolean mainMenuInitialized = false;
 
 	/**
 	 * Stage to draw the screen once the player has lost
@@ -69,7 +79,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	private BitmapFont font;
 
-	
+
 
 	/**
 	 * Constructor using the running game instance
@@ -141,6 +151,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 			//Draw buttons over the screen
 			buttonStage.draw();
+
 		}
 		else { //if player lost
 			Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -199,8 +210,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	protected void initializeButtons() {
-
-
+		dnd = new DragAndDrop();
 		//ALEXBUTTON BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/playerButton.atlas"));
 		buttonSkin = new Skin();
@@ -223,46 +233,258 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .1);
-				handleMenu(alexButton.isChecked());
+				if (!mainMenuInitialized)
+					initializeMenuItems();
+				handleMainMenu(alexButton.isChecked());
+				System.out.println("Alex clicked.");
 			}
 		});
-
-		//initialize all menuGroup buttons
-		menuGroup = new VerticalGroup();
-		menuGroup.left();
-		menuGroup.setPosition(alexButton.getX(), alexButton.getY());
-		menuGroup.setColor(Color.BLACK);
-		menuGroup.setSize(alexButton.getWidth(), Gdx.graphics.getHeight());
 		
-		menuGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
-		menuGroupImage.setPosition(alexButton.getX(), 0);
-		menuGroupImage.setSize(alexButton.getWidth(), alexButton.getY());
-		
-		inventoryGroup = new HorizontalGroup();
+		dnd.addTarget(new Target(alexButton){
+			
+			@Override
+			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
+				System.out.println("Stop tickling me!");
+				if (payload.getObject() instanceof Consumable)
+					if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL){
+						this.getActor().setColor(Color.RED);
+						return false;
+					}
+				this.getActor().setColor(Color.GREEN);
+				return true;
+			}
 
-		upgradeGroup = new HorizontalGroup();
+			@Override
+			public void reset( Source source, Payload payload) {
+				getActor().setColor(Color.WHITE);
+			}
 
-		optionGroup = new HorizontalGroup();
-
-		
-
-
-
-
-
+			@Override
+			public void drop(Source source, Payload payload, float x, float y, int pointer) {
+				if (payload.getObject() instanceof Consumable)
+					getWorld().getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
+			}
+		});
 		buttonStage.addActor(alexButton);
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 
-	public void handleMenu(boolean checked) {
+	public void initializeMenuItems(){
+		mainMenuInitialized = true;
+		//Initialze Background Button
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/backgroundMenuButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle backgroundMenuButtonStyle = new ButtonStyle();
+		backgroundMenuButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		backgroundMenuButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		menuBackgroundButton = new Button(backgroundMenuButtonStyle);
+		menuBackgroundButton.setWidth(Gdx.graphics.getWidth());
+		menuBackgroundButton.setHeight(Gdx.graphics.getHeight());
+		menuBackgroundButton.setX(0);
+		menuBackgroundButton.setY(0);
+		menuBackgroundButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				handleMainMenu(false);
+				alexButton.setChecked(false);
+				inventoryGroupButton.setChecked(false);
+				//upgradesGroupButton.setChecked(false);
+				//optionsGroupButton.setChecked(false);
+				
+			}
+		});
+
+		//Main Group
+		menuGroup = new VerticalGroup();
+		menuGroup.left();
+		menuGroup.setPosition(alexButton.getX(), EDGE_TOLERANCE);
+		menuGroup.setSize(alexButton.getWidth(), alexButton.getY() - EDGE_TOLERANCE);
+
+		menuGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+		menuGroupImage.setPosition(alexButton.getX(), EDGE_TOLERANCE);
+		menuGroupImage.setSize(alexButton.getWidth(), alexButton.getY() - EDGE_TOLERANCE);
+
+		//Inventory Group Button
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/inventoryButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle inventoryButtonStyle = new ButtonStyle();
+		inventoryButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		inventoryGroupButton = new Button(inventoryButtonStyle){
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH;
+			}
+
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT;
+			}
+		};
+		inventoryGroupButton.setWidth(BUTTON_WIDTH);
+		inventoryGroupButton.setHeight(BUTTON_HEIGHT);
+		inventoryGroupButton.setChecked(false);
+		inventoryGroupButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				handleInventoryMenu(inventoryGroupButton.isChecked());
+				inventoryGroupButton.setChecked(inventoryGroupButton.isChecked());
+			}
+		});
+		menuGroup.addActor(inventoryGroupButton);
+
+
+
+
+		//Upgrade Group Button
+
+		//Option Group Button
+
+		//Inventory Group
+		inventoryGroup = new HorizontalGroup();
+		inventoryGroup.center();
+		inventoryGroup.setPosition((inventoryGroupButton.getX() + inventoryGroupButton.getPrefWidth()) + EDGE_TOLERANCE, 
+				inventoryGroupButton.getY());
+		inventoryGroup.setSize(Gdx.graphics.getWidth() - (inventoryGroupButton.getX() + inventoryGroupButton.getPrefWidth()) + EDGE_TOLERANCE,
+				alexButton.getY() - EDGE_TOLERANCE );
+		inventoryGroup.space(EDGE_TOLERANCE);
+		
+		System.out.println("inventoryGroup position" + inventoryGroup.getX() + " " + inventoryGroup.getY());
+
+		Image inventoryGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+		inventoryGroupImage.setPosition((inventoryGroupButton.getX() + inventoryGroupButton.getPrefWidth()) + EDGE_TOLERANCE, 
+				inventoryGroupButton.getY() + 150f);
+		inventoryGroupImage.setSize(Gdx.graphics.getWidth() - (inventoryGroupButton.getX() + inventoryGroupButton.getPrefWidth()) + EDGE_TOLERANCE,
+				alexButton.getY() - EDGE_TOLERANCE);
+
+		System.out.println("inventoryGroupImage position" + inventoryGroupImage.getX() + " " + inventoryGroupImage.getY());
+		//Upgrade Group
+		upgradesGroup = new HorizontalGroup();
+
+		//Option Group
+		optionsGroup = new HorizontalGroup();
+
+		System.out.println("Main menu bar initialized.");
+
+		initializeInventoryItems();
+		initializeUpgradeItems();
+		initializeOptionItems();
+
+	}
+
+	public void initializeInventoryItems(){
+		for (int i = 0; i < Consumable.DropType.values().length; i++){
+			final int index = i;
+
+			//create atlas and add it to a new skin
+			atlas = new TextureAtlas(Gdx.files.internal(Consumable.DropType.values()[i].getAtlasPath()));
+			buttonSkin = new Skin();
+			buttonSkin.addRegions(atlas);
+
+			//create a Buttonstyle
+			ImageTextButtonStyle inventoryButtonStyle = new ImageTextButtonStyle();
+			inventoryButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+			inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+			inventoryButtonStyle.font = new BitmapFont();
+
+			//create a new button using aforementioned button style and set stuff up
+			final ImageTextButton inventoryButton = new ImageTextButton("", inventoryButtonStyle){
+				@Override
+				public float getPrefHeight(){
+					return BUTTON_HEIGHT/2;
+				};
+
+				@Override
+				public float getPrefWidth(){
+					return BUTTON_WIDTH/2;
+				}
+			};
+			inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
+			inventoryButton.pad(EDGE_TOLERANCE);
+
+			dnd.addSource(new Source(inventoryButton){
+
+				/**
+				 * Overriding dragStart to initialize drag and drop payload
+				 */
+				@Override
+				public Payload dragStart(InputEvent event, float x, float y,int pointer) {
+					System.out.println("Drag started @ x:" + x + " y:" + y);
+					Payload payload = new Payload();
+					if (getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[index])){
+						inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
+						//change fonts/size attributes use inventoryButton.getLabel().(invoke methods)
+						payload.setObject(new Consumable(Consumable.DropType.values()[index]));
+						payload.setDragActor(new Image(inventoryButton.getBackground()));
+						return payload;
+					}
+					return null;
+				}
+
+				/**
+				 * Overriding dragStop to determine if drag has stopped over a valid target
+				 */
+				@Override
+				public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload, DragAndDrop.Target target){
+					System.out.println("Drag stopped @ x:" + x + " y:" + y);
+					if (target == null){
+						getWorld().getPlayer().getInventory().addItem(new Consumable(Consumable.DropType.values()[index]));
+						inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
+					}
+				}
+			}
+					);
+			inventoryGroup.addActor(inventoryButton);
+		}
+	}
+	public void initializeUpgradeItems(){}
+	public void initializeOptionItems(){}
+
+	
+	public void handleMainMenu(boolean checked) {
 		if (checked){
+			buttonStage.addActor(menuBackgroundButton);
 			buttonStage.addActor(menuGroupImage);
 			buttonStage.addActor(menuGroup);
 		}
 		else{
 			menuGroupImage.remove();
 			menuGroup.remove();
+			menuBackgroundButton.remove();
+
+			//collapse children menus
+			handleInventoryMenu(false);
+			handleUpgradeMenu(false);
+			handleOptionsMenu(false);
 		}
+	}
+
+	public void handleInventoryMenu(boolean checked){
+		if (checked){
+			buttonStage.addActor(inventoryGroup);
+			alexButton.toFront();
+		}
+		else{
+			inventoryGroup.remove();
+		}
+	}
+
+	public void handleUpgradeMenu(boolean checked){
+
+	}
+
+	public void handleOptionsMenu(boolean checked){
+
 	}
 
 	/**
@@ -323,8 +545,17 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		return alexButton.isChecked();
 	}
 
-	public Array<Actor> getScreenActors() {
-		return buttonStage.getActors();
+	public Array<Actor> getScreenActors(){
+		Array<Actor> menuActors = new Array<Actor>();
+		menuActors.add(alexButton);
+		if (alexButton.isChecked())
+			menuActors.add(menuGroup);
+		/*if (inventoryButton.isChecked())
+			menuActors.add(inventoryGroup);
+		if (upgradesButton.isChecked())
+			menuActors.add(upgradesGroup);
+		if (optionsButton.isChecked())
+			menuActors.add(optionsGroup);*/
+		return menuActors;
 	}
-
 }

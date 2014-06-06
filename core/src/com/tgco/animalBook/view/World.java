@@ -5,8 +5,6 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -381,7 +379,7 @@ public class World {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
 			//Drop new items
-			if(rand.nextInt(100) <= 50 && drawMap.get("Animal").size <= 30){
+			if(rand.nextInt(100) <= 50 && drawMap.get("Movable").size <= 30){
 				ABDrawable dropping =  ((Animal)movable).drop();
 				if(dropping != null){
 					drawMap.get("Dropped").add(dropping);

@@ -141,20 +141,7 @@ public class GameScreenInputHandler implements InputProcessor {
 	 */
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if (gameScreen.inMenu()){
-			boolean keepMenu = false;
-			for (Actor a : gameScreen.getScreenActors()){
-				if (screenX > a.getX() 
-						&& screenX < a.getX() + a.getWidth()
-						&& screenY > a.getY()
-						&& screenY < a.getY() + a.getHeight() 
-						&& a != gameScreen.getAlexButton()){
-					keepMenu = true;
-				}
-			}
-			gameScreen.handleMenu(keepMenu);
-			gameScreen.getAlexButton().setChecked(keepMenu);
-		}
+		
 		Vector3 touch = new Vector3(screenX,screenY,0);
 		//unproject touch to world coordinates
 		gameScreen.getWorld().getCamera().unproject(touch);

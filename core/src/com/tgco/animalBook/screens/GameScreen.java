@@ -245,8 +245,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 				System.out.println("Stop tickling me!");
+				System.out.println("Player health:" + getWorld().getPlayer().getHealth());
 				if (payload.getObject() instanceof Consumable)
-					if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL){
+					if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL ||
+					getWorld().getPlayer().getHealth() == 100f){
 						this.getActor().setColor(Color.RED);
 						return false;
 					}
@@ -363,11 +365,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		Image inventoryGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
 		inventoryGroupImage.setPosition((inventoryGroupButton.getX() + inventoryGroupButton.getPrefWidth()) + EDGE_TOLERANCE, 
-				inventoryGroupButton.getY() + 150f);
+				inventoryGroupButton.getY());
 		inventoryGroupImage.setSize(Gdx.graphics.getWidth() - (inventoryGroupButton.getX() + inventoryGroupButton.getPrefWidth()) + EDGE_TOLERANCE,
 				alexButton.getY() - EDGE_TOLERANCE);
 
-		System.out.println("inventoryGroupImage position" + inventoryGroupImage.getX() + " " + inventoryGroupImage.getY());
+		System.out.println("inventoryGroupImage position" + inventoryGroupImage.getX() + " " + inventoryGroupImage.getY() + "Size: " + inventoryGroupImage.getWidth() + " " + inventoryGroupImage.getHeight());
 		//Upgrade Group
 		upgradesGroup = new HorizontalGroup();
 

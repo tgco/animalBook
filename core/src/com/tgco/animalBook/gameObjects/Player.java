@@ -40,11 +40,13 @@ public class Player extends Movable {
 	 * eat increases the player's health by a certain amount
 	 * @param value how much the player adds in health
 	 */
-	public void eat(float value) {
+	public boolean eat(float value) {
 		if ((playerHealth + value) > 100) {
 			playerHealth = 100;
+			return false;
 		} else {
 			playerHealth += value;
+			return true;
 		}
 	}
 	
@@ -140,5 +142,9 @@ public class Player extends Movable {
 	//TODO:: Ben - not sure where this is called
 	public void setHealth(float health) {
 		this.playerHealth = health;
+	}
+
+	public float getMaxHealth() {
+		return playerHealth;
 	}
 }

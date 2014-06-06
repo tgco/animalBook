@@ -329,7 +329,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);		
 				
-				gameInstance.getLevelHandler().resetStoredAmount();
+				//gameInstance.getLevelHandler().resetStoredAmount();
 				
 				gameScreen.resetInputProcessors();
 				gameScreen.dispose();

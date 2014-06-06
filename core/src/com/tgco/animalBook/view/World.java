@@ -144,27 +144,35 @@ public class World {
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
+
 		if(gameInstance.getLevelHandler().getLevel()>1){
 			increasedCameraSpeed = 2f*cameraSpeed;
 		}else{
 			increasedCameraSpeed = 3f*cameraSpeed;
 		}
-		if(levelSize && gameInstance.getLevelData().get(1) != null){
-			player = (Player) gameInstance.getLevelData().get(1);
-				player.resetPlayerPosition();
-		}else{
-			player = new Player(cameraSpeed);
-		}
-
-
+		
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
 
 		market = new Market();
-		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength + player.getHeight()));
+		market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/8 + laneLength));
 		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.get("Market").add(market);
+		
+		if(levelSize && gameInstance.getLevelData().get(1) != null){
+			player = (Player) gameInstance.getLevelData().get(1);
+			if (!gameInstance.isHitBack()) {
+				reinitTexturePlayer();
+				player.resetPlayerPosition();
+			} else {
+				camera.position.set(Gdx.graphics.getWidth()/2, player.getPosition().cpy().y + 3f*Gdx.graphics.getHeight()/8, 0);
+				reinitTexturePlayer();
+				market.setPosition(new Vector2(player.getPosition().cpy().x, Gdx.graphics.getHeight()/8 + laneLength + player.getHeight()));
+			}
+		}else{
+			player = new Player(cameraSpeed);
+		}
 
 		if(levelSize && gameInstance.getLevelData().get(3) != null){
 			drawMap.put("Dropped", (Array<ABDrawable>) gameInstance.getLevelData().get(3));
@@ -418,6 +426,7 @@ public class World {
 		if (player.getBounds().overlaps(market.getBounds())) {
 			SoundHandler.pauseBackgroundMusic();
 			gameInstance.getLevelHandler().resetNextLevelStart();
+			gameInstance.setHitBack(false);
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 	}
@@ -445,6 +454,9 @@ public class World {
 			obstacles.add((Obstacle) aBDrawable);
 		}
 		return obstacles;
+	}
+	public void reinitTexturePlayer() {
+		player.resetTexture("objectTextures/player.png");
 	}
 
 }

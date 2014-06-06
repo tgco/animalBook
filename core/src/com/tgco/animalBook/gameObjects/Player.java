@@ -138,6 +138,7 @@ public class Player extends Movable {
 }
 	
 	//TODO:: Ben - not sure where this is called
+	//ANSWER:: in the tutorial to teach health dropping
 	public void setHealth(float health) {
 		this.playerHealth = health;
 	}

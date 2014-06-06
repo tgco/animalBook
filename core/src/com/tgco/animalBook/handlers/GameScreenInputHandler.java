@@ -74,6 +74,7 @@ public class GameScreenInputHandler implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		if(keycode == Keys.BACK){
+			gameInstance.setHitBack(true);
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));
 			//store the data in levelData of Game
 

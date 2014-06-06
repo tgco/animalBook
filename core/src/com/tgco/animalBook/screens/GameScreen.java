@@ -123,7 +123,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 			//Draw players current money
-			font.setColor(Color.BLACK);
+			font.setColor(Color.WHITE);
 			font.setScale(1.2f);
 			Vector3 vect = new Vector3(Gdx.graphics.getWidth()/2 +10,0 +3*EDGE_TOLERANCE,0);
 			gameWorld.getCamera().unproject(vect);

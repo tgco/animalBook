@@ -293,7 +293,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 					SoundHandler.pauseMarketBackgroundMusic();
 					SoundHandler.playBackgroundMusic(true);
 					
-					gameInstance.addToLevel(1);
+					gameInstance.addToLevel();
 					
 					// spot 1 is current level
 					gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);

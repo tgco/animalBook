@@ -120,10 +120,18 @@ public abstract class ABDrawable {
 		return width;
 	}
 	
+	/**
+	 * the string of the texture for use in the market
+	 * @return the string of the texture
+	 */
 	public String getTexturePath() {
 		return texturePath;
 	}
 	
+	/**
+	 * resets to new texture because of disposing of the texture for memory usage when switching screens
+	 * @param texturePath 
+	 */
 	public void resetTexture(String texturePath) {
 		this.texture = new Texture(Gdx.files.internal(texturePath));	
 	}

@@ -86,6 +86,9 @@ public class Swipe {
 		return lifeTime;
 	}
 
+	/** 
+	 * disposing of the swipe texture
+	 */
 	public void dispose() {
 		TEXTURE.dispose();
 	}

@@ -48,6 +48,10 @@ public class Pig extends Animal {
 	public DropType getDropType() {
 		return dropType;
 	}
+	
+	/**
+	 * resets the this animal texture with it's path
+	 */
 	@Override
 	public void resetTexture() {
 		super.resetTexture(texturePath);

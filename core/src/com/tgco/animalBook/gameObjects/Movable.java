@@ -69,6 +69,7 @@ public abstract class Movable extends ABDrawable {
 	public void setCurrentTarget(Vector2 target) {
 		currentTarget = target.cpy();
 	}
+	
 	 /**
 	  * handles collisions between movable objects and obstacles
 	  * 

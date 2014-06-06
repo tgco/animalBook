@@ -20,6 +20,7 @@ public class Dropped extends ABDrawable{
 	/** how much time it has left before disappearing */
 	private double timeLeft;
 	
+	/** if the user has clicked on it*/
 	private boolean pickedUp;
 	
 	/**
@@ -69,6 +70,11 @@ public class Dropped extends ABDrawable{
 		}
 	}
 	
+	/**
+	 *  moves the dropped to the position on screen if it has been clicked on
+	 * @param pos the position to where it needs to go
+	 * @param delta the time between frames
+	 */
 	public void droppedMove(Vector2 pos, float delta) {
 		if (pickedUp) {
 			position.lerp(pos, delta);
@@ -77,10 +83,17 @@ public class Dropped extends ABDrawable{
 		}
 	}
 	
+	/**
+	 * when clicked on, change to true from the input handler of the game
+	 */
 	public void pickUp() {
 		pickedUp = true;
 	}
 	
+	/**
+	 * getter for the picked up
+	 * @return
+	 */
 	public boolean isPickedUp() {
 		return pickedUp;
 	}
@@ -111,6 +124,9 @@ public class Dropped extends ABDrawable{
 		return true;
 	}
 	
+	/**
+	 * resets the approprtatie texture when changing screens
+	 */
 	public void resetTexture() {
 		if(consume != null){
 		super.resetTexture(consume.getType().getTexturePath());

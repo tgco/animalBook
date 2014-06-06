@@ -28,11 +28,11 @@ public class AnimalBookGame extends Game {
 	public static final Boolean debugMode = true;
 	private FPSLogger fpsLogger;
 
-
+	/** levelData array is used hold the data for the current level */
 	private static Array<Object> levelData = new Array<Object>(5);
 
-
-	private DatabaseHandler dbHand;
+	
+	//private DatabaseHandler dbHand;
 
 	/**
 	 * The target frame rate for all motion updates.  Movement is calculated relative to this frame rate.
@@ -40,23 +40,21 @@ public class AnimalBookGame extends Game {
 	public static final float TARGET_FRAME_RATE = 30;
 
 	/**
-	 * The current level being played
+	 * The current level from the preferences file
 	 */
 	private  int level = 1;
 	/**
 	 * Load all information that differs between levels
 	 */
 	private LevelHandler levelHandler;
-	/**
-	 * every game starts with the create function.
-	 * this sets the initial screen to splash screen
-	 */
-
+	
+	/** varaiable to store each consumable and retrieve them */
 	private int numConsumables;
 
 	/** DATA_PREFS is the preference file for the data of the game*/
 	private static final String DATA_PREFS = "tgco.AnimalBookGame_data";
 
+	/**continueable is used for the MainMenu continue button disable */
 	private boolean continueable = false;
 
 	/**
@@ -64,6 +62,10 @@ public class AnimalBookGame extends Game {
 	 */
 	private boolean hitBack = false;
 
+	/**
+	 * every game starts with the create function.
+	 * this sets the initial screen to splash screen
+	 */
 	@Override
 	public void create () {
 
@@ -80,6 +82,7 @@ public class AnimalBookGame extends Game {
 		//DB stuff if we go this route
 		/*dbHand = new DatabaseHandler();
 		 dbHand.getValue( "0");*/
+		
 		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 		int lev = prefs.getInteger("level");
 
@@ -121,7 +124,8 @@ public class AnimalBookGame extends Game {
 	}
 
 	/**
-	 * life cycle of the app in which the saving of data will go here
+	 * Overrides the pause from the Normal life cycle and saves to the preferences 
+	 * if the game has been played
 	 */
 	@Override
 	public void pause() {
@@ -133,6 +137,9 @@ public class AnimalBookGame extends Game {
 		}
 	}
 
+	/**
+	 * saves the data for the level to the preferences 
+	 */
 	public void setPrefsToFile(){
 		if(level < levelHandler.getLevel()){
 			Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
@@ -162,13 +169,7 @@ public class AnimalBookGame extends Game {
 			Gdx.app.log("My Tagg", "After flush of save");
 		}
 	}
-	/**
-	 * life cycle of the app in which the loading of the data will go here
-	 */
-	@Override
-	public void resume() {
-		super.resume();
-	}
+	
 
 	/**
 	 * Used to cast the current screen to gameScreen to
@@ -187,26 +188,44 @@ public class AnimalBookGame extends Game {
 		SoundHandler.resetAudio();
 	}
 
+	/** 
+	 * getter for the level data used in World constructor
+	 * @return the level data
+	 */
 	public Array<Object> getLevelData() {
 		return levelData;
 	}
 
+	/** 
+	 * The add function is the place to reset the data in LevelData when nextLevel button is pressed and back button
+	 * @param obj the object that will be stored in LevelData
+	 * @param pos the position that the object will be stored in LevelData
+	 */
 	public void addToDatalevel(Object obj, int pos){
 		levelData.set(pos, obj);
 	}
 
-
+	/**
+	 * getter for the LevelHandler for the other classes to use the info of the level
+	 * @return the levelHandler of the Game
+	 */
 	public LevelHandler getLevelHandler() {
 		return levelHandler;
 	}
 
-	public void addToLevel(int i) {
+	/**
+	 * The Game adds a level to levelHandler and resets the storedAmount to 0 for the market
+	 */
+	public void addToLevel() {
 		levelHandler.addLevel();
 		levelHandler.resetStoredAmount();
 	}
 
 
-
+	/**
+	 * This sets the levelHandler and it's data from preferences for the continue. 
+	 * if nothing in preferences it will return 0.
+	 */
 	public void setDataCont() {
 		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 		level = prefs.getInteger("level");
@@ -259,6 +278,9 @@ public class AnimalBookGame extends Game {
 
 	}
 
+	/**
+	 * sets the levelHandler when the play button is clicked.
+	 */
 	public void setDataPlay(){
 		boolean levelSize = getLevelData().size >0;
 		if(levelSize && getLevelData().get(0) !=null){
@@ -270,10 +292,19 @@ public class AnimalBookGame extends Game {
 
 	}
 
+	/**
+	 * getter for the continue varaible for the MainMenu
+	 * @return if continue should be enabled
+	 */
 	public boolean isContinueable() {
 		return continueable;
 	}
 
+	/**
+	 * this resets the data to be like null to start from the begining 
+	 * used in the Options menu reset button
+	 *  
+	 */
 	public void resetData(){
 		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 		prefs.putInteger("level", 0);
@@ -297,12 +328,28 @@ public class AnimalBookGame extends Game {
 		prefs.putBoolean("tutorial", true);
 
 		prefs.flush();
+		
+		//after calling flush
+		Preferences prefs2 = Gdx.app.getPreferences(DATA_PREFS);
+		int lev = prefs2.getInteger("level");
+
+		if(lev <=0 ){
+			continueable=false;
+		}
 	}
 
+	/**
+	 * getter for gameScreen loading data
+	 * @return 
+	 */
 	public boolean isHitBack() {
 		return hitBack;
 	}
 
+	/**
+	 * setter for the back button press
+	 * @param hitBack
+	 */
 	public void setHitBack(boolean hitBack) {
 		this.hitBack = hitBack;
 	}

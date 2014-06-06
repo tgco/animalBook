@@ -222,14 +222,14 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 		
-		helpButton.addListener(new InputListener() {
+		resetButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				//TODO STUFF
-			
+				gameInstance.resetData();
+				SoundHandler.playButtonClick();
 			}
 		});
 		

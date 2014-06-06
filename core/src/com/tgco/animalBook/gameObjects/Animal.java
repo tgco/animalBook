@@ -25,6 +25,7 @@ public abstract class Animal extends Movable {
 
 	/** interval between drop chances */
 	private double dropInterval;
+	
 	/** the time it stays on the ground until it disappears */
 	private double timeOnGround;
 
@@ -40,6 +41,7 @@ public abstract class Animal extends Movable {
 	/** rand is used to created random movement of the animal */
 	protected Random rand;
 
+	/** the animal will have different target changes for different levels */
 	private int  animalLevel;
 
 	/**
@@ -47,6 +49,7 @@ public abstract class Animal extends Movable {
 	 *  along with a position
 	 * @param texturePath the string path to the picture
 	 * @param position the starting position when the animal is created
+	 * @param animalLevel the level the animal is on
 	 */
 	public Animal(String texturePath, Vector2 position, int animalLevel) {
 		super(texturePath);
@@ -210,5 +213,6 @@ public abstract class Animal extends Movable {
 	/** every animal will be able to get the dropType that it has */
 	public abstract DropType getDropType();
 
+	/** every animal must have a resetTexture for switching screens */
 	public abstract void resetTexture();
 }

@@ -419,7 +419,19 @@ public class World {
 				if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable.getClass().equals(Player.class))) {
 					((Movable)movable).bounce(null, (Obstacle)obstacle);
 					if ((movable.getPosition().y + movable.getHeight()/2) < (obstacle.getPosition().y))
-							((Movable)movable).stopForwardBias(cameraSpeed,delta);
+						((Movable)movable).stopForwardBias(cameraSpeed,delta);
+				}
+			}
+		}
+
+		//Bounce animals off of each other
+		Array<ABDrawable> movables = drawMap.get("Movable");
+		for (int i = 0; i < movables.size; i ++) {
+			for (int j = i + 1; j < movables.size; j++) {
+				//collision check
+				if (movables.get(i).getBounds().overlaps(movables.get(j).getBounds())) {
+					if (movables.get(i).getPosition().cpy().dst(movables.get(j).getPosition().cpy()) < 2f*movables.get(i).getHeight()/3f)
+						((Movable)movables.get(i)).bounce((Movable)(movables.get(j)), null);
 				}
 			}
 		}

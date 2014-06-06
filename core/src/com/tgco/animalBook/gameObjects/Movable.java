@@ -94,18 +94,23 @@ public abstract class Movable extends ABDrawable {
 		
 		//Collision with obstacle
 		if (movable == null) {
-			Vector2 mPos, oPos, baseVector;
-			mPos = this.position.cpy();
+			Vector2 oPos, baseVector;
 			oPos = obstacle.getPosition().cpy();
-			baseVector = new Vector2(mPos.x - oPos.x, mPos.y - oPos.y);
-			float dist = mPos.dst(oPos);
+			baseVector = new Vector2(this.position.x - oPos.x, this.position.y - oPos.y);
+			float dist = this.position.cpy().dst(oPos);
 			float deg = baseVector.getAngleRad();
 			addToCurrentTarget(new Vector2(((float)(dist*Math.cos((double)deg)))/4,((float)(dist*Math.sin((double)deg))/4)));
 			this.previousTarget = this.currentTarget.cpy();
 		}
 		//collision with other movable
 		else if (obstacle == null) {
-			
+			Vector2 mPos, baseVector;
+			mPos = movable.getPosition().cpy();
+			baseVector = new Vector2(this.position.x - mPos.x, this.position.y - mPos.y);
+			float dist = this.position.cpy().dst(mPos);
+			float deg = baseVector.getAngleRad();
+			addToCurrentTarget(new Vector2(((float)(dist*Math.cos((double)deg)))/24,((float)(dist*Math.sin((double)deg))/24)));
+			this.previousTarget = this.currentTarget.cpy();
 		}
 
 	}

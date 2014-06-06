@@ -3,6 +3,7 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -39,6 +40,12 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
 	private BitmapFont font;
 
+	/**
+	 * Stage to draw the screen once the user has pressed the back button
+	 */
+	private Stage popupStage;
+
+	private boolean hasConfirm = false;
 
 	/**
 	 * Constructs a new Market Screen with a game instance and a game screen.
@@ -53,7 +60,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	public MarketScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
-
+		popupStage = new Stage();
 		this.gameScreen = gameScreen;
 
 		//Background rendering
@@ -80,6 +87,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
+		if(!hasConfirm){
 		int storedAnimal = gameInstance.getLevelHandler().getStoredAmount();
 		int nextLevel = gameInstance.getLevelHandler().getNextLevelStart();
 		int needAnimals = gameInstance.getLevelHandler().getPassLevelAmount();
@@ -113,7 +121,19 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			updateMarketScreenItems(i);
 		}
 		reinitButtons();
-
+		
+		if(Gdx.input.isKeyPressed(Keys.BACK)){
+			setDialog();
+		}
+		
+		//Gdx.gl.glClearColor(1, 1, 1, 1);
+		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		}
+		else{
+			popupStage.act(delta);
+			popupStage.draw();
+		}
 	}
 
 	/**
@@ -386,5 +406,24 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			font.dispose();
 		}
 	}
-
+	
+	/**
+	 * Sets the game to the confirm dialog when back is pressed
+	 * 
+	 */
+	public void setDialog(){
+		hasConfirm  = true;
+		Skin skin = new Skin(Gdx.files.internal("confirmSkin/uiskin.json"));
+		ConfirmDialog backD = new ConfirmDialog("Back Button Pressed", skin, gameInstance,"Please click  \"retry\" or \"Next Level\" button to save Progress", 0);
+		backD.show(popupStage);
+		popupStage.addActor(backD);
+		inputMultiplexer.addProcessor(popupStage);
+		inputMultiplexer.removeProcessor(buttonStage);
+	}
+	public void setCancel(){
+		hasConfirm = false;
+		inputMultiplexer.removeProcessor(popupStage);
+		inputMultiplexer.addProcessor(buttonStage);
+		popupStage = new Stage();	
+	}
 }

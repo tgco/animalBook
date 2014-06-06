@@ -5,6 +5,7 @@
  */
 package com.tgco.animalBook;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -99,6 +100,8 @@ public class AnimalBookGame extends Game {
 		super.render();
 		if (debugMode) 
 			fpsLogger.log();
+		
+		
 	}
 
 	/**
@@ -353,4 +356,5 @@ public class AnimalBookGame extends Game {
 	public void setHitBack(boolean hitBack) {
 		this.hitBack = hitBack;
 	}
+	
 }

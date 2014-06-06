@@ -3,6 +3,7 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -128,6 +129,14 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		drawData(0.5f, 1);
 		drawData(0.5f, 2);
 		reinitButtons();
+		
+		if(Gdx.input.isKeyPressed(Keys.BACK)){
+			SoundHandler.pauseMarketBackgroundMusic();
+			SoundHandler.playBackgroundMusic(true);
+			gameScreen.resetInputProcessors();
+			gameInstance.setScreen(gameScreen);
+			dispose();
+		}
 	}
 
 	/**

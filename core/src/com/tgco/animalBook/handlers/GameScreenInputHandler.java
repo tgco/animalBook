@@ -73,27 +73,7 @@ public class GameScreenInputHandler implements InputProcessor {
 	 */
 	@Override
 	public boolean keyDown(int keycode) {
-		if(keycode == Keys.BACK){
-			gameInstance.setHitBack(true);
-			gameInstance.setScreen(new MainMenuScreen(gameInstance));
-			//store the data in levelData of Game
-
-			// spot 1 is current level
-			gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
-
-			//spot 2 is player			
-			gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
-
-			//spot 3 is storing movable array
-			gameInstance.addToDatalevel(gameScreen.getWorld().getMovables(),2);
-
-			//spot 4 is storing dropped items array
-			gameInstance.addToDatalevel(gameScreen.getWorld().getDropped(), 3);
-			
-			gameInstance.addToDatalevel(gameScreen.getWorld().getObstacles(), 4);
-
-			gameScreen.dispose();
-		}
+		
 		return false;
 	}
 
@@ -230,7 +210,30 @@ public class GameScreenInputHandler implements InputProcessor {
 	 */
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
+		if(keycode == Keys.BACK && gameScreen.toMain()){
+			gameInstance.setHitBack(true);
+			gameInstance.setScreen(new MainMenuScreen(gameInstance));
+			//store the data in levelData of Game
+
+			// spot 1 is current level
+			gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
+
+			//spot 2 is player			
+			gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
+
+			//spot 3 is storing movable array
+			gameInstance.addToDatalevel(gameScreen.getWorld().getMovables(),2);
+
+			//spot 4 is storing dropped items array
+			gameInstance.addToDatalevel(gameScreen.getWorld().getDropped(), 3);
+			
+			gameInstance.addToDatalevel(gameScreen.getWorld().getObstacles(), 4);
+
+			gameScreen.dispose();
+		}
+		else if(keycode == Keys.BACK){
+			gameScreen.setMain();
+		}
 		return false;
 	}
 

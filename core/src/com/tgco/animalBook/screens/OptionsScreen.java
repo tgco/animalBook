@@ -3,6 +3,7 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -64,6 +65,12 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 
 		buttonStage.act(delta);
 		buttonStage.draw();
+		
+		if(Gdx.input.isKeyPressed(Keys.BACK)){
+			SoundHandler.playButtonClick();
+			gameInstance.setScreen(new MainMenuScreen(gameInstance));
+			dispose();
+		}
 	}
 
 	/**

@@ -150,7 +150,7 @@ public class World {
 		}else{
 			increasedCameraSpeed = 3f*cameraSpeed;
 		}
-		
+
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
@@ -159,7 +159,7 @@ public class World {
 		market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/8 + laneLength));
 		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.get("Market").add(market);
-		
+
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
 			if (!gameInstance.isHitBack()) {
@@ -416,8 +416,10 @@ public class World {
 		//check for collisions between movable and obstacles
 		for (ABDrawable movable : drawMap.get("Movable")){
 			for (ABDrawable obstacle : drawMap.get("Obstacle")){
-				if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable instanceof Player)){
-					((Movable)movable).bounce((Movable)movable, (Obstacle)obstacle);
+				if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable.getClass().equals(Player.class))) {
+					((Movable)movable).bounce(null, (Obstacle)obstacle);
+					if ((movable.getPosition().y + movable.getHeight()/2) < (obstacle.getPosition().y))
+							((Movable)movable).stopForwardBias(cameraSpeed,delta);
 				}
 			}
 		}

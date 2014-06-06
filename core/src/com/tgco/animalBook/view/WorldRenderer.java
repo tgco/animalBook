@@ -79,6 +79,16 @@ public class WorldRenderer {
 		for (Array<ABDrawable> a : drawables.values()){
 			for (ABDrawable drawable : a) {
 				drawable.draw(batch);
+				/*
+				batch.end();
+				ShapeRenderer render = new ShapeRenderer();
+				render.setProjectionMatrix(cam.combined);
+				render.begin(ShapeType.Line);
+				render.rect(drawable.getBounds().x, drawable.getBounds().y, drawable.getBounds().width, drawable.getBounds().height);
+				render.end();
+				render.dispose();
+				batch.begin();
+				*/
 			}
 		}
 

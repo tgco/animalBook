@@ -11,15 +11,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.AnimalBookGame;
 
 public abstract class Movable extends ABDrawable {
-	
+
 	/** each movable will have a speed which is how much they move per frame*/
 	protected float speed;
 	/** each movable will have a speed that the camera is moving due to they should move faster*/
 	protected float cameraSpeed;
-	
+
+	/** the multiple of the camera speed that an animal moves up with the camera every move call */
+	protected float moveBias;
+
 	/**each movable will have a previous target which lerps to the current target */
 	protected Vector2 previousTarget;
-	
+
 	/**the current target is where the movable should be heading to  */
 	protected Vector2 currentTarget;
 
@@ -29,9 +32,11 @@ public abstract class Movable extends ABDrawable {
 	 */
 	public Movable(String texturePath) {
 		super(texturePath);
-		
+
 		//default speed
 		speed = 1/14f;
+
+		moveBias = 1.5f;
 	}
 
 	/**
@@ -41,17 +46,26 @@ public abstract class Movable extends ABDrawable {
 	 */
 	public void move(float cameraSpeed, float delta) {
 		//move bias with camera direction
-		position.y += (1.5*cameraSpeed) * (AnimalBookGame.TARGET_FRAME_RATE*delta);
-		
+		position.y += (moveBias*cameraSpeed) * (AnimalBookGame.TARGET_FRAME_RATE*delta);
+
 		//Lerp the position to the target
 		position.lerp(previousTarget, speed*Gdx.graphics.getDeltaTime());
 
 		//Lerp the previous target to the current
 		previousTarget.lerp(currentTarget,30*speed*Gdx.graphics.getDeltaTime());
-		
+
 		//update bounds
 		bounds.setX(position.x - width/2);
 		bounds.setY(position.y - height/2);
+	}
+
+	/**
+	 * Stops the constant forward motion for use with colliding with an obstacle from below
+	 * 
+	 * @param cameraSpeed
+	 */
+	public void stopForwardBias(float cameraSpeed,float delta) {
+		position.y -= (moveBias*cameraSpeed) * (AnimalBookGame.TARGET_FRAME_RATE*delta);
 	}
 
 	/**
@@ -69,22 +83,31 @@ public abstract class Movable extends ABDrawable {
 	public void setCurrentTarget(Vector2 target) {
 		currentTarget = target.cpy();
 	}
-	
-	 /**
-	  * handles collisions between movable objects and obstacles
-	  * 
-	  * @param movable
-	  * @param obstacle
-	  */
+
+	/**
+	 * handles collisions between movable objects and obstacles
+	 * 
+	 * @param movable
+	 * @param obstacle
+	 */
 	public void bounce(Movable movable, Obstacle obstacle){
-		Vector2 mPos, oPos, baseVector;
-		mPos = movable.getPosition().cpy();
-		oPos = obstacle.getPosition().cpy();
-		baseVector = new Vector2(mPos.x - oPos.x, mPos.y - oPos.y);
-		float dist = mPos.dst(oPos);
-		float deg = baseVector.getAngleRad();
-		//addToCurrentTarget(new Vector2((mPos.x - oPos.x)/2, (mPos.y-oPos.y)/2));
-		addToCurrentTarget(new Vector2(((float)(dist*Math.cos((double)deg)))/4,((float)(dist*Math.sin((double)deg))/4)));
+		
+		//Collision with obstacle
+		if (movable == null) {
+			Vector2 mPos, oPos, baseVector;
+			mPos = this.position.cpy();
+			oPos = obstacle.getPosition().cpy();
+			baseVector = new Vector2(mPos.x - oPos.x, mPos.y - oPos.y);
+			float dist = mPos.dst(oPos);
+			float deg = baseVector.getAngleRad();
+			addToCurrentTarget(new Vector2(((float)(dist*Math.cos((double)deg)))/4,((float)(dist*Math.sin((double)deg))/4)));
+			this.previousTarget = this.currentTarget.cpy();
+		}
+		//collision with other movable
+		else if (obstacle == null) {
+			
+		}
+
 	}
 
 	/**

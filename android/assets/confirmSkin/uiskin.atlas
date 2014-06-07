@@ -62,9 +62,9 @@ default-round
   xy: 112, 29
   size: 12, 20
   split: 5, 5, 5, 4
-  pad: 4, 4, 1, 1
-  orig: 12, 20
-  offset: 0, 0
+  pad: 30, 30, 10, 10
+  orig: 20, 28
+  offset: 20, 20
   index: -1
 check-off
   rotate: false

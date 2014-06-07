@@ -106,6 +106,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer.addProcessor(touchControls);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		Gdx.input.setCatchBackKey(true);
+		
+		dnd = new DragAndDrop();
 	}
 
 	/**
@@ -210,7 +212,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	protected void initializeButtons() {
-		dnd = new DragAndDrop();
+		
 		//ALEXBUTTON BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/playerButton.atlas"));
 		buttonSkin = new Skin();
@@ -220,7 +222,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		alexButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		alexButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
-		alexButton = new Button(alexButtonStyle);
+		if (!mainMenuInitialized)
+			alexButton = new Button(alexButtonStyle);
 		alexButton.setWidth(BUTTON_WIDTH);
 		alexButton.setHeight(BUTTON_HEIGHT);
 		alexButton.setX(EDGE_TOLERANCE);
@@ -238,9 +241,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				handleMainMenu(alexButton.isChecked());
 			}
 		});
-		
+
+		buttonStage.addActor(alexButton);
+		inputMultiplexer.addProcessor(buttonStage);
+	}
+
+	public void initializeMenuItems(){
 		dnd.addTarget(new Target(alexButton){
-			
+
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 				System.out.println("Stop tickling me!");
@@ -266,11 +274,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					getWorld().getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
 			}
 		});
-		buttonStage.addActor(alexButton);
-		inputMultiplexer.addProcessor(buttonStage);
-	}
 
-	public void initializeMenuItems(){
 		mainMenuInitialized = true;
 		//Initialze Background Button
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/backgroundMenuButton.atlas"));
@@ -298,6 +302,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				inventoryGroupButton.setChecked(false);
 				upgradesGroupButton.setChecked(false);
 				optionsGroupButton.setChecked(false);
+				System.out.println("BACK END CLICK");
 			}
 		});
 
@@ -383,6 +388,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				inventoryGroupButton.setChecked(false);
 				handleOptionsMenu(false);
 				optionsGroupButton.setChecked(false);
+
+				//testing purposes
+				handleMainMenu(false);
+				gameInstance.setScreen(new UpgradesScreen(gameInstance, gameInstance.getGameScreen()));
 			}
 		});
 		menuGroup.addActor(upgradesGroupButton);
@@ -450,7 +459,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		menuGroup.setPosition(alexButton.getX(), alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE);
 		menuGroupImage.setPosition(alexButton.getX() - .5f*EDGE_TOLERANCE, alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE*2f);
 		menuGroupImage.setSize(alexButton.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE*2f);
-		
+
 		initializeInventoryItems();
 		initializeUpgradeItems();
 		initializeOptionItems();
@@ -529,7 +538,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void initializeUpgradeItems(){}
 	public void initializeOptionItems(){}
 
-	
+
 	public void handleMainMenu(boolean checked) {
 		if (checked){
 			buttonStage.addActor(menuGroupImage);

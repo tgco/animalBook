@@ -295,20 +295,17 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				handleMainMenu(false);
 				alexButton.setChecked(false);
 				inventoryGroupButton.setChecked(false);
-				//upgradesGroupButton.setChecked(false);
+				upgradesGroupButton.setChecked(false);
 				//optionsGroupButton.setChecked(false);
 			}
 		});
 
 		//Main Group
 		menuGroup = new VerticalGroup();
-		menuGroup.left();
-		menuGroup.setPosition(alexButton.getX(), EDGE_TOLERANCE);
-		menuGroup.setSize(alexButton.getWidth(), alexButton.getY() - EDGE_TOLERANCE);
+		menuGroup.center();
 
 		menuGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
-		menuGroupImage.setPosition(alexButton.getX(), EDGE_TOLERANCE);
-		menuGroupImage.setSize(alexButton.getWidth(), alexButton.getY() - EDGE_TOLERANCE);
+		menuGroup.space(EDGE_TOLERANCE);
 
 		//Inventory Group Button
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/inventoryButton.atlas"));
@@ -339,41 +336,73 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				handleInventoryMenu(inventoryGroupButton.isChecked());
-				inventoryGroupButton.setChecked(inventoryGroupButton.isChecked());
+				handleUpgradeMenu(false);
+				upgradesGroupButton.setChecked(false);
 			}
 		});
-		inventoryGroupButton.setName("inventoryGroupButton");
+
 		menuGroup.addActor(inventoryGroupButton);
 
-
-
-
 		//Upgrade Group Button
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/upgradeButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle upgradeButtonStyle = new ButtonStyle();
+		upgradeButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		upgradeButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		upgradesGroupButton = new Button(upgradeButtonStyle){
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH;
+			}
+
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT;
+			}
+		};
+		upgradesGroupButton.setWidth(BUTTON_WIDTH);
+		upgradesGroupButton.setHeight(BUTTON_HEIGHT);
+		upgradesGroupButton.setChecked(false);
+		upgradesGroupButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				handleUpgradeMenu(upgradesGroupButton.isChecked());
+				handleInventoryMenu(false);
+				inventoryGroupButton.setChecked(false);
+			}
+		});
+		menuGroup.addActor(upgradesGroupButton);
 
 		//Option Group Button
 
 		//Inventory Group
 		inventoryGroup = new HorizontalGroup();
 		inventoryGroup.center();
-		//some whacky code here to get positions relative to alexButton
 		inventoryGroup.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
-				alexButton.getY() - BUTTON_HEIGHT);
-		//inventoryGroup.setSize(Gdx.graphics.getWidth()/2f - inventoryGroupButton.getX() - inventoryGroupButton.getWidth() - EDGE_TOLERANCE, inventoryGroupButton.getHeight());
+				alexButton.getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 		inventoryGroup.space(EDGE_TOLERANCE);
 
 		inventoryGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
 		inventoryGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
-				alexButton.getY() - BUTTON_HEIGHT);
+				alexButton.getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
-		System.out.println("inventoryGroupImage position" + inventoryGroupImage.getX() + " " + inventoryGroupImage.getY() + "Size: " + inventoryGroupImage.getWidth() + " " + inventoryGroupImage.getHeight());
 		//Upgrade Group
 		upgradesGroup = new HorizontalGroup();
 
 		//Option Group
 		optionsGroup = new HorizontalGroup();
 
-		System.out.println("Main menu bar initialized.");
-
+		//after all components are taken care of...
+		menuGroup.pack();
+		menuGroup.setPosition(alexButton.getX(), alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE);
+		menuGroupImage.setPosition(alexButton.getX() - .5f*EDGE_TOLERANCE, alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE*2f);
+		menuGroupImage.setSize(alexButton.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE*2f);
+		
 		initializeInventoryItems();
 		initializeUpgradeItems();
 		initializeOptionItems();
@@ -399,12 +428,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			final ImageTextButton inventoryButton = new ImageTextButton("", inventoryButtonStyle){
 				@Override
 				public float getPrefHeight(){
-					return BUTTON_HEIGHT/2;
+					return BUTTON_HEIGHT*2/3;
 				};
 
 				@Override
 				public float getPrefWidth(){
-					return BUTTON_WIDTH/2;
+					return BUTTON_WIDTH*2/3;
 				}
 			};
 			inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);

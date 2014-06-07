@@ -56,7 +56,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton;
 
 	private VerticalGroup menuGroup;
-	private Image menuGroupImage;
+	private Image menuGroupImage, inventoryGroupImage;
 
 	private HorizontalGroup inventoryGroup, upgradesGroup, optionsGroup;
 
@@ -297,7 +297,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				inventoryGroupButton.setChecked(false);
 				//upgradesGroupButton.setChecked(false);
 				//optionsGroupButton.setChecked(false);
-				
 			}
 		});
 
@@ -343,6 +342,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				inventoryGroupButton.setChecked(inventoryGroupButton.isChecked());
 			}
 		});
+		inventoryGroupButton.setName("inventoryGroupButton");
 		menuGroup.addActor(inventoryGroupButton);
 
 
@@ -355,19 +355,15 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//Inventory Group
 		inventoryGroup = new HorizontalGroup();
 		inventoryGroup.center();
-		inventoryGroup.setPosition((inventoryGroupButton.getX() + inventoryGroupButton.getPrefWidth()) + EDGE_TOLERANCE, 
-				inventoryGroupButton.getY());
-		inventoryGroup.setSize(Gdx.graphics.getWidth() - (inventoryGroupButton.getX() + inventoryGroupButton.getPrefWidth()) + EDGE_TOLERANCE,
-				alexButton.getY() - EDGE_TOLERANCE );
+		//some whacky code here to get positions relative to alexButton
+		inventoryGroup.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
+				alexButton.getY() - BUTTON_HEIGHT);
+		//inventoryGroup.setSize(Gdx.graphics.getWidth()/2f - inventoryGroupButton.getX() - inventoryGroupButton.getWidth() - EDGE_TOLERANCE, inventoryGroupButton.getHeight());
 		inventoryGroup.space(EDGE_TOLERANCE);
-		
-		System.out.println("inventoryGroup position" + inventoryGroup.getX() + " " + inventoryGroup.getY());
 
-		Image inventoryGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
-		inventoryGroupImage.setPosition((inventoryGroupButton.getX() + inventoryGroupButton.getPrefWidth()) + EDGE_TOLERANCE, 
-				inventoryGroupButton.getY());
-		inventoryGroupImage.setSize(Gdx.graphics.getWidth() - (inventoryGroupButton.getX() + inventoryGroupButton.getPrefWidth()) + EDGE_TOLERANCE,
-				alexButton.getY() - EDGE_TOLERANCE);
+		inventoryGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+		inventoryGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
+				alexButton.getY() - BUTTON_HEIGHT);
 
 		System.out.println("inventoryGroupImage position" + inventoryGroupImage.getX() + " " + inventoryGroupImage.getY() + "Size: " + inventoryGroupImage.getWidth() + " " + inventoryGroupImage.getHeight());
 		//Upgrade Group
@@ -448,6 +444,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					);
 			inventoryGroup.addActor(inventoryButton);
 		}
+		//some whacky code down here...
+		inventoryGroup.pack();
+		inventoryGroup.setHeight(BUTTON_HEIGHT);
+		inventoryGroupImage.setSize(inventoryGroup.getWidth() + EDGE_TOLERANCE*2f, inventoryGroup.getHeight());
 	}
 	public void initializeUpgradeItems(){}
 	public void initializeOptionItems(){}
@@ -455,9 +455,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	
 	public void handleMainMenu(boolean checked) {
 		if (checked){
-			buttonStage.addActor(menuBackgroundButton);
 			buttonStage.addActor(menuGroupImage);
+			buttonStage.addActor(menuBackgroundButton);
 			buttonStage.addActor(menuGroup);
+			menuBackgroundButton.toBack();
 		}
 		else{
 			menuGroupImage.remove();
@@ -473,11 +474,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	public void handleInventoryMenu(boolean checked){
 		if (checked){
+			buttonStage.addActor(inventoryGroupImage);
 			buttonStage.addActor(inventoryGroup);
-			alexButton.toFront();
 		}
 		else{
 			inventoryGroup.remove();
+			inventoryGroupImage.remove();
 		}
 	}
 

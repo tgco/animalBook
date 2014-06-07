@@ -18,7 +18,8 @@ public class Player extends Movable {
 	/** it starts at $0*/
 	private int playerMoney = 0;
 	/** it starts at full health */
-	private float playerHealth = 100;
+	private static final float MAX_HEALTH = 100f;
+	private float playerHealth;;
 
 	/**
 	 * the constructor which sets the variables of it's parent
@@ -26,6 +27,7 @@ public class Player extends Movable {
 	 */
 	public Player(float speed) {
 		super(texturePath);
+		playerHealth = MAX_HEALTH;
 		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/8);
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
@@ -41,8 +43,8 @@ public class Player extends Movable {
 	 * @param value how much the player adds in health
 	 */
 	public boolean eat(float value) {
-		if ((playerHealth + value) > 100) {
-			playerHealth = 100;
+		if ((playerHealth + value) > MAX_HEALTH) {
+			playerHealth = MAX_HEALTH;
 			return false;
 		} else {
 			playerHealth += value;

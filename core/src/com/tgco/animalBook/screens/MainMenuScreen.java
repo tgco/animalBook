@@ -142,7 +142,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		playButton = new Button(style);
 		playButton.setWidth(MENU_BUTTON_WIDTH);
 		playButton.setHeight(MENU_BUTTON_HEIGHT);
-		playButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
+		playButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
 		playButton.setY(Gdx.graphics.getHeight()/2);
 
 		//create style for options button, must start over
@@ -156,7 +156,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton = new Button(style);
 		optionsButton.setWidth(MENU_BUTTON_WIDTH);
 		optionsButton.setHeight(MENU_BUTTON_HEIGHT);
-		optionsButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
+		optionsButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
 		optionsButton.setY( EDGE_TOLERANCE);
 
 		//This button is just to test the story screen
@@ -176,7 +176,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		continueButton = new Button(style);
 		continueButton.setWidth(MENU_BUTTON_WIDTH);
 		continueButton.setHeight(MENU_BUTTON_HEIGHT);
-		continueButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
+		continueButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
 		continueButton.setY(  Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - EDGE_TOLERANCE);
 		if(!gameInstance.isContinueable()){
 			continueButton.setDisabled(true);

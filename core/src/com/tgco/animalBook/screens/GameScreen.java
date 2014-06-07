@@ -431,6 +431,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				inventoryGroupButton.setChecked(false);
 				handleUpgradesMenu(false);
 				upgradesGroupButton.setChecked(false);
+				
+				handleMainMenu(false);
+				gameInstance.setScreen(new OptionsScreen(gameInstance, gameInstance.getGameScreen()));
 			}
 		});
 		menuGroup.addActor(optionsGroupButton);

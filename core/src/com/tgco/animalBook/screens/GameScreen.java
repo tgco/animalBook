@@ -236,7 +236,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				if (!mainMenuInitialized)
 					initializeMenuItems();
 				handleMainMenu(alexButton.isChecked());
-				System.out.println("Alex clicked.");
 			}
 		});
 		
@@ -292,11 +291,13 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				return true;
 			}
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				SoundHandler.changeBackgroundVolume((float) .1);
 				handleMainMenu(false);
 				alexButton.setChecked(false);
 				inventoryGroupButton.setChecked(false);
 				upgradesGroupButton.setChecked(false);
-				//optionsGroupButton.setChecked(false);
+				optionsGroupButton.setChecked(false);
 			}
 		});
 
@@ -335,9 +336,13 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				return true;
 			}
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				SoundHandler.changeBackgroundVolume((float) .1);
 				handleInventoryMenu(inventoryGroupButton.isChecked());
-				handleUpgradeMenu(false);
+				handleUpgradesMenu(false);
 				upgradesGroupButton.setChecked(false);
+				handleOptionsMenu(false);
+				optionsGroupButton.setChecked(false);
 			}
 		});
 
@@ -371,14 +376,55 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				return true;
 			}
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				handleUpgradeMenu(upgradesGroupButton.isChecked());
+				SoundHandler.playButtonClick();
+				SoundHandler.changeBackgroundVolume((float) .1);
+				handleUpgradesMenu(upgradesGroupButton.isChecked());
 				handleInventoryMenu(false);
 				inventoryGroupButton.setChecked(false);
+				handleOptionsMenu(false);
+				optionsGroupButton.setChecked(false);
 			}
 		});
 		menuGroup.addActor(upgradesGroupButton);
 
 		//Option Group Button
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/optionsButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle optionsButtonStyle = new ButtonStyle();
+		optionsButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		optionsButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		optionsGroupButton = new Button(optionsButtonStyle){
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH;
+			}
+
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT;
+			}
+		};
+		optionsGroupButton.setWidth(BUTTON_WIDTH);
+		optionsGroupButton.setHeight(BUTTON_HEIGHT);
+		optionsGroupButton.setChecked(false);
+		optionsGroupButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				SoundHandler.changeBackgroundVolume((float) .1);
+				handleOptionsMenu(upgradesGroupButton.isChecked());
+				handleInventoryMenu(false);
+				inventoryGroupButton.setChecked(false);
+				handleUpgradesMenu(false);
+				upgradesGroupButton.setChecked(false);
+			}
+		});
+		menuGroup.addActor(optionsGroupButton);
 
 		//Inventory Group
 		inventoryGroup = new HorizontalGroup();
@@ -392,9 +438,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				alexButton.getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//Upgrade Group
+		//TODO: 
 		upgradesGroup = new HorizontalGroup();
 
 		//Option Group
+		//TODO:
 		optionsGroup = new HorizontalGroup();
 
 		//after all components are taken care of...
@@ -496,7 +544,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 			//collapse children menus
 			handleInventoryMenu(false);
-			handleUpgradeMenu(false);
+			handleUpgradesMenu(false);
 			handleOptionsMenu(false);
 		}
 	}
@@ -512,7 +560,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		}
 	}
 
-	public void handleUpgradeMenu(boolean checked){
+	public void handleUpgradesMenu(boolean checked){
 
 	}
 

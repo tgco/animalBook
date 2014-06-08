@@ -569,7 +569,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		fruitfulMoney = (int) (100*(Math.pow(2,gameInstance.getLevelHandler().getFruitfullMoneyP())));
 		longerMoney = (int) (500*(Math.pow(2,gameInstance.getLevelHandler().getLongerMoneyP())));
 		moreMoney = (int) (1000*(Math.pow(2,gameInstance.getLevelHandler().getMoreMoneyP())));
-		
+		final Button fruitfulButton, longerButton, moreButton;
+
 		//fruitfulbutton
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/fruitfullButton.atlas"));
 		buttonSkin = new Skin();
@@ -581,10 +582,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		TextureRegion trFruitfulButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/fruitfullButtonDis.png")) );
 		trFruitfulButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
 		trFruitfulButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
-		
+
 		fruitfulButtonStyle.disabled = new TextureRegionDrawable(trFruitfulButton);
 
-		final Button fruitfulButton = new Button(fruitfulButtonStyle){
+		fruitfulButton = new Button(fruitfulButtonStyle){
 			@Override
 			public float getPrefHeight(){
 				return BUTTON_HEIGHT*2/3;
@@ -596,6 +597,64 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 		};
 		fruitfulButton.setName("fruitfulButton");
+
+		//longerButton
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/LongerButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle longerButtonStyle = new ButtonStyle();
+		longerButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		longerButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
+		trLongerButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
+		trLongerButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+
+		longerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
+
+		longerButton = new Button(longerButtonStyle){
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT*2/3;
+			};
+
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH*2/3;
+			}
+		};
+		longerButton.setName("longerButton");
+
+
+
+		//moreButton
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/MoreButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle MoreButtonStyle = new ButtonStyle();
+		MoreButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		MoreButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		TextureRegion trMoreButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/MoreButtonDis.png")) );
+		trMoreButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
+		trMoreButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+
+		MoreButtonStyle.disabled = new TextureRegionDrawable(trMoreButton);
+
+		moreButton = new Button(MoreButtonStyle) {
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT*2/3;
+			};
+
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH*2/3;
+			}
+		};
+		moreButton.setName("moreButton");
+
+		//add listeners to buttons
 		fruitfulButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -620,33 +679,19 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					fruitfulButton.setDisabled(true);
 				else
 					fruitfulButton.setDisabled(false);
+
+				if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
+					longerButton.setDisabled(true);
+				else
+					longerButton.setDisabled(false);
+
+				if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
+					moreButton.setDisabled(true);
+				else
+					moreButton.setDisabled(false);
 			}
 		});
 
-		//longerButton
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/LongerButton.atlas"));
-		buttonSkin = new Skin();
-		buttonSkin.addRegions(atlas);
-
-		ButtonStyle longerButtonStyle = new ButtonStyle();
-		longerButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		longerButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
-
-		longerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
-
-		final Button longerButton = new Button(longerButtonStyle){
-			@Override
-			public float getPrefHeight(){
-				return BUTTON_HEIGHT*2/3;
-			};
-
-			@Override
-			public float getPrefWidth(){
-				return BUTTON_WIDTH*2/3;
-			}
-		};
-		longerButton.setName("longerButton");
 		longerButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -666,34 +711,23 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					longerMoney += longerMoney;
 					gameInstance.getLevelHandler().addLongerMoneyP();
 				}
+				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
+					fruitfulButton.setDisabled(true);
+				else
+					fruitfulButton.setDisabled(false);
+
+				if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
+					longerButton.setDisabled(true);
+				else
+					longerButton.setDisabled(false);
+
+				if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
+					moreButton.setDisabled(true);
+				else
+					moreButton.setDisabled(false);	
 			}
 		});
 
-
-		//moreButton
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/MoreButton.atlas"));
-		buttonSkin = new Skin();
-		buttonSkin.addRegions(atlas);
-
-		ButtonStyle MoreButtonStyle = new ButtonStyle();
-		MoreButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		MoreButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		TextureRegion trMoreButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/MoreButtonDis.png")) );
-
-		MoreButtonStyle.disabled = new TextureRegionDrawable(trMoreButton);
-
-		final Button moreButton = new Button(MoreButtonStyle) {
-			@Override
-			public float getPrefHeight(){
-				return BUTTON_HEIGHT*2/3;
-			};
-
-			@Override
-			public float getPrefWidth(){
-				return BUTTON_WIDTH*2/3;
-			}
-		};
-		moreButton.setName("moreButton");
 		moreButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -713,9 +747,24 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					gameInstance.getLevelHandler().addMoreMoneyP();
 					moreMoney += moreMoney;
 				}
+				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
+					fruitfulButton.setDisabled(true);
+				else
+					fruitfulButton.setDisabled(false);
+
+				if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
+					longerButton.setDisabled(true);
+				else
+					longerButton.setDisabled(false);
+
+				if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
+					moreButton.setDisabled(true);
+				else
+					moreButton.setDisabled(false);
 			}
 		});
 
+		//set disabled
 		if(getWorld().getPlayer().getPlayerMoney() < 500){
 			fruitfulButton.setDisabled(true);
 		}
@@ -725,7 +774,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		if(getWorld().getPlayer().getPlayerMoney() < 1500){
 			moreButton.setDisabled(true);
 		}
-		
 		upgradesGroup.addActor(fruitfulButton);
 		upgradesGroup.addActor(longerButton);
 		upgradesGroup.addActor(moreButton);
@@ -787,12 +835,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				((Button) upgradesGroup.findActor("fruitfulButton")).setDisabled(true);
 			else
 				((Button) upgradesGroup.findActor("fruitfulButton")).setDisabled(false);
-			
+
 			if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
 				((Button) upgradesGroup.findActor("longerButton")).setDisabled(true);
 			else
 				((Button) upgradesGroup.findActor("longerButton")).setDisabled(false);
-			
+
 			if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
 				((Button) upgradesGroup.findActor("moreButton")).setDisabled(true);
 			else

@@ -579,8 +579,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		fruitfulButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		fruitfulButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trFruitfulButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/fruitfullButtonDis.png")) );
-		trFruitfulButton.setRegionHeight((int) (BUTTON_HEIGHT*1/3));
-		trFruitfulButton.setRegionWidth((int) (BUTTON_HEIGHT*1/3));
+		trFruitfulButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
+		trFruitfulButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
 		
 		fruitfulButtonStyle.disabled = new TextureRegionDrawable(trFruitfulButton);
 

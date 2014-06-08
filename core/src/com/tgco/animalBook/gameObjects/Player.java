@@ -16,7 +16,7 @@ public class Player extends Movable {
 	/**inventory houses the consumables it's carrying */
 	private final Inventory inventory = new Inventory();
 	/** it starts at $0*/
-	private int playerMoney = 0;
+	private int playerMoney = 10000;
 	/** it starts at full health */
 	private static final float MAX_HEALTH = 100f;
 	private float playerHealth;;

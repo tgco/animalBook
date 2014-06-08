@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -22,15 +22,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Consumable;
+import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
@@ -56,11 +61,18 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton;
 
 	private VerticalGroup menuGroup;
-	private Image menuGroupImage, inventoryGroupImage;
+	private Image menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage;
 
 	private HorizontalGroup inventoryGroup, upgradesGroup, optionsGroup;
 
-	private static DragAndDrop dnd;
+	private DragAndDrop dnd;
+
+	/**
+	 * Amounts of each upgrade
+	 */
+	private int fruitfulMoney;
+	private int longerMoney;
+	private int moreMoney;
 
 	private static boolean mainMenuInitialized = false;
 
@@ -106,8 +118,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer.addProcessor(touchControls);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		Gdx.input.setCatchBackKey(true);
-		
+
+		//initialize some DnD components and set drag actor based on first Consumable texture
 		dnd = new DragAndDrop();
+		if (Consumable.DropType.values().length > 0){
+			Image test = new Image(new Texture(Gdx.files.internal(Consumable.DropType.values()[0].getTexturePath())));
+			dnd.setDragActorPosition(-test.getWidth()/4f, test.getHeight()/4f);
+		}
+
 	}
 
 	/**
@@ -204,6 +222,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			buttonStage = new Stage();
 		buttonStage.clear();
 		//reinit buttons
+		mainMenuInitialized = false;
 		initializeButtons();
 	}
 
@@ -212,7 +231,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	protected void initializeButtons() {
-		
+
 		//ALEXBUTTON BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/playerButton.atlas"));
 		buttonSkin = new Skin();
@@ -222,8 +241,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		alexButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		alexButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
-		if (!mainMenuInitialized)
-			alexButton = new Button(alexButtonStyle);
+		alexButton = new Button(alexButtonStyle);
 		alexButton.setWidth(BUTTON_WIDTH);
 		alexButton.setHeight(BUTTON_HEIGHT);
 		alexButton.setX(EDGE_TOLERANCE);
@@ -246,13 +264,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 
+	//interface initialization by menu heirarchy
 	public void initializeMenuItems(){
 		dnd.addTarget(new Target(alexButton){
 
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
-				System.out.println("Stop tickling me!");
-				System.out.println("Player health:" + getWorld().getPlayer().getHealth());
 				if (payload.getObject() instanceof Consumable)
 					if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL ||
 					getWorld().getPlayer().getHealth() == 100f){
@@ -302,7 +319,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				inventoryGroupButton.setChecked(false);
 				upgradesGroupButton.setChecked(false);
 				optionsGroupButton.setChecked(false);
-				System.out.println("BACK END CLICK");
 			}
 		});
 
@@ -388,10 +404,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				inventoryGroupButton.setChecked(false);
 				handleOptionsMenu(false);
 				optionsGroupButton.setChecked(false);
-
-				//testing purposes
-				handleMainMenu(false);
-				gameInstance.setScreen(new UpgradesScreen(gameInstance, gameInstance.getGameScreen()));
 			}
 		});
 		menuGroup.addActor(upgradesGroupButton);
@@ -426,14 +438,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .1);
-				handleOptionsMenu(upgradesGroupButton.isChecked());
+				handleOptionsMenu(optionsGroupButton.isChecked());
 				handleInventoryMenu(false);
 				inventoryGroupButton.setChecked(false);
 				handleUpgradesMenu(false);
 				upgradesGroupButton.setChecked(false);
-				
-				handleMainMenu(false);
-				gameInstance.setScreen(new OptionsScreen(gameInstance, gameInstance.getGameScreen()));
 			}
 		});
 		menuGroup.addActor(optionsGroupButton);
@@ -450,12 +459,27 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				alexButton.getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//Upgrade Group
-		//TODO: 
 		upgradesGroup = new HorizontalGroup();
+		upgradesGroup.center();
+		upgradesGroup.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
+				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);
+		upgradesGroup.space(EDGE_TOLERANCE);
+
+		upgradesGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
+				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);
 
 		//Option Group
-		//TODO:
 		optionsGroup = new HorizontalGroup();
+		optionsGroup = new HorizontalGroup();
+		optionsGroup.center();
+		optionsGroup.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
+				alexButton.getY() - 3f*BUTTON_HEIGHT - 3f*EDGE_TOLERANCE);
+		optionsGroup.space(EDGE_TOLERANCE);
+
+		optionsGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+		optionsGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
+				alexButton.getY() - 3f*BUTTON_HEIGHT - 3f*EDGE_TOLERANCE);
 
 		//after all components are taken care of...
 		menuGroup.pack();
@@ -482,8 +506,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			ImageTextButtonStyle inventoryButtonStyle = new ImageTextButtonStyle();
 			inventoryButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 			inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+			//set the font here
 			inventoryButtonStyle.font = new BitmapFont();
-
 			//create a new button using aforementioned button style and set stuff up
 			final ImageTextButton inventoryButton = new ImageTextButton("", inventoryButtonStyle){
 				@Override
@@ -496,8 +520,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					return BUTTON_WIDTH*2/3;
 				}
 			};
+			inventoryButton.getLabel().setColor(Color.RED);
 			inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
-			inventoryButton.pad(EDGE_TOLERANCE);
+			inventoryButton.bottom();
+			inventoryButton.right();
 
 			dnd.addSource(new Source(inventoryButton){
 
@@ -510,7 +536,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					Payload payload = new Payload();
 					if (getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[index])){
 						inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
-						//change fonts/size attributes use inventoryButton.getLabel().(invoke methods)
 						payload.setObject(new Consumable(Consumable.DropType.values()[index]));
 						payload.setDragActor(new Image(inventoryButton.getBackground()));
 						return payload;
@@ -534,14 +559,193 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			inventoryGroup.addActor(inventoryButton);
 		}
 		//some whacky code down here...
+
 		inventoryGroup.pack();
 		inventoryGroup.setHeight(BUTTON_HEIGHT);
 		inventoryGroupImage.setSize(inventoryGroup.getWidth() + EDGE_TOLERANCE*2f, inventoryGroup.getHeight());
 	}
-	public void initializeUpgradeItems(){}
-	public void initializeOptionItems(){}
+	public void initializeUpgradeItems(){
+		//initialize upgrade monies
+		fruitfulMoney = (int) (100*(Math.pow(2,gameInstance.getLevelHandler().getFruitfullMoneyP())));
+		longerMoney = (int) (500*(Math.pow(2,gameInstance.getLevelHandler().getLongerMoneyP())));
+		moreMoney = (int) (1000*(Math.pow(2,gameInstance.getLevelHandler().getMoreMoneyP())));
+		
+		//fruitfulbutton
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/fruitfullButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle fruitfulButtonStyle = new ButtonStyle();
+		fruitfulButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		fruitfulButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		TextureRegion trFruitfulButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/fruitfullButtonDis.png")) );
+		trFruitfulButton.setRegionHeight((int) (BUTTON_HEIGHT*1/3));
+		trFruitfulButton.setRegionWidth((int) (BUTTON_HEIGHT*1/3));
+		
+		fruitfulButtonStyle.disabled = new TextureRegionDrawable(trFruitfulButton);
+
+		final Button fruitfulButton = new Button(fruitfulButtonStyle){
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT*2/3;
+			};
+
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH*2/3;
+			}
+		};
+		fruitfulButton.setName("fruitfulButton");
+		fruitfulButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				if(!fruitfulButton.isDisabled()){
+					SoundHandler.playButtonClick();
+					//take away player money and add more to precentage of droppings
+					//Gdx.input.setCatchBackKey(true);
+
+					Array<Movable> animals = getWorld().getMovables();
+					for(Movable animal : animals){
+						((Animal) animal).upgradeFertilityRate(5);
+					}
+					getWorld().getPlayer().subtractPlayerMoney(fruitfulMoney);
+					System.out.println(fruitfulMoney +"  "+getWorld().getPlayer().getPlayerMoney());
+					fruitfulMoney += fruitfulMoney;
+					gameInstance.getLevelHandler().addFruitfullMoneyP();
+				}
+				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
+					fruitfulButton.setDisabled(true);
+				else
+					fruitfulButton.setDisabled(false);
+			}
+		});
+
+		//longerButton
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/LongerButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle longerButtonStyle = new ButtonStyle();
+		longerButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		longerButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
+
+		longerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
+
+		final Button longerButton = new Button(longerButtonStyle){
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT*2/3;
+			};
+
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH*2/3;
+			}
+		};
+		longerButton.setName("longerButton");
+		longerButton.addListener(new InputListener(){
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				if(!longerButton.isDisabled()){
+					SoundHandler.playButtonClick();
+					//take away player money and add more to precentage of droppings
+					//Gdx.input.setCatchBackKey(true);
+
+					Array<Movable> animals = getWorld().getMovables();
+					for(Movable animal : animals){
+						((Animal) animal).upgradeTimeOnGround(5);
+					}
+					getWorld().getPlayer().subtractPlayerMoney(longerMoney);
+					longerMoney += longerMoney;
+					gameInstance.getLevelHandler().addLongerMoneyP();
+				}
+			}
+		});
 
 
+		//moreButton
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/MoreButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle MoreButtonStyle = new ButtonStyle();
+		MoreButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		MoreButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		TextureRegion trMoreButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/MoreButtonDis.png")) );
+
+		MoreButtonStyle.disabled = new TextureRegionDrawable(trMoreButton);
+
+		final Button moreButton = new Button(MoreButtonStyle) {
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT*2/3;
+			};
+
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH*2/3;
+			}
+		};
+		moreButton.setName("moreButton");
+		moreButton.addListener(new InputListener(){
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				if(!moreButton.isDisabled()){
+					SoundHandler.playButtonClick();
+					//take away player money and add more to precentage of droppings
+					//Gdx.input.setCatchBackKey(true);
+
+					Array<Movable> animals = getWorld().getMovables();
+					for(Movable animal : animals){
+						((Animal) animal).upgradeDropInterval(5);
+					}
+					getWorld().getPlayer().subtractPlayerMoney(moreMoney);
+					gameInstance.getLevelHandler().addMoreMoneyP();
+					moreMoney += moreMoney;
+				}
+			}
+		});
+
+		if(getWorld().getPlayer().getPlayerMoney() < 500){
+			fruitfulButton.setDisabled(true);
+		}
+		if(getWorld().getPlayer().getPlayerMoney() < 1000){
+			longerButton.setDisabled(true);
+		}
+		if(getWorld().getPlayer().getPlayerMoney() < 1500){
+			moreButton.setDisabled(true);
+		}
+		
+		upgradesGroup.addActor(fruitfulButton);
+		upgradesGroup.addActor(longerButton);
+		upgradesGroup.addActor(moreButton);
+
+
+
+
+		upgradesGroup.pack();
+		upgradesGroup.setHeight(BUTTON_HEIGHT);
+		//upgradesGroup.setWidth(BUTTON_HEIGHT);
+		upgradesGroupImage.setSize(upgradesGroup.getWidth() + EDGE_TOLERANCE*2f, upgradesGroup.getHeight());
+	}
+	public void initializeOptionItems(){
+		optionsGroup.pack();
+		optionsGroup.setHeight(BUTTON_HEIGHT);
+		optionsGroup.setWidth(BUTTON_HEIGHT);
+		optionsGroupImage.setSize(optionsGroup.getWidth() + EDGE_TOLERANCE*2f, optionsGroup.getHeight());
+	}
+
+	//menu actions by heirarchy
 	public void handleMainMenu(boolean checked) {
 		if (checked){
 			buttonStage.addActor(menuGroupImage);
@@ -565,19 +769,55 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		if (checked){
 			buttonStage.addActor(inventoryGroupImage);
 			buttonStage.addActor(inventoryGroup);
+			//from here has to update on button visibility
 		}
 		else{
 			inventoryGroup.remove();
 			inventoryGroupImage.remove();
+			if (!alexButton.isChecked())
+				inventoryGroupButton.setChecked(false);
 		}
 	}
 
 	public void handleUpgradesMenu(boolean checked){
-
+		if (checked){
+			buttonStage.addActor(upgradesGroupImage);
+			buttonStage.addActor(upgradesGroup);
+			if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
+				((Button) upgradesGroup.findActor("fruitfulButton")).setDisabled(true);
+			else
+				((Button) upgradesGroup.findActor("fruitfulButton")).setDisabled(false);
+			
+			if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
+				((Button) upgradesGroup.findActor("longerButton")).setDisabled(true);
+			else
+				((Button) upgradesGroup.findActor("longerButton")).setDisabled(false);
+			
+			if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
+				((Button) upgradesGroup.findActor("moreButton")).setDisabled(true);
+			else
+				((Button) upgradesGroup.findActor("moreButton")).setDisabled(false);
+			System.out.println(((Button) upgradesGroup.findActor("fruitfulButton")).isDisabled());
+		}
+		else{
+			upgradesGroup.remove();
+			upgradesGroupImage.remove();
+			if (!alexButton.isChecked())
+				upgradesGroupButton.setChecked(false);
+		}
 	}
 
 	public void handleOptionsMenu(boolean checked){
-
+		if (checked){
+			buttonStage.addActor(optionsGroupImage);
+			buttonStage.addActor(optionsGroup);
+		}
+		else{
+			optionsGroup.remove();
+			optionsGroupImage.remove();
+			if (!alexButton.isChecked())
+				optionsGroupButton.setChecked(false);
+		}
 	}
 
 	/**
@@ -637,18 +877,43 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public boolean inMenu() {
 		return alexButton.isChecked();
 	}
+	/*public void reinitButtons(){
+		if(world.getPlayer().getPlayerMoney() < fruitfulMoney){
+			fruitfullButton.setDisabled(true);
+			drawAmounts(0.5f, 0);
+			drawData(0.5f, 0);
+		}
+		else{
+			fruitfullButton.setDisabled(false);
+			drawAmounts(1f, 0);
+			drawData(1f, 0);
+		}
+		if(world.getPlayer().getPlayerMoney() < longerMoney){
+			longerButton.setDisabled(true);
+			drawAmounts(0.5f, 1);
+			drawData(0.5f, 1);
+		}
+		else{
+			longerButton.setDisabled(false);
+			drawAmounts(1, 1);
+			drawData(1, 1);
+		}
+		if(world.getPlayer().getPlayerMoney() < moreMoney){
+			moreeButton.setDisabled(true);
+			drawAmounts(0.5f, 2);
+			drawData(0.5f, 2);
+		}
+		else{
+			moreeButton.setDisabled(false);
+			drawAmounts(1, 2);
+			drawData(1, 2);
+		}
 
-	public Array<Actor> getScreenActors(){
-		Array<Actor> menuActors = new Array<Actor>();
-		menuActors.add(alexButton);
-		if (alexButton.isChecked())
-			menuActors.add(menuGroup);
-		/*if (inventoryButton.isChecked())
-			menuActors.add(inventoryGroup);
-		if (upgradesButton.isChecked())
-			menuActors.add(upgradesGroup);
-		if (optionsButton.isChecked())
-			menuActors.add(optionsGroup);*/
-		return menuActors;
-	}
+		batch.begin();
+		font.setColor(Color.BLACK);
+		font.setScale(1.2f);
+		font.draw(batch, "Your Money: $" + String.valueOf(world.getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 -10, Gdx.graphics.getHeight() -2*EDGE_TOLERANCE);
+		font.setScale(.75f);
+		batch.end();
+	}*/
 }

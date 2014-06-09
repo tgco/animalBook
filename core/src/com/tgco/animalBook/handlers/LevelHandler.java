@@ -26,20 +26,25 @@ public class LevelHandler {
 	private int level;
 
 	/**
+	 * true if the game is in kid mode, where levels are easier
+	 */
+	private static boolean kidMode = false;
+
+	/**
 	 * The amount of animals needed in order to progress to the next level
 	 */
 	private int passLevelAmount;
-	
+
 	/**
 	 * Number of animals the player has already stored in the market
 	 */
 	private int storedAmount;
-	
+
 	/**
 	 * Number of animals the player will start with next level
 	 */
 	private int nextLevelStart;
-	
+
 	/**
 	 * Number of times each upgrade button has been pressed
 	 */
@@ -51,7 +56,7 @@ public class LevelHandler {
 	 * Boolean that stores if the user is retrying the level or not
 	 */
 	private boolean onRetry = false;
-	
+
 	/**
 	 * Boolean to determine if the tutorial should be played
 	 */
@@ -70,19 +75,34 @@ public class LevelHandler {
 
 		switch(level) {
 		case 1:
-			passLevelAmount = 5;
+			if (kidMode)
+				passLevelAmount = 5;
+			else
+				passLevelAmount = 5;
 			break;
 		case 2:
-			passLevelAmount = 10;
+			if (kidMode)
+				passLevelAmount = 10;
+			else
+				passLevelAmount = 10;
 			break;
 		case 3:
-			passLevelAmount = 15;
+			if (kidMode)
+				passLevelAmount = 15;
+			else
+				passLevelAmount = 15;
 			break;
 		case 4:
-			passLevelAmount = 20;
+			if (kidMode)
+				passLevelAmount = 20;
+			else
+				passLevelAmount = 20;
 			break;
 		case 5:
-			passLevelAmount = 25;
+			if (kidMode)
+				passLevelAmount = 25;
+			else
+				passLevelAmount = 25;
 			break;
 		}
 	}
@@ -168,7 +188,10 @@ public class LevelHandler {
 	 * @return		the speed for the camera
 	 */
 	public float returnCameraSpeed(int level) {
-		return .25f*level;
+		if (kidMode)
+			return .25f*level;
+		else
+			return .25f*level;
 	}
 
 	/**
@@ -178,54 +201,57 @@ public class LevelHandler {
 	 * @return		the length of the lane for the specified level
 	 */
 	public float returnLaneLength(int level) {
-		return 800 + 1200*(level - 1);
+		if (kidMode)
+			return 800 + 1200*(level - 1);
+		else
+			return 800 + 1200*(level - 1);
 	}
-	
+
 	/**
 	 * Getters and increments for the specified variables
 	 */
 	public void increaseStored() {
 		storedAmount++;
 	}
-	
+
 	public void decreaseStored() {
 		storedAmount--;
 	}
-	
+
 	public void increaseNextLevelStart() {
 		nextLevelStart++;
 	}
-	
+
 	public int getStoredAmount() {
 		return storedAmount;
 	}
-	
+
 	public void resetStoredAmount(){
 		storedAmount = 0;
 	}
-	
+
 	public int getPassLevelAmount() {
 		return passLevelAmount;
 	}
-	
+
 	public int getNextLevelStart() {
 		return nextLevelStart;
 	}
-	
+
 	/**
 	 * Called every time player reaches the market
 	 */
 	public void resetNextLevelStart() {
 		if(!onRetry ){
-		nextLevelStart = 0;
+			nextLevelStart = 0;
 		}else{
 			onRetry = false;
 		}
 	}
-	
+
 	/**
-	 * Returns the texture for the animal that corresponds to the current level
-	 * @return 		the texture for the current level's animal
+	 * Returns the atlas for the animal that corresponds to the current level
+	 * @return 		the file handle for the current level's animal
 	 */
 	public FileHandle currentLevelTexture() {
 		switch(level) {
@@ -242,11 +268,11 @@ public class LevelHandler {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Returns the correct texture for the animal that corresponds to the next level
+	 * Returns the correct atlas for the animal that corresponds to the next level
 	 * 
-	 * @return		the texture for the next level's animal
+	 * @return		the file handle for the next level's animal
 	 */
 	public FileHandle nextLevelTexture() {
 		switch(level) {
@@ -271,23 +297,38 @@ public class LevelHandler {
 		level++;
 		switch(level) {
 		case 1:
-			passLevelAmount = 5;
+			if (kidMode)
+				passLevelAmount = 5;
+			else
+				passLevelAmount = 5;
 			break;
 		case 2:
-			passLevelAmount = 10;
+			if (kidMode)
+				passLevelAmount = 10;
+			else
+				passLevelAmount = 10;
 			break;
 		case 3:
-			passLevelAmount = 15;
+			if (kidMode)
+				passLevelAmount = 15;
+			else
+				passLevelAmount = 15;
 			break;
 		case 4:
-			passLevelAmount = 20;
+			if (kidMode)
+				passLevelAmount = 20;
+			else
+				passLevelAmount = 20;
 			break;
 		case 5:
-			passLevelAmount = 25;
+			if (kidMode)
+				passLevelAmount = 25;
+			else
+				passLevelAmount = 25;
 			break;
 		}
 	}
-	
+
 	/**
 	 * Getters and setters
 	 * 
@@ -296,7 +337,7 @@ public class LevelHandler {
 	public int getLevel(){
 		return level;
 	}
-	
+
 	public int getFruitfullMoneyP() {
 		return fruitfullMoneyP;
 	}
@@ -308,11 +349,11 @@ public class LevelHandler {
 	public int getMoreMoneyP() {
 		return MoreMoneyP;
 	}
-	
+
 	public void setNextLevelStart(int nextStart) {
 		nextLevelStart = nextStart;
 	}
-	
+
 	public void addFruitfullMoneyP() {
 		this.fruitfullMoneyP += 1;
 	}
@@ -324,7 +365,7 @@ public class LevelHandler {
 	public void addMoreMoneyP() {
 		MoreMoneyP += 1;
 	}
-	
+
 	public void setFruitfullMoneyP(int fruitfull) {
 		this.fruitfullMoneyP = fruitfull;
 	}
@@ -347,5 +388,13 @@ public class LevelHandler {
 
 	public void setRetry(){
 		onRetry = true;
+	}
+	
+	public boolean isKidMode() {
+		return kidMode;
+	}
+	
+	public void setKidMode(boolean kidMode) {
+		this.kidMode = kidMode;
 	}
 }

@@ -46,8 +46,6 @@ public class ConfirmDialog extends Dialog{
 	 */
 	@Override
 	public void result(Object object){
-		SoundHandler.toggleSounds();
-		SoundHandler.toggleMusic();
 		if(object.equals("Main Menu")){
 			gameInstance.getScreen().dispose();
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));

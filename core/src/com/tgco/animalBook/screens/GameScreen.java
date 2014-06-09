@@ -61,8 +61,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton;
 
 	private VerticalGroup menuGroup;
-	private Image menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
-
+	private Image alexInfoImage, menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
+	private Label infoLabel;
 	private HorizontalGroup inventoryGroup, upgradesGroup, optionsGroup, upgradesStatusGroup;
 
 	private DragAndDrop dnd;
@@ -90,8 +90,15 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * The font used when rendering strings
 	 */
 	private BitmapFont font;
-
-
+	
+	
+	/**
+	 * textures for health bar, etc
+	 */
+	private Texture black = new Texture(Gdx.files.internal("primitiveTextures/black.png"));
+	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
+	private Texture yellow = new Texture(Gdx.files.internal("primitiveTextures/yellow.png"));
+	private Texture green = new Texture(Gdx.files.internal("primitiveTextures/green.png"));
 
 	/**
 	 * Constructor using the running game instance
@@ -107,7 +114,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		gameWorld = new World(gameInstance);
 
 		//Initialize rendering objects
-		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+		//font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+		font = new BitmapFont();
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass2.jpg"));
@@ -156,20 +164,28 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-			//Draw players current money
-			font.setColor(Color.BLACK);
-			font.setScale(1.2f);
-			Vector3 vect = new Vector3(Gdx.graphics.getWidth()/2 +10,0 +3*EDGE_TOLERANCE,0);
-			gameWorld.getCamera().unproject(vect);
-			font.draw(batch, "Your Money: $" + String.valueOf(gameWorld.getPlayer().getPlayerMoney()), vect.x ,vect.y );
-
 			//Draw world over background
 			gameWorld.render(batch,alexButton.isChecked(),delta);
-
 			batch.end();
 
 			//Draw buttons over the screen
 			buttonStage.draw();
+			
+			batch.begin();
+			//Draw health bar (test)
+			Vector3 vect = new Vector3(alexButton.getX() + alexButton.getWidth() + 1.4f*EDGE_TOLERANCE,
+					 Gdx.graphics.getHeight() - (alexButton.getY() + alexButton.getHeight() - 1.5f*EDGE_TOLERANCE)
+					,0);
+			gameWorld.getCamera().unproject(vect);
+			batch.draw(black,vect.x, vect.y, 10.2f*EDGE_TOLERANCE, 1.2f*EDGE_TOLERANCE);
+			if (getWorld().getPlayer().getHealth()/100f > .50f)	
+				batch.draw(green,vect.x + .1f*EDGE_TOLERANCE, vect.y + .1f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
+			else if (getWorld().getPlayer().getHealth()/100f > .25f)
+				batch.draw(yellow,vect.x + .1f*EDGE_TOLERANCE, vect.y + .1f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
+			else
+				batch.draw(red,vect.x + .1f*EDGE_TOLERANCE, vect.y + .1f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
+
+			batch.end();
 
 		}
 		else { //if player lost
@@ -261,12 +277,31 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				handleMainMenu(alexButton.isChecked());
 			}
 		});
-
 		buttonStage.addActor(alexButton);
+		
+		//Information Label
+		LabelStyle infoLabelStyle = new LabelStyle();
+		infoLabelStyle.font = new BitmapFont();
+		infoLabelStyle.fontColor = Color.WHITE;
+		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
+		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
+				alexButton.getY() + alexButton.getHeight() - 2.5f*EDGE_TOLERANCE);
+
+		//The label's background image
+		alexInfoImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+		alexInfoImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
+				infoLabel.getY() - EDGE_TOLERANCE*.5f);
+		alexInfoImage.setSize(11f*EDGE_TOLERANCE, alexButton.getHeight() - 2f*EDGE_TOLERANCE);
+		
+		buttonStage.addActor(alexInfoImage);
+		buttonStage.addActor(infoLabel);
+		
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 
-	//interface initialization by menu heirarchy
+	/**
+	 * Initialize main menu group items
+	 */
 	public void initializeMenuItems(){
 		mainMenuInitialized = true;
 		dnd.addTarget(new Target(alexButton){
@@ -495,7 +530,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		menuGroupImage.setPosition(alexButton.getX() - .5f*EDGE_TOLERANCE, alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE*2f);
 		menuGroupImage.setSize(alexButton.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE*2f);
 	}
-
+	
+	/**
+	 * Initilize inventory group items
+	 */
 	public void initializeInventoryItems(){
 		inventoryMenuInitialized = true;
 		for (int i = 0; i < Consumable.DropType.values().length; i++){
@@ -568,7 +606,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryGroup.setHeight(BUTTON_HEIGHT);
 		inventoryGroupImage.setSize(inventoryGroup.getWidth() + EDGE_TOLERANCE*2f, inventoryGroup.getHeight());
 	}
-
+	
+	/**
+	 * Initialize upgrade group items
+	 */
 	public void initializeUpgradeItems(){
 		upgradesMenuInitialized = true;
 		//initialize upgrade monies
@@ -737,6 +778,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(fruitfulMoney) + "\n" +
 									String.format("%.1f",((Animal) getWorld().getMovables().get(0)).getFertilityRate())+ "%"
 							);
+					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
@@ -779,6 +821,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(longerMoney) + "\n" +
 									String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getTimeOnGround())+ "%"
 							);
+					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
@@ -821,6 +864,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(moreMoney) + "\n" +
 									String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getDropInterval())+ "%"	
 							);
+					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
@@ -875,7 +919,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesGroup.setHeight(BUTTON_HEIGHT);
 		upgradesGroupImage.setSize(upgradesGroup.getWidth() + EDGE_TOLERANCE*2f, upgradesGroup.getHeight());
 	}
-
+	
+	/**
+	 * Initialize option group items
+	 */
 	public void initializeOptionItems(){
 		optionsMenuInitialized = true;
 		Button soundButton, musicButton, mainMenuButton, helpButton;
@@ -1023,7 +1070,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		optionsGroupImage.setSize(optionsGroup.getWidth() + EDGE_TOLERANCE*2f, optionsGroup.getHeight());
 	}
 
-	//menu actions by heirarchy
+	/**
+	 * Toggles main menu group items
+	 * @param checked
+	 */
 	public void handleMainMenu(boolean checked) {
 		if (checked){
 			buttonStage.addActor(menuGroupImage);
@@ -1042,7 +1092,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			handleOptionsMenu(false);
 		}
 	}
-
+	
+	/**
+	 * Toggles inventory menu items
+	 * @param checked
+	 */
 	public void handleInventoryMenu(boolean checked){
 		if (checked){
 			buttonStage.addActor(inventoryGroupImage);
@@ -1056,7 +1110,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				inventoryGroupButton.setChecked(false);
 		}
 	}
-
+	
+	/**
+	 * Toggles upgrades menu items
+	 * @param checked
+	 */
 	public void handleUpgradesMenu(boolean checked){
 		if (checked){
 			buttonStage.addActor(upgradesGroupImage);
@@ -1091,7 +1149,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				upgradesGroupButton.setChecked(false);
 		}
 	}
-
+	
+	/**
+	 * Toggles options menu items
+	 * @param checked
+	 */
 	public void handleOptionsMenu(boolean checked){
 		if (checked){
 			buttonStage.addActor(optionsGroupImage);
@@ -1105,6 +1167,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		}
 	}
 
+	/**
+	 * Returns if alexButton is checked or not for pausing purposes
+	 * @return
+	 */
+	public boolean inMenu() {
+		return alexButton.isChecked();
+	}
+	
 	/**
 	 * Disposes of all objects that should release memory
 	 */
@@ -1130,7 +1200,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	/**
 	 * Returns the instance of the world that game screen is using
-	 * 
 	 * @return		reference to the current game world
 	 */
 	public World getWorld() {
@@ -1141,26 +1210,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * Unused methods for detecting screen events
 	 */
 	@Override
-	public void show() {
-
-	}
+	public void show() {}
 
 	@Override
-	public void hide() {
-	}
+	public void hide() {}
 
 	@Override
 	public void pause() {}
 
 	@Override
 	public void resume() {}
-
-	public Button getAlexButton() {
-		return alexButton;
-	}
-
-	public boolean inMenu() {
-		return alexButton.isChecked();
-	}
-
 }

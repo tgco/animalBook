@@ -98,8 +98,11 @@ public class LevelHandler {
 	 */
 	public Array<ABDrawable> addAnimals(int level) {
 		int startAnimals = nextLevelStart;
-		if(startAnimals == 0)
+		if(startAnimals <= 5 && !onRetry)
 			startAnimals =5;
+		else if(onRetry){
+			startAnimals = (int) Math.ceil(passLevelAmount/2.0);
+		}
 		Array<ABDrawable> animals = new Array<ABDrawable>();
 
 		Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);

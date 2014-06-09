@@ -74,7 +74,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private int longerMoney;
 	private int moreMoney;
 
-	private static boolean mainMenuInitialized = false;
+	private static boolean mainMenuInitialized, inventoryMenuInitialized, upgradesMenuInitialized, optionsMenuInitialized;
 
 	/**
 	 * Stage to draw the screen once the player has lost
@@ -223,6 +223,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.clear();
 		//reinit buttons
 		mainMenuInitialized = false;
+		inventoryMenuInitialized = false;
+		upgradesMenuInitialized = false;
+		optionsMenuInitialized = false;
 		initializeButtons();
 	}
 
@@ -266,6 +269,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	//interface initialization by menu heirarchy
 	public void initializeMenuItems(){
+		mainMenuInitialized = true;
 		dnd.addTarget(new Target(alexButton){
 
 			@Override
@@ -292,7 +296,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 
-		mainMenuInitialized = true;
 		//Initialze Background Button
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/backgroundMenuButton.atlas"));
 		buttonSkin = new Skin();
@@ -359,11 +362,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .1);
+				if (!inventoryMenuInitialized)
+					initializeInventoryItems();
 				handleInventoryMenu(inventoryGroupButton.isChecked());
 				handleUpgradesMenu(false);
 				upgradesGroupButton.setChecked(false);
 				handleOptionsMenu(false);
 				optionsGroupButton.setChecked(false);
+
 			}
 		});
 
@@ -399,6 +405,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .1);
+				if (!upgradesMenuInitialized)
+					initializeUpgradeItems();
 				handleUpgradesMenu(upgradesGroupButton.isChecked());
 				handleInventoryMenu(false);
 				inventoryGroupButton.setChecked(false);
@@ -438,6 +446,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .1);
+				if (!optionsMenuInitialized)
+					initializeOptionItems();
 				handleOptionsMenu(optionsGroupButton.isChecked());
 				handleInventoryMenu(false);
 				inventoryGroupButton.setChecked(false);
@@ -471,7 +481,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		//Option Group
 		optionsGroup = new HorizontalGroup();
-		optionsGroup = new HorizontalGroup();
 		optionsGroup.center();
 		optionsGroup.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
 				alexButton.getY() - 3f*BUTTON_HEIGHT - 3f*EDGE_TOLERANCE);
@@ -487,13 +496,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		menuGroupImage.setPosition(alexButton.getX() - .5f*EDGE_TOLERANCE, alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE*2f);
 		menuGroupImage.setSize(alexButton.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE*2f);
 
-		initializeInventoryItems();
-		initializeUpgradeItems();
-		initializeOptionItems();
-
+		
+		
 	}
 
 	public void initializeInventoryItems(){
+		inventoryMenuInitialized = true;
 		for (int i = 0; i < Consumable.DropType.values().length; i++){
 			final int index = i;
 
@@ -565,6 +573,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryGroupImage.setSize(inventoryGroup.getWidth() + EDGE_TOLERANCE*2f, inventoryGroup.getHeight());
 	}
 	public void initializeUpgradeItems(){
+		upgradesMenuInitialized = true;
 		//initialize upgrade monies
 		fruitfulMoney = (int) (100*(Math.pow(2,gameInstance.getLevelHandler().getFruitfullMoneyP())));
 		longerMoney = (int) (500*(Math.pow(2,gameInstance.getLevelHandler().getLongerMoneyP())));
@@ -787,6 +796,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesGroupImage.setSize(upgradesGroup.getWidth() + EDGE_TOLERANCE*2f, upgradesGroup.getHeight());
 	}
 	public void initializeOptionItems(){
+		optionsMenuInitialized = true;
+		
 		optionsGroup.pack();
 		optionsGroup.setHeight(BUTTON_HEIGHT);
 		optionsGroup.setWidth(BUTTON_HEIGHT);

@@ -7,6 +7,7 @@
 package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.AnimalBookGame;
 
@@ -37,6 +38,14 @@ public abstract class Movable extends ABDrawable {
 		speed = 1/14f;
 
 		moveBias = 1.5f;
+	}
+	/**
+	 * Overridden to draw with rotation so movables face the direction they are moving
+	 */
+	@Override
+	public void draw(SpriteBatch batch) {
+		float rotation = this.previousTarget.cpy().sub(this.position).angle();
+		batch.draw(texture, position.x, position.y, width/2, height/2, width, height, 1, 1, rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
 	}
 
 	/**

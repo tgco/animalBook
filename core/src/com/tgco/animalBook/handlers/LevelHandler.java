@@ -96,7 +96,8 @@ public class LevelHandler {
 	public Array<ABDrawable> addAnimals(int level) {
 		int startAnimals = nextLevelStart;
 		if(startAnimals == 0)
-			startAnimals =5;
+			startAnimals =25;
+			//startAnimals =5;
 		Array<ABDrawable> animals = new Array<ABDrawable>();
 
 		Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
@@ -174,7 +175,8 @@ public class LevelHandler {
 	 */
 	public float returnLaneLength(int level) {
 
-		return 800 + 1200*(level - 1);
+		return 750;
+		//return 800 + 1200*(level - 1);
 	}
 	
 	/**
@@ -239,7 +241,7 @@ public class LevelHandler {
 		case 4 :
 			return Gdx.files.internal("objectTextures/cowButton.atlas");
 		case 5 :
-			return Gdx.files.internal("objectTextures/gooseButton.atlas"); //SHOULD BE THE BOOK TEXTURE
+			return Gdx.files.internal("objectTextures/bookButton.atlas");
 		}
 		return null;
 	}

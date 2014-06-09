@@ -101,7 +101,15 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 		font.setColor(Color.WHITE);
 		font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-		font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		if (gameInstance.getLevelHandler().getLevel() == 5) {
+			if (nextLevel >= 25) {
+				font.draw(batch, String.valueOf(1), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+			} else {
+				font.draw(batch, String.valueOf(0), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+			}
+		} else {
+			font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		}
 		font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE - font.getCapHeight());
 
 		batch.end();
@@ -215,11 +223,16 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	protected void initializeButtons() {
 
 		//NEXT LEVEL BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/nextLevelButton.atlas"));
+		if (gameInstance.getLevelHandler().getLevel() == 5) {
+			atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/endGameButton.atlas"));
+		} else {
+			atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/nextLevelButton.atlas"));
+		}
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
 		ButtonStyle nextLevelButtonStyle = new ButtonStyle();
+
 		nextLevelButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		nextLevelButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
@@ -289,32 +302,37 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!nextLevelButton.isDisabled()) {
-					SoundHandler.playButtonClick();
-					SoundHandler.pauseMarketBackgroundMusic();
-					SoundHandler.playBackgroundMusic(true);
-					
-					gameInstance.addToLevel();
-					
-					// spot 1 is current level
-					gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
-					
-					//spot 2 is player		
-					gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
-					
-					//spot 3 is storing movable array
-					gameInstance.addToDatalevel(null,2);
-					
-					//spot 4 is storing dropped items array
-					gameInstance.addToDatalevel(null, 3);
-					
-					gameInstance.addToDatalevel(null, 4);
-					
-					
-					gameScreen.resetInputProcessors();
-					gameScreen.dispose();
-					gameInstance.setScreen(new GameScreen(gameInstance));
-					dispose();
-					
+					if (gameInstance.getLevelHandler().getLevel() == 5) {
+						gameInstance.setScreen(new EndGameStory(gameInstance));
+						dispose();
+					} else {
+						SoundHandler.playButtonClick();
+						SoundHandler.pauseMarketBackgroundMusic();
+						SoundHandler.playBackgroundMusic(true);
+						
+						gameInstance.addToLevel();
+						
+						// spot 1 is current level
+						gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
+						
+						//spot 2 is player		
+						gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
+						
+						//spot 3 is storing movable array
+						gameInstance.addToDatalevel(null,2);
+						
+						//spot 4 is storing dropped items array
+						gameInstance.addToDatalevel(null, 3);
+						
+						gameInstance.addToDatalevel(null, 4);
+						
+						
+						gameScreen.resetInputProcessors();
+						gameScreen.dispose();
+						gameInstance.setScreen(new GameScreen(gameInstance));
+						dispose();
+						
+					}
 				}
 			}
 		});

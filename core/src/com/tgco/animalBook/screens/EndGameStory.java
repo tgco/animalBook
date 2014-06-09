@@ -1,6 +1,7 @@
 package com.tgco.animalBook.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 
 /**
@@ -24,12 +26,16 @@ import com.tgco.animalBook.handlers.SoundHandler;
  * @author Kelly
  *
  */
-public class StoryScreen extends ButtonScreenAdapter implements Screen {
+public class EndGameStory extends ButtonScreenAdapter implements Screen {
 
 	/**
 	 * Buttons
 	 */
 	private Button 			skipButton, continueButton;
+	
+	private Stage popupStage;
+	
+	private boolean endGame;
 	
 	/**
 	 * Holds story screen string paths
@@ -64,8 +70,10 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 	 * 
 	 * @param gameInstance - The current AnimalBookGame instance.
 	 */
-	public StoryScreen(AnimalBookGame gameInstance) {
+	public EndGameStory(AnimalBookGame gameInstance) {
 		super(gameInstance);
+		
+		popupStage = new Stage();
 		
 		for (int i = 0; i < 5; i++){
 			storyMap.put(i, new Array<String>());
@@ -74,8 +82,8 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		SoundHandler.playStoryBackgroundMusic(true);
 		batch = new SpriteBatch();
 		pageNumber = 0;
-		storyMap.get(0).add("story/story1.png");
-		storyMap.get(0).add("story/story2.jpg");
+		storyMap.get(0).add("endGameStory/endGameStory1.png");
+		storyMap.get(0).add("endGameStory/endGameStory2.png");
 		backgroundTexture =  new Texture(Gdx.files.internal(storyMap.get(1-1).first()));
 		fadingSprite = new Sprite(backgroundTexture);
 		fadingSprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -83,6 +91,11 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		fadingIn = true;
 		fadingOut = false;
 		displaying = false;
+		
+		//Setup input processing
+		inputMultiplexer = new InputMultiplexer();
+		Gdx.input.setInputProcessor(inputMultiplexer);
+		Gdx.input.setCatchBackKey(true);
 	}
 
 	/**
@@ -132,6 +145,10 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		
 		buttonStage.act(delta);
 		buttonStage.draw();
+		
+		popupStage.act(delta);
+		popupStage.draw();
+		
 		timeCounter += delta;
 	}
 
@@ -150,11 +167,10 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	@Override
-	protected void initializeButtons() {
+	protected void initializeButtons() {		
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/continueButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		
 		ButtonStyle buttonStyle = new ButtonStyle();
 		buttonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		buttonStyle.down = buttonSkin.getDrawable("buttonPressed");
@@ -162,8 +178,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		continueButton = new Button(buttonStyle);
 		continueButton.setWidth(BUTTON_WIDTH);
 		continueButton.setHeight(BUTTON_HEIGHT);
-		continueButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
-		continueButton.setY(EDGE_TOLERANCE);
+		continueButton.setPosition(BUTTON_WIDTH + EDGE_TOLERANCE,  BUTTON_HEIGHT + EDGE_TOLERANCE );
 		
 		continueButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -179,11 +194,12 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 					fadingOut = true;
 				}
 				else{
-					SoundHandler.playButtonClick();
-					SoundHandler.pauseStoryBackgroundMusic();
-					SoundHandler.playBackgroundMusic(true);
-					gameInstance.setScreen(new GameScreen(gameInstance));
-					dispose();
+					endGame = true;
+					Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+					EndGameDialog endD = new EndGameDialog("You Won!", skin, gameInstance);
+					endD.show(popupStage);
+					popupStage.addActor(endD);
+					inputMultiplexer.addProcessor(popupStage);
 				}
 			}
 		});

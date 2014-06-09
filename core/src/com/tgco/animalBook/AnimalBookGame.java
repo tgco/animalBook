@@ -5,7 +5,6 @@
  */
 package com.tgco.animalBook;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 import com.tgco.animalBook.gameObjects.Player;
-import com.tgco.animalBook.handlers.DatabaseHandler;
 import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.GameScreen;
@@ -43,7 +41,7 @@ public class AnimalBookGame extends Game {
 	/**
 	 * The current level from the preferences file
 	 */
-	private  int level = 1;
+	private  int level = 5;
 	/**
 	 * Load all information that differs between levels
 	 */

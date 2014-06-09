@@ -1,9 +1,9 @@
 package com.tgco.animalBook.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
-import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.SoundHandler;
 
 public class MarketScreen extends ButtonScreenAdapter implements Screen {
@@ -235,11 +234,16 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	protected void initializeButtons() {
 
 		//NEXT LEVEL BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/nextLevelButton.atlas"));
+		if (gameInstance.getLevelHandler().getLevel() == 5) {
+			atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/endGameButton.atlas"));
+		} else {
+			atlas = new TextureAtlas(Gdx.files.internal("buttons/marketScreen/nextLevelButton.atlas"));
+		}
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
 		ButtonStyle nextLevelButtonStyle = new ButtonStyle();
+
 		nextLevelButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		nextLevelButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
@@ -309,32 +313,38 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!nextLevelButton.isDisabled()) {
-					SoundHandler.playButtonClick();
-					SoundHandler.pauseMarketBackgroundMusic();
-					SoundHandler.playBackgroundMusic(true);
-					
-					gameInstance.addToLevel();
-					
-					// spot 1 is current level
-					gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
-					
-					//spot 2 is player		
-					gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
-					
-					//spot 3 is storing movable array
-					gameInstance.addToDatalevel(null,2);
-					
-					//spot 4 is storing dropped items array
-					gameInstance.addToDatalevel(null, 3);
-					
-					gameInstance.addToDatalevel(null, 4);
-					
-					
-					gameScreen.resetInputProcessors();
-					gameScreen.dispose();
-					gameInstance.setScreen(new GameScreen(gameInstance));
-					dispose();
-					
+					if (gameInstance.getLevelHandler().getLevel() == 5) {
+						SoundHandler.pauseBackgroundMusic();
+						gameInstance.setScreen(new EndGameStory(gameInstance));
+						dispose();
+					} else {
+						SoundHandler.playButtonClick();
+						SoundHandler.pauseMarketBackgroundMusic();
+						SoundHandler.playBackgroundMusic(true);
+
+						gameInstance.addToLevel();
+
+						// spot 1 is current level
+						gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
+
+						//spot 2 is player		
+						gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
+
+						//spot 3 is storing movable array
+						gameInstance.addToDatalevel(null,2);
+
+						//spot 4 is storing dropped items array
+						gameInstance.addToDatalevel(null, 3);
+
+						gameInstance.addToDatalevel(null, 4);
+
+
+						gameScreen.resetInputProcessors();
+						gameScreen.dispose();
+						gameInstance.setScreen(new GameScreen(gameInstance));
+						dispose();
+
+					}
 				}
 			}
 		});
@@ -348,9 +358,9 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);		
-				
+
 				gameInstance.getLevelHandler().setRetry();
-				
+
 				gameScreen.resetInputProcessors();
 				gameScreen.dispose();
 				gameInstance.setScreen(new GameScreen(gameInstance));
@@ -406,7 +416,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			font.dispose();
 		}
 	}
-	
+
 	/**
 	 * Sets the game to the confirm dialog when back is pressed
 	 * 

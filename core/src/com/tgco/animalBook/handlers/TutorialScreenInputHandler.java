@@ -1,8 +1,8 @@
 package com.tgco.animalBook.handlers;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -12,6 +12,13 @@ import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.screens.MainMenuScreen;
 import com.tgco.animalBook.screens.TutorialScreen;
 
+/**
+ * Copy of the game screen input handler that has additional listening features in order to
+ * progress the tutorial.
+ * 
+ * @author
+ *
+ */
 public class TutorialScreenInputHandler implements InputProcessor {
 
 	/**
@@ -218,7 +225,9 @@ public class TutorialScreenInputHandler implements InputProcessor {
 	}
 
 	/**
-	 * Unused input detection functions
+	 * Detects the release of a key character.  Used to detect the back key on android.
+	 * 
+	 * @param keycode	the keycode of the released key
 	 */
 	@Override
 	public boolean keyUp(int keycode) {
@@ -230,6 +239,9 @@ public class TutorialScreenInputHandler implements InputProcessor {
 		return false;
 	}
 
+	/**
+	 * Unused input detection functions
+	 */
 	@Override
 	public boolean keyTyped(char character) {
 		// TODO Auto-generated method stub

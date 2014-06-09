@@ -4,19 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
-import com.tgco.animalBook.handlers.SoundHandler;
 
 public class ConfirmDialog extends Dialog{
 
 	private AnimalBookGame gameInstance;
 	
 	/**
-	 * Constructs a new confirm dialog with a title, a skin, a game instance, and a boolean option
+	 * Constructs a new confirm dialog with a title, a skin, a game instance, the text to
+	 * be displayed and an option for which dialog
 	 * 
 	 * @param title the title of the dialog
 	 * @param skin the skin to be used by the dialog
 	 * @param gameInstance the game instance to reference
-	 * @param noAnimals represents cause of loss
+	 * @param words the words to be displayed on the dialog
+	 * @param box an option for which buttons to be displayed
 	 */
 	public ConfirmDialog(String title, Skin skin, AnimalBookGame gameInstance, String words, int box) {
 		super(title, skin);

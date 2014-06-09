@@ -19,8 +19,6 @@ import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Obstacle;
 import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.SoundHandler;
-import com.tgco.animalBook.screens.GameScreen;
-import com.tgco.animalBook.screens.MarketScreen;
 import com.tgco.animalBook.screens.TutorialMarketScreen;
 import com.tgco.animalBook.screens.TutorialScreen;
 

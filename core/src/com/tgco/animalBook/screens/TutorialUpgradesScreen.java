@@ -14,8 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
@@ -23,7 +23,6 @@ import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.TutorialWorld;
-import com.tgco.animalBook.view.World;
 
 public class TutorialUpgradesScreen extends ButtonScreenAdapter implements Screen{
 

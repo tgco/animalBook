@@ -11,7 +11,6 @@ import com.tgco.animalBook.gameObjects.Goose;
 import com.tgco.animalBook.gameObjects.Pig;
 import com.tgco.animalBook.gameObjects.Sheep;
 
-//instantiates correct object for the given level
 /**
  * This class returns the correct values for each variable that changes between levels 
  * 
@@ -45,13 +44,12 @@ public class LevelHandler {
 	 * Number of times each upgrade button has been pressed
 	 */
 	private int fruitfullMoneyP	= 0;
-	
-
-
 	private int LongerMoneyP	= 0;
-	
 	private int MoreMoneyP		= 0;
 
+	/**
+	 * Boolean that stores if the user is retrying the level or not
+	 */
 	private boolean onRetry = false;
 	
 	/**
@@ -103,6 +101,7 @@ public class LevelHandler {
 		else if(onRetry){
 			startAnimals = (int) Math.ceil(passLevelAmount/2.0);
 		}
+
 		Array<ABDrawable> animals = new Array<ABDrawable>();
 
 		Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
@@ -179,7 +178,6 @@ public class LevelHandler {
 	 * @return		the length of the lane for the specified level
 	 */
 	public float returnLaneLength(int level) {
-
 		return 800 + 1200*(level - 1);
 	}
 	
@@ -215,7 +213,7 @@ public class LevelHandler {
 	}
 	
 	/**
-	 * this is called everytime it reaches the market
+	 * Called every time player reaches the market
 	 */
 	public void resetNextLevelStart() {
 		if(!onRetry ){
@@ -225,6 +223,10 @@ public class LevelHandler {
 		}
 	}
 	
+	/**
+	 * Returns the texture for the animal that corresponds to the current level
+	 * @return 		the texture for the current level's animal
+	 */
 	public FileHandle currentLevelTexture() {
 		switch(level) {
 		case 1 :
@@ -241,6 +243,11 @@ public class LevelHandler {
 		return null;
 	}
 	
+	/**
+	 * Returns the correct texture for the animal that corresponds to the next level
+	 * 
+	 * @return		the texture for the next level's animal
+	 */
 	public FileHandle nextLevelTexture() {
 		switch(level) {
 		case 1 :
@@ -252,27 +259,14 @@ public class LevelHandler {
 		case 4 :
 			return Gdx.files.internal("objectTextures/cowButton.atlas");
 		case 5 :
-			return Gdx.files.internal("objectTextures/gooseButton.atlas"); //SHOULD BE THE BOOK TEXTURE
+			return Gdx.files.internal("objectTextures/bookButton.atlas");
 		}
 		return null;
 	}
-	
-	public int getLevel(){
-		return level;
-	}
-	
-	public int getFruitfullMoneyP() {
-		return fruitfullMoneyP;
-	}
-
-	public int getLongerMoneyP() {
-		return LongerMoneyP;
-	}
-
-	public int getMoreMoneyP() {
-		return MoreMoneyP;
-	}
-	
+	/**
+	 * Increases the level and the pass level amount
+	 * 
+	 */
 	public void addLevel(){
 		level++;
 		switch(level) {
@@ -292,6 +286,27 @@ public class LevelHandler {
 			passLevelAmount = 25;
 			break;
 		}
+	}
+	
+	/**
+	 * Getters and setters
+	 * 
+	 * @return
+	 */
+	public int getLevel(){
+		return level;
+	}
+	
+	public int getFruitfullMoneyP() {
+		return fruitfullMoneyP;
+	}
+
+	public int getLongerMoneyP() {
+		return LongerMoneyP;
+	}
+
+	public int getMoreMoneyP() {
+		return MoreMoneyP;
 	}
 	
 	public void setNextLevelStart(int nextStart) {

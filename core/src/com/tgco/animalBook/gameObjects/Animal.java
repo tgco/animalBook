@@ -9,12 +9,10 @@ package com.tgco.animalBook.gameObjects;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
-import com.tgco.animalBook.handlers.LevelHandler;
 
 public abstract class Animal extends Movable {
 

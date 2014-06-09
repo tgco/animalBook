@@ -495,6 +495,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		menuGroupImage.setPosition(alexButton.getX() - .5f*EDGE_TOLERANCE, alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE*2f);
 		menuGroupImage.setSize(alexButton.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE*2f);
 	}
+
 	public void initializeInventoryItems(){
 		inventoryMenuInitialized = true;
 		for (int i = 0; i < Consumable.DropType.values().length; i++){
@@ -567,6 +568,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryGroup.setHeight(BUTTON_HEIGHT);
 		inventoryGroupImage.setSize(inventoryGroup.getWidth() + EDGE_TOLERANCE*2f, inventoryGroup.getHeight());
 	}
+
 	public void initializeUpgradeItems(){
 		upgradesMenuInitialized = true;
 		//initialize upgrade monies
@@ -682,56 +684,30 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		fruitfulLabel = new Label(
 				"Fruitfulness\n" +
-				String.valueOf(gameInstance.getLevelHandler().getFruitfullMoneyP()) + "\n" +
-				"+" + String.valueOf(5) + "%\n" +
-				"$" + String.valueOf(fruitfulMoney) + "\n" +
-				String.format("%.1f",((Animal) getWorld().getMovables().get(0)).getFertilityRate())+ "%"			 
-				, upgradeLabelStyle);
+						String.valueOf(gameInstance.getLevelHandler().getFruitfullMoneyP()) + "\n" +
+						"+" + String.valueOf(5) + "%\n" +
+						"$" + String.valueOf(fruitfulMoney) + "\n" +
+						String.format("%.1f",((Animal) getWorld().getMovables().get(0)).getFertilityRate())+ "%"			 
+						, upgradeLabelStyle);
 		fruitfulLabel.setAlignment(Align.right);
 
 		longerLabel = new Label(
 				"Item Duration\n" +
-				String.valueOf(gameInstance.getLevelHandler().getLongerMoneyP()) + "\n" +
-				"+" + String.format("%.2f",5/60.0) + " s\n" +
-				"$" + String.valueOf(longerMoney) + "\n" +
-				String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getTimeOnGround())+ "%"			 
-				, upgradeLabelStyle);
+						String.valueOf(gameInstance.getLevelHandler().getLongerMoneyP()) + "\n" +
+						"+" + String.format("%.2f",5/60.0) + " s\n" +
+						"$" + String.valueOf(longerMoney) + "\n" +
+						String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getTimeOnGround())+ "%"			 
+						, upgradeLabelStyle);
 		longerLabel.setAlignment(Align.right);
 
 		moreLabel = new Label(
 				"Drop Interval\n" +
-				String.valueOf(gameInstance.getLevelHandler().getMoreMoneyP()) + "\n" +
-				"-" + String.format("%.2f",5/60.0) + " s\n" +
-				"$" + String.valueOf(moreMoney) + "\n" +
-				String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getDropInterval())+ "%"	
-				, upgradeLabelStyle);
+						String.valueOf(gameInstance.getLevelHandler().getMoreMoneyP()) + "\n" +
+						"-" + String.format("%.2f",5/60.0) + " s\n" +
+						"$" + String.valueOf(moreMoney) + "\n" +
+						String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getDropInterval())+ "%"	
+						, upgradeLabelStyle);
 		moreLabel.setAlignment(Align.right);
-
-
-		//pack labels
-		upgradesStatusGroup.addActor(upgradeLabel);
-		upgradesStatusGroup.addActor(fruitfulLabel);
-		upgradesStatusGroup.addActor(longerLabel);
-		upgradesStatusGroup.addActor(moreLabel);
-
-		upgradesStatusGroup.pack();
-		upgradesStatusGroup.setPosition(Gdx.graphics.getWidth()/2f - upgradesStatusGroup.getWidth()/2f,
-				EDGE_TOLERANCE*2f);
-
-		upgradesStatusGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
-		upgradesStatusGroupImage.setPosition(upgradesStatusGroup.getX() - EDGE_TOLERANCE,
-				upgradesStatusGroup.getY() - EDGE_TOLERANCE);
-		upgradesStatusGroupImage.setSize(upgradesStatusGroup.getWidth() + EDGE_TOLERANCE*2f,
-				upgradesStatusGroup.getHeight() + EDGE_TOLERANCE*2f);
-
-
-		upgradesGroup.addActor(fruitfulButton);
-		upgradesGroup.addActor(longerButton);
-		upgradesGroup.addActor(moreButton);
-
-		upgradesGroup.pack();
-		upgradesGroup.setHeight(BUTTON_HEIGHT);
-		upgradesGroupImage.setSize(upgradesGroup.getWidth() + EDGE_TOLERANCE*2f, upgradesGroup.getHeight());
 
 		//add listeners to buttons
 		fruitfulButton.addListener(new InputListener() {
@@ -753,13 +729,13 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					System.out.println(fruitfulMoney +"  "+getWorld().getPlayer().getPlayerMoney());
 					fruitfulMoney += fruitfulMoney;
 					gameInstance.getLevelHandler().addFruitfullMoneyP();
-					
+
 					fruitfulLabel.setText(
 							"Fruitfulness\n" +
-							String.valueOf(gameInstance.getLevelHandler().getFruitfullMoneyP()) + "\n" +
-							"+" + String.valueOf(5) + "%\n" +
-							"$" + String.valueOf(fruitfulMoney) + "\n" +
-							String.format("%.1f",((Animal) getWorld().getMovables().get(0)).getFertilityRate())+ "%"
+									String.valueOf(gameInstance.getLevelHandler().getFruitfullMoneyP()) + "\n" +
+									"+" + String.valueOf(5) + "%\n" +
+									"$" + String.valueOf(fruitfulMoney) + "\n" +
+									String.format("%.1f",((Animal) getWorld().getMovables().get(0)).getFertilityRate())+ "%"
 							);
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
@@ -798,10 +774,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					gameInstance.getLevelHandler().addLongerMoneyP();
 					longerLabel.setText(
 							"Item Duration\n" +
-							String.valueOf(gameInstance.getLevelHandler().getLongerMoneyP()) + "\n" +
-							"+" + String.format("%.2f",5/60.0) + " s\n" +
-							"$" + String.valueOf(longerMoney) + "\n" +
-							String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getTimeOnGround())+ "%"
+									String.valueOf(gameInstance.getLevelHandler().getLongerMoneyP()) + "\n" +
+									"+" + String.format("%.2f",5/60.0) + " s\n" +
+									"$" + String.valueOf(longerMoney) + "\n" +
+									String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getTimeOnGround())+ "%"
 							);
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
@@ -840,10 +816,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					moreMoney += moreMoney;
 					moreLabel.setText(
 							"Drop Interval\n" +
-							String.valueOf(gameInstance.getLevelHandler().getMoreMoneyP()) + "\n" +
-							"-" + String.format("%.2f",5/60.0) + " s\n" +
-							"$" + String.valueOf(moreMoney) + "\n" +
-							String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getDropInterval())+ "%"	
+									String.valueOf(gameInstance.getLevelHandler().getMoreMoneyP()) + "\n" +
+									"-" + String.format("%.2f",5/60.0) + " s\n" +
+									"$" + String.valueOf(moreMoney) + "\n" +
+									String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getDropInterval())+ "%"	
 							);
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
@@ -873,14 +849,177 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		if(getWorld().getPlayer().getPlayerMoney() < 1500){
 			moreButton.setDisabled(true);
 		}
+
+		//pack labels
+		upgradesStatusGroup.addActor(upgradeLabel);
+		upgradesStatusGroup.addActor(fruitfulLabel);
+		upgradesStatusGroup.addActor(longerLabel);
+		upgradesStatusGroup.addActor(moreLabel);
+
+		upgradesStatusGroup.pack();
+		upgradesStatusGroup.setPosition(Gdx.graphics.getWidth()/2f - upgradesStatusGroup.getWidth()/2f,
+				EDGE_TOLERANCE*2f);
+
+		upgradesStatusGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+		upgradesStatusGroupImage.setPosition(upgradesStatusGroup.getX() - EDGE_TOLERANCE,
+				upgradesStatusGroup.getY() - EDGE_TOLERANCE);
+		upgradesStatusGroupImage.setSize(upgradesStatusGroup.getWidth() + EDGE_TOLERANCE*2f,
+				upgradesStatusGroup.getHeight() + EDGE_TOLERANCE*2f);
+
+
+		upgradesGroup.addActor(fruitfulButton);
+		upgradesGroup.addActor(longerButton);
+		upgradesGroup.addActor(moreButton);
+
+		upgradesGroup.pack();
+		upgradesGroup.setHeight(BUTTON_HEIGHT);
+		upgradesGroupImage.setSize(upgradesGroup.getWidth() + EDGE_TOLERANCE*2f, upgradesGroup.getHeight());
 	}
 
 	public void initializeOptionItems(){
 		optionsMenuInitialized = true;
+		Button soundButton, musicButton, mainMenuButton, helpButton;
+
+		//MAIN MENU BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/mainMenuButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle mainMenuButtonStyle = new ButtonStyle();
+		mainMenuButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		mainMenuButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		mainMenuButton = new Button(mainMenuButtonStyle){
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT*2/3;
+			};
+
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH*2/3;
+			}
+		};
+
+		//SOUND BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/soundButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle soundButtonStyle = new ButtonStyle();
+		soundButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		soundButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		soundButtonStyle.checked = buttonSkin.getDrawable("buttonPressed");
+
+		soundButton = new Button(soundButtonStyle){
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT*2/3;
+			};
+
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH*2/3;
+			}
+		};
+
+		//MUSIC BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/musicButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle musicButtonStyle = new ButtonStyle();
+		musicButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		musicButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		musicButtonStyle.checked = buttonSkin.getDrawable("buttonPressed");
+
+		musicButton = new Button(musicButtonStyle){
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT*2/3;
+			};
+
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH*2/3;
+			}
+		};
+
+		//HELP BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/helpButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle helpButtonStyle = new ButtonStyle();
+		helpButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		helpButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		helpButton = new Button(helpButtonStyle){
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT*2/3;
+			};
+
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH*2/3;
+			}
+		};
+
+		//LISTENERS
+		mainMenuButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				gameInstance.setScreen(new MainMenuScreen(gameInstance));
+			}
+		});
+
+		soundButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				SoundHandler.toggleSounds();
+
+			}
+		});
+
+		musicButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				SoundHandler.toggleMusic();
+
+			}
+		});
+
+		helpButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+
+			}
+		});
+
+		optionsGroup.addActor(mainMenuButton);
+		optionsGroup.addActor(soundButton);
+		optionsGroup.addActor(musicButton);
+		optionsGroup.addActor(helpButton);
 
 		optionsGroup.pack();
 		optionsGroup.setHeight(BUTTON_HEIGHT);
-		optionsGroup.setWidth(BUTTON_HEIGHT);
 		optionsGroupImage.setSize(optionsGroup.getWidth() + EDGE_TOLERANCE*2f, optionsGroup.getHeight());
 	}
 
@@ -1023,43 +1162,5 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public boolean inMenu() {
 		return alexButton.isChecked();
 	}
-	/*public void reinitButtons(){
-		if(world.getPlayer().getPlayerMoney() < fruitfulMoney){
-			fruitfullButton.setDisabled(true);
-			drawAmounts(0.5f, 0);
-			drawData(0.5f, 0);
-		}
-		else{
-			fruitfullButton.setDisabled(false);
-			drawAmounts(1f, 0);
-			drawData(1f, 0);
-		}
-		if(world.getPlayer().getPlayerMoney() < longerMoney){
-			longerButton.setDisabled(true);
-			drawAmounts(0.5f, 1);
-			drawData(0.5f, 1);
-		}
-		else{
-			longerButton.setDisabled(false);
-			drawAmounts(1, 1);
-			drawData(1, 1);
-		}
-		if(world.getPlayer().getPlayerMoney() < moreMoney){
-			moreeButton.setDisabled(true);
-			drawAmounts(0.5f, 2);
-			drawData(0.5f, 2);
-		}
-		else{
-			moreeButton.setDisabled(false);
-			drawAmounts(1, 2);
-			drawData(1, 2);
-		}
 
-		batch.begin();
-		font.setColor(Color.BLACK);
-		font.setScale(1.2f);
-		font.draw(batch, "Your Money: $" + String.valueOf(world.getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 -10, Gdx.graphics.getHeight() -2*EDGE_TOLERANCE);
-		font.setScale(.75f);
-		batch.end();
-	}*/
 }

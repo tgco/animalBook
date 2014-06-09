@@ -3,6 +3,7 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -39,6 +40,12 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
 	private BitmapFont font;
 
+	/**
+	 * Stage to draw the screen once the user has pressed the back button
+	 */
+	private Stage popupStage;
+
+	private boolean hasConfirm = false;
 
 	/**
 	 * Constructs a new Market Screen with a game instance and a game screen.
@@ -53,7 +60,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	public MarketScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
 		super(gameInstance);
-
+		popupStage = new Stage();
 		this.gameScreen = gameScreen;
 
 		//Background rendering
@@ -80,48 +87,66 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
-		int storedAnimal = gameInstance.getLevelHandler().getStoredAmount();
-		int nextLevel = gameInstance.getLevelHandler().getNextLevelStart();
-		int needAnimals = gameInstance.getLevelHandler().getPassLevelAmount();
-		String needAnimalsString = "Need: " + String.valueOf(needAnimals);
+		if(!hasConfirm){
+			int storedAnimal = gameInstance.getLevelHandler().getStoredAmount();
+			int nextLevel = gameInstance.getLevelHandler().getNextLevelStart();
+			int needAnimals = gameInstance.getLevelHandler().getPassLevelAmount();
+			String needAnimalsString = "Need: " + String.valueOf(needAnimals);
 
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		buttonStage.act(delta);
+			buttonStage.act(delta);
 
-		//render background
-		batch.begin();
-		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			//render background
+			batch.begin();
+			batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		//Draw money
-		font.setColor(Color.WHITE);
-		font.setScale(1.2f);
-		font.draw(batch, "Your Money: $" + String.valueOf(gameScreen.getWorld().getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 , Gdx.graphics.getHeight() - 3*EDGE_TOLERANCE );
+			//Draw money
+			font.setColor(Color.WHITE);
+			font.setScale(1.2f);
+			font.draw(batch, "Your Money: $" + String.valueOf(gameScreen.getWorld().getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 , Gdx.graphics.getHeight() - 3*EDGE_TOLERANCE );
 
-		font.setColor(Color.WHITE);
-		font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-		if (gameInstance.getLevelHandler().getLevel() == 5) {
-			if (nextLevel >= 25) {
-				font.draw(batch, String.valueOf(1), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-			} else {
-				font.draw(batch, String.valueOf(0), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-			}
-		} else {
+			font.setColor(Color.WHITE);
+			font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
 			font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+			font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE - font.getCapHeight());
+
+			batch.end();
+
+			//Draw buttons
+			buttonStage.draw();
+			int numConsumables = Consumable.DropType.values().length;
+			for (int i = 0; i < numConsumables; i ++){
+				updateMarketScreenItems(i);
+			}
+			reinitButtons();
+
+			font.setColor(Color.WHITE);
+			font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+			if (gameInstance.getLevelHandler().getLevel() == 5) {
+				if (nextLevel >= 25) {
+					font.draw(batch, String.valueOf(1), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+				} else {
+					font.draw(batch, String.valueOf(0), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+				}
+			} else {
+				font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+			}
+			font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE - font.getCapHeight());
+
+			if(Gdx.input.isKeyPressed(Keys.BACK)){
+				setDialog();
+			}
+
+			//Gdx.gl.glClearColor(1, 1, 1, 1);
+			//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 		}
-		font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE - font.getCapHeight());
-
-		batch.end();
-
-		//Draw buttons
-		buttonStage.draw();
-		int numConsumables = Consumable.DropType.values().length;
-		for (int i = 0; i < numConsumables; i ++){
-			updateMarketScreenItems(i);
+		else{
+			popupStage.act(delta);
+			popupStage.draw();
 		}
-		reinitButtons();
-
 	}
 
 	/**
@@ -309,29 +334,29 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 						SoundHandler.playButtonClick();
 						SoundHandler.pauseMarketBackgroundMusic();
 						SoundHandler.playBackgroundMusic(true);
-						
+
 						gameInstance.addToLevel();
-						
+
 						// spot 1 is current level
 						gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
-						
+
 						//spot 2 is player		
 						gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
-						
+
 						//spot 3 is storing movable array
 						gameInstance.addToDatalevel(null,2);
-						
+
 						//spot 4 is storing dropped items array
 						gameInstance.addToDatalevel(null, 3);
-						
+
 						gameInstance.addToDatalevel(null, 4);
-						
-						
+
+
 						gameScreen.resetInputProcessors();
 						gameScreen.dispose();
 						gameInstance.setScreen(new GameScreen(gameInstance));
 						dispose();
-						
+
 					}
 				}
 			}
@@ -346,13 +371,13 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);		
-				
-				//gameInstance.getLevelHandler().resetStoredAmount();
-				
+
+				gameInstance.getLevelHandler().setRetry();
+
 				gameScreen.resetInputProcessors();
 				gameScreen.dispose();
 				gameInstance.setScreen(new GameScreen(gameInstance));
-
+				dispose();
 			}
 		});
 
@@ -405,4 +430,23 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		}
 	}
 
+	/**
+	 * Sets the game to the confirm dialog when back is pressed
+	 * 
+	 */
+	public void setDialog(){
+		hasConfirm  = true;
+		Skin skin = new Skin(Gdx.files.internal("confirmSkin/uiskin.json"));
+		ConfirmDialog backD = new ConfirmDialog("Back Button Pressed", skin, gameInstance,"Please click  \"retry\" or \"Next Level\" button to save Progress", 0);
+		backD.show(popupStage);
+		popupStage.addActor(backD);
+		inputMultiplexer.addProcessor(popupStage);
+		inputMultiplexer.removeProcessor(buttonStage);
+	}
+	public void setCancel(){
+		hasConfirm = false;
+		inputMultiplexer.removeProcessor(popupStage);
+		inputMultiplexer.addProcessor(buttonStage);
+		popupStage = new Stage();	
+	}
 }

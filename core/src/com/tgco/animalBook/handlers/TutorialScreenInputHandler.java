@@ -58,11 +58,7 @@ public class TutorialScreenInputHandler implements InputProcessor {
 	 */
 	@Override
 	public boolean keyDown(int keycode) {
-		if(keycode == Keys.BACK){
-			gameInstance.setScreen(new MainMenuScreen(gameInstance));
-
-			tutorialScreen.dispose();
-		}
+		
 		return false;
 	}
 
@@ -226,7 +222,11 @@ public class TutorialScreenInputHandler implements InputProcessor {
 	 */
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
+		if(keycode == Keys.BACK){
+			gameInstance.setScreen(new MainMenuScreen(gameInstance));
+
+			tutorialScreen.dispose();
+		}
 		return false;
 	}
 

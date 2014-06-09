@@ -65,6 +65,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	boolean paused;
 
+	private boolean isMain = true;
+
 	/**
 	 * Constructor using the running game instance
 	 * 
@@ -90,7 +92,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		GameScreenInputHandler touchControls = new GameScreenInputHandler(gameInstance,this);
 		inputMultiplexer.addProcessor(touchControls);
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		Gdx.input.setCatchBackKey(true);
+	
 	}
 
 	/**
@@ -136,6 +138,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 			//Draw buttons over the screen
 			buttonStage.draw();
+			
 		}
 		else { //if player lost
 			Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -214,7 +217,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/inventoryButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-
+		
 		ButtonStyle inventoryButtonStyle = new ButtonStyle();
 		inventoryButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
@@ -271,6 +274,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.pauseBackgroundMusic();
+				isMain = false;
 				gameInstance.setScreen(new UpgradesScreen(gameInstance,GameScreen.this));
 			}
 		});
@@ -283,6 +287,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .1);
+				isMain = false;
 				gameInstance.setScreen(new InventoryScreen(gameInstance,GameScreen.this));
 			}
 		});
@@ -383,6 +388,15 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void resume() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public boolean toMain() {
+		return isMain ;
+	}
+
+	public void setMain() {
+		isMain = true;
+		
 	}
 
 }

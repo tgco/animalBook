@@ -51,6 +51,8 @@ public class LevelHandler {
 	private int LongerMoneyP	= 0;
 	
 	private int MoreMoneyP		= 0;
+
+	private boolean onRetry = false;
 	
 	/**
 	 * Boolean to determine if the tutorial should be played
@@ -63,6 +65,7 @@ public class LevelHandler {
 	 * @param level the level that the handler will return values for
 	 */
 	public LevelHandler(int level) {
+		Gdx.app.log("My Tagg", "The initializing of the level Handler");
 		this.level = level;
 
 		storedAmount = 0;
@@ -95,9 +98,12 @@ public class LevelHandler {
 	 */
 	public Array<ABDrawable> addAnimals(int level) {
 		int startAnimals = nextLevelStart;
-		if(startAnimals == 0)
-			startAnimals =25;
-			//startAnimals =5;
+		if(startAnimals <= 5 && !onRetry)
+			startAnimals =5;
+		else if(onRetry){
+			startAnimals = (int) Math.ceil(passLevelAmount/2.0);
+		}
+
 		Array<ABDrawable> animals = new Array<ABDrawable>();
 
 		Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
@@ -210,8 +216,15 @@ public class LevelHandler {
 		return nextLevelStart;
 	}
 	
+	/**
+	 * this is called everytime it reaches the market
+	 */
 	public void resetNextLevelStart() {
+		if(!onRetry ){
 		nextLevelStart = 0;
+		}else{
+			onRetry = false;
+		}
 	}
 	
 	public FileHandle currentLevelTexture() {
@@ -319,5 +332,7 @@ public class LevelHandler {
 		this.doTutorial = doTutorial;
 	}
 
-	
+	public void setRetry(){
+		onRetry = true;
+	}
 }

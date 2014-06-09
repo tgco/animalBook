@@ -275,8 +275,8 @@ public class AnimalBookGame extends Game {
 
 
 		//app settings
-		SoundHandler.setMusicMuted(prefs.getBoolean("music"));
-		SoundHandler.setSoundMuted(prefs.getBoolean("sound"));
+		//SoundHandler.setMusicMuted(prefs.getBoolean("music"));
+		//SoundHandler.setSoundMuted(prefs.getBoolean("sound"));
 		levelHandler.setDoTutorial(prefs.getBoolean("tutorial"));
 
 	}

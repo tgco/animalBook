@@ -25,6 +25,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	private Button mainMenuButton;
 	private Button helpButton;
 	private Button resetButton;
+	private boolean hasConfirm = false;
+	private Stage popupStage;
 	
 	/**
 	 * Constructs a new Options Screen with a game instance
@@ -36,7 +38,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	public OptionsScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
-		
+		popupStage = new Stage();
 		//Background Rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/optionsBackground.jpg"));
@@ -55,6 +57,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
+		
+		if(!hasConfirm){
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
@@ -70,6 +74,10 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 			SoundHandler.playButtonClick();
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));
 			dispose();
+		}
+		}else{
+			popupStage.act(delta);
+			popupStage.draw();
 		}
 	}
 
@@ -237,8 +245,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				gameInstance.resetData();
 				SoundHandler.playButtonClick();
+				setDialog();
 			}
 		});
 		
@@ -281,6 +289,26 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	public void dispose() {
 		super.dispose();
 		
+	}
+	
+	/**
+	 * Sets the game to the confirm dialog when reset is pressed
+	 * 
+	 */
+	public void setDialog(){
+		hasConfirm  = true;
+		Skin skin = new Skin(Gdx.files.internal("confirmSkin/uiskin.json"));
+		ConfirmDialog resetD = new ConfirmDialog("RESET DATA", skin, gameInstance,"All progress will be deleted. Are you Sure you want to reset?", 2);
+		resetD.show(popupStage);
+		popupStage.addActor(resetD);
+		inputMultiplexer.addProcessor(popupStage);
+		inputMultiplexer.removeProcessor(buttonStage);
+	}
+	public void setExitDialog(){
+		hasConfirm = false;
+		inputMultiplexer.removeProcessor(popupStage);
+		inputMultiplexer.addProcessor(buttonStage);
+		popupStage = new Stage();	
 	}
 
 }

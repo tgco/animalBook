@@ -68,8 +68,6 @@ public class World {
 	 */
 	private ArrayMap<String, Array<ABDrawable>> drawMap;
 
-
-
 	/**
 	 * Reference to the running game instance
 	 */
@@ -79,8 +77,6 @@ public class World {
 	 * The distance the player must walk to reach the market
 	 */
 	private float laneLength;
-
-
 
 	/**
 	 * Market located at end of the game level
@@ -107,7 +103,7 @@ public class World {
 	private WorldRenderer worldRender;
 
 	/**
-	 * Constructor with game instance
+	 * Constructor with game instance and pulls stored info from gameInstance if there is anything stored
 	 * 
 	 * @param gameInstance reference to the running game instance
 	 */
@@ -220,7 +216,7 @@ public class World {
 	}
 
 	/**
-	 * Checks if the player lost the current level
+	 * Checks if the player lost the current level either by no animals on screen or by running out of health
 	 */
 	public void checkLost(){
 		if(getMovables().size <=0 &&  gameInstance.getLevelHandler().getStoredAmount() <= 0 ){
@@ -269,8 +265,6 @@ public class World {
 		return droppings;
 	}
 
-
-
 	/**
 	 * Finds which drawables are movable, casts them to movable and returns them in an array
 	 * 
@@ -284,6 +278,10 @@ public class World {
 		return movables;
 	}
 
+	/**
+	 * returns the player for the screens to use health, money, and inventory
+	 * @return
+	 */
 	public Player getPlayer() {
 		return player;
 	}
@@ -444,24 +442,38 @@ public class World {
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 	}
-
+	
+	/**
+	 * on reseting from Main menu this reinitalizes the movable object pictures
+	 */
 	public void reinitTextureMovable(){
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			((Animal)movable).resetTexture();
 		}
 	}
 
+	/**
+	 * on resetting after dispose, this reinitalizes the dropped object Textures
+	 */
 	public void reinitTextureDropped(){
 		for (ABDrawable dropped : drawMap.get("Dropped")) {
 			((Dropped)dropped).resetTexture();
 		}
 	}
 
+	/**
+	 * on resetting objects , this reinitializes the Obstacle object textures
+	 */
 	public void reinitTextureObstacle(){
 		for (ABDrawable obstacle : drawMap.get("Obstacle")) {
 			((Obstacle) obstacle).resetText();
 		}
 	}
+	
+	/**
+	 * returns the obstacles array for use in changing to Main Menu and gameScreen
+	 * @return
+	 */
 	public Array<Obstacle> getObstacles() {
 		Array<Obstacle> obstacles = new Array<Obstacle>();
 		for (ABDrawable aBDrawable : drawMap.get("Obstacle")) {
@@ -469,6 +481,10 @@ public class World {
 		}
 		return obstacles;
 	}
+	
+	/**
+	 * on resetting objects, this reinitializes the players texture
+	 */
 	public void reinitTexturePlayer() {
 		player.resetTexture("objectTextures/player.png");
 	}

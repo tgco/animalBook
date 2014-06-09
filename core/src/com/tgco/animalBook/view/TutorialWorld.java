@@ -67,6 +67,10 @@ public class TutorialWorld {
 	 * Market located at end of the game level
 	 */
 	private Market market;
+	
+	/**
+	 * Number of times the More Drops have been counted
+	 */
 	private int MoreMoneyP		= 0;
 	/**
 	 * The main player
@@ -121,14 +125,23 @@ public class TutorialWorld {
 
 	}
 
+	/**
+	 * adds 1 to the fruitfull upgrade 
+	 */
 	public void addFruitfullMoneyP() {
 		this.fruitfullMoneyP += 1;
 	}
 
+	/**
+	 * adds 1 to the Longer duration upgrade
+	 */
 	public void addLongerMoneyP() {
 		LongerMoneyP += 1;
 	}
 
+	/**
+	 * adds 1 to the more drops upgrade
+	 */
 	public void addMoreMoneyP() {
 		MoreMoneyP += 1;
 	}
@@ -156,7 +169,7 @@ public class TutorialWorld {
 	}
 
 	/**
-	 * Returns the camera used to view the world
+	 * Returns the camera used to view the world to get proper coordinates
 	 * 
 	 * @return		the camera currently in use
 	 */
@@ -177,14 +190,26 @@ public class TutorialWorld {
 		return droppings;
 	}
 
+	/**
+	 * returns the number of presses for the fruitful upgrade for which level it is on
+	 * @return
+	 */
 	public int getFruitfullMoneyP() {
 		return fruitfullMoneyP;
 	}
 
+	/**
+	 * returns the number of presses for the longer duration upgrade for which level it is on
+	 * @return
+	 */
 	public int getLongerMoneyP() {
 		return LongerMoneyP;
 	}
 
+	/**
+	 * returns the  number of presses for the more drops upgrade for which level it is on
+	 * @return
+	 */
 	public int getMoreMoneyP() {
 		return MoreMoneyP;
 	}
@@ -202,6 +227,10 @@ public class TutorialWorld {
 		return movables;
 	}
 
+	/**
+	 * returns the player for the screens to use money, health and inventory
+	 * @return
+	 */
 	public Player getPlayer() {
 		return player;
 	}
@@ -247,9 +276,6 @@ public class TutorialWorld {
 		worldRender.render(batch, drawMap, player.getHealth(),camera,delta);
 	}
 
-	/**
-	 * 
-	 */
 
 	/**
 	 * Updates all logic between game objects and moves them if necessary
@@ -323,11 +349,18 @@ public class TutorialWorld {
 		}
 	}
 
+	/**
+	 * on reseting from Main menu this reinitalizes the movable object pictures
+	 */
 	public void reinitTextureMovable(){
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			((Animal)movable).resetTexture();
 		}
 	}
+	
+	/**
+	 * on resetting from Main Menu this reinitalizes the dropped object textures
+	 */
 	public void reinitTextureDropped(){
 		for (ABDrawable dropped : drawMap.get("Dropped")) {
 			((Dropped)dropped).resetTexture();
@@ -368,6 +401,4 @@ public class TutorialWorld {
 			generatedMarketAndObstacle = true;
 		}
 	}
-
-
 }

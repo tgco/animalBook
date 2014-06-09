@@ -41,13 +41,13 @@ public class AnimalBookGame extends Game {
 	/**
 	 * The current level from the preferences file
 	 */
-	private  int level = 5;
+	private  int level = 1;
 	/**
 	 * Load all information that differs between levels
 	 */
 	private LevelHandler levelHandler;
 	
-	/** varaiable to store each consumable and retrieve them */
+	/** variable to store each consumable and retrieve them */
 	private int numConsumables;
 
 	/** DATA_PREFS is the preference file for the data of the game*/

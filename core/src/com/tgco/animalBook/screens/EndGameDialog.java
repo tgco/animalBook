@@ -9,6 +9,7 @@ import com.tgco.animalBook.handlers.SoundHandler;
 public class EndGameDialog extends Dialog{
 
 	private AnimalBookGame gameInstance;
+	private EndGameStory story;
 	
 	/**
 	 * Constructs a new lose dialog with a title, a skin, and a game instance
@@ -17,9 +18,10 @@ public class EndGameDialog extends Dialog{
 	 * @param skin the skin to be used by the dialog
 	 * @param gameInstance the game instance to reference
 	 */
-	public EndGameDialog(String title, Skin skin, AnimalBookGame gameInstance) {
+	public EndGameDialog(String title, Skin skin, AnimalBookGame gameInstance, EndGameStory story) {
 		super(title, skin);
 		this.gameInstance = gameInstance;
+		this.story = story;
 		this.text("Congratulations! You have won the game!");
 	}
 	
@@ -43,14 +45,11 @@ public class EndGameDialog extends Dialog{
 		SoundHandler.toggleSounds();
 		SoundHandler.toggleMusic();
 		if(object.equals("reset")){
-			gameInstance.resetData();
-			GameScreen temp = gameInstance.getGameScreen();
-			gameInstance.setScreen(new MainMenuScreen(gameInstance));
-			temp.dispose();
+			hide();
+			story.setConfirmDialog();
 		}
 		else if(object.equals("mainmenu")){
-			Gdx.app.log("Help", "I've been pressed!");
-			GameScreen temp = gameInstance.getGameScreen();
+			EndGameStory temp = (EndGameStory) gameInstance.getScreen();
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));
 			temp.dispose();
 		}

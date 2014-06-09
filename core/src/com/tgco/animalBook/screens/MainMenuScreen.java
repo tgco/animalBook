@@ -38,6 +38,11 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	private static final double REGION_HEIGHT = BUTTON_HEIGHT*1.25f;
 	private static final double REGION_WIDTH = BUTTON_WIDTH*3.1f;
 
+	/**
+	 * Constructor for the main menu screen
+	 * 
+	 * @param gameInstance current game instance to be referenced
+	 */
 	public MainMenuScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 		popupStage = new Stage();
@@ -99,7 +104,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	/**
-	 * the show, hide, pause, resume buttons are not being used becuase
+	 * the show, hide, pause, resume buttons are not being used because
 	 *  the life cycle of the screen is not needed at this point.
 	 */
 	@Override
@@ -193,6 +198,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 				gameInstance.setDataPlay();
 				if(gameInstance.getLevelHandler().isDoTutorial()){
 					gameInstance.setScreen(new TutorialScreen(gameInstance));
+					//gameInstance.setScreen(new EndGameStory(gameInstance));
 				}else{
 					gameInstance.setScreen(new GameScreen(gameInstance));
 				}

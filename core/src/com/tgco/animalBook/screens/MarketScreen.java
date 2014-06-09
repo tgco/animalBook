@@ -122,19 +122,6 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			}
 			reinitButtons();
 
-			font.setColor(Color.WHITE);
-			font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-			if (gameInstance.getLevelHandler().getLevel() == 5) {
-				if (nextLevel >= 25) {
-					font.draw(batch, String.valueOf(1), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-				} else {
-					font.draw(batch, String.valueOf(0), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-				}
-			} else {
-				font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-			}
-			font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE - font.getCapHeight());
-
 			if(Gdx.input.isKeyPressed(Keys.BACK)){
 				setDialog();
 			}
@@ -328,6 +315,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!nextLevelButton.isDisabled()) {
 					if (gameInstance.getLevelHandler().getLevel() == 5) {
+						SoundHandler.pauseBackgroundMusic();
 						gameInstance.setScreen(new EndGameStory(gameInstance));
 						dispose();
 					} else {

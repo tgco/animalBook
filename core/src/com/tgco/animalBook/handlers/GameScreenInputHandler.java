@@ -50,6 +50,9 @@ public class GameScreenInputHandler implements InputProcessor {
 	 */
 	private static final float HERD_TOLERANCE = 300f;
 
+	/**
+	 * Dimensions of button to locate on screen for consumables to move to when touched
+	 */
 	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
@@ -73,7 +76,7 @@ public class GameScreenInputHandler implements InputProcessor {
 	 */
 	@Override
 	public boolean keyDown(int keycode) {
-		
+
 		return false;
 	}
 
@@ -204,9 +207,10 @@ public class GameScreenInputHandler implements InputProcessor {
 		}
 
 	}
-
 	/**
-	 * Unused input detection functions
+	 * Detects the release of a key.  Used to detect the back key press on android
+	 * 
+	 * @param keycode		the keycode for the released key
 	 */
 	@Override
 	public boolean keyUp(int keycode) {
@@ -226,7 +230,7 @@ public class GameScreenInputHandler implements InputProcessor {
 
 			//spot 4 is storing dropped items array
 			gameInstance.addToDatalevel(gameScreen.getWorld().getDropped(), 3);
-			
+
 			gameInstance.addToDatalevel(gameScreen.getWorld().getObstacles(), 4);
 
 			gameScreen.dispose();
@@ -237,6 +241,10 @@ public class GameScreenInputHandler implements InputProcessor {
 		return false;
 	}
 
+
+	/**
+	 * Unused input detection functions
+	 */
 	@Override
 	public boolean keyTyped(char character) {
 		// TODO Auto-generated method stub

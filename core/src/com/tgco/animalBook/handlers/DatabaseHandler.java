@@ -6,6 +6,13 @@ import com.badlogic.gdx.sql.DatabaseCursor;
 import com.badlogic.gdx.sql.DatabaseFactory;
 import com.badlogic.gdx.sql.SQLiteGdxException;
 
+/**
+ * Manages database functionality to save information between user plays.  Currently replaced by the Preferences class
+ * provided by libGDX.
+ * 
+ * @author
+ *
+ */
 public class DatabaseHandler {
 	Database dbHandler;
 

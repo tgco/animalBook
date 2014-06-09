@@ -329,7 +329,8 @@ public class AnimalBookGame extends Game {
 
 		//app settings
 		prefs.putBoolean("tutorial", true);
-
+		levelHandler.setDoTutorial(true);
+		
 		prefs.flush();
 		
 		//after calling flush

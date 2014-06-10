@@ -119,7 +119,6 @@ public class TutorialWorld {
 		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.put("Obstacle", new Array<ABDrawable>());
 		drawMap.put("Player", new Array<ABDrawable>());
-		drawMap.get("Player").add(player);
 
 	}
 

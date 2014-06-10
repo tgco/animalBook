@@ -540,8 +540,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 				if (payload.getObject() instanceof Consumable)
-					if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL ||
-					getWorld().getPlayer().getHealth() == 100f){
+					if (getWorld().getPlayer().getHealth() == 100f){
 						this.getActor().setColor(Color.RED);
 						return false;
 					}

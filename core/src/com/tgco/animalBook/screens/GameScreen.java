@@ -1170,10 +1170,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			else
 				((Button) upgradesGroup1.findActor("fruitfulButton")).setDisabled(false);
 
-			/*if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
+			if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
 				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(true);
 			else
-				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(false);*/
+				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(false);
 
 			if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
 				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(true);

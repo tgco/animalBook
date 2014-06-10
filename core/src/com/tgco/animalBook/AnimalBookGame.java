@@ -359,7 +359,14 @@ public class AnimalBookGame extends Game {
 
 
 			//the consumables adding back in
+			for (int i = 0; i < Consumable.DropType.values().length; i++){
+				numConsumables = prefs.getInteger(Consumable.DropType.values()[i].getName());
+				for(int j =0; j<numConsumables; j++){
+					player.getInventory().addItem(new Consumable(DropType.values()[i]));
+				}
+			}
 
+/*
 			numConsumables = prefs.getInteger("Eggs");
 			for(int i =0; i<numConsumables; i++){
 				player.getInventory().addItem(new Consumable(DropType.EGG));
@@ -377,14 +384,14 @@ public class AnimalBookGame extends Game {
 
 			numConsumables = prefs.getInteger("Wool");
 			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.WOOL));
+				player.getInventory().addItem(new Consumable(DropType.MUTTON));
 			}
 
 			numConsumables = prefs.getInteger("Milk");
 			for(int i =0; i<numConsumables; i++){
 				player.getInventory().addItem(new Consumable(DropType.MILK));
 			}
-		
+		*/
 		
 			//animal data
 			levelHandler.setNextLevelStart(prefs.getInteger("numAnimals"));

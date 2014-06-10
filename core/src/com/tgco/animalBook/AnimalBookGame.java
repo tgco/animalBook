@@ -343,11 +343,14 @@ public class AnimalBookGame extends Game {
 		//Player data
 		prefs.putInteger("money", 0);
 		prefs.putFloat("health", 0);
-		prefs.putInteger("Eggs", 0);
-		prefs.putInteger("Bacon", 0);
+		
+		for (int i = 0; i < Consumable.DropType.values().length; i++)
+			prefs.putInteger(Consumable.DropType.values()[i].getName(), 0);
+		
+		/*prefs.putInteger("Bacon", 0);
 		prefs.putInteger("Cheese", 0);
 		prefs.putInteger("Wool", 0);
-		prefs.putInteger("Milk", 0);
+		prefs.putInteger("Milk", 0);*/
 
 		//animal data,   0 = fruitfullness, 1=dropInterval, 2=duration
 		prefs.putInteger("numAnimals", 0);

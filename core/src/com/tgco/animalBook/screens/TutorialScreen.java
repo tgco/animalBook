@@ -921,7 +921,6 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		LabelStyle upgradeLabelStyle = new LabelStyle();
 		//upgradeLabelStyle.font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
 		upgradeLabelStyle.font = font;
-		upgradeLabelStyle.font.setScale(1.10f);
 		//upgradeLabelStyle.fontColor = Color.WHITE;
 
 		upgradeLabel = new Label(

@@ -527,8 +527,14 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 			@Override
 			public void drop(Source source, Payload payload, float x, float y, int pointer) {
-				if (payload.getObject() instanceof Consumable)
+				if (payload.getObject() instanceof Consumable) {
 					getWorld().getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
+					if (swiped && tapped & pickedUp) {
+						ate = true;
+						alexButton.setChecked(false);
+						handleMainMenu(false);
+					}
+				}
 			}
 		});
 
@@ -606,8 +612,6 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 				handleOptionsMenu(false);
 				optionsGroupButton.setChecked(false);
 				
-				if (swiped && tapped & pickedUp)
-					ate = true;
 			}
 		});
 
@@ -652,13 +656,6 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 					handleOptionsMenu(false);
 					optionsGroupButton.setChecked(false);
 					
-					if (ate) {
-						upgraded = true;
-						//spawn these for the return to game tutorial
-						tutorialWorld.spawnObstacleAndMarket();
-						overlay.dispose();
-						overlay = null;
-					}
 				}
 			}
 		});
@@ -971,6 +968,16 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!fruitfulButton.isDisabled()){
+					if (ate) {
+						upgraded = true;
+						//spawn these for the return to game tutorial
+						tutorialWorld.spawnObstacleAndMarket();
+						overlay.dispose();
+						overlay = null;
+						
+						alexButton.setChecked(false);
+						handleMainMenu(false);
+					}
 					SoundHandler.playButtonClick();
 					//take away player money and add more to precentage of droppings
 					//Gdx.input.setCatchBackKey(true);
@@ -1016,6 +1023,16 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!longerButton.isDisabled()){
+					if (ate) {
+						upgraded = true;
+						//spawn these for the return to game tutorial
+						tutorialWorld.spawnObstacleAndMarket();
+						overlay.dispose();
+						overlay = null;
+						
+						alexButton.setChecked(false);
+						handleMainMenu(false);
+					}
 					SoundHandler.playButtonClick();
 					//take away player money and add more to precentage of droppings
 					//Gdx.input.setCatchBackKey(true);
@@ -1059,6 +1076,16 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!moreButton.isDisabled()){
+					if (ate) {
+						upgraded = true;
+						//spawn these for the return to game tutorial
+						tutorialWorld.spawnObstacleAndMarket();
+						overlay.dispose();
+						overlay = null;
+						
+						alexButton.setChecked(false);
+						handleMainMenu(false);
+					}
 					SoundHandler.playButtonClick();
 					//take away player money and add more to precentage of droppings
 					//Gdx.input.setCatchBackKey(true);

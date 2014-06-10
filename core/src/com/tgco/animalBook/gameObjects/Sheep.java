@@ -18,7 +18,7 @@ public class Sheep extends Animal {
 	/**
 	 * The type of item this animal drops
 	 */
-	private static final DropType dropType = Consumable.DropType.WOOL;
+	private static final DropType dropType = Consumable.DropType.MUTTON;
 
 	/**
 	 * Path to the texture for this animal

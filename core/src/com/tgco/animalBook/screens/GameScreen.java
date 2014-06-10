@@ -94,7 +94,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * The font used when rendering strings
 	 */
 	private BitmapFont font;
-
+	private final float FONT_SCALE = .75f;
 
 	/**
 	 * textures for health bar, etc
@@ -121,7 +121,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		//Initialize rendering objects
 		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
-		font.setScale(.75f);
+		font.setScale(FONT_SCALE);
 		//font = new BitmapFont();
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
@@ -291,7 +291,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		LabelStyle infoLabelStyle = new LabelStyle();
 		infoLabelStyle.font = font;
 		infoLabelStyle.fontColor = Color.WHITE;
-		infoLabelStyle.font.setScale(.75f);
+		infoLabelStyle.font.setScale(FONT_SCALE);
 		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
 				alexButton.getY() + alexButton.getHeight() - 2.5f*EDGE_TOLERANCE);
@@ -318,8 +318,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 				if (payload.getObject() instanceof Consumable)
-					if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL ||
-					getWorld().getPlayer().getHealth() == 100f){
+					if (getWorld().getPlayer().getHealth() == 100f){
 						this.getActor().setColor(Color.RED);
 						return false;
 					}
@@ -574,6 +573,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				}
 			};
 			inventoryButton.getLabel().setColor(Color.RED);
+			inventoryButton.getStyle().font.setScale(FONT_SCALE);
 			inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
 			inventoryButton.bottom();
 			inventoryButton.right();
@@ -721,7 +721,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		LabelStyle upgradeLabelStyle = new LabelStyle();
 		//upgradeLabelStyle.font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
 		upgradeLabelStyle.font = font;
-		upgradeLabelStyle.font.setScale(1.10f);
 		//upgradeLabelStyle.fontColor = Color.WHITE;
 
 		upgradeLabel = new Label(

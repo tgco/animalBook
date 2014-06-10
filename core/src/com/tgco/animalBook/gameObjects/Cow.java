@@ -34,7 +34,9 @@ public class Cow extends Animal {
 		super(texturePath, pos, 5);
 		
 		speed = 1/14f;
-		width = .139f*Gdx.graphics.getWidth();
+		
+		//width = .3045*height
+		width = .067f*Gdx.graphics.getWidth();
 		height = .22f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}

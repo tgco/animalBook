@@ -187,7 +187,7 @@ public class World {
 				if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) > 0 && rand.nextInt(1) == 0){
 					o = new Obstacle();
 					o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
-					System.out.println("new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i );
+					Gdx.app.log("Obstacle", "new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i);
 					if (o.getPosition().dst(market.getPosition()) > 250f)
 						obstacles.add(o);
 					i += 400f;

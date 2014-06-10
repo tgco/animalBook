@@ -44,7 +44,7 @@ public class SoundHandler {
 			return;
 		} else {
 			backgroundMusic.setLooping(isLooping);
-			backgroundMusic.setVolume((float) 0.5);
+			backgroundMusic.setVolume((float) 0.3);
 			backgroundMusic.play();
 		}
 	}
@@ -64,7 +64,7 @@ public class SoundHandler {
 			return;
 		} else {
 			storyBackgroundMusic.setLooping(isLooping);
-			storyBackgroundMusic.setVolume((float) 0.5);
+			storyBackgroundMusic.setVolume((float) 0.35);
 			storyBackgroundMusic.play();
 		}
 	}
@@ -141,7 +141,7 @@ public class SoundHandler {
 		if (soundMuted) {
 			return;
 		} else {
-			buttonClick.play();
+			buttonClick.play(.4f);
 		}
 	}
 

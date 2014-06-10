@@ -24,7 +24,10 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	private Button mainMenuButton;
 	private Button helpButton;
 	private Button resetButton;
-	
+
+	//Gamescreen
+	GameScreen gameScreen;
+
 	/**
 	 * Constructs a new Options Screen with a game instance
 	 * <p>
@@ -35,15 +38,27 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	public OptionsScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
-		
+
 		//Background Rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/optionsBackground.jpg"));
-		
+
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
-	
+
+	public OptionsScreen(AnimalBookGame gameInstance, GameScreen gameScreen) {
+		super(gameInstance);
+
+		this.gameScreen = gameScreen;
+		//Background Rendering
+		batch = new SpriteBatch();
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/optionsBackground.jpg"));
+
+		inputMultiplexer = new InputMultiplexer();
+		Gdx.input.setInputProcessor(inputMultiplexer);
+	}
+
 	/**
 	 * Renders the on screen objects.
 	 * <p>
@@ -56,7 +71,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
 		//draw background
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -86,14 +101,14 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	protected void initializeButtons() {
-		
+
 		//SOUND BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/soundButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		
+
 		ButtonStyle soundButtonStyle = new ButtonStyle();
-		
+
 		if (SoundHandler.isSoundMuted()) {
 			soundButtonStyle.up = buttonSkin.getDrawable("muted");
 			soundButtonStyle.checked = buttonSkin.getDrawable("unmuted");
@@ -101,20 +116,20 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 			soundButtonStyle.up = buttonSkin.getDrawable("unmuted");
 			soundButtonStyle.checked = buttonSkin.getDrawable("muted");
 		}
-		
+
 		soundButton = new Button(soundButtonStyle);
 		soundButton.setWidth(BUTTON_WIDTH);
 		soundButton.setHeight(BUTTON_HEIGHT);
 		soundButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
 		soundButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
-		
+
 		//MUSIC BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/musicButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		
+
 		ButtonStyle musicButtonStyle = new ButtonStyle();
-		
+
 		if (SoundHandler.isMusicMuted()) {
 			musicButtonStyle.up = buttonSkin.getDrawable("muted");
 			musicButtonStyle.checked = buttonSkin.getDrawable("unmuted");
@@ -122,58 +137,58 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 			musicButtonStyle.up = buttonSkin.getDrawable("unmuted");
 			musicButtonStyle.checked = buttonSkin.getDrawable("muted");
 		}
-		
+
 		musicButton = new Button(musicButtonStyle);
 		musicButton.setWidth(BUTTON_WIDTH);
 		musicButton.setHeight(BUTTON_HEIGHT);
 		musicButton.setX(EDGE_TOLERANCE);
 		musicButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
-		
+
 		//MAIN MENU BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/mainMenuButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		
+
 		ButtonStyle mainMenuButtonStyle = new ButtonStyle();
 		mainMenuButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		mainMenuButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-				
+
 		mainMenuButton = new Button(mainMenuButtonStyle);
 		mainMenuButton.setWidth(BUTTON_WIDTH);
 		mainMenuButton.setHeight(BUTTON_HEIGHT);
 		mainMenuButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
 		mainMenuButton.setY(EDGE_TOLERANCE);
-		
+
 		//HELP BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/helpButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		
+
 		ButtonStyle helpButtonStyle = new ButtonStyle();
 		helpButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		helpButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-				
+
 		helpButton = new Button(helpButtonStyle);
 		helpButton.setWidth(BUTTON_WIDTH);
 		helpButton.setHeight(BUTTON_HEIGHT);
 		helpButton.setX(EDGE_TOLERANCE);
 		helpButton.setY(EDGE_TOLERANCE);
-		
+
 		//RESET BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/resetButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-				
+
 		ButtonStyle resetButtonStyle = new ButtonStyle();
 		resetButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		resetButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-					
+
 		resetButton = new Button(resetButtonStyle);
 		resetButton.setWidth(BUTTON_WIDTH);
 		resetButton.setHeight(BUTTON_HEIGHT);
 		resetButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
 		resetButton.setY(Gdx.graphics.getHeight()/2 - BUTTON_HEIGHT/2);
-		
+
 		//LISTENERS
 		soundButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -183,10 +198,10 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.toggleSounds();
-			
+
 			}
 		});
-		
+
 		musicButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -195,22 +210,30 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.toggleMusic();
-			
+
 			}
 		});
-		
+
 		mainMenuButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				SoundHandler.playButtonClick();
-				gameInstance.setScreen(new MainMenuScreen(gameInstance));
-				dispose();
+				if (gameScreen == null){
+					SoundHandler.playButtonClick();
+					gameInstance.setScreen(new MainMenuScreen(gameInstance));
+					dispose();
+				}
+				else{
+					SoundHandler.playButtonClick();
+					gameScreen.resetInputProcessors();
+					gameInstance.setScreen(gameScreen);
+					dispose();
+				}
 			}
 		});
-		
+
 		helpButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -218,10 +241,10 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-			
+
 			}
 		});
-		
+
 		helpButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -229,40 +252,41 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				//TODO STUFF
-			
+
 			}
 		});
-		
+
 		buttonStage.addActor(soundButton);
 		buttonStage.addActor(musicButton);
 		buttonStage.addActor(mainMenuButton);
 		buttonStage.addActor(helpButton);
+
 		buttonStage.addActor(resetButton);
-		
+
 		inputMultiplexer.addProcessor(buttonStage);
 	}
-	
+
 	@Override
 	public void show() {
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -271,7 +295,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
-		
+
 	}
 
 }

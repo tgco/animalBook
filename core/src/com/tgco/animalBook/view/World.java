@@ -5,8 +5,6 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -191,8 +189,8 @@ public class World {
 		}
 		drawMap.put("Obstacle", obstacles);
 		//Add player to drawmap
-		drawMap.put("Player", new Array<ABDrawable>());
-		drawMap.get("Player").add(player);
+		//drawMap.put("Player", new Array<ABDrawable>());
+		//drawMap.get("Player").add(player);
 	}
 
 	

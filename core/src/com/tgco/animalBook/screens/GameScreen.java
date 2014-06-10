@@ -1065,7 +1065,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-
+				gameInstance.setScreen(new HelpScreen(gameInstance, gameInstance.getGameScreen(), 1));
 			}
 		});
 
@@ -1239,9 +1239,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		return isMain ;
 	}
 
-	public void setMain() {
-		isMain = true;
-
+	public void setMain(boolean set) {
+		isMain = set;
+	}
+	
+	public void setAlexButton(boolean set) {
+		alexButton.setChecked(set);
 	}
 
 	@Override

@@ -105,7 +105,6 @@ public class Dropped extends ABDrawable{
 	@Override
 	public void draw(SpriteBatch batch) {
 		super.draw(batch);
-		timeLeft--;
 	}
 
  /**
@@ -114,6 +113,10 @@ public class Dropped extends ABDrawable{
   */
 	public double getTimeLeft() {
 		return timeLeft;
+	}
+	
+	public void decreaseTimeLeft() {
+		timeLeft--;
 	}
 	
 	/**

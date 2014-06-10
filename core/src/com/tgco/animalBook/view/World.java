@@ -352,18 +352,19 @@ public class World {
 		//Update Camera bounds
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
 		Vector3 buttonLoc = new Vector3(EDGE_TOLERANCE + BUTTON_WIDTH/2, 
-				1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
+				BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
 		camera.unproject(buttonLoc);
 		Vector2 buttonLoc2 = new Vector2();
 		Rectangle buttonBounds = new Rectangle();
 
 		for (ABDrawable dropped : drawMap.get("Dropped")){
+			((Dropped) dropped).decreaseTimeLeft();
 			buttonBounds.setX(buttonLoc.x - BUTTON_WIDTH/2);
 			buttonBounds.setY(buttonLoc.y - BUTTON_HEIGHT);
 			buttonBounds.setWidth(BUTTON_WIDTH);
 			buttonBounds.setHeight(BUTTON_HEIGHT);
-			buttonLoc2.x = buttonLoc.x;
-			buttonLoc2.y = buttonLoc.y;
+			buttonLoc2.x = buttonLoc.x - EDGE_TOLERANCE;
+			buttonLoc2.y = buttonLoc.y + EDGE_TOLERANCE;
 			((Dropped) dropped).droppedMove(buttonLoc2.cpy(), delta);
 			//Remove uncollected drops
 			if((((Dropped) dropped).getTimeLeft() <= 0) && !((Dropped) dropped).isPickedUp()){

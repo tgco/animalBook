@@ -235,7 +235,7 @@ public class GameScreenInputHandler implements InputProcessor {
 			gameScreen.dispose();
 		}
 		else if(keycode == Keys.BACK){
-			gameScreen.setMain();
+			gameScreen.setMain(true);
 		}
 		return false;
 	}

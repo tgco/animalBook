@@ -33,13 +33,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
-
 import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.gameObjects.Movable;
-
 import com.tgco.animalBook.AnimalBookGame.state;
-
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
@@ -1049,7 +1046,25 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
+				gameInstance.setHitBack(true);
 				gameInstance.setScreen(new MainMenuScreen(gameInstance));
+				//store the data in levelData of Game
+
+				// spot 1 is current level
+				gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
+
+				//spot 2 is player			
+				gameInstance.addToDatalevel(gameWorld.getPlayer(),1);
+
+				//spot 3 is storing movable array
+				gameInstance.addToDatalevel(gameWorld.getMovables(),2);
+
+				//spot 4 is storing dropped items array
+				gameInstance.addToDatalevel(gameWorld.getDropped(), 3);
+
+				gameInstance.addToDatalevel(gameWorld.getObstacles(), 4);
+
+				dispose();
 			}
 		});
 
@@ -1083,7 +1098,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-
+				gameInstance.setScreen(new HelpScreen(gameInstance, gameInstance.getGameScreen(), 1));
 			}
 		});
 
@@ -1212,6 +1227,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		super.dispose();
 		font.dispose();
 		gameWorld.dispose();
+		yellow.dispose();
+		green.dispose();
+		red.dispose();
+		black.dispose();
 	}
 
 	/**
@@ -1255,14 +1274,17 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		return isMain ;
 	}
 
-	public void setMain() {
-		isMain = true;
-
+	public void setMain(boolean set) {
+		isMain = set;
+	}
+	
+	public void setAlexButton(boolean set) {
+		alexButton.setChecked(set);
 	}
 
 	@Override
 	public void pause() {
-		Gdx.app.log("My Tagg", "THis is screen pause");
+		Gdx.app.log("My Tagg", "This is screen pause");
 
 	}
 }

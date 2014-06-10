@@ -120,7 +120,7 @@ public class World {
 
 		//spot 3 is storing movable array
 		if(levelSize && gameInstance.getLevelData().get(2) !=null){
-			//Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
+			Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
 			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
 			reinitTextureMovable();
 		}else{
@@ -133,7 +133,8 @@ public class World {
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
-
+		
+		
 		tolerance = drawMap.get("Movable").get(0).getWidth();
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
@@ -352,18 +353,19 @@ public class World {
 		//Update Camera bounds
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
 		Vector3 buttonLoc = new Vector3(EDGE_TOLERANCE + BUTTON_WIDTH/2, 
-				1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
+				BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
 		camera.unproject(buttonLoc);
 		Vector2 buttonLoc2 = new Vector2();
 		Rectangle buttonBounds = new Rectangle();
 
 		for (ABDrawable dropped : drawMap.get("Dropped")){
+			((Dropped) dropped).decreaseTimeLeft();
 			buttonBounds.setX(buttonLoc.x - BUTTON_WIDTH/2);
 			buttonBounds.setY(buttonLoc.y - BUTTON_HEIGHT);
 			buttonBounds.setWidth(BUTTON_WIDTH);
 			buttonBounds.setHeight(BUTTON_HEIGHT);
-			buttonLoc2.x = buttonLoc.x;
-			buttonLoc2.y = buttonLoc.y;
+			buttonLoc2.x = buttonLoc.x - EDGE_TOLERANCE;
+			buttonLoc2.y = buttonLoc.y + EDGE_TOLERANCE;
 			((Dropped) dropped).droppedMove(buttonLoc2.cpy(), delta);
 			//Remove uncollected drops
 			if((((Dropped) dropped).getTimeLeft() <= 0) && !((Dropped) dropped).isPickedUp()){

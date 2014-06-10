@@ -9,34 +9,37 @@ package com.tgco.animalBook.gameObjects;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
-import com.tgco.animalBook.handlers.LevelHandler;
 
 public abstract class Animal extends Movable {
-	
+
 	/**
 	 * rate in percent that a child animal is spawned instead of a consumable
 	 */
 	private double fertilityRate;
-	
+
 	/** interval between drop chances */
 	private double dropInterval;
+	
 	/** the time it stays on the ground until it disappears */
 	private double timeOnGround;
-	
+
 	/** a counter to reflect the amount of frames have gone by to determine when to move the animal */
-	private int changeTargetCount = 0;
+	private float changeTargetCount = 0f;
 	
+	/** a counter to reflect the amount of frames before an animal will drop an item */
+	private int dropCount = 0;
+
 	/** every animal has a different item that is dropped */
 	private DropType dropType;
-	
+
 	/** rand is used to created random movement of the animal */
 	protected Random rand;
-	
+
+	/** the animal will have different target changes for different levels */
 	private int  animalLevel;
 
 	/**
@@ -44,6 +47,7 @@ public abstract class Animal extends Movable {
 	 *  along with a position
 	 * @param texturePath the string path to the picture
 	 * @param position the starting position when the animal is created
+	 * @param animalLevel the level the animal is on
 	 */
 	public Animal(String texturePath, Vector2 position, int animalLevel) {
 		super(texturePath);
@@ -51,7 +55,7 @@ public abstract class Animal extends Movable {
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
 		this.animalLevel = animalLevel;
-		
+
 		//leeway for collection
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 
@@ -60,34 +64,36 @@ public abstract class Animal extends Movable {
 		dropInterval = 400;
 		timeOnGround = 120;
 
-		
+		dropCount = 0;
+
 		rand = new Random();
 	}
-	
+
 	/**
-	 * draw is done every frame. It draws and then decides if it should move with a 75%  chance after 5/6 of a second
+	 * Overridden to allow animal to possibly choose a new target
 	 */
 	@Override
-	public void draw(SpriteBatch batch) {
-		super.draw(batch);
-		
-		
-		if(changeTargetCount % 50 == 0 && rand.nextInt(100) < 75){
+	public void move(float cameraSpeed, float delta) {
+		super.move(cameraSpeed, delta);
 
-			changeTarget();	
+		if (changeTargetCount > 30) {
+			changeTargetCount = 0f;
+			if (rand.nextInt(100) < 75)
+				changeTarget();
 		}
-		
-		changeTargetCount++;
+
+		changeTargetCount += AnimalBookGame.TARGET_FRAME_RATE*delta;
+		dropCount++;
 	}
-	
+
 	private void changeTarget(){
 		int xChangeDistance = (int) (.139f*Gdx.graphics.getWidth()*animalLevel);
 		int yChangeDistance = (int) (.221f*Gdx.graphics.getHeight()*animalLevel);
-		
+
 		currentTarget = new Vector2(position.x + rand.nextInt(xChangeDistance) - xChangeDistance/2, position.y + rand.nextInt(yChangeDistance) - yChangeDistance/2);
 	}
-	
-	
+
+
 	/**
 	 * Create a consumable or new animal based on which animal the parent is.
 	 * 
@@ -95,7 +101,8 @@ public abstract class Animal extends Movable {
 	 */
 	public ABDrawable drop() {
 		
-		if(changeTargetCount % dropInterval ==0){
+		
+		if(dropCount  % dropInterval == 0){
 			if(rand.nextInt(100) < fertilityRate){
 				if (this.getClass().equals(Goose.class)) 
 					return new Dropped(new Goose(this.position.cpy()),this.position.cpy(), timeOnGround);
@@ -129,30 +136,30 @@ public abstract class Animal extends Movable {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Create a consumable every time for tutorial purposes
 	 * 
 	 * @return ABDrawable which is a consumable to the Dropped class
 	 */
 	public ABDrawable forceDropConsumable() {
-	
-				if (this.getClass().equals(Goose.class))
-					return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
-				else if (this.getClass().equals(Pig.class))
-					return new Dropped(new Consumable(Consumable.DropType.values()[1]), this.position.cpy(), timeOnGround);
-				else if (this.getClass().equals(Goat.class))
-					return new Dropped(new Consumable(Consumable.DropType.values()[2]), this.position.cpy(), timeOnGround);
-				else if (this.getClass().equals(Sheep.class))
-					return new Dropped(new Consumable(Consumable.DropType.values()[3]), this.position.cpy(), timeOnGround);
-				else if (this.getClass().equals(Cow.class))
-					return new Dropped(new Consumable(Consumable.DropType.values()[4]), this.position.cpy(), timeOnGround);
-				else
-					return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
-	
-		
+
+		if (this.getClass().equals(Goose.class))
+			return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
+		else if (this.getClass().equals(Pig.class))
+			return new Dropped(new Consumable(Consumable.DropType.values()[1]), this.position.cpy(), timeOnGround);
+		else if (this.getClass().equals(Goat.class))
+			return new Dropped(new Consumable(Consumable.DropType.values()[2]), this.position.cpy(), timeOnGround);
+		else if (this.getClass().equals(Sheep.class))
+			return new Dropped(new Consumable(Consumable.DropType.values()[3]), this.position.cpy(), timeOnGround);
+		else if (this.getClass().equals(Cow.class))
+			return new Dropped(new Consumable(Consumable.DropType.values()[4]), this.position.cpy(), timeOnGround);
+		else
+			return new Dropped(new Consumable(Consumable.DropType.values()[0]), this.position.cpy(), timeOnGround);
+
+
 	}
-	
+
 	/**
 	 * used for upgradesScreen
 	 * @return fertilityRate
@@ -176,7 +183,7 @@ public abstract class Animal extends Movable {
 	public double getTimeOnGround() {
 		return timeOnGround /60.0;
 	}
-	
+
 	/**
 	 *  used with the upgradesScreen to increase the fertility of the animal
 	 * @param fertilityRate the amount to add to the fertilityRate of the animal
@@ -200,9 +207,10 @@ public abstract class Animal extends Movable {
 	public void upgradeTimeOnGround(double timeOnGround) {
 		this.timeOnGround += timeOnGround;
 	}
-	
+
 	/** every animal will be able to get the dropType that it has */
 	public abstract DropType getDropType();
-	
+
+	/** every animal must have a resetTexture for switching screens */
 	public abstract void resetTexture();
 }

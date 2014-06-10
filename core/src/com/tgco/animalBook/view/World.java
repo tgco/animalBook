@@ -66,8 +66,6 @@ public class World {
 	 */
 	private ArrayMap<String, Array<ABDrawable>> drawMap;
 
-
-
 	/**
 	 * Reference to the running game instance
 	 */
@@ -78,18 +76,16 @@ public class World {
 	 */
 	private float laneLength;
 
-
-
 	/**
 	 * Market located at end of the game level
 	 */
 	private Market market;
-	
+
 	/**
 	 * The main player
 	 */
 	private Player player;
-	
+
 	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
@@ -105,7 +101,7 @@ public class World {
 	private WorldRenderer worldRender;
 
 	/**
-	 * Constructor with game instance
+	 * Constructor with game instance and pulls stored info from gameInstance if there is anything stored
 	 * 
 	 * @param gameInstance reference to the running game instance
 	 */
@@ -114,12 +110,10 @@ public class World {
 		this.gameInstance = gameInstance;
 		drawMap = new ArrayMap<String, Array<ABDrawable>>();
 
-		boolean levelSize = gameInstance.getLevelData().size >0;
+		boolean levelSize = gameInstance.getLevelData().size > 0;
 		// spot 1 is current level
 		//spot 2 is player			
-
 		//spot 4 is storing dropped items array
-
 
 		worldRender = new WorldRenderer();
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
@@ -144,27 +138,35 @@ public class World {
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
+
 		if(gameInstance.getLevelHandler().getLevel()>1){
 			increasedCameraSpeed = 2f*cameraSpeed;
 		}else{
 			increasedCameraSpeed = 3f*cameraSpeed;
 		}
-		if(levelSize && gameInstance.getLevelData().get(1) != null){
-			player = (Player) gameInstance.getLevelData().get(1);
-			player.resetPlayerPosition();
-		}else{
-			player = new Player(cameraSpeed);
-		}
-
 
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
-		
-		
+
+
 		market = new Market();
-		market.setPosition(new Vector2(player.getPosition().cpy().x, player.getPosition().cpy().y + laneLength + player.getHeight()));
+		market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/8 + laneLength));
 		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.get("Market").add(market);
+
+		if(levelSize && gameInstance.getLevelData().get(1) != null){
+			player = (Player) gameInstance.getLevelData().get(1);
+			if (!gameInstance.isHitBack()) {
+				reinitTexturePlayer();
+				player.resetPlayerPosition();
+			} else {
+				camera.position.set(Gdx.graphics.getWidth()/2, player.getPosition().cpy().y + 3f*Gdx.graphics.getHeight()/8, 0);
+				reinitTexturePlayer();
+				market.setPosition(new Vector2(player.getPosition().cpy().x, Gdx.graphics.getHeight()/8 + laneLength + player.getHeight()));
+			}
+		}else{
+			player = new Player(cameraSpeed);
+		}
 
 		if(levelSize && gameInstance.getLevelData().get(3) != null){
 			drawMap.put("Dropped", (Array<ABDrawable>) gameInstance.getLevelData().get(3));
@@ -174,26 +176,33 @@ public class World {
 		}
 
 		//Make the obstacles
-		Random rand = new Random();
-		Array<ABDrawable> obstacles = new Array<ABDrawable>();
-		Obstacle o;
-		for (float i = 700f; i < laneLength; i += 10f){
-			if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) > 0 && rand.nextInt(1) == 0){
-				o = new Obstacle();
-				o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
-				System.out.println("new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i );
-				if (o.getPosition().dst(market.getPosition()) > 250f)
-					obstacles.add(o);
-				i += 400f;
+		if(levelSize && gameInstance.getLevelData().get(4) !=null){
+			drawMap.put("Obstacle", (Array<ABDrawable>) gameInstance.getLevelData().get(4));
+			reinitTextureObstacle();
+		}else{
+			Random rand = new Random();
+			Array<ABDrawable> obstacles = new Array<ABDrawable>();
+			Obstacle o;
+			for (float i = 700f; i < laneLength; i += 10f){
+				if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) > 0 && rand.nextInt(1) == 0){
+					o = new Obstacle();
+					o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
+					Gdx.app.log("Obstacle", "new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i);
+					if (o.getPosition().dst(market.getPosition()) > 250f)
+						obstacles.add(o);
+					i += 400f;
+				}
 			}
+			drawMap.put("Obstacle", obstacles);
 		}
-		drawMap.put("Obstacle", obstacles);
+
+
 		//Add player to drawmap
 		//drawMap.put("Player", new Array<ABDrawable>());
 		//drawMap.get("Player").add(player);
 	}
 
-	
+
 	/**
 	 * Adds a swipe line to the world so it will be rendered
 	 * 
@@ -205,7 +214,7 @@ public class World {
 	}
 
 	/**
-	 * Checks if the player lost the current level
+	 * Checks if the player lost the current level either by no animals on screen or by running out of health
 	 */
 	public void checkLost(){
 		if(getMovables().size <=0 &&  gameInstance.getLevelHandler().getStoredAmount() <= 0 ){
@@ -254,8 +263,6 @@ public class World {
 		return droppings;
 	}
 
-	
-
 	/**
 	 * Finds which drawables are movable, casts them to movable and returns them in an array
 	 * 
@@ -269,6 +276,10 @@ public class World {
 		return movables;
 	}
 
+	/**
+	 * returns the player for the screens to use health, money, and inventory
+	 * @return
+	 */
 	public Player getPlayer() {
 		return player;
 	}
@@ -341,7 +352,7 @@ public class World {
 		//Update Camera bounds
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
 		Vector3 buttonLoc = new Vector3(EDGE_TOLERANCE + BUTTON_WIDTH/2, 
-				 1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
+				1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
 		camera.unproject(buttonLoc);
 		Vector2 buttonLoc2 = new Vector2();
 		Rectangle buttonBounds = new Rectangle();
@@ -365,7 +376,7 @@ public class World {
 				removeFromABDrawable(dropped);
 				dropped.dispose();
 			}
-			
+
 		}
 
 		for (ABDrawable movable : drawMap.get("Movable")) {
@@ -401,8 +412,22 @@ public class World {
 		//check for collisions between movable and obstacles
 		for (ABDrawable movable : drawMap.get("Movable")){
 			for (ABDrawable obstacle : drawMap.get("Obstacle")){
-				if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable instanceof Player)){
-					((Movable)movable).bounce((Movable)movable, (Obstacle)obstacle);
+				if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable.getClass().equals(Player.class))) {
+					((Movable)movable).bounce(null, (Obstacle)obstacle);
+					if ((movable.getPosition().y + movable.getHeight()/2) < (obstacle.getPosition().y))
+						((Movable)movable).stopForwardBias(cameraSpeed,delta);
+				}
+			}
+		}
+
+		//Bounce animals off of each other
+		Array<ABDrawable> movables = drawMap.get("Movable");
+		for (int i = 0; i < movables.size; i ++) {
+			for (int j = i + 1; j < movables.size; j++) {
+				//collision check
+				if (movables.get(i).getBounds().overlaps(movables.get(j).getBounds())) {
+					if (movables.get(i).getPosition().cpy().dst(movables.get(j).getPosition().cpy()) < 2f*movables.get(i).getHeight()/3f)
+						((Movable)movables.get(i)).bounce((Movable)(movables.get(j)), null);
 				}
 			}
 		}
@@ -411,19 +436,55 @@ public class World {
 		if (player.getBounds().overlaps(market.getBounds())) {
 			SoundHandler.pauseBackgroundMusic();
 			gameInstance.getLevelHandler().resetNextLevelStart();
+			gameInstance.setHitBack(false);
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 	}
-
+	
+	/**
+	 * on reseting from Main menu this reinitalizes the movable object pictures
+	 */
 	public void reinitTextureMovable(){
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			((Animal)movable).resetTexture();
 		}
 	}
+
+	/**
+	 * on resetting after dispose, this reinitalizes the dropped object Textures
+	 */
 	public void reinitTextureDropped(){
 		for (ABDrawable dropped : drawMap.get("Dropped")) {
 			((Dropped)dropped).resetTexture();
 		}
+	}
+
+	/**
+	 * on resetting objects , this reinitializes the Obstacle object textures
+	 */
+	public void reinitTextureObstacle(){
+		for (ABDrawable obstacle : drawMap.get("Obstacle")) {
+			((Obstacle) obstacle).resetText();
+		}
+	}
+	
+	/**
+	 * returns the obstacles array for use in changing to Main Menu and gameScreen
+	 * @return
+	 */
+	public Array<Obstacle> getObstacles() {
+		Array<Obstacle> obstacles = new Array<Obstacle>();
+		for (ABDrawable aBDrawable : drawMap.get("Obstacle")) {
+			obstacles.add((Obstacle) aBDrawable);
+		}
+		return obstacles;
+	}
+	
+	/**
+	 * on resetting objects, this reinitializes the players texture
+	 */
+	public void reinitTexturePlayer() {
+		player.resetTexture("objectTextures/player.png");
 	}
 
 }

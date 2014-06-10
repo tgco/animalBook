@@ -33,9 +33,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
+
 import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.gameObjects.Movable;
+
+import com.tgco.animalBook.AnimalBookGame.state;
+
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
@@ -68,8 +72,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private DragAndDrop dnd;
 
 	/**
-<<<<<<< HEAD
-=======
 	 * Amounts of each upgrade
 	 */
 	private int fruitfulMoney;
@@ -79,7 +81,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private static boolean mainMenuInitialized, inventoryMenuInitialized, upgradesMenuInitialized, optionsMenuInitialized;
 
 	/**
->>>>>>> origin/Interface_Branch
 	 * Stage to draw the screen once the player has lost
 	 */
 	private Stage popupStage;
@@ -93,8 +94,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * The font used when rendering strings
 	 */
 	private BitmapFont font;
-	
-	
+
+
 	/**
 	 * textures for health bar, etc
 	 */
@@ -102,6 +103,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
 	private Texture yellow = new Texture(Gdx.files.internal("primitiveTextures/yellow.png"));
 	private Texture green = new Texture(Gdx.files.internal("primitiveTextures/green.png"));
+
+	private boolean isMain = true;
 
 	/**
 	 * Constructor using the running game instance
@@ -117,8 +120,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		gameWorld = new World(gameInstance);
 
 		//Initialize rendering objects
-		//font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
-		font = new BitmapFont();
+		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+		font.setScale(.75f);
+		//font = new BitmapFont();
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass2.jpg"));
@@ -128,6 +132,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		GameScreenInputHandler touchControls = new GameScreenInputHandler(gameInstance,this);
 		inputMultiplexer.addProcessor(touchControls);
 		Gdx.input.setInputProcessor(inputMultiplexer);
+
 		Gdx.input.setCatchBackKey(true);
 
 		//initialize some DnD components and set drag actor based on first Consumable texture
@@ -145,58 +150,58 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
+		if(AnimalBookGame.currState == state.RESUME){
+			if(!hasLost) {
+				Gdx.gl.glClearColor(0, 0, 0, 1);
+				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		if(!hasLost) {
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+				//Process button presses
+				buttonStage.act(delta);
 
-			//Process button presses
-			buttonStage.act(delta);
+				//render background and world
+				batch.setProjectionMatrix(gameWorld.getCamera().combined);
 
-			//render background and world
-			batch.setProjectionMatrix(gameWorld.getCamera().combined);
+				//Find the node on screen to draw grass around
+				Vector2 tileNode = findTileNodeOnScreen();
 
-			//Find the node on screen to draw grass around
-			Vector2 tileNode = findTileNodeOnScreen();
+				batch.begin();
 
-			batch.begin();
+				//Draw four grass textures around the node on screen
+				batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-			//Draw four grass textures around the node on screen
-			batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				//Draw world over background
+				gameWorld.render(batch,alexButton.isChecked(),delta);
+				batch.end();
 
-			//Draw world over background
-			gameWorld.render(batch,alexButton.isChecked(),delta);
-			batch.end();
+				//Draw buttons over the screen
+				buttonStage.draw();
 
-			//Draw buttons over the screen
-			buttonStage.draw();
-			
-			batch.begin();
-			//Draw health bar (test)
-			Vector3 vect = new Vector3(alexButton.getX() + alexButton.getWidth() + 1.4f*EDGE_TOLERANCE,
-					 Gdx.graphics.getHeight() - (alexButton.getY() + alexButton.getHeight() - 1.5f*EDGE_TOLERANCE)
-					,0);
-			gameWorld.getCamera().unproject(vect);
-			batch.draw(black,vect.x, vect.y, 10.2f*EDGE_TOLERANCE, 1.2f*EDGE_TOLERANCE);
-			if (getWorld().getPlayer().getHealth()/100f > .50f)	
-				batch.draw(green,vect.x + .1f*EDGE_TOLERANCE, vect.y + .1f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
-			else if (getWorld().getPlayer().getHealth()/100f > .25f)
-				batch.draw(yellow,vect.x + .1f*EDGE_TOLERANCE, vect.y + .1f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
-			else
-				batch.draw(red,vect.x + .1f*EDGE_TOLERANCE, vect.y + .1f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
+				batch.begin();
+				//Draw health bar (test)
+				Vector3 vectHealth = new Vector3(alexButton.getX() + alexButton.getWidth() + 1.4f*EDGE_TOLERANCE,
+						Gdx.graphics.getHeight() - (alexButton.getY() + alexButton.getHeight() - 1.5f*EDGE_TOLERANCE)
+						,0);
+				gameWorld.getCamera().unproject(vectHealth);
+				batch.draw(black,vectHealth.x, vectHealth.y, 10.2f*EDGE_TOLERANCE, 1.2f*EDGE_TOLERANCE);
+				if (getWorld().getPlayer().getHealth()/100f > .50f)	
+					batch.draw(green,vectHealth.x + .1f*EDGE_TOLERANCE, vectHealth.y + .1f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
+				else if (getWorld().getPlayer().getHealth()/100f > .25f)
+					batch.draw(yellow,vectHealth.x + .1f*EDGE_TOLERANCE, vectHealth.y + .1f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
+				else
+					batch.draw(red,vectHealth.x + .1f*EDGE_TOLERANCE, vectHealth.y + .1f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
 
-			batch.end();
+				batch.end();
 
-		}
-		else { //if player lost
-			Gdx.gl.glClearColor(1, 1, 1, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-			popupStage.act(delta);
-			popupStage.draw();
+			}
+			else { //if player lost
+				Gdx.gl.glClearColor(1, 1, 1, 1);
+				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+				popupStage.act(delta);
+				popupStage.draw();
+			}
 		}
 	}
 
@@ -281,11 +286,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 		buttonStage.addActor(alexButton);
-		
+
 		//Information Label
 		LabelStyle infoLabelStyle = new LabelStyle();
-		infoLabelStyle.font = new BitmapFont();
+		infoLabelStyle.font = font;
 		infoLabelStyle.fontColor = Color.WHITE;
+		infoLabelStyle.font.setScale(.75f);
 		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
 				alexButton.getY() + alexButton.getHeight() - 2.5f*EDGE_TOLERANCE);
@@ -295,10 +301,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		alexInfoImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
 				infoLabel.getY() - EDGE_TOLERANCE*.5f);
 		alexInfoImage.setSize(11f*EDGE_TOLERANCE, alexButton.getHeight() - 2f*EDGE_TOLERANCE);
-		
+
 		buttonStage.addActor(alexInfoImage);
 		buttonStage.addActor(infoLabel);
-		
+
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 
@@ -440,15 +446,17 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				return true;
 			}
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				SoundHandler.playButtonClick();
-				SoundHandler.changeBackgroundVolume((float) .1);
-				if (!upgradesMenuInitialized)
-					initializeUpgradeItems();
-				handleUpgradesMenu(upgradesGroupButton.isChecked());
-				handleInventoryMenu(false);
-				inventoryGroupButton.setChecked(false);
-				handleOptionsMenu(false);
-				optionsGroupButton.setChecked(false);
+				if (getWorld().getMovables().size > 0){
+					SoundHandler.playButtonClick();
+					SoundHandler.changeBackgroundVolume((float) .1);
+					if (!upgradesMenuInitialized)
+						initializeUpgradeItems();
+					handleUpgradesMenu(upgradesGroupButton.isChecked());
+					handleInventoryMenu(false);
+					inventoryGroupButton.setChecked(false);
+					handleOptionsMenu(false);
+					optionsGroupButton.setChecked(false);
+				}
 			}
 		});
 		menuGroup.addActor(upgradesGroupButton);
@@ -533,7 +541,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		menuGroupImage.setPosition(alexButton.getX() - .5f*EDGE_TOLERANCE, alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE*2f);
 		menuGroupImage.setSize(alexButton.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE*2f);
 	}
-	
+
 	/**
 	 * Initilize inventory group items
 	 */
@@ -552,7 +560,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 			inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 			//set the font here
-			inventoryButtonStyle.font = new BitmapFont();
+			inventoryButtonStyle.font = font;
 			//create a new button using aforementioned button style and set stuff up
 			final ImageTextButton inventoryButton = new ImageTextButton("", inventoryButtonStyle){
 				@Override
@@ -609,7 +617,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryGroup.setHeight(BUTTON_HEIGHT);
 		inventoryGroupImage.setSize(inventoryGroup.getWidth() + EDGE_TOLERANCE*2f, inventoryGroup.getHeight());
 	}
-	
+
 	/**
 	 * Initialize upgrade group items
 	 */
@@ -660,7 +668,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
 		trLongerButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
 		trLongerButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
-
 		longerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
 
 		longerButton = new Button(longerButtonStyle){
@@ -713,7 +720,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//fruitfulLabel
 		LabelStyle upgradeLabelStyle = new LabelStyle();
 		//upgradeLabelStyle.font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
-		upgradeLabelStyle.font = new BitmapFont();
+		upgradeLabelStyle.font = font;
 		upgradeLabelStyle.font.setScale(1.10f);
 		//upgradeLabelStyle.fontColor = Color.WHITE;
 
@@ -922,7 +929,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesGroup.setHeight(BUTTON_HEIGHT);
 		upgradesGroupImage.setSize(upgradesGroup.getWidth() + EDGE_TOLERANCE*2f, upgradesGroup.getHeight());
 	}
-	
+
 	/**
 	 * Initialize option group items
 	 */
@@ -1036,7 +1043,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.toggleSounds();
-
 			}
 		});
 
@@ -1095,7 +1101,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			handleOptionsMenu(false);
 		}
 	}
-	
+
 	/**
 	 * Toggles inventory menu items
 	 * @param checked
@@ -1113,7 +1119,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				inventoryGroupButton.setChecked(false);
 		}
 	}
-	
+
 	/**
 	 * Toggles upgrades menu items
 	 * @param checked
@@ -1152,7 +1158,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				upgradesGroupButton.setChecked(false);
 		}
 	}
-	
+
 	/**
 	 * Toggles options menu items
 	 * @param checked
@@ -1177,13 +1183,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public boolean inMenu() {
 		return alexButton.isChecked();
 	}
-	
+
 	/**
 	 * Disposes of all objects that should release memory
 	 */
 	@Override
 	public void dispose() {
 		super.dispose();
+		font.dispose();
 		gameWorld.dispose();
 	}
 
@@ -1219,8 +1226,23 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void hide() {}
 
 	@Override
-	public void pause() {}
+	public void resume() {
+		AnimalBookGame.currState = state.RESUME;
+
+	}
+
+	public boolean toMain() {
+		return isMain ;
+	}
+
+	public void setMain() {
+		isMain = true;
+
+	}
 
 	@Override
-	public void resume() {}
+	public void pause() {
+		Gdx.app.log("My Tagg", "THis is screen pause");
+
+	}
 }

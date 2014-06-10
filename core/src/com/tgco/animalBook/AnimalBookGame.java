@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 import com.tgco.animalBook.gameObjects.Player;
-import com.tgco.animalBook.handlers.DatabaseHandler;
 import com.tgco.animalBook.handlers.LevelHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.screens.GameScreen;
@@ -22,65 +21,80 @@ import com.tgco.animalBook.screens.SplashScreen;
 public class AnimalBookGame extends Game {
 
 	/**Version string  */
-	public static final String version = "0.2.0";
+	public static final String version = "0.7.0";
 
 	/** debug variables */
 	public static final Boolean debugMode = true;
 	private FPSLogger fpsLogger;
+
+	/** levelData array is used hold the data for the current level */
+	private static Array<Object> levelData = new Array<Object>(5);
+
+	/** the current state of the cycle*/
+	public enum state{
+		RESUME, PAUSE, GOING
+	}
 	
-	
-	private static Array<Object> levelData = new Array<Object>(4);
-	
-	
-	private DatabaseHandler dbHand;
-	
+	public static state currState;
+	//private DatabaseHandler dbHand;
+
 	/**
 	 * The target frame rate for all motion updates.  Movement is calculated relative to this frame rate.
 	 */
 	public static final float TARGET_FRAME_RATE = 30;
-	
+
 	/**
-	 * The current level being played
+	 * The current level from the preferences file
 	 */
 	private  int level = 1;
 	/**
 	 * Load all information that differs between levels
 	 */
 	private LevelHandler levelHandler;
+	
+	/** variable to store each consumable and retrieve them */
+	private int numConsumables;
+
+	/** DATA_PREFS is the preference file for the data of the game*/
+	private static final String DATA_PREFS = "tgco.AnimalBookGame_data";
+
+	/**continueable is used for the MainMenu continue button disable */
+	private boolean continueable = false;
+
+	/**
+	 * Determines if the player hit the back button and can resume
+	 */
+	private boolean hitBack = false;
+
 	/**
 	 * every game starts with the create function.
 	 * this sets the initial screen to splash screen
 	 */
-
-	private int numConsumables;
-	
-	/** DATA_PREFS is the preference file for the data of the game*/
-	private static final String DATA_PREFS = "tgco.AnimalBookGame_data";
-	
-	private boolean continueable = false;
-			
 	@Override
 	public void create () {
-		
-		for(int i=0; i< 4; i++){
+
+		for(int i=0; i< 5; i++){
 			levelData.insert(i, null);
 		}
-	
+
 		//Set the initial screen
 		setScreen(new SplashScreen(this));
-		
+
 		if (debugMode)
 			fpsLogger = new FPSLogger();
 
 		//DB stuff if we go this route
 		/*dbHand = new DatabaseHandler();
 		 dbHand.getValue( "0");*/
+		
 		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 		int lev = prefs.getInteger("level");
-		
+
 		if(lev >0 ){
 			continueable = true;
 		}
+		
+		currState = state.RESUME;
 	}
 
 	/**
@@ -91,6 +105,8 @@ public class AnimalBookGame extends Game {
 		super.render();
 		if (debugMode) 
 			fpsLogger.log();
+		
+		
 	}
 
 	/**
@@ -101,7 +117,7 @@ public class AnimalBookGame extends Game {
 		super.dispose();
 		getScreen().dispose();
 		SoundHandler.dispose();
-		
+
 		//dbHand.close();
 	}
 
@@ -116,23 +132,35 @@ public class AnimalBookGame extends Game {
 	}
 
 	/**
-	 * life cycle of the app in which the saving of data will go here
+	 * Overrides the pause from the Normal life cycle and saves to the preferences 
+	 * if the game has been played
 	 */
 	@Override
 	public void pause() {
 		super.pause();
-		Gdx.app.log("My Tagg", "The app is calling pause");
 		if(levelHandler != null){
 			Gdx.app.log("My Tagg", "the level is " + level);
 			setPrefsToFile();
 		}
+		currState = state.PAUSE;
+	}
+	
+	@Override
+	public void resume(){
+		super.resume();
+		Gdx.app.log("My tagg", "The app is resumeing");
+		currState = state.RESUME;
+		
 	}
 
+	/**
+	 * saves the data for the level to the preferences 
+	 */
 	public void setPrefsToFile(){
 		if(level < levelHandler.getLevel()){
 			Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 			prefs.putInteger("level", levelHandler.getLevel());
-			
+
 			//Player data
 			prefs.putInteger("money", ((Player) levelData.get(1)).getPlayerMoney());
 			prefs.putFloat("health", ((Player) levelData.get(1)).getHealth());
@@ -141,29 +169,23 @@ public class AnimalBookGame extends Game {
 			prefs.putInteger("Cheese", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[2]).size);
 			prefs.putInteger("Wool", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[3]).size);
 			prefs.putInteger("Milk", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[4]).size);
-			
+
 			//animal data,   0 = fruitfullness, 1=dropInterval, 2=duration
 			prefs.putInteger("numAnimals", levelHandler.getNextLevelStart());
 			prefs.putInteger("Fruitfulness", levelHandler.getFruitfullMoneyP());
 			prefs.putInteger("More", levelHandler.getMoreMoneyP());
 			prefs.putInteger("Longer", levelHandler.getLongerMoneyP());
-				
+
 			//app settings
 			prefs.putBoolean("music", SoundHandler.isMusicMuted());
 			prefs.putBoolean("sound", SoundHandler.isSoundMuted());
 			prefs.putBoolean("tutorial", levelHandler.isDoTutorial());
-			
+
 			prefs.flush();
 			Gdx.app.log("My Tagg", "After flush of save");
 		}
 	}
-	/**
-	 * life cycle of the app in which the loading of the data will go here
-	 */
-	@Override
-	public void resume() {
-		super.resume();
-	}
+	
 
 	/**
 	 * Used to cast the current screen to gameScreen to
@@ -174,7 +196,7 @@ public class AnimalBookGame extends Game {
 	public GameScreen getGameScreen(){
 		return (GameScreen) getScreen();
 	}
-	
+
 	/**
 	 * resets the audio stuff because of how android works with static. Static is not deleted at onStop().
 	 */
@@ -182,90 +204,178 @@ public class AnimalBookGame extends Game {
 		SoundHandler.resetAudio();
 	}
 
+	/** 
+	 * getter for the level data used in World constructor
+	 * @return the level data
+	 */
 	public Array<Object> getLevelData() {
 		return levelData;
 	}
-	
+
+	/** 
+	 * The add function is the place to reset the data in LevelData when nextLevel button is pressed and back button
+	 * @param obj the object that will be stored in LevelData
+	 * @param pos the position that the object will be stored in LevelData
+	 */
 	public void addToDatalevel(Object obj, int pos){
 		levelData.set(pos, obj);
 	}
 
-
+	/**
+	 * getter for the LevelHandler for the other classes to use the info of the level
+	 * @return the levelHandler of the Game
+	 */
 	public LevelHandler getLevelHandler() {
 		return levelHandler;
 	}
 
-	public void addToLevel(int i) {
+	/**
+	 * The Game adds a level to levelHandler and resets the storedAmount to 0 for the market
+	 */
+	public void addToLevel() {
 		levelHandler.addLevel();
 		levelHandler.resetStoredAmount();
 	}
-	
 
-
-	public void setDataCont() {
-			Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
-			level = prefs.getInteger("level");
-			levelHandler = new LevelHandler(level);	
-			Player player = new Player(levelHandler.returnCameraSpeed(level));
-			player.setValues(prefs.getFloat("health"), prefs.getInteger("money"));
-			
-			addToDatalevel(player,1);
-			
-			
-			//the consumables adding back in
-			
-			numConsumables = prefs.getInteger("Eggs");
-			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.EGG));
-			}
-			
-			numConsumables = prefs.getInteger("Bacon");
-			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.BACON));
-			}
-			
-			numConsumables = prefs.getInteger("Cheese");
-			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.CHEESE));
-			}
-			
-			numConsumables = prefs.getInteger("Wool");
-			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.WOOL));
-			}
-			
-			numConsumables = prefs.getInteger("Milk");
-			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.MILK));
-			}
-			
-			
-			//animal data
-			levelHandler.setNextLevelStart(prefs.getInteger("numAnimals"));
-			levelHandler.setFruitfullMoneyP(prefs.getInteger("Fruitfulness"));
-			levelHandler.setMoreMoneyP(prefs.getInteger("More"));
-			levelHandler.setLongerMoneyP(prefs.getInteger("Longer"));
-			
-			
-			//app settings
-			SoundHandler.setMusicMuted(prefs.getBoolean("music"));
-			SoundHandler.setSoundMuted(prefs.getBoolean("sound"));
-			levelHandler.setDoTutorial(prefs.getBoolean("tutorial"));
-			
+	public void setData(){
+		if(continueable){
+			setDataCont();
+		}else{
+			setDataPlay();
+		}
 	}
-	
+	/**
+	 * This sets the levelHandler and it's data from preferences for the continue. 
+	 * if nothing in preferences it will return 0.
+	 */
+	private void setDataCont() {
+		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
+		level = prefs.getInteger("level");
+		levelHandler = new LevelHandler(level);	
+		Player player = new Player(levelHandler.returnCameraSpeed(level));
+		player.setValues(prefs.getFloat("health"), prefs.getInteger("money"));
+
+		addToDatalevel(player,1);
+
+
+		//the consumables adding back in
+
+		numConsumables = prefs.getInteger("Eggs");
+		for(int i =0; i<numConsumables; i++){
+			player.getInventory().addItem(new Consumable(DropType.EGG));
+		}
+
+		numConsumables = prefs.getInteger("Bacon");
+		for(int i =0; i<numConsumables; i++){
+			player.getInventory().addItem(new Consumable(DropType.BACON));
+		}
+
+		numConsumables = prefs.getInteger("Cheese");
+		for(int i =0; i<numConsumables; i++){
+			player.getInventory().addItem(new Consumable(DropType.CHEESE));
+		}
+
+		numConsumables = prefs.getInteger("Wool");
+		for(int i =0; i<numConsumables; i++){
+			player.getInventory().addItem(new Consumable(DropType.WOOL));
+		}
+
+		numConsumables = prefs.getInteger("Milk");
+		for(int i =0; i<numConsumables; i++){
+			player.getInventory().addItem(new Consumable(DropType.MILK));
+		}
+
+
+		//animal data
+		levelHandler.setNextLevelStart(prefs.getInteger("numAnimals"));
+		levelHandler.setFruitfullMoneyP(prefs.getInteger("Fruitfulness"));
+		levelHandler.setMoreMoneyP(prefs.getInteger("More"));
+		levelHandler.setLongerMoneyP(prefs.getInteger("Longer"));
+
+
+		//app settings
+		SoundHandler.setMusicMuted(prefs.getBoolean("music"));
+		SoundHandler.setSoundMuted(prefs.getBoolean("sound"));
+		levelHandler.setDoTutorial(prefs.getBoolean("tutorial"));
+
+	}
+
+	/**
+	 * sets the levelHandler when the play button is clicked.
+	 */
 	public void setDataPlay(){
-		boolean levelSize =getLevelData().size >0;
+		boolean levelSize = getLevelData().size >0;
 		if(levelSize && getLevelData().get(0) !=null){
 			level = (Integer) getLevelData().get(0);
 		}
-		levelHandler = new LevelHandler(level);
-		
+		if (levelHandler == null) {
+			levelHandler = new LevelHandler(level);
+		}
+
 	}
 
+	/**
+	 * getter for the continue varaible for the MainMenu
+	 * @return if continue should be enabled
+	 */
 	public boolean isContinueable() {
 		return continueable;
 	}
-	
+
+	/**
+	 * this resets the data to be like null to start from the begining 
+	 * used in the Options menu reset button
+	 *  
+	 */
+	public void resetData(){
+		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
+		prefs.putInteger("level", 0);
+
+		//Player data
+		prefs.putInteger("money", 0);
+		prefs.putFloat("health", 0);
+		prefs.putInteger("Eggs", 0);
+		prefs.putInteger("Bacon", 0);
+		prefs.putInteger("Cheese", 0);
+		prefs.putInteger("Wool", 0);
+		prefs.putInteger("Milk", 0);
+
+		//animal data,   0 = fruitfullness, 1=dropInterval, 2=duration
+		prefs.putInteger("numAnimals", 0);
+		prefs.putInteger("Fruitfulness", 0);
+		prefs.putInteger("More", 0);
+		prefs.putInteger("Longer", 0);
+
+		//app settings
+		prefs.putBoolean("tutorial", true);
+		if(levelHandler !=null){
+			levelHandler.setDoTutorial(true);
+		}
+		prefs.flush();
+		
+		//after calling flush
+		Preferences prefs2 = Gdx.app.getPreferences(DATA_PREFS);
+		int lev = prefs2.getInteger("level");
+
+		if(lev <=0 ){
+			continueable=false;
+		}
+	}
+
+	/**
+	 * getter for gameScreen loading data
+	 * @return 
+	 */
+	public boolean isHitBack() {
+		return hitBack;
+	}
+
+	/**
+	 * setter for the back button press
+	 * @param hitBack
+	 */
+	public void setHitBack(boolean hitBack) {
+		this.hitBack = hitBack;
+	}
 	
 }

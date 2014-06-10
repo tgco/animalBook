@@ -4,8 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
+/**
+ * Static class that stores all of the sound objects for the game.  Each method is static to allow any
+ * class in the code to access sound methods.
+ * 
+ * @author
+ *
+ */
 public class SoundHandler {
 
+	/**
+	 * Static member variables for each sound clip
+	 */
 	private static Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/farmNoise.wav"));
 	private static Music storyBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/storyNoise.wav"));
 	private static Music marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
@@ -13,6 +23,9 @@ public class SoundHandler {
 	private static Sound whistle = Gdx.audio.newSound(Gdx.files.internal("sounds/whistle.wav"));
 	private static Sound pickup = Gdx.audio.newSound(Gdx.files.internal("sounds/pickup.wav"));
 
+	/**
+	 * Booleans that store if the sound or music is currently muted
+	 */
 	private static boolean soundMuted = false;
 	private static boolean musicMuted = false;
 
@@ -31,7 +44,7 @@ public class SoundHandler {
 			return;
 		} else {
 			backgroundMusic.setLooping(isLooping);
-			backgroundMusic.setVolume((float) 0.5);
+			backgroundMusic.setVolume((float) 0.3);
 			backgroundMusic.play();
 		}
 	}
@@ -51,7 +64,7 @@ public class SoundHandler {
 			return;
 		} else {
 			storyBackgroundMusic.setLooping(isLooping);
-			storyBackgroundMusic.setVolume((float) 0.5);
+			storyBackgroundMusic.setVolume((float) 0.35);
 			storyBackgroundMusic.play();
 		}
 	}
@@ -128,7 +141,7 @@ public class SoundHandler {
 		if (soundMuted) {
 			return;
 		} else {
-			buttonClick.play();
+			buttonClick.play(.4f);
 		}
 	}
 

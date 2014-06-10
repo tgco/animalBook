@@ -22,4 +22,11 @@ public class Obstacle extends ABDrawable {
 		height = .196f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
+	
+	/**
+	 * resets the texture when switching screens
+	 */
+	public void resetText(){
+		super.resetTexture(texturePath);
+	}
 }

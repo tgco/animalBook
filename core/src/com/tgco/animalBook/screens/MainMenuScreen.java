@@ -6,6 +6,7 @@
 package com.tgco.animalBook.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,21 +31,26 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	private Button playButton;
 	private Button optionsButton;
-	private Button continueButton;
+	private Button testButton;
+	private boolean hasConfirm = false;
+	private Stage popupStage;
 
 	private static final double REGION_HEIGHT = BUTTON_HEIGHT*1.25f;
 	private static final double REGION_WIDTH = BUTTON_WIDTH*3.1f;
 
+	/**
+	 * Constructor for the main menu screen
+	 * 
+	 * @param gameInstance current game instance to be referenced
+	 */
 	public MainMenuScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
-
+		popupStage = new Stage();
 		//Background rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/mainback.png"));
 
-		//libgdx should not catch the back key, the device should catch the back button
-		Gdx.input.setCatchBackKey(false);
-
+		Gdx.input.setCatchBackKey(true);
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
@@ -56,6 +62,8 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
+		
+		if(!hasConfirm){
 		//clear screen
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -70,7 +78,15 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 		//draw button stage on top of images in the batch
 		buttonStage.draw();
-
+		
+		if(Gdx.input.isKeyPressed(Keys.BACK)){
+			setDialog();
+		}
+		}else{
+			popupStage.act(delta);
+			popupStage.draw();
+		}
+			
 
 	}
 
@@ -88,7 +104,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	/**
-	 * the show, hide, pause, resume buttons are not being used becuase
+	 * the show, hide, pause, resume buttons are not being used because
 	 *  the life cycle of the screen is not needed at this point.
 	 */
 	@Override
@@ -131,7 +147,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		playButton = new Button(style);
 		playButton.setWidth(MENU_BUTTON_WIDTH);
 		playButton.setHeight(MENU_BUTTON_HEIGHT);
-		playButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
+		playButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
 		playButton.setY(Gdx.graphics.getHeight()/2);
 
 		//create style for options button, must start over
@@ -145,31 +161,23 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton = new Button(style);
 		optionsButton.setWidth(MENU_BUTTON_WIDTH);
 		optionsButton.setHeight(MENU_BUTTON_HEIGHT);
-		optionsButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
+		optionsButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
 		optionsButton.setY( EDGE_TOLERANCE);
 
 		//This button is just to test the story screen
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/continueButton.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/button.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 		style = new ButtonStyle();
 		style.up = buttonSkin.getDrawable("buttonUnpressed");
 		style.down = buttonSkin.getDrawable("buttonPressed");
-		TextureRegion trContinueButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/mainMenu/continueButtonDis.png")) );
 
-		trContinueButton.setRegionHeight((int) (REGION_HEIGHT));
-		trContinueButton.setRegionWidth((int) (REGION_WIDTH));
-
-		style.disabled = new TextureRegionDrawable(trContinueButton);
-
-		continueButton = new Button(style);
-		continueButton.setWidth(MENU_BUTTON_WIDTH);
-		continueButton.setHeight(MENU_BUTTON_HEIGHT);
-		continueButton.setX(Gdx.graphics.getWidth()/2 - MENU_BUTTON_WIDTH/2);
-		continueButton.setY(  Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - EDGE_TOLERANCE);
-		if(!gameInstance.isContinueable()){
-			continueButton.setDisabled(true);
-		}
+		testButton = new Button(style);
+		testButton.setWidth(MENU_BUTTON_WIDTH);
+		testButton.setHeight(MENU_BUTTON_HEIGHT);
+		testButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
+		testButton.setY(  Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - EDGE_TOLERANCE);
+		
 		//Create listeners
 		playButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -179,9 +187,10 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				//Change the screen when the button is let go
-				gameInstance.setDataPlay();
+				gameInstance.setData();
 				if(gameInstance.getLevelHandler().isDoTutorial()){
 					gameInstance.setScreen(new TutorialScreen(gameInstance));
+					//gameInstance.setScreen(new EndGameStory(gameInstance));
 				}else{
 					gameInstance.setScreen(new GameScreen(gameInstance));
 				}
@@ -202,17 +211,15 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 
-		continueButton.addListener(new InputListener() {
+		testButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				if(!continueButton.isDisabled()){
+				if(!testButton.isDisabled()){
 					SoundHandler.playButtonClick();
-					//Change the screen when the button is let go
-					gameInstance.setDataCont();
-					gameInstance.setScreen(new GameScreen(gameInstance));
+					gameInstance.setScreen(new StoryScreen(gameInstance));
 				}
 			}
 		});
@@ -220,9 +227,28 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		//Add to stage
 		buttonStage.addActor(playButton);
 		buttonStage.addActor(optionsButton);
-		buttonStage.addActor(continueButton);
+		buttonStage.addActor(testButton);
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}
-
+	
+	/**
+	 * Sets the game to the confirm dialog when back is pressed
+	 * 
+	 */
+	public void setDialog(){
+		hasConfirm  = true;
+		Skin skin = new Skin(Gdx.files.internal("confirmSkin/uiskin.json"));
+		ConfirmDialog backD = new ConfirmDialog("Quit Game", skin, gameInstance,"Are you Sure you want to Quit?", 1);
+		backD.show(popupStage);
+		popupStage.addActor(backD);
+		inputMultiplexer.addProcessor(popupStage);
+		inputMultiplexer.removeProcessor(buttonStage);
+	}
+	public void setCancel(){
+		hasConfirm = false;
+		inputMultiplexer.removeProcessor(popupStage);
+		inputMultiplexer.addProcessor(buttonStage);
+		popupStage = new Stage();	
+	}
 }

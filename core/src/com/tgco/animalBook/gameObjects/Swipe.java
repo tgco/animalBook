@@ -1,13 +1,9 @@
 package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.AnimalBookGame;
 
@@ -86,6 +82,9 @@ public class Swipe {
 		return lifeTime;
 	}
 
+	/** 
+	 * disposing of the swipe texture
+	 */
 	public void dispose() {
 		TEXTURE.dispose();
 	}

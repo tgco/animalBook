@@ -151,41 +151,20 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	protected void initializeButtons() {
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/skipButton.atlas"));
-		buttonSkin = new Skin();
-		buttonSkin.addRegions(atlas);
-		ButtonStyle buttonStyle = new ButtonStyle();
-		buttonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
-		buttonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		skipButton = new Button(buttonStyle);
-		skipButton.setWidth(BUTTON_WIDTH);
-		skipButton.setHeight(BUTTON_HEIGHT);
-		skipButton.setPosition(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE, Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE );
-		skipButton.addListener(new InputListener(){
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
-
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				SoundHandler.playButtonClick();
-				SoundHandler.pauseStoryBackgroundMusic();
-				SoundHandler.playBackgroundMusic(true);
-				gameInstance.setScreen(new GameScreen(gameInstance));
-				dispose();
-			}
-		});
-		buttonStage.addActor(skipButton);
-		
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/continueButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		buttonStyle = new ButtonStyle();
+		
+		ButtonStyle buttonStyle = new ButtonStyle();
 		buttonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		buttonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		
 		continueButton = new Button(buttonStyle);
 		continueButton.setWidth(BUTTON_WIDTH);
 		continueButton.setHeight(BUTTON_HEIGHT);
-		continueButton.setPosition(BUTTON_WIDTH + EDGE_TOLERANCE,  BUTTON_HEIGHT + EDGE_TOLERANCE );
+		continueButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
+		continueButton.setY(EDGE_TOLERANCE);
+		
 		continueButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;

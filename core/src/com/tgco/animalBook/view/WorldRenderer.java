@@ -1,18 +1,13 @@
 package com.tgco.animalBook.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.gameObjects.ABDrawable;
-import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.gameObjects.Swipe;
 
 
@@ -79,6 +74,16 @@ public class WorldRenderer {
 		for (Array<ABDrawable> a : drawables.values()){
 			for (ABDrawable drawable : a) {
 				drawable.draw(batch);
+				/*
+				batch.end();
+				ShapeRenderer render = new ShapeRenderer();
+				render.setProjectionMatrix(cam.combined);
+				render.begin(ShapeType.Line);
+				render.rect(drawable.getBounds().x, drawable.getBounds().y, drawable.getBounds().width, drawable.getBounds().height);
+				render.end();
+				render.dispose();
+				batch.begin();
+				*/
 			}
 		}
 

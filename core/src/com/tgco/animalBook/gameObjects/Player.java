@@ -125,6 +125,10 @@ public class Player extends Movable {
 	public void subtractPlayerMoney(float playerMoney) {
 		this.playerMoney -= playerMoney;
 	}
+	
+	/**
+	 * resets the player and it's texture when switching screens
+	 */
 	public void resetPlayerPosition(){
 		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/8);
 		previousTarget = position.cpy();
@@ -136,12 +140,20 @@ public class Player extends Movable {
 	}
 
 
+	/**
+	 *  the health and money is set after creation due to loading data from preferences
+	 * @param health the starting health
+	 * @param money the starting money
+	 */
 	public void setValues(float health, int money) {
 		this.playerHealth = health;
 		this.playerMoney = money;
 }
 	
-	//TODO:: Ben - not sure where this is called
+	/**
+	 * this is used in the tutorial screen to set the health
+	 * @param health of the player
+	 */
 	public void setHealth(float health) {
 		this.playerHealth = health;
 	}

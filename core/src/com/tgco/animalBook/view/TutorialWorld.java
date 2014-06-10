@@ -19,8 +19,6 @@ import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Obstacle;
 import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.SoundHandler;
-import com.tgco.animalBook.screens.GameScreen;
-import com.tgco.animalBook.screens.MarketScreen;
 import com.tgco.animalBook.screens.TutorialMarketScreen;
 import com.tgco.animalBook.screens.TutorialScreen;
 
@@ -67,6 +65,10 @@ public class TutorialWorld {
 	 * Market located at end of the game level
 	 */
 	private Market market;
+	
+	/**
+	 * Number of times the More Drops have been counted
+	 */
 	private int MoreMoneyP		= 0;
 	/**
 	 * The main player
@@ -121,14 +123,23 @@ public class TutorialWorld {
 
 	}
 
+	/**
+	 * adds 1 to the fruitfull upgrade 
+	 */
 	public void addFruitfullMoneyP() {
 		this.fruitfullMoneyP += 1;
 	}
 
+	/**
+	 * adds 1 to the Longer duration upgrade
+	 */
 	public void addLongerMoneyP() {
 		LongerMoneyP += 1;
 	}
 
+	/**
+	 * adds 1 to the more drops upgrade
+	 */
 	public void addMoreMoneyP() {
 		MoreMoneyP += 1;
 	}
@@ -156,7 +167,7 @@ public class TutorialWorld {
 	}
 
 	/**
-	 * Returns the camera used to view the world
+	 * Returns the camera used to view the world to get proper coordinates
 	 * 
 	 * @return		the camera currently in use
 	 */
@@ -177,14 +188,26 @@ public class TutorialWorld {
 		return droppings;
 	}
 
+	/**
+	 * returns the number of presses for the fruitful upgrade for which level it is on
+	 * @return
+	 */
 	public int getFruitfullMoneyP() {
 		return fruitfullMoneyP;
 	}
 
+	/**
+	 * returns the number of presses for the longer duration upgrade for which level it is on
+	 * @return
+	 */
 	public int getLongerMoneyP() {
 		return LongerMoneyP;
 	}
 
+	/**
+	 * returns the  number of presses for the more drops upgrade for which level it is on
+	 * @return
+	 */
 	public int getMoreMoneyP() {
 		return MoreMoneyP;
 	}
@@ -202,6 +225,10 @@ public class TutorialWorld {
 		return movables;
 	}
 
+	/**
+	 * returns the player for the screens to use money, health and inventory
+	 * @return
+	 */
 	public Player getPlayer() {
 		return player;
 	}
@@ -247,9 +274,6 @@ public class TutorialWorld {
 		worldRender.render(batch, drawMap, player.getHealth(),camera,delta);
 	}
 
-	/**
-	 * 
-	 */
 
 	/**
 	 * Updates all logic between game objects and moves them if necessary
@@ -278,6 +302,18 @@ public class TutorialWorld {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
 		}		
+		
+		//Bounce animals off of each other
+		Array<ABDrawable> movables = drawMap.get("Movable");
+		for (int i = 0; i < movables.size; i ++) {
+			for (int j = i + 1; j < movables.size; j++) {
+				//collision check
+				if (movables.get(i).getBounds().overlaps(movables.get(j).getBounds())) {
+					if (movables.get(i).getPosition().cpy().dst(movables.get(j).getPosition().cpy()) < 2f*movables.get(i).getHeight()/3f)
+						((Movable)movables.get(i)).bounce((Movable)(movables.get(j)), null);
+				}
+			}
+		}
 
 		if (generatedMarketAndObstacle) {
 			//check for collisions between the market and the animals
@@ -293,11 +329,15 @@ public class TutorialWorld {
 			//check for collisions between movable and obstacles
 			for (ABDrawable movable : drawMap.get("Movable")){
 				for (ABDrawable obstacle : drawMap.get("Obstacle")){
-					if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable instanceof Player)){
-						((Movable)movable).bounce((Movable)movable, (Obstacle)obstacle);
+					if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable.getClass().equals(Player.class))) {
+						((Movable)movable).bounce(null, (Obstacle)obstacle);
+						if ((movable.getPosition().y + movable.getHeight()/2) < (obstacle.getPosition().y))
+							((Movable)movable).stopForwardBias(cameraSpeed,delta);
 					}
 				}
 			}
+			
+			
 
 			//check if player reached market
 			if (player.getBounds().overlaps(market.getBounds())) {
@@ -307,11 +347,18 @@ public class TutorialWorld {
 		}
 	}
 
+	/**
+	 * on reseting from Main menu this reinitalizes the movable object pictures
+	 */
 	public void reinitTextureMovable(){
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			((Animal)movable).resetTexture();
 		}
 	}
+	
+	/**
+	 * on resetting from Main Menu this reinitalizes the dropped object textures
+	 */
 	public void reinitTextureDropped(){
 		for (ABDrawable dropped : drawMap.get("Dropped")) {
 			((Dropped)dropped).resetTexture();
@@ -352,6 +399,4 @@ public class TutorialWorld {
 			generatedMarketAndObstacle = true;
 		}
 	}
-
-
 }

@@ -20,12 +20,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
-import com.tgco.animalBook.gameObjects.Dropped;
-import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.handlers.TutorialScreenInputHandler;
 import com.tgco.animalBook.view.TutorialWorld;
-import com.tgco.animalBook.view.World;
 
 /**
  * Extends the button screen to play a sequence of tutorials and teach the player
@@ -345,7 +342,6 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				SoundHandler.pauseBackgroundMusic();
 				gameInstance.getLevelHandler().setDoTutorial(false);
 				gameInstance.setScreen(new GameScreen(gameInstance));
 				dispose();

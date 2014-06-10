@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Animal;
@@ -13,7 +12,6 @@ import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.screens.GameScreen;
 import com.tgco.animalBook.screens.MainMenuScreen;
-import com.tgco.animalBook.screens.TutorialScreen;
 
 /**
  * Handles input to create touch controls for the game screen, 
@@ -50,6 +48,9 @@ public class GameScreenInputHandler implements InputProcessor {
 	 */
 	private static final float HERD_TOLERANCE = 300f;
 
+	/**
+	 * Dimensions of button to locate on screen for consumables to move to when touched
+	 */
 	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
@@ -73,25 +74,7 @@ public class GameScreenInputHandler implements InputProcessor {
 	 */
 	@Override
 	public boolean keyDown(int keycode) {
-		if(keycode == Keys.BACK){
-			gameInstance.setScreen(new MainMenuScreen(gameInstance));
 
-			//store the data in levelData of Game
-
-			// spot 1 is current level
-			gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
-
-			//spot 2 is player			
-			gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
-
-			//spot 3 is storing movable array
-			gameInstance.addToDatalevel(gameScreen.getWorld().getMovables(),2);
-
-			//spot 4 is storing dropped items array
-			gameInstance.addToDatalevel(gameScreen.getWorld().getDropped(), 3);
-
-			gameScreen.dispose();
-		}
 		return false;
 	}
 
@@ -223,16 +206,44 @@ public class GameScreenInputHandler implements InputProcessor {
 		}
 
 	}
+	/**
+	 * Detects the release of a key.  Used to detect the back key press on android
+	 * 
+	 * @param keycode		the keycode for the released key
+	 */
+	@Override
+	public boolean keyUp(int keycode) {
+		if(keycode == Keys.BACK && gameScreen.toMain()){
+			gameInstance.setHitBack(true);
+			gameInstance.setScreen(new MainMenuScreen(gameInstance));
+			//store the data in levelData of Game
+
+			// spot 1 is current level
+			gameInstance.addToDatalevel(gameInstance.getLevelHandler().getLevel(),0);
+
+			//spot 2 is player			
+			gameInstance.addToDatalevel(gameScreen.getWorld().getPlayer(),1);
+
+			//spot 3 is storing movable array
+			gameInstance.addToDatalevel(gameScreen.getWorld().getMovables(),2);
+
+			//spot 4 is storing dropped items array
+			gameInstance.addToDatalevel(gameScreen.getWorld().getDropped(), 3);
+
+			gameInstance.addToDatalevel(gameScreen.getWorld().getObstacles(), 4);
+
+			gameScreen.dispose();
+		}
+		else if(keycode == Keys.BACK){
+			gameScreen.setMain();
+		}
+		return false;
+	}
+
 
 	/**
 	 * Unused input detection functions
 	 */
-	@Override
-	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	@Override
 	public boolean keyTyped(char character) {
 		// TODO Auto-generated method stub

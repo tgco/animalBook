@@ -190,8 +190,8 @@ public class World {
 		drawMap.put("Obstacle", obstacles);
 
 		//Add player to drawmap
-		drawMap.put("Player", new Array<ABDrawable>());
-		drawMap.get("Player").add(player);
+		//drawMap.put("Player", new Array<ABDrawable>());
+		//drawMap.get("Player").add(player);
 	}
 
 	

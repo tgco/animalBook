@@ -103,7 +103,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
-		Gdx.app.log("My Tagg", "The state is " + AnimalBookGame.currState);
 		if(AnimalBookGame.currState == state.RESUME){
 			if(!hasLost) {
 				Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -275,10 +274,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				SoundHandler.playButtonClick();
-				SoundHandler.pauseBackgroundMusic();
-				isMain = false;
-				gameInstance.setScreen(new UpgradesScreen(gameInstance,GameScreen.this));
+				if(gameWorld.getMovables().size >0){
+					SoundHandler.playButtonClick();
+					SoundHandler.pauseBackgroundMusic();
+					isMain = false;
+					gameInstance.setScreen(new UpgradesScreen(gameInstance,GameScreen.this));
+				}
 			}
 		});
 

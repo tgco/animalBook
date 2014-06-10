@@ -138,7 +138,6 @@ public class AnimalBookGame extends Game {
 	@Override
 	public void pause() {
 		super.pause();
-		Gdx.app.log("My Tagg", "The app is calling pause");
 		if(levelHandler != null){
 			Gdx.app.log("My Tagg", "the level is " + level);
 			setPrefsToFile();

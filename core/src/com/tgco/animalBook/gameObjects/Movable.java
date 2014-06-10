@@ -53,11 +53,6 @@ public abstract class Movable extends ABDrawable {
 	 */
 	@Override
 	public void draw(SpriteBatch batch) {
-		
-		float targetRotation = this.previousTarget.cpy().sub(this.position).angle() - 90f;
-		float difference = targetRotation - rotation;
-		rotation += difference/rotationSpeed;
-		
 		batch.draw(texture, position.x - width/2, position.y - height/2, width/2, height/2, width, height, 1, 1, rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
 	}
 
@@ -79,6 +74,10 @@ public abstract class Movable extends ABDrawable {
 		//update bounds
 		bounds.setX(position.x - width/2);
 		bounds.setY(position.y - height/2);
+		
+		float targetRotation = this.previousTarget.cpy().sub(this.position).angle() - 90f;
+		float difference = targetRotation - rotation;
+		rotation += difference/rotationSpeed;
 	}
 
 	/**

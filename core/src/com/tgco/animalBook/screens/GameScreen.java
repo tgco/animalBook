@@ -1192,6 +1192,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		super.dispose();
 		font.dispose();
 		gameWorld.dispose();
+		yellow.dispose();
+		green.dispose();
+		red.dispose();
+		black.dispose();
 	}
 
 	/**
@@ -1242,7 +1246,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void pause() {
-		Gdx.app.log("My Tagg", "THis is screen pause");
+		Gdx.app.log("My Tagg", "This is screen pause");
 
 	}
 }

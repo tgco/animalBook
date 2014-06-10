@@ -26,6 +26,9 @@ public abstract class Movable extends ABDrawable {
 
 	/**the current target is where the movable should be heading to  */
 	protected Vector2 currentTarget;
+	
+	/**The rotation of the movable texture*/
+	protected float rotation;
 
 	/**
 	 * the constructor creates a movable with a given speed

@@ -363,7 +363,7 @@ public class World {
 			buttonBounds.setX(buttonLoc.x - BUTTON_WIDTH/2);
 			buttonBounds.setY(buttonLoc.y - BUTTON_HEIGHT);
 			buttonBounds.setWidth(BUTTON_WIDTH);
-			buttonBounds.setHeight(BUTTON_HEIGHT);
+			buttonBounds.setHeight(BUTTON_HEIGHT*2);
 			buttonLoc2.x = buttonLoc.x - EDGE_TOLERANCE;
 			buttonLoc2.y = buttonLoc.y + EDGE_TOLERANCE;
 			((Dropped) dropped).droppedMove(buttonLoc2.cpy(), delta);

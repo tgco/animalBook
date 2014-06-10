@@ -198,8 +198,8 @@ public class World {
 
 
 		//Add player to drawmap
-		drawMap.put("Player", new Array<ABDrawable>());
-		drawMap.get("Player").add(player);
+		//drawMap.put("Player", new Array<ABDrawable>());
+		//drawMap.get("Player").add(player);
 	}
 
 

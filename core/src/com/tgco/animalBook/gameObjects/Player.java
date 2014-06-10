@@ -16,9 +16,10 @@ public class Player extends Movable {
 	/**inventory houses the consumables it's carrying */
 	private final Inventory inventory = new Inventory();
 	/** it starts at $0*/
-	private int playerMoney = 0;
+	private int playerMoney = 10000;
 	/** it starts at full health */
-	private float playerHealth = 100;
+	private static final float MAX_HEALTH = 100f;
+	private float playerHealth;;
 
 	/**
 	 * the constructor which sets the variables of it's parent
@@ -26,6 +27,7 @@ public class Player extends Movable {
 	 */
 	public Player(float speed) {
 		super(texturePath);
+		playerHealth = MAX_HEALTH;
 		position = new Vector2(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/8);
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
@@ -40,11 +42,13 @@ public class Player extends Movable {
 	 * eat increases the player's health by a certain amount
 	 * @param value how much the player adds in health
 	 */
-	public void eat(float value) {
-		if ((playerHealth + value) > 100) {
-			playerHealth = 100;
+	public boolean eat(float value) {
+		if ((playerHealth + value) > MAX_HEALTH) {
+			playerHealth = MAX_HEALTH;
+			return false;
 		} else {
 			playerHealth += value;
+			return true;
 		}
 	}
 	
@@ -152,5 +156,9 @@ public class Player extends Movable {
 	 */
 	public void setHealth(float health) {
 		this.playerHealth = health;
+	}
+
+	public float getMaxHealth() {
+		return playerHealth;
 	}
 }

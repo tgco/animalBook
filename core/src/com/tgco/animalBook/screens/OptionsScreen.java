@@ -25,6 +25,9 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	private Button mainMenuButton;
 	private Button helpButton;
 	private Button resetButton;
+
+	//Gamescreen
+	GameScreen gameScreen;
 	private boolean hasConfirm = false;
 	private Stage popupStage;
 
@@ -57,7 +60,6 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
-
 		if(!hasConfirm){
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -220,9 +222,17 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				SoundHandler.playButtonClick();
-				gameInstance.setScreen(new MainMenuScreen(gameInstance));
-				dispose();
+				if (gameScreen == null){
+					SoundHandler.playButtonClick();
+					gameInstance.setScreen(new MainMenuScreen(gameInstance));
+					dispose();
+				}
+				else{
+					SoundHandler.playButtonClick();
+					gameScreen.resetInputProcessors();
+					gameInstance.setScreen(gameScreen);
+					dispose();
+				}
 			}
 		});
 
@@ -235,7 +245,6 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 				SoundHandler.playButtonClick();
 				gameInstance.setScreen(new HelpScreen(gameInstance));
 				dispose();
-
 			}
 		});
 
@@ -254,6 +263,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.addActor(musicButton);
 		buttonStage.addActor(mainMenuButton);
 		buttonStage.addActor(helpButton);
+
 		buttonStage.addActor(resetButton);
 
 		inputMultiplexer.addProcessor(buttonStage);
@@ -288,7 +298,6 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
-
 	}
 
 	/**

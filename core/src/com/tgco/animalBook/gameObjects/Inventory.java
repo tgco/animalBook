@@ -2,6 +2,7 @@ package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
 public class Inventory {
 	
@@ -19,6 +20,8 @@ public class Inventory {
 		Consumable.DropType[] dropTypes = Consumable.DropType.values();
 		for (int i = 0; i < dropTypes.length; i++){
 			inventory.put(dropTypes[i], new Array<Consumable>(false, MAX_CAPACITY));
+			for (int k = 0; k < 20; k++)
+				addItem(new Consumable(DropType.values()[i]));
 		}
 	}
 	

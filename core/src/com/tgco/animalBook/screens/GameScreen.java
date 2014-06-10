@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.AnimalBookGame.state;
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
@@ -102,50 +103,52 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
+		Gdx.app.log("My Tagg", "The state is " + AnimalBookGame.currState);
+		if(AnimalBookGame.currState == state.RESUME){
+			if(!hasLost) {
+				Gdx.gl.glClearColor(0, 0, 0, 1);
+				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		if(!hasLost) {
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+				//Process button presses
+				buttonStage.act(delta);
 
-			//Process button presses
-			buttonStage.act(delta);
+				//render background and world
+				batch.setProjectionMatrix(gameWorld.getCamera().combined);
 
-			//render background and world
-			batch.setProjectionMatrix(gameWorld.getCamera().combined);
+				//Find the node on screen to draw grass around
+				Vector2 tileNode = findTileNodeOnScreen();
 
-			//Find the node on screen to draw grass around
-			Vector2 tileNode = findTileNodeOnScreen();
+				batch.begin();
 
-			batch.begin();
+				//Draw four grass textures around the node on screen
+				batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-			//Draw four grass textures around the node on screen
-			batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				//Draw players current money
+				font.setColor(Color.WHITE);
+				font.setScale(1.2f);
+				Vector3 vect = new Vector3(Gdx.graphics.getWidth()/2 +10,0 +3*EDGE_TOLERANCE,0);
+				gameWorld.getCamera().unproject(vect);
+				font.draw(batch, "Your Money: $" + String.valueOf(gameWorld.getPlayer().getPlayerMoney()), vect.x ,vect.y );
 
-			//Draw players current money
-			font.setColor(Color.WHITE);
-			font.setScale(1.2f);
-			Vector3 vect = new Vector3(Gdx.graphics.getWidth()/2 +10,0 +3*EDGE_TOLERANCE,0);
-			gameWorld.getCamera().unproject(vect);
-			font.draw(batch, "Your Money: $" + String.valueOf(gameWorld.getPlayer().getPlayerMoney()), vect.x ,vect.y );
+				//Draw world over background
+				gameWorld.render(batch,paused,delta);
 
-			//Draw world over background
-			gameWorld.render(batch,paused,delta);
-			
-			batch.end();
+				batch.end();
 
-			//Draw buttons over the screen
-			buttonStage.draw();
-			
-		}
-		else { //if player lost
-			Gdx.gl.glClearColor(1, 1, 1, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+				//Draw buttons over the screen
+				buttonStage.draw();
 
-			popupStage.act(delta);
-			popupStage.draw();
+			}
+			else { //if player lost
+				Gdx.gl.glClearColor(1, 1, 1, 1);
+				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+				popupStage.act(delta);
+				popupStage.draw();
+			}
 		}
 	}
 
@@ -382,7 +385,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
+		AnimalBookGame.currState = state.RESUME;
 
 	}
 

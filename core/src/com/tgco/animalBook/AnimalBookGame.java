@@ -30,7 +30,12 @@ public class AnimalBookGame extends Game {
 	/** levelData array is used hold the data for the current level */
 	private static Array<Object> levelData = new Array<Object>(5);
 
+	/** the current state of the cycle*/
+	public enum state{
+		RESUME, PAUSE, GOING
+	}
 	
+	public static state currState;
 	//private DatabaseHandler dbHand;
 
 	/**
@@ -88,6 +93,8 @@ public class AnimalBookGame extends Game {
 		if(lev >0 ){
 			continueable = true;
 		}
+		
+		currState = state.RESUME;
 	}
 
 	/**
@@ -136,12 +143,15 @@ public class AnimalBookGame extends Game {
 			Gdx.app.log("My Tagg", "the level is " + level);
 			setPrefsToFile();
 		}
+		currState = state.PAUSE;
 	}
 	
 	@Override
 	public void resume(){
 		super.resume();
 		Gdx.app.log("My tagg", "The app is resumeing");
+		currState = state.RESUME;
+		
 	}
 
 	/**

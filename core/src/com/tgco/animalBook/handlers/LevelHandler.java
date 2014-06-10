@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Cow;
 import com.tgco.animalBook.gameObjects.Goat;
@@ -61,6 +62,8 @@ public class LevelHandler {
 	 * Boolean to determine if the tutorial should be played
 	 */
 	private static boolean doTutorial = true;
+	
+
 
 	/**
 	 * Constructor that takes the level in order to initialize pass amounts

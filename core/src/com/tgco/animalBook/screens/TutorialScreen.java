@@ -62,7 +62,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Each button used on the game screen user interface overlay
 	 */
-	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton;
+	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, skipButton;
 
 	private VerticalGroup menuGroup;
 	private Image alexInfoImage, menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
@@ -495,6 +495,35 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 				infoLabel.getY() - EDGE_TOLERANCE*.5f);
 		alexInfoImage.setSize(11f*EDGE_TOLERANCE, alexButton.getHeight() - 2f*EDGE_TOLERANCE);
 
+		//SKIP BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/tutorialScreen/buttonSkip.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle skipButtonStyle = new ButtonStyle();
+		skipButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		skipButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+
+		skipButton = new Button(skipButtonStyle);
+		skipButton.setWidth(BUTTON_WIDTH);
+		skipButton.setHeight(BUTTON_HEIGHT);
+		skipButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
+		skipButton.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - EDGE_TOLERANCE);
+
+		skipButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				SoundHandler.playButtonClick();
+				gameInstance.getLevelHandler().setDoTutorial(false);
+				gameInstance.setScreen(new GameScreen(gameInstance));
+				dispose();
+			}
+		});
+
+		buttonStage.addActor(skipButton);
 		buttonStage.addActor(alexInfoImage);
 		buttonStage.addActor(infoLabel);
 
@@ -611,7 +640,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 				upgradesGroupButton.setChecked(false);
 				handleOptionsMenu(false);
 				optionsGroupButton.setChecked(false);
-				
+
 			}
 		});
 
@@ -655,7 +684,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 					inventoryGroupButton.setChecked(false);
 					handleOptionsMenu(false);
 					optionsGroupButton.setChecked(false);
-					
+
 				}
 			}
 		});
@@ -973,7 +1002,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 						tutorialWorld.spawnObstacleAndMarket();
 						overlay.dispose();
 						overlay = null;
-						
+
 						alexButton.setChecked(false);
 						handleMainMenu(false);
 					}
@@ -1028,7 +1057,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 						tutorialWorld.spawnObstacleAndMarket();
 						overlay.dispose();
 						overlay = null;
-						
+
 						alexButton.setChecked(false);
 						handleMainMenu(false);
 					}
@@ -1081,7 +1110,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 						tutorialWorld.spawnObstacleAndMarket();
 						overlay.dispose();
 						overlay = null;
-						
+
 						alexButton.setChecked(false);
 						handleMainMenu(false);
 					}

@@ -120,7 +120,7 @@ public class World {
 
 		//spot 3 is storing movable array
 		if(levelSize && gameInstance.getLevelData().get(2) !=null){
-			//Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
+			Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
 			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
 			reinitTextureMovable();
 		}else{
@@ -133,7 +133,8 @@ public class World {
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
-
+		
+		
 		tolerance = drawMap.get("Movable").get(0).getWidth();
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 

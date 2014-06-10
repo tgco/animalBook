@@ -31,7 +31,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	private Button playButton;
 	private Button optionsButton;
-	private Button continueButton;
+	private Button testButton;
 	private boolean hasConfirm = false;
 	private Stage popupStage;
 
@@ -165,27 +165,19 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton.setY( EDGE_TOLERANCE);
 
 		//This button is just to test the story screen
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/continueButton.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/button.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 		style = new ButtonStyle();
 		style.up = buttonSkin.getDrawable("buttonUnpressed");
 		style.down = buttonSkin.getDrawable("buttonPressed");
-		TextureRegion trContinueButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/mainMenu/continueButtonDis.png")) );
 
-		trContinueButton.setRegionHeight((int) (REGION_HEIGHT));
-		trContinueButton.setRegionWidth((int) (REGION_WIDTH));
-
-		style.disabled = new TextureRegionDrawable(trContinueButton);
-
-		continueButton = new Button(style);
-		continueButton.setWidth(MENU_BUTTON_WIDTH);
-		continueButton.setHeight(MENU_BUTTON_HEIGHT);
-		continueButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
-		continueButton.setY(  Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - EDGE_TOLERANCE);
-		if(!gameInstance.isContinueable()){
-			continueButton.setDisabled(true);
-		}
+		testButton = new Button(style);
+		testButton.setWidth(MENU_BUTTON_WIDTH);
+		testButton.setHeight(MENU_BUTTON_HEIGHT);
+		testButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
+		testButton.setY(  Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - EDGE_TOLERANCE);
+		
 		//Create listeners
 		playButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -195,7 +187,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				//Change the screen when the button is let go
-				gameInstance.setDataPlay();
+				gameInstance.setData();
 				if(gameInstance.getLevelHandler().isDoTutorial()){
 					gameInstance.setScreen(new TutorialScreen(gameInstance));
 					//gameInstance.setScreen(new EndGameStory(gameInstance));
@@ -219,17 +211,15 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 
-		continueButton.addListener(new InputListener() {
+		testButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				if(!continueButton.isDisabled()){
+				if(!testButton.isDisabled()){
 					SoundHandler.playButtonClick();
-					//Change the screen when the button is let go
-					gameInstance.setDataCont();
-					gameInstance.setScreen(new GameScreen(gameInstance));
+					gameInstance.setScreen(new StoryScreen(gameInstance));
 				}
 			}
 		});
@@ -237,7 +227,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		//Add to stage
 		buttonStage.addActor(playButton);
 		buttonStage.addActor(optionsButton);
-		buttonStage.addActor(continueButton);
+		buttonStage.addActor(testButton);
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}

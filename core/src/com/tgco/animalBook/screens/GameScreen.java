@@ -378,11 +378,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void hide() {
 	}
 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 	@Override
 	public void resume() {
@@ -396,6 +392,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	public void setMain() {
 		isMain = true;
+		
+	}
+
+	@Override
+	public void pause() {
+		Gdx.app.log("My Tagg", "THis is screen pause");
 		
 	}
 

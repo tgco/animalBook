@@ -137,6 +137,12 @@ public class AnimalBookGame extends Game {
 			setPrefsToFile();
 		}
 	}
+	
+	@Override
+	public void resume(){
+		super.resume();
+		Gdx.app.log("My tagg", "The app is resumeing");
+	}
 
 	/**
 	 * saves the data for the level to the preferences 
@@ -222,12 +228,18 @@ public class AnimalBookGame extends Game {
 		levelHandler.resetStoredAmount();
 	}
 
-
+	public void setData(){
+		if(continueable){
+			setDataCont();
+		}else{
+			setDataPlay();
+		}
+	}
 	/**
 	 * This sets the levelHandler and it's data from preferences for the continue. 
 	 * if nothing in preferences it will return 0.
 	 */
-	public void setDataCont() {
+	private void setDataCont() {
 		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 		level = prefs.getInteger("level");
 		levelHandler = new LevelHandler(level);	

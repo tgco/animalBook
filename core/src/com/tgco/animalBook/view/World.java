@@ -162,7 +162,7 @@ public class World {
 
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
-			Gdx.app.log("My Tagg", "The hit back is " + gameInstance.isHitBack());
+			//Gdx.app.log("My Tagg", "The hit back is " + gameInstance.isHitBack());
 			if (!gameInstance.isHitBack()) {
 				reinitTexturePlayer();
 				player.resetPlayerPosition();
@@ -188,21 +188,10 @@ public class World {
 			drawMap.put("Obstacle", (Array<ABDrawable>) gameInstance.getLevelData().get(4));
 			reinitTextureObstacle();
 		}else{
-			Random rand = new Random();
-			Array<ABDrawable> obstacles = new Array<ABDrawable>();
-			Obstacle o;
-			for (float i = 700f; i < laneLength; i += 10f){
-				if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) > 0 && rand.nextInt(1) == 0){
-					o = new Obstacle();
-					o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
-					Gdx.app.log("Obstacle", "new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i);
-					if (o.getPosition().dst(market.getPosition()) > 250f)
-						obstacles.add(o);
-					i += 400f;
-				}
-			}
-			drawMap.put("Obstacle", obstacles);
 
+			
+			drawMap.put("Obstacle",  gameInstance.getLevelHandler().addObstacles( gameInstance.getLevelHandler().getLevel(), market.getPosition()));
+			
 		}
 		weather = Weather.CLEAR;
 	}
@@ -443,6 +432,8 @@ public class World {
 			}
 		}
 
+		gameInstance.getGameScreen().setInfolabel();
+		
 		//check if market is in middle of screen to move on
 		if (Math.abs(market.getPosition().y - camera.position.y) < 20) {
 			SoundHandler.pauseBackgroundMusic();
@@ -451,7 +442,6 @@ public class World {
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 
-		gameInstance.getGameScreen().setInfolabel();
 	}
 
 	/**

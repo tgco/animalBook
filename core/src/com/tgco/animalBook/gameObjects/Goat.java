@@ -33,8 +33,10 @@ public class Goat extends Animal{
 	public Goat(Vector2 pos,  int aX, int aY) {
 		super(texturePath, pos, aX, aY);
 		
+		
 		speed = 1/14f;
-		width = .093f*Gdx.graphics.getWidth();
+		//width = .272*height
+		width = .04f*Gdx.graphics.getWidth();
 		height = .147f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}

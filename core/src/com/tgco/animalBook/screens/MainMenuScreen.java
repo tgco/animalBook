@@ -242,6 +242,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	public void setDialog(){
 		hasConfirm  = true;
+		SoundHandler.toggleMusic();
 		Skin skin = new Skin(Gdx.files.internal("confirmSkin/uiskin.json"));
 		ConfirmDialog backD = new ConfirmDialog("Quit Game", skin, gameInstance,"Are you Sure you want to Quit?", 1);
 		backD.show(popupStage);
@@ -251,6 +252,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	}
 	public void setCancel(){
 		hasConfirm = false;
+		SoundHandler.toggleMusic();
 		inputMultiplexer.removeProcessor(popupStage);
 		inputMultiplexer.addProcessor(buttonStage);
 		popupStage = new Stage();	

@@ -5,8 +5,6 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.tgco.animalBook.AnimalBookGame;
-import com.tgco.animalBook.screens.GameScreen;
-import com.tgco.animalBook.screens.MainMenuScreen;
 
 public class AndroidLauncher extends AndroidApplication {
 	private AnimalBookGame ABGame;

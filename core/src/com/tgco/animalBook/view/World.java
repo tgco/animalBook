@@ -157,10 +157,12 @@ public class World {
 
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
+			Gdx.app.log("My Tagg", "The hit back is " + gameInstance.isHitBack());
 			if (!gameInstance.isHitBack()) {
 				reinitTexturePlayer();
 				player.resetPlayerPosition();
 			} else {
+				//Gdx.app.log("My Tagg", "the player pos " + );
 				camera.position.set(Gdx.graphics.getWidth()/2, player.getPosition().cpy().y + 3f*Gdx.graphics.getHeight()/8, 0);
 				reinitTexturePlayer();
 				market.setPosition(new Vector2(player.getPosition().cpy().x, Gdx.graphics.getHeight()/8 + laneLength + player.getHeight()));
@@ -196,11 +198,6 @@ public class World {
 			}
 			drawMap.put("Obstacle", obstacles);
 		}
-
-
-		//Add player to drawmap
-		//drawMap.put("Player", new Array<ABDrawable>());
-		//drawMap.get("Player").add(player);
 	}
 
 
@@ -386,7 +383,7 @@ public class World {
 			((Movable) movable).move(speed,delta);
 			//Drop new items
 			if(rand.nextInt(100) <= 50 && drawMap.get("Movable").size <= 30){
-				ABDrawable dropping =  ((Animal)movable).drop();
+				ABDrawable dropping =  ((Animal)movable).drop(gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
 				if(dropping != null){
 					drawMap.get("Dropped").add(dropping);
 				}
@@ -417,7 +414,7 @@ public class World {
 				if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable.getClass().equals(Player.class))) {
 					((Movable)movable).bounce(null, (Obstacle)obstacle);
 					if ((movable.getPosition().y + movable.getHeight()/2) < (obstacle.getPosition().y))
-						((Movable)movable).stopForwardBias(cameraSpeed,delta);
+						((Movable)movable).adjustForwardBias(1,cameraSpeed,delta);
 				}
 			}
 		}
@@ -490,3 +487,8 @@ public class World {
 	}
 
 }
+/*
+ * if (wind.getPosition().x < 0 || wind.getPosition().x > Gdx.graphics.getWidth()){
+				winds.removeValue(wind, false);
+				wind.dispose();
+			}*/

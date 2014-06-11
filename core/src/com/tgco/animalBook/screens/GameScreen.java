@@ -55,11 +55,17 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * Reference to the game world where all objects are located
 	 */
 	private World gameWorld;
+	
+	/**
+	 * The width and height of tiles for the background
+	 */
+	private float tileWidth = Gdx.graphics.getWidth()/4f;
+	private float tileHeight = Gdx.graphics.getHeight()/4f;
 
 	/**
 	 * Each button used on the game screen user interface overlay
 	 */
-	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton;
+	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, dogButton;
 
 	private VerticalGroup menuGroup;
 	private Image alexInfoImage, menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
@@ -74,6 +80,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private int fruitfulMoney;
 	private int longerMoney;
 	private int moreMoney;
+	private int dogMoney;
 
 	private static boolean mainMenuInitialized, inventoryMenuInitialized, upgradesMenuInitialized, optionsMenuInitialized;
 
@@ -158,16 +165,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				//render background and world
 				batch.setProjectionMatrix(gameWorld.getCamera().combined);
 
-				//Find the node on screen to draw grass around
-				Vector2 tileNode = findTileNodeOnScreen();
-
 				batch.begin();
 
-				//Draw four grass textures around the node on screen
-				batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-				batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-				batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-				batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				drawTiledBackground(batch);
 
 				//Draw world over background
 				gameWorld.render(batch,alexButton.isChecked(),delta);
@@ -201,6 +201,20 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 		}
 	}
+	
+	public void drawTiledBackground(SpriteBatch batch) {
+		
+		//Find the node on screen to draw grass around
+		Array<Vector2> tileNodes = findTileNodesOnScreen();
+		
+		for(Vector2 tileNode : tileNodes) {
+			//Draw four grass textures around the node on screen
+			batch.draw(backgroundTexture, tileNode.x*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
+			batch.draw(backgroundTexture, (tileNode.x-1)*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
+			batch.draw(backgroundTexture, tileNode.x*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
+			batch.draw(backgroundTexture, (tileNode.x-1)*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
+		}
+	}
 
 	/**
 	 * Returns the point in world coordinates that grass should be drawn around so that grass
@@ -208,26 +222,49 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * 
 	 * @return		the point on screen to draw grass around
 	 */
-	public Vector2 findTileNodeOnScreen() {
+	public Array<Vector2> findTileNodesOnScreen() {
 
-		//If camera is in the negative quadrant
-		boolean flipX = false;
+		//If camera is in the negative quadrant (doesn't happen in new lane game play)
+		/*boolean flipX = false;
 		boolean flipY = false;
 		if (gameWorld.getCamera().position.x < 0)
 			flipX = true;
 		if (gameWorld.getCamera().position.y < 0)
 			flipY = true;
-
-		int xCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.x / Gdx.graphics.getWidth()) + .5);
-		int yCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.y / Gdx.graphics.getHeight()) + .5);
+			*/
+		
+		//Reference to the center of the camera
+		Vector3 camCorner = gameWorld.getCamera().position.cpy();
+		//adjust to lower left of camera
+		camCorner.sub(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
+		
+		int xCoordinate = (int) ( Math.abs(camCorner.x / tileWidth) - .5);
+		int yCoordinate = (int) ( Math.abs(camCorner.y / tileHeight) - .5);
+		
+		//Fill array with all nodes on screen
+		Array<Vector2> tileNodes = new Array<Vector2>();
+		Vector2 node;
+		
+		int initYCoordinate = yCoordinate;
+		
+		while (xCoordinate*tileWidth < (camCorner.x + Gdx.graphics.getWidth()) + tileWidth) {
+			while(yCoordinate*tileHeight < (camCorner.y + Gdx.graphics.getHeight() + tileHeight)) {
+				node = new Vector2(xCoordinate,yCoordinate);
+				tileNodes.add(node);
+				yCoordinate += 1;
+			}
+			xCoordinate += 1;
+			yCoordinate = initYCoordinate;
+		}
 
 		//Provides correct float truncation for tiling in the negative x/y direction
-		if (flipX)
+		/*if (flipX)
 			xCoordinate *= -1;
 		if (flipY)
 			yCoordinate *= -1;
+			*/
 
-		return new Vector2(xCoordinate,yCoordinate);
+		return tileNodes;
 	}
 
 	/**
@@ -248,8 +285,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		optionsMenuInitialized = false;
 		initializeButtons();
 	}
-
-
 
 	/**
 	 * Initializes all button objects
@@ -581,7 +616,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
 			inventoryButton.bottom();
 			inventoryButton.right();
-
+			inventoryButton.setName(Consumable.DropType.values()[i].getName());
 			dnd.addSource(new Source(inventoryButton){
 
 				/**
@@ -628,9 +663,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void initializeUpgradeItems(){
 		upgradesMenuInitialized = true;
 		//initialize upgrade monies
-		fruitfulMoney = (int) (100*(Math.pow(2,gameInstance.getLevelHandler().getFruitfullMoneyP())));
-		longerMoney = (int) (500*(Math.pow(2,gameInstance.getLevelHandler().getLongerMoneyP())));
-		moreMoney = (int) (1000*(Math.pow(2,gameInstance.getLevelHandler().getMoreMoneyP())));
+		fruitfulMoney = (int) (15*(Math.pow(2,gameInstance.getLevelHandler().getFruitfullMoneyP())));
+		longerMoney = (int) (5*(Math.pow(2,gameInstance.getLevelHandler().getLongerMoneyP())));
+		moreMoney = (int) (10*(Math.pow(2,gameInstance.getLevelHandler().getMoreMoneyP())));
+		dogMoney = 100;
 		final Button fruitfulButton, longerButton, moreButton;
 		final Label upgradeLabel, fruitfulLabel, longerLabel, moreLabel;
 
@@ -714,6 +750,33 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		};
 		moreButton.setName("moreButton");
 
+		//dogButton
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/dogButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle dogButtonStyle = new ButtonStyle();
+		dogButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		dogButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		TextureRegion trDogButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/dogButtonDis.png")) );
+		trDogButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
+		trDogButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+
+		dogButtonStyle.disabled = new TextureRegionDrawable(trDogButton);
+
+		dogButton = new Button(dogButtonStyle) {
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT*2/3;
+			};
+
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH*2/3;
+			}
+		};
+		dogButton.setName("dogButton");
+
 
 
 		//UpgradeStatusGroup
@@ -772,7 +835,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!fruitfulButton.isDisabled()){
 					SoundHandler.playButtonClick();
-					//take away player money and add more to precentage of droppings
+					//take away player money and add more to percentage of droppings
 					//Gdx.input.setCatchBackKey(true);
 
 					Array<Movable> animals = getWorld().getMovables();
@@ -895,6 +958,13 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					moreButton.setDisabled(false);
 			}
 		});
+		
+//		dogButton.addListener(new InputListener(){
+//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//				return true;
+//			}
+//			public void touchUp
+//		}
 
 		//set disabled
 		if(getWorld().getPlayer().getPlayerMoney() < 500){
@@ -905,6 +975,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		}
 		if(getWorld().getPlayer().getPlayerMoney() < 1500){
 			moreButton.setDisabled(true);
+		}
+		if(getWorld().getPlayer().getPlayerMoney() < 10000){
+			dogButton.setDisabled(true);
 		}
 
 		//pack labels
@@ -933,16 +1006,16 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesGroup1.setHeight(BUTTON_HEIGHT);
 		upgradesGroup2.pack();
 		upgradesGroup2.setHeight(BUTTON_HEIGHT);
-		
+
 		//For two rows
-		/*upgradesGroupImage.setSize(Float.max(upgradesGroup1.getWidth(), upgradesGroup2.getWidth()) + EDGE_TOLERANCE*2f,
+		upgradesGroupImage.setSize(Math.max(upgradesGroup1.getWidth(), upgradesGroup2.getWidth()) + EDGE_TOLERANCE*2f,
 				upgradesGroup1.getHeight() + upgradesGroup2.getHeight() - EDGE_TOLERANCE);
 		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
-				alexButton.getY() - 3f*BUTTON_HEIGHT - EDGE_TOLERANCE);*/
+				alexButton.getY() - 3f*BUTTON_HEIGHT - EDGE_TOLERANCE);
 		//For single row
-		upgradesGroupImage.setSize(upgradesGroup1.getWidth() + 2f*EDGE_TOLERANCE, upgradesGroup1.getHeight());
+		/*upgradesGroupImage.setSize(upgradesGroup1.getWidth() + 2f*EDGE_TOLERANCE, upgradesGroup1.getHeight());
 		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
-				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);
+				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);*/
 	}
 
 	/**
@@ -1143,6 +1216,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		if (checked){
 			buttonStage.addActor(inventoryGroupImage);
 			buttonStage.addActor(inventoryGroup);
+			for (Consumable.DropType d : Consumable.DropType.values()){
+				((ImageTextButton) inventoryGroup.findActor(d.getName())).setText("x" + getWorld().getPlayer().getInventory().getInventory().get(d).size);
+			}
 			//from here has to update on button visibility
 		}
 		else{
@@ -1179,6 +1255,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(true);
 			else
 				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(false);
+
+			if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+				((Button) upgradesGroup1.findActor("dogButton")).setDisabled(true);
+			else
+				((Button) upgradesGroup1.findActor("dogButton")).setDisabled(false);
+
 			System.out.println(((Button) upgradesGroup1.findActor("fruitfulButton")).isDisabled());
 		}
 		else{
@@ -1277,9 +1359,15 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void setMain(boolean set) {
 		isMain = set;
 	}
-	
+
 	public void setAlexButton(boolean set) {
 		alexButton.setChecked(set);
+	}
+	public void comingFromHelpScreen(boolean set) {
+		alexButton.setChecked(true);
+		handleMainMenu(true);
+		optionsGroupButton.setChecked(true);
+		handleOptionsMenu(true);
 	}
 
 	@Override

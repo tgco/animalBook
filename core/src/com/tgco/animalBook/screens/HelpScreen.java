@@ -131,9 +131,11 @@ public class HelpScreen extends ButtonScreenAdapter implements Screen {
 					case 1:
 						gameInstance.setScreen(gameScreen);
 						gameScreen.resetInputProcessors();
-						gameScreen.setAlexButton(true);
-						gameScreen.handleMainMenu(true);
-						gameScreen.handleOptionsMenu(true);
+						gameScreen.comingFromHelpScreen(true);
+						//gameScreen.setAlexButton(true);
+						//gameScreen.handleMainMenu(true);
+						//gameScreen.setOptionsButton(true);
+						//gameScreen.handleOptionsMenu(true);
 						break;
 				}
 				//gameInstance.setScreen(new OptionsScreen(gameInstance));

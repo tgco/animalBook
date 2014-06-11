@@ -1,19 +1,19 @@
 
-egg.png
+dogButton.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-buttonPressed
-  rotate: false
-  xy: 1, 1
-  size: 156, 156
-  orig: 156, 156
-  offset: 0, 0
-  index: -1
 buttonUnpressed
   rotate: false
-  xy: 1, 1
-  size: 156, 156
-  orig: 156, 156
+  xy: 0, 0
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+buttonPressed
+  rotate: false
+  xy: 400, 0
+  size: 400, 400
+  orig: 400, 400
   offset: 0, 0
   index: -1

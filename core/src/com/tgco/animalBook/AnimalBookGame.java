@@ -67,6 +67,11 @@ public class AnimalBookGame extends Game {
 	private boolean hitBack = false;
 
 	/**
+	 * true if the game is in kid mode, where levels are easier
+	 */
+	private static boolean kidMode = false;
+
+	/**
 	 * every game starts with the create function.
 	 * this sets the initial screen to splash screen
 	 */
@@ -89,6 +94,7 @@ public class AnimalBookGame extends Game {
 		
 		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 		int lev = prefs.getInteger("level");
+		kidMode = prefs.getBoolean("kidMode");
 
 		if(lev >0 ){
 			continueable = true;
@@ -105,7 +111,6 @@ public class AnimalBookGame extends Game {
 		super.render();
 		if (debugMode) 
 			fpsLogger.log();
-		
 		
 	}
 
@@ -157,8 +162,9 @@ public class AnimalBookGame extends Game {
 	 * saves the data for the level to the preferences 
 	 */
 	public void setPrefsToFile(){
+		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 		if(level < levelHandler.getLevel()){
-			Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
+			
 			prefs.putInteger("level", levelHandler.getLevel());
 
 			//Player data
@@ -179,14 +185,19 @@ public class AnimalBookGame extends Game {
 			prefs.putInteger("More", levelHandler.getMoreMoneyP());
 			prefs.putInteger("Longer", levelHandler.getLongerMoneyP());
 
-			//app settings
-			prefs.putBoolean("music", SoundHandler.isMusicMuted());
-			prefs.putBoolean("sound", SoundHandler.isSoundMuted());
-			prefs.putBoolean("tutorial", levelHandler.isDoTutorial());
-
-			prefs.flush();
+			
+			
 			Gdx.app.log("My Tagg", "After flush of save");
 		}
+		
+		//app settings
+		prefs.putBoolean("music", SoundHandler.isMusicMuted());
+		prefs.putBoolean("sound", SoundHandler.isSoundMuted());
+		prefs.putBoolean("tutorial", levelHandler.isDoTutorial());
+		prefs.putBoolean("kidMode", kidMode);
+		
+		prefs.flush();
+
 	}
 	
 	public void setPrefsToFileLevelChange(){
@@ -205,6 +216,7 @@ public class AnimalBookGame extends Game {
 			
 			//animal data
 			prefs.putInteger("numAnimals", levelHandler.getNextLevelStart());
+			prefs.putBoolean("kidMode", kidMode);
 			
 			prefs.flush();
 		}
@@ -267,6 +279,9 @@ public class AnimalBookGame extends Game {
 			Gdx.app.log("My Tagg", "This is doing play");
 			setDataPlay();
 		}
+		
+		//continuable should only be used after loading app
+		continueable = false;
 	}
 	/**
 	 * This sets the levelHandler and it's data from preferences for the continue. 
@@ -275,7 +290,7 @@ public class AnimalBookGame extends Game {
 	private void setDataCont() {
 		Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 		level = prefs.getInteger("level");
-		levelHandler = new LevelHandler(level);	
+		levelHandler = new LevelHandler(level, kidMode);	
 		Player player = new Player(levelHandler.returnCameraSpeed(level));
 		player.setValues(prefs.getFloat("health"), prefs.getInteger("money"));
 
@@ -327,7 +342,7 @@ public class AnimalBookGame extends Game {
 		SoundHandler.setMusicMuted(prefs.getBoolean("music"));
 		SoundHandler.setSoundMuted(prefs.getBoolean("sound"));
 		levelHandler.setDoTutorial(prefs.getBoolean("tutorial"));
-
+		
 	}
 
 	/**
@@ -339,7 +354,7 @@ public class AnimalBookGame extends Game {
 			level = (Integer) getLevelData().get(0);
 		}
 		if (levelHandler == null) {
-			levelHandler = new LevelHandler(level);
+			levelHandler = new LevelHandler(level, kidMode);
 		}
 
 	}
@@ -351,7 +366,7 @@ public class AnimalBookGame extends Game {
 		if (levelHandler == null) {
 			Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 			level = prefs.getInteger("level");
-			levelHandler = new LevelHandler(level);	
+			levelHandler = new LevelHandler(level, kidMode);	
 			Player player = new Player(levelHandler.returnCameraSpeed(level));
 			player.setValues(prefs.getFloat("health"), prefs.getInteger("money"));
 
@@ -481,4 +496,13 @@ public class AnimalBookGame extends Game {
 		}
 		setDataRetry();
 	}
+	
+	public boolean isKidMode() {
+		return kidMode;
+	}
+	
+	public void setKidMode(boolean kidMode) {
+		this.kidMode = kidMode;
+	}
+	
 }

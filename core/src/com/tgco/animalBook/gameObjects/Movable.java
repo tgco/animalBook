@@ -62,6 +62,9 @@ public abstract class Movable extends ABDrawable {
 	 * @param delta		  the time between two frames
 	 */
 	public void move(float cameraSpeed, float delta) {
+		//hold old position
+		Vector2 temp = this.position.cpy();
+		
 		//move bias with camera direction
 		position.y += (moveBias*cameraSpeed) * (AnimalBookGame.TARGET_FRAME_RATE*delta);
 
@@ -75,7 +78,9 @@ public abstract class Movable extends ABDrawable {
 		bounds.setX(position.x - width/2);
 		bounds.setY(position.y - height/2);
 		
-		float targetRotation = this.previousTarget.cpy().sub(this.position).angle() - 90f;
+		//Find rotation
+		float targetRotation = this.position.cpy().sub(temp).angle() - 90f;
+		//float targetRotation = (this.previousTarget.cpy().sub(this.position).add(new Vector2(0,moveBias*cameraSpeed))).angle() - 90f;
 		float difference = targetRotation - rotation;
 		rotation += difference/rotationSpeed;
 	}

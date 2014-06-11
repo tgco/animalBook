@@ -9,6 +9,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Swipe;
+import com.tgco.animalBook.gameObjects.Wind;
+import com.tgco.animalBook.view.World.Weather;
 
 
 /**
@@ -112,7 +114,7 @@ public class WorldRenderer {
 			} else
 				swipe.draw(batch,delta);
 		}
-
+		
 	}
 
 	/**
@@ -155,7 +157,6 @@ public class WorldRenderer {
 			} else
 				swipe.draw(batch,delta);
 		}
-
 	}
 
 	/**
@@ -165,6 +166,11 @@ public class WorldRenderer {
 		black.dispose();
 		blue.dispose();
 		red.dispose();
+	}
+
+	public void renderWeather(Weather weather) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

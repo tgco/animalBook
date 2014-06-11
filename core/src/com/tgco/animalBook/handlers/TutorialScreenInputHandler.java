@@ -136,7 +136,7 @@ public class TutorialScreenInputHandler implements InputProcessor {
 
 		//Determine if drag is registered
 		if (lastTouch != null) {
-			if ( touch.cpy().sub(lastTouch.cpy()).len() > touchToDragTolerance ) {
+			if ( touch.cpy().sub(lastTouch.cpy()).len() > touchToDragTolerance && pointer == 0) {
 				//Drag gesture is detected, create an influence barrier between touch and last touch
 				if (!tutorialScreen.isPaused()) {
 					tutorialScreen.getWorld().addSwipeToWorld(lastTouch, touch);

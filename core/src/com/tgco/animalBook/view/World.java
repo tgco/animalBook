@@ -99,6 +99,8 @@ public class World {
 	 * Handles all of the game object rendering responsibility
 	 */
 	private WorldRenderer worldRender;
+	
+	private Weather weather;
 
 	/**
 	 * Constructor with game instance and pulls stored info from gameInstance if there is anything stored
@@ -133,17 +135,17 @@ public class World {
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
-		
-		
+
+
 		tolerance = drawMap.get("Movable").get(0).getWidth();
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
 
 		if(gameInstance.getLevelHandler().getLevel()>1){
-			increasedCameraSpeed = 2f*cameraSpeed;
-		}else{
 			increasedCameraSpeed = 3f*cameraSpeed;
+		}else{
+			increasedCameraSpeed = 4f*cameraSpeed;
 		}
 
 		//Make the market and set it at the end
@@ -197,12 +199,9 @@ public class World {
 				}
 			}
 			drawMap.put("Obstacle", obstacles);
+			
 		}
-
-
-		//Add player to drawmap
-		//drawMap.put("Player", new Array<ABDrawable>());
-		//drawMap.get("Player").add(player);
+		weather = Weather.CLEAR;
 	}
 
 
@@ -326,7 +325,7 @@ public class World {
 		}
 
 		//draw objects
-		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera,delta);
+		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - camera.position.y)/(laneLength),camera,delta);
 	}
 
 	/**
@@ -436,15 +435,15 @@ public class World {
 			}
 		}
 
-		//check if player reached market
-		if (player.getBounds().overlaps(market.getBounds())) {
+		//check if market is in middle of screen to move on
+		if (Math.abs(market.getPosition().y - camera.position.y) < 20) {
 			SoundHandler.pauseBackgroundMusic();
 			gameInstance.getLevelHandler().resetNextLevelStart();
 			gameInstance.setHitBack(false);
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 	}
-	
+
 	/**
 	 * on reseting from Main menu this reinitalizes the movable object pictures
 	 */
@@ -471,7 +470,7 @@ public class World {
 			((Obstacle) obstacle).resetText();
 		}
 	}
-	
+
 	/**
 	 * returns the obstacles array for use in changing to Main Menu and gameScreen
 	 * @return
@@ -483,7 +482,7 @@ public class World {
 		}
 		return obstacles;
 	}
-	
+
 	/**
 	 * on resetting objects, this reinitializes the players texture
 	 */
@@ -491,4 +490,26 @@ public class World {
 		player.resetTexture("objectTextures/player.png");
 	}
 
+	public enum Weather{
+		CLEAR ("Clear"),
+		RAINY ("Rainy"),
+		WINDY ("Windy");
+
+		private Weather(String weatherName){
+			this.weatherName = weatherName;
+		}
+
+		private final String weatherName;
+
+		public final String getName(){
+			return weatherName;
+		}
+
+	}
+
 }
+/*
+ * if (wind.getPosition().x < 0 || wind.getPosition().x > Gdx.graphics.getWidth()){
+				winds.removeValue(wind, false);
+				wind.dispose();
+			}*/

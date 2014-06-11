@@ -1,5 +1,7 @@
 package com.tgco.animalBook.gameObjects;
 
+import com.badlogic.gdx.Gdx;
+
 
 public class Wind extends Movable{
 	private final static String TEXTURE_PATH = "objectTextures/swipe.png";
@@ -14,5 +16,4 @@ public class Wind extends Movable{
 		rotation = 0;
 		rotationSpeed = 50f;
 	}
-
 }

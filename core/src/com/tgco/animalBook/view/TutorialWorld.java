@@ -118,8 +118,6 @@ public class TutorialWorld {
 		drawMap.put("Dropped", new Array<ABDrawable>());
 		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.put("Obstacle", new Array<ABDrawable>());
-		drawMap.put("Player", new Array<ABDrawable>());
-
 	}
 
 	/**
@@ -287,6 +285,8 @@ public class TutorialWorld {
 
 		if(getMovables().size <=0 && gameInstance.getLevelHandler().getStoredAmount() > 0) {
 			speed = increasedCameraSpeed*(player.getHealth()/100);
+			SoundHandler.pauseBackgroundMusic();
+			gameInstance.setScreen(new TutorialMarketScreen(gameInstance, (TutorialScreen)gameInstance.getScreen()));
 		} else {
 			speed = cameraSpeed*(player.getHealth()/100);
 		}
@@ -334,14 +334,6 @@ public class TutorialWorld {
 							((Movable)movable).adjustForwardBias(1,cameraSpeed,delta);
 					}
 				}
-			}
-			
-			
-
-			//check if player reached market
-			if (player.getBounds().overlaps(market.getBounds())) {
-				SoundHandler.pauseBackgroundMusic();
-				gameInstance.setScreen(new TutorialMarketScreen(gameInstance, (TutorialScreen)gameInstance.getScreen()));
 			}
 		}
 	}

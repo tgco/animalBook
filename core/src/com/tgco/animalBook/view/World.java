@@ -157,10 +157,12 @@ public class World {
 
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
+			Gdx.app.log("My Tagg", "The hit back is " + gameInstance.isHitBack());
 			if (!gameInstance.isHitBack()) {
 				reinitTexturePlayer();
 				player.resetPlayerPosition();
 			} else {
+				//Gdx.app.log("My Tagg", "the player pos " + );
 				camera.position.set(Gdx.graphics.getWidth()/2, player.getPosition().cpy().y + 3f*Gdx.graphics.getHeight()/8, 0);
 				reinitTexturePlayer();
 				market.setPosition(new Vector2(player.getPosition().cpy().x, Gdx.graphics.getHeight()/8 + laneLength + player.getHeight()));
@@ -196,11 +198,6 @@ public class World {
 			}
 			drawMap.put("Obstacle", obstacles);
 		}
-
-
-		//Add player to drawmap
-		//drawMap.put("Player", new Array<ABDrawable>());
-		//drawMap.get("Player").add(player);
 	}
 
 
@@ -490,3 +487,8 @@ public class World {
 	}
 
 }
+/*
+ * if (wind.getPosition().x < 0 || wind.getPosition().x > Gdx.graphics.getWidth()){
+				winds.removeValue(wind, false);
+				wind.dispose();
+			}*/

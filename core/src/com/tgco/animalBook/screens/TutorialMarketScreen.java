@@ -3,18 +3,21 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.SoundHandler;
@@ -22,7 +25,7 @@ import com.tgco.animalBook.handlers.SoundHandler;
 public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen {
 
 	//reference to the game screen
-	private TutorialScreen tutorialGameScreen;
+	private TutorialScreen tutorialScreen;
 
 	//buttons
 	private Button levelAnimalButton;
@@ -32,6 +35,12 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
 	private BitmapFont font;
 
+	/**
+	 * Stage to draw the screen once the user has pressed the back button
+	 */
+	private Stage popupStage;
+
+	private boolean hasConfirm = false;
 
 	/**
 	 * Constructs a new Market Screen with a game instance and a game screen.
@@ -42,12 +51,12 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 	 * user inputs.
 	 * 
 	 * @param gameInstance the game instance to reference
-	 * @param tutorialGameScreen the game screen to reference
+	 * @param gameScreen the game screen to reference
 	 */
-	public TutorialMarketScreen(AnimalBookGame gameInstance, TutorialScreen tutorialGameScreen) {
+	public TutorialMarketScreen(AnimalBookGame gameInstance, TutorialScreen tutorialScreen) {
 		super(gameInstance);
-
-		this.tutorialGameScreen = tutorialGameScreen;
+		popupStage = new Stage();
+		this.tutorialScreen = tutorialScreen;
 
 		//Background rendering
 		batch = new SpriteBatch();
@@ -73,39 +82,52 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 	 */
 	@Override
 	public void render(float delta) {
-		int storedAnimal = gameInstance.getLevelHandler().getStoredAmount();
-		int nextLevel = gameInstance.getLevelHandler().getNextLevelStart();
-		int needAnimals = gameInstance.getLevelHandler().getPassLevelAmount();
-		String needAnimalsString = "Need: " + String.valueOf(needAnimals);
+		if(!hasConfirm){
+			int storedAnimal = gameInstance.getLevelHandler().getStoredAmount();
+			int nextLevel = gameInstance.getLevelHandler().getNextLevelStart();
+			int needAnimals = gameInstance.getLevelHandler().getPassLevelAmount();
+			String needAnimalsString = "Need: " + String.valueOf(needAnimals);
 
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		buttonStage.act(delta);
+			buttonStage.act(delta);
 
-		//render background
-		batch.begin();
-		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			//render background
+			batch.begin();
+			batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		//Draw money
-		font.setColor(Color.WHITE);
-		font.setScale(1.2f);
-		font.draw(batch, "Your Money: $" + String.valueOf(tutorialGameScreen.getWorld().getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 , Gdx.graphics.getHeight() - 3*EDGE_TOLERANCE );
+			//Draw money
+			font.setColor(Color.WHITE);
+			font.setScale(1.2f);
+			font.draw(batch, "Your Money: $" + String.valueOf(tutorialScreen.getWorld().getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 , Gdx.graphics.getHeight() - 3*EDGE_TOLERANCE );
 
-		font.setColor(Color.WHITE);
-		font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-		font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-		font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE - font.getCapHeight());
+			font.setColor(Color.WHITE);
+			font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+			font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+			font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE - font.getCapHeight());
 
-		batch.end();
+			batch.end();
 
-		//Draw buttons
-		buttonStage.draw();
-		int numConsumables = Consumable.DropType.values().length;
-		for (int i = 0; i < numConsumables; i ++){
-			updateMarketScreenItems(i);
+			//Draw buttons
+			buttonStage.draw();
+			int numConsumables = Consumable.DropType.values().length;
+			for (int i = 0; i < numConsumables; i ++){
+				updateMarketScreenItems(i);
+			}
+
+			if(Gdx.input.isKeyPressed(Keys.BACK)){
+				setDialog();
+			}
+
+			//Gdx.gl.glClearColor(1, 1, 1, 1);
+			//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 		}
-
+		else{
+			popupStage.act(delta);
+			popupStage.draw();
+		}
 	}
 
 	/**
@@ -167,8 +189,8 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 				public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 
 					//player eats when button of representing object gets eaten
-					if(tutorialGameScreen.getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[consumableIndex])){
-						tutorialGameScreen.getWorld().getPlayer().addPlayerMoney(sellValue);
+					if(tutorialScreen.getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[consumableIndex])){
+						tutorialScreen.getWorld().getPlayer().addPlayerMoney(sellValue);
 					}
 				}
 			});
@@ -185,7 +207,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		batch.begin();
 		fonts[consumableIndex].setColor(55,55,55,1f);
 		fonts[consumableIndex].draw(batch,
-				String.valueOf(tutorialGameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size),
+				String.valueOf(tutorialScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size),
 				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex,
 				Gdx.graphics.getHeight()/1.5f);
 		fonts[consumableIndex].draw(batch,
@@ -197,7 +219,6 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 
 	@Override
 	protected void initializeButtons() {
-
 		//PLAY BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/tutorialScreen/playButton.atlas"));
 		buttonSkin = new Skin();
@@ -212,9 +233,9 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		playButton.setHeight(BUTTON_HEIGHT);
 		playButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
 		playButton.setY(EDGE_TOLERANCE);
-
+		
 		//CURRENT LEVEL ANIMAL BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("objectTextures/gooseButton.atlas"));
+		atlas = new TextureAtlas(gameInstance.getLevelHandler().currentLevelTexture());
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
@@ -228,8 +249,8 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		levelAnimalButton.setX(Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2);
 		levelAnimalButton.setY(Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
-		//LEVEL ANIMAL BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("objectTextures/pigButton.atlas"));
+		//NEXT LEVEL ANIMAL BUTTON
+		atlas = new TextureAtlas(gameInstance.getLevelHandler().nextLevelTexture());
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
@@ -243,6 +264,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		nextLevelAnimalButton.setX(Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2);
 		nextLevelAnimalButton.setY(Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
+		//LISTENERS
 		playButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -253,12 +275,12 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);	
 				gameInstance.getLevelHandler().setDoTutorial(false);
-				tutorialGameScreen.dispose();
+				tutorialScreen.dispose();
 				gameInstance.setScreen(new GameScreen(gameInstance));
 				dispose();
 			}
 		});
-
+		
 		levelAnimalButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -274,7 +296,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 				}
 			}
 		});
-
+		
 		buttonStage.addActor(playButton);
 		buttonStage.addActor(levelAnimalButton);
 		buttonStage.addActor(nextLevelAnimalButton);
@@ -303,4 +325,23 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		}
 	}
 
+	/**
+	 * Sets the game to the confirm dialog when back is pressed
+	 * 
+	 */
+	public void setDialog(){
+		hasConfirm  = true;
+		Skin skin = new Skin(Gdx.files.internal("confirmSkin/uiskin.json"));
+		ConfirmDialog backD = new ConfirmDialog("Back Button Pressed", skin, gameInstance,"Please click  \"retry\" or \"Next Level\" button to save Progress", 0);
+		backD.show(popupStage);
+		popupStage.addActor(backD);
+		inputMultiplexer.addProcessor(popupStage);
+		inputMultiplexer.removeProcessor(buttonStage);
+	}
+	public void setCancel(){
+		hasConfirm = false;
+		inputMultiplexer.removeProcessor(popupStage);
+		inputMultiplexer.addProcessor(buttonStage);
+		popupStage = new Stage();	
+	}
 }

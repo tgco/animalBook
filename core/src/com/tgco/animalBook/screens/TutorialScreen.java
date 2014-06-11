@@ -60,8 +60,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * The width and height of tiles for the background
 	 */
-	private float tileWidth = Gdx.graphics.getWidth()/1f;
-	private float tileHeight = Gdx.graphics.getHeight()/1f;
+	private float tileWidth = Gdx.graphics.getWidth()/4f;
+	private float tileHeight = Gdx.graphics.getHeight()/4f;
 
 	/**
 	 * Each button used on the game screen user interface overlay

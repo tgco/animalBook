@@ -120,7 +120,7 @@ public class World {
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
 		//spot 3 is storing movable array
-		if(levelSize && gameInstance.getLevelData().get(2) !=null){
+		if(levelSize && gameInstance.getLevelData().get(2) != null){
 			Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
 			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
 			reinitTextureMovable();
@@ -135,10 +135,8 @@ public class World {
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 
-		if (drawMap.get("Movable").size != 0) {
-			tolerance = drawMap.get("Movable").get(0).getWidth();
-		} else tolerance = 100f;
-		
+		tolerance = drawMap.get("Movable").get(0).getWidth();
+
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
@@ -189,9 +187,9 @@ public class World {
 			reinitTextureObstacle();
 		}else{
 
-			
+
 			drawMap.put("Obstacle",  gameInstance.getLevelHandler().addObstacles( gameInstance.getLevelHandler().getLevel(), market.getPosition()));
-			
+
 		}
 		weather = Weather.CLEAR;
 	}
@@ -433,7 +431,7 @@ public class World {
 		}
 
 		gameInstance.getGameScreen().setInfolabel();
-		
+
 		//check if market is in middle of screen to move on
 		if (Math.abs(market.getPosition().y - camera.position.y) < 20) {
 			SoundHandler.pauseBackgroundMusic();

@@ -496,6 +496,11 @@ public class AnimalBookGame extends Game {
 		}
 		setDataRetry();
 	}
+	public void retryLevel(){
+		for(int i=0; i< 5; i++){
+			levelData.set(i, null);
+		}
+	}
 	
 	public boolean isKidMode() {
 		return kidMode;

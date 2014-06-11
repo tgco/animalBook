@@ -393,6 +393,7 @@ public class LevelHandler {
 
 	public void setRetry(){
 		onRetry = true;
+		
 	}
 	
 	public void updateKidMode(boolean kM){
@@ -438,29 +439,29 @@ public class LevelHandler {
 		switch(level) {
 		case 1:
 			if (kidMode)
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.2f*Gdx.graphics.getHeight());
 			else
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.228f*Gdx.graphics.getHeight());
 		case 2:
 			if (kidMode)
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.285f*Gdx.graphics.getHeight());
 			else
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.485f*Gdx.graphics.getHeight());
 		case 3:
 			if (kidMode)
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.428f*Gdx.graphics.getHeight());
 			else
-				return (int) (.221f*Gdx.graphics.getHeight()*level);
+				return (int) (.714f*Gdx.graphics.getHeight());
 		case 4:
 			if (kidMode)
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.628f*Gdx.graphics.getHeight());
 			else
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.914f*Gdx.graphics.getHeight());
 		case 5:
 			if (kidMode)
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.857f*Gdx.graphics.getHeight());
 			else
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (1.142f*Gdx.graphics.getHeight());
 		}
 		return  (int) (.221f*Gdx.graphics.getHeight()*level);
 	}

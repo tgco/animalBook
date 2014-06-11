@@ -59,7 +59,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * Reference to the game world where all objects are located
 	 */
 	private World gameWorld;
-	
+
 	/**
 	 * The width and height of tiles for the background
 	 */
@@ -206,12 +206,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 		}
 	}
-	
+
 	public void drawTiledBackground(SpriteBatch batch) {
-		
+
 		//Find the node on screen to draw grass around
 		Array<Vector2> tileNodes = findTileNodesOnScreen();
-		
+
 		for(Vector2 tileNode : tileNodes) {
 			//Draw four grass textures around the node on screen
 			batch.draw(backgroundTexture, tileNode.x*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
@@ -236,22 +236,22 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			flipX = true;
 		if (gameWorld.getCamera().position.y < 0)
 			flipY = true;
-			*/
-		
+		 */
+
 		//Reference to the center of the camera
 		Vector3 camCorner = gameWorld.getCamera().position.cpy();
 		//adjust to lower left of camera
 		camCorner.sub(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
-		
+
 		int xCoordinate = (int) ( Math.abs(camCorner.x / tileWidth) - .5);
 		int yCoordinate = (int) ( Math.abs(camCorner.y / tileHeight) - .5);
-		
+
 		//Fill array with all nodes on screen
 		Array<Vector2> tileNodes = new Array<Vector2>();
 		Vector2 node;
-		
+
 		int initYCoordinate = yCoordinate;
-		
+
 		while (xCoordinate*tileWidth < (camCorner.x + Gdx.graphics.getWidth()) + tileWidth) {
 			while(yCoordinate*tileHeight < (camCorner.y + Gdx.graphics.getHeight() + tileHeight)) {
 				node = new Vector2(xCoordinate,yCoordinate);
@@ -267,7 +267,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			xCoordinate *= -1;
 		if (flipY)
 			yCoordinate *= -1;
-			*/
+		 */
 
 		return tileNodes;
 	}
@@ -875,7 +875,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					moreButton.setDisabled(true);
 				else
 					moreButton.setDisabled(false);
-				
+
 				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
 					dogButton.setDisabled(true);
 				else
@@ -923,7 +923,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					moreButton.setDisabled(true);
 				else
 					moreButton.setDisabled(false);
-				
+
 				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
 					dogButton.setDisabled(true);
 				else
@@ -971,25 +971,29 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					moreButton.setDisabled(true);
 				else
 					moreButton.setDisabled(false);
-				
+
 				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
 			}
 		});
-		
+
 		dogButton.addListener(new InputListener(){
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				if(!dogButton.isDisabled()) {
-					SoundHandler.playButtonClick();
-					getWorld().getPlayer().subtractPlayerMoney(dogMoney);
-					boostArray.add(new Dog(new Vector2(0, Gdx.graphics.getHeight()), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY()));
-					getWorld().getDrawMap().put("Boosts", boostArray);
-					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
+					if(getWorld().getDrawMap().get("Boosts").size <= 0) {
+						SoundHandler.playButtonClick();
+						getWorld().getPlayer().subtractPlayerMoney(dogMoney);
+						Dog newDog = new Dog(new Vector2(0, Gdx.graphics.getHeight()), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
+						getWorld().getDrawMap().get("Boosts").add(newDog);
+						infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
+					} else {
+						getWorld().getDrawMap().get("Boosts").clear();
+					}
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
@@ -1005,13 +1009,13 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					moreButton.setDisabled(true);
 				else
 					moreButton.setDisabled(false);
-				
+
 				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
 			}
-			
+
 		});
 
 		//set disabled

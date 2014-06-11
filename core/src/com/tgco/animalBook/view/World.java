@@ -147,6 +147,8 @@ public class World {
 			increasedCameraSpeed = 4f*cameraSpeed;
 		}
 
+		drawMap.put("Boosts", new Array<ABDrawable>());
+		
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
@@ -384,6 +386,11 @@ public class World {
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
+			//Reduce upward bias if there's a dog
+			if(drawMap.get("Boosts").size > 0) {
+				((Movable) movable).adjustForwardBias(.5f, speed, delta);
+				Gdx.app.log("Doge", "Such adjust, many method call");
+			}
 			//Drop new items
 			if(rand.nextInt(100) <= 50 && drawMap.get("Movable").size <= 30){
 				ABDrawable dropping =  ((Animal)movable).drop(gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());

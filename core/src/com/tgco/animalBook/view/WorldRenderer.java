@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Swipe;
 import com.tgco.animalBook.gameObjects.Wind;
+import com.tgco.animalBook.view.World.Weather;
 
 
 /**
@@ -25,7 +26,6 @@ public class WorldRenderer {
 	 * Stores all swipes to be drawn on screen
 	 */
 	private Array<Swipe> swipes;
-	private Array<Wind> winds;
 
 	/**
 	 * Dimensions for the progress bar and slider
@@ -114,6 +114,7 @@ public class WorldRenderer {
 			} else
 				swipe.draw(batch,delta);
 		}
+		
 	}
 
 	/**
@@ -156,7 +157,6 @@ public class WorldRenderer {
 			} else
 				swipe.draw(batch,delta);
 		}
-
 	}
 
 	/**
@@ -166,6 +166,11 @@ public class WorldRenderer {
 		black.dispose();
 		blue.dispose();
 		red.dispose();
+	}
+
+	public void renderWeather(Weather weather) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

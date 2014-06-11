@@ -65,7 +65,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Each button used on the game screen user interface overlay
 	 */
-	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton;
+	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, dogButton;
 
 	private VerticalGroup menuGroup;
 	private Image alexInfoImage, menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
@@ -80,6 +80,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private int fruitfulMoney;
 	private int longerMoney;
 	private int moreMoney;
+	private int dogMoney;
 
 	private static boolean mainMenuInitialized, inventoryMenuInitialized, upgradesMenuInitialized, optionsMenuInitialized;
 
@@ -97,7 +98,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * The font used when rendering strings
 	 */
 	private BitmapFont font;
-	private final float FONT_SCALE = .75f;
+	private final float FONT_SCALE = Gdx.graphics.getHeight()/1000f;
 
 	/**
 	 * textures for health bar, etc
@@ -662,9 +663,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void initializeUpgradeItems(){
 		upgradesMenuInitialized = true;
 		//initialize upgrade monies
-		fruitfulMoney = (int) (100*(Math.pow(2,gameInstance.getLevelHandler().getFruitfullMoneyP())));
-		longerMoney = (int) (500*(Math.pow(2,gameInstance.getLevelHandler().getLongerMoneyP())));
-		moreMoney = (int) (1000*(Math.pow(2,gameInstance.getLevelHandler().getMoreMoneyP())));
+		fruitfulMoney = (int) (15*(Math.pow(2,gameInstance.getLevelHandler().getFruitfullMoneyP())));
+		longerMoney = (int) (5*(Math.pow(2,gameInstance.getLevelHandler().getLongerMoneyP())));
+		moreMoney = (int) (10*(Math.pow(2,gameInstance.getLevelHandler().getMoreMoneyP())));
+		dogMoney = 100;
 		final Button fruitfulButton, longerButton, moreButton;
 		final Label upgradeLabel, fruitfulLabel, longerLabel, moreLabel;
 
@@ -748,6 +750,33 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		};
 		moreButton.setName("moreButton");
 
+		//dogButton
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/upgradesScreen/dogButton.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		ButtonStyle dogButtonStyle = new ButtonStyle();
+		dogButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
+		dogButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
+		TextureRegion trDogButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/dogButtonDis.png")) );
+		trDogButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
+		trDogButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+
+		dogButtonStyle.disabled = new TextureRegionDrawable(trDogButton);
+
+		dogButton = new Button(dogButtonStyle) {
+			@Override
+			public float getPrefHeight(){
+				return BUTTON_HEIGHT*2/3;
+			};
+
+			@Override
+			public float getPrefWidth(){
+				return BUTTON_WIDTH*2/3;
+			}
+		};
+		dogButton.setName("dogButton");
+
 
 
 		//UpgradeStatusGroup
@@ -806,7 +835,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!fruitfulButton.isDisabled()){
 					SoundHandler.playButtonClick();
-					//take away player money and add more to precentage of droppings
+					//take away player money and add more to percentage of droppings
 					//Gdx.input.setCatchBackKey(true);
 
 					Array<Movable> animals = getWorld().getMovables();
@@ -929,6 +958,13 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					moreButton.setDisabled(false);
 			}
 		});
+		
+//		dogButton.addListener(new InputListener(){
+//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//				return true;
+//			}
+//			public void touchUp
+//		}
 
 		//set disabled
 		if(getWorld().getPlayer().getPlayerMoney() < 500){
@@ -939,6 +975,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		}
 		if(getWorld().getPlayer().getPlayerMoney() < 1500){
 			moreButton.setDisabled(true);
+		}
+		if(getWorld().getPlayer().getPlayerMoney() < 10000){
+			dogButton.setDisabled(true);
 		}
 
 		//pack labels
@@ -961,13 +1000,13 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesGroup1.addActor(fruitfulButton);
 		upgradesGroup1.addActor(longerButton);
 		upgradesGroup1.addActor(moreButton);
-		//upgradesGroup2.addActor(new Actor());
+		upgradesGroup2.addActor(dogButton);
 
 		upgradesGroup1.pack();
 		upgradesGroup1.setHeight(BUTTON_HEIGHT);
 		upgradesGroup2.pack();
 		upgradesGroup2.setHeight(BUTTON_HEIGHT);
-		
+
 		//For two rows
 		upgradesGroupImage.setSize(Math.max(upgradesGroup1.getWidth(), upgradesGroup2.getWidth()) + EDGE_TOLERANCE*2f,
 				upgradesGroup1.getHeight() + upgradesGroup2.getHeight() - EDGE_TOLERANCE);
@@ -1216,6 +1255,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(true);
 			else
 				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(false);
+
+			if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(true);
+			else
+				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(false);
+
 			System.out.println(((Button) upgradesGroup1.findActor("fruitfulButton")).isDisabled());
 		}
 		else{
@@ -1314,7 +1359,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void setMain(boolean set) {
 		isMain = set;
 	}
-	
+
 	public void setAlexButton(boolean set) {
 		alexButton.setChecked(set);
 	}

@@ -20,6 +20,8 @@ public class HelpScreen extends ButtonScreenAdapter implements Screen {
 
 	//buttons
 	private Button backButton;
+	private int fromScreen;
+	private GameScreen gameScreen;
 	
 	/**
 	 * Constructs a new Help Screen with a game instance
@@ -28,9 +30,24 @@ public class HelpScreen extends ButtonScreenAdapter implements Screen {
 	 * as the background. Initializes a new input multiplexer and processor to handle user inputs.
 	 * 
 	 * @param gameInstance the game instance to reference
+	 * @param fromScreen the screen help is called fron (0, Options; 1, Game)
 	 */
-	public HelpScreen(AnimalBookGame gameInstance) {
+	public HelpScreen(AnimalBookGame gameInstance, int fromScreen) {
 		super(gameInstance);
+		this.fromScreen = fromScreen;
+		
+		//Background Rendering
+		batch = new SpriteBatch();
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/helpScreenBackground.png"));
+		
+		inputMultiplexer = new InputMultiplexer();
+		Gdx.input.setInputProcessor(inputMultiplexer);
+	}
+	
+	public HelpScreen(AnimalBookGame gameInstance, GameScreen gameScreen, int fromScreen) {
+		super(gameInstance);
+		this.fromScreen = fromScreen;
+		this.gameScreen = gameScreen;
 		
 		//Background Rendering
 		batch = new SpriteBatch();
@@ -96,7 +113,7 @@ public class HelpScreen extends ButtonScreenAdapter implements Screen {
 		backButton = new Button(backButtonStyle);
 		backButton.setWidth(BUTTON_WIDTH);
 		backButton.setHeight(BUTTON_HEIGHT);
-		backButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
+		backButton.setX(EDGE_TOLERANCE);
 		backButton.setY(EDGE_TOLERANCE);
 		
 		//LISTENERS
@@ -107,7 +124,19 @@ public class HelpScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				gameInstance.setScreen(new OptionsScreen(gameInstance));
+				switch(fromScreen){
+					case 0:
+						gameInstance.setScreen(new OptionsScreen(gameInstance));
+						break;
+					case 1:
+						gameInstance.setScreen(gameScreen);
+						gameScreen.resetInputProcessors();
+						gameScreen.setAlexButton(true);
+						gameScreen.handleMainMenu(true);
+						gameScreen.handleOptionsMenu(true);
+						break;
+				}
+				//gameInstance.setScreen(new OptionsScreen(gameInstance));
 				dispose();
 			}
 		});

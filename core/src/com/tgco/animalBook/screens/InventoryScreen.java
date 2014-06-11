@@ -89,7 +89,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 				if (payload.getObject() instanceof Consumable)
-					if ((((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL) || (gameScreen.getWorld().getPlayer().getHealth() == 100)){
+					if ((gameScreen.getWorld().getPlayer().getHealth() == 100)){
 						this.getActor().setColor(Color.RED);
 						return false;
 					}
@@ -181,9 +181,20 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
 			//create a new button using aforementioned button style and set stuff up
-			final Button inventoryButton = new Button(inventoryButtonStyle);
-			inventoryButton.setWidth(BUTTON_WIDTH/2);
-			inventoryButton.setHeight(BUTTON_HEIGHT/2);
+			final Button inventoryButton = new Button(inventoryButtonStyle){
+					@Override
+					public float getPrefHeight(){
+						return BUTTON_HEIGHT;
+					};
+					
+					@Override
+					public float getPrefWidth(){
+						return BUTTON_WIDTH;
+					}
+			};
+			//inventoryButton.setWidth(BUTTON_WIDTH/2);
+			//inventoryButton.setHeight(BUTTON_HEIGHT/2);
+			inventoryButton.getPrefHeight();
 			inventoryButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*i);
 			inventoryButton.setY(Gdx.graphics.getHeight()/2);
 

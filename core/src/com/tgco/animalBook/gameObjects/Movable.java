@@ -26,6 +26,12 @@ public abstract class Movable extends ABDrawable {
 
 	/**the current target is where the movable should be heading to  */
 	protected Vector2 currentTarget;
+	
+	/**The rotation of the movable texture*/
+	protected float rotation;
+	
+	/**The speed that an object rotates with.  Lower values rotate faster*/
+	protected float rotationSpeed;
 
 	/**
 	 * the constructor creates a movable with a given speed
@@ -38,13 +44,15 @@ public abstract class Movable extends ABDrawable {
 		speed = 1/14f;
 
 		moveBias = 1.5f;
+		
+		rotation = 0;
+		rotationSpeed = 50f;
 	}
 	/**
 	 * Overridden to draw with rotation so movables face the direction they are moving
 	 */
 	@Override
 	public void draw(SpriteBatch batch) {
-		float rotation = this.previousTarget.cpy().sub(this.position).angle() - 90f;
 		batch.draw(texture, position.x - width/2, position.y - height/2, width/2, height/2, width, height, 1, 1, rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
 	}
 
@@ -66,6 +74,10 @@ public abstract class Movable extends ABDrawable {
 		//update bounds
 		bounds.setX(position.x - width/2);
 		bounds.setY(position.y - height/2);
+		
+		float targetRotation = this.previousTarget.cpy().sub(this.position).angle() - 90f;
+		float difference = targetRotation - rotation;
+		rotation += difference/rotationSpeed;
 	}
 
 	/**

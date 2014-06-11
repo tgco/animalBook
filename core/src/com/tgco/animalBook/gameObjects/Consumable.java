@@ -37,12 +37,13 @@ public class Consumable extends ABDrawable {
 	 * @author Kelly Masuda
 	 */
 	public enum DropType {
-		EGG			("objectTextures/dropEgg.jpg", "objectTextures/eggButton.atlas", 5, 10),
-		BACON	("objectTextures/bacon.png", "objectTextures/baconButton.atlas", 10, 7),
-		CHEESE	("objectTextures/cheese.png", "objectTextures/cheeseButton.atlas", 15, 5), 
-		WOOL		("objectTextures/wool.png", "objectTextures/woolButton.atlas", 20, 0),
-		MILK		("objectTextures/milk.png", "objectTextures/milkButton.atlas", 25, 9);
+		EGG			("Eggs", "objectTextures/dropEgg.jpg", "objectTextures/eggButton.atlas", 5, 10),
+		BACON	("Bacon", "objectTextures/bacon.png", "objectTextures/baconButton.atlas", 10, 7),
+		CHEESE	("Cheese", "objectTextures/cheese.png", "objectTextures/cheeseButton.atlas", 15, 5), 
+		MUTTON		("Mutton", "objectTextures/mutton.png", "objectTextures/muttonButton.atlas", 20, 0),
+		MILK		("Milk", "objectTextures/milk.png", "objectTextures/milkButton.atlas", 25, 9);
 		
+		private final String 	name;
 		private final String	texturePath;
 		private final String	atlasPath;
 		private final int		marketValue;
@@ -55,11 +56,20 @@ public class Consumable extends ABDrawable {
 		 * @param marketValue - The Consumable's market value
 		 * @param hungerValue - The Consumable's hunger value
 		 */
-		private DropType(String texturePath, String atlasPath, int marketValue, int hungerValue){
+		private DropType(String name, String texturePath, String atlasPath, int marketValue, int hungerValue){
+			this.name				=	name;
 			this.texturePath		=	texturePath;
 			this.atlasPath			=	atlasPath;
 			this.marketValue 	=	marketValue;
 			this.hungerValue 	=	hungerValue;
+		}
+		
+		/**
+		 * Returns this Consumable.DropType's name.
+		 * @return name
+		 */
+		public final String getName(){
+			return name;
 		}
 		
 		/**

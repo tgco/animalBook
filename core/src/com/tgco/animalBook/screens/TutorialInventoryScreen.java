@@ -79,11 +79,6 @@ public class TutorialInventoryScreen extends ButtonScreenAdapter implements Scre
 			 */
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
-				if (payload.getObject() instanceof Consumable)
-					if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL){
-						this.getActor().setColor(Color.RED);
-						return false;
-					}
 				this.getActor().setColor(Color.GREEN);
 				return true;
 			}

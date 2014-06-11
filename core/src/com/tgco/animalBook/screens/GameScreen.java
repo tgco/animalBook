@@ -55,6 +55,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * Reference to the game world where all objects are located
 	 */
 	private World gameWorld;
+	
+	/**
+	 * The width and height of tiles for the background
+	 */
+	private float tileWidth = Gdx.graphics.getWidth()/4f;
+	private float tileHeight = Gdx.graphics.getHeight()/4f;
 
 	/**
 	 * Each button used on the game screen user interface overlay
@@ -158,16 +164,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				//render background and world
 				batch.setProjectionMatrix(gameWorld.getCamera().combined);
 
-				//Find the node on screen to draw grass around
-				Vector2 tileNode = findTileNodeOnScreen();
-
 				batch.begin();
 
-				//Draw four grass textures around the node on screen
-				batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-				batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), tileNode.y*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-				batch.draw(backgroundTexture, tileNode.x*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-				batch.draw(backgroundTexture, (tileNode.x-1)*Gdx.graphics.getWidth(), (tileNode.y-1)*Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				drawTiledBackground(batch);
 
 				//Draw world over background
 				gameWorld.render(batch,alexButton.isChecked(),delta);
@@ -201,6 +200,20 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 		}
 	}
+	
+	public void drawTiledBackground(SpriteBatch batch) {
+		
+		//Find the node on screen to draw grass around
+		Array<Vector2> tileNodes = findTileNodesOnScreen();
+		
+		for(Vector2 tileNode : tileNodes) {
+			//Draw four grass textures around the node on screen
+			batch.draw(backgroundTexture, tileNode.x*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
+			batch.draw(backgroundTexture, (tileNode.x-1)*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
+			batch.draw(backgroundTexture, tileNode.x*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
+			batch.draw(backgroundTexture, (tileNode.x-1)*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
+		}
+	}
 
 	/**
 	 * Returns the point in world coordinates that grass should be drawn around so that grass
@@ -208,26 +221,49 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * 
 	 * @return		the point on screen to draw grass around
 	 */
-	public Vector2 findTileNodeOnScreen() {
+	public Array<Vector2> findTileNodesOnScreen() {
 
-		//If camera is in the negative quadrant
-		boolean flipX = false;
+		//If camera is in the negative quadrant (doesn't happen in new lane game play)
+		/*boolean flipX = false;
 		boolean flipY = false;
 		if (gameWorld.getCamera().position.x < 0)
 			flipX = true;
 		if (gameWorld.getCamera().position.y < 0)
 			flipY = true;
-
-		int xCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.x / Gdx.graphics.getWidth()) + .5);
-		int yCoordinate = (int) ( Math.abs(gameWorld.getCamera().position.y / Gdx.graphics.getHeight()) + .5);
+			*/
+		
+		//Reference to the center of the camera
+		Vector3 camCorner = gameWorld.getCamera().position.cpy();
+		//adjust to lower left of camera
+		camCorner.sub(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
+		
+		int xCoordinate = (int) ( Math.abs(camCorner.x / tileWidth) - .5);
+		int yCoordinate = (int) ( Math.abs(camCorner.y / tileHeight) - .5);
+		
+		//Fill array with all nodes on screen
+		Array<Vector2> tileNodes = new Array<Vector2>();
+		Vector2 node;
+		
+		int initYCoordinate = yCoordinate;
+		
+		while (xCoordinate*tileWidth < (camCorner.x + Gdx.graphics.getWidth()) + tileWidth) {
+			while(yCoordinate*tileHeight < (camCorner.y + Gdx.graphics.getHeight() + tileHeight)) {
+				node = new Vector2(xCoordinate,yCoordinate);
+				tileNodes.add(node);
+				yCoordinate += 1;
+			}
+			xCoordinate += 1;
+			yCoordinate = initYCoordinate;
+		}
 
 		//Provides correct float truncation for tiling in the negative x/y direction
-		if (flipX)
+		/*if (flipX)
 			xCoordinate *= -1;
 		if (flipY)
 			yCoordinate *= -1;
+			*/
 
-		return new Vector2(xCoordinate,yCoordinate);
+		return tileNodes;
 	}
 
 	/**
@@ -581,7 +617,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
 			inventoryButton.bottom();
 			inventoryButton.right();
-
+			inventoryButton.setName(Consumable.DropType.values()[i].getName());
 			dnd.addSource(new Source(inventoryButton){
 
 				/**
@@ -1143,6 +1179,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		if (checked){
 			buttonStage.addActor(inventoryGroupImage);
 			buttonStage.addActor(inventoryGroup);
+			for (Consumable.DropType d : Consumable.DropType.values()){
+				((ImageTextButton) inventoryGroup.findActor(d.getName())).setText("x" + getWorld().getPlayer().getInventory().getInventory().get(d).size);
+			}
 			//from here has to update on button visibility
 		}
 		else{
@@ -1280,6 +1319,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	
 	public void setAlexButton(boolean set) {
 		alexButton.setChecked(set);
+	}
+	public void comingFromHelpScreen(boolean set) {
+		alexButton.setChecked(true);
+		handleMainMenu(true);
+		optionsGroupButton.setChecked(true);
+		handleOptionsMenu(true);
 	}
 
 	@Override

@@ -419,7 +419,7 @@ public class World {
 				if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable.getClass().equals(Player.class))) {
 					((Movable)movable).bounce(null, (Obstacle)obstacle);
 					if ((movable.getPosition().y + movable.getHeight()/2) < (obstacle.getPosition().y))
-						((Movable)movable).stopForwardBias(cameraSpeed,delta);
+						((Movable)movable).adjustForwardBias(1,cameraSpeed,delta);
 				}
 			}
 		}

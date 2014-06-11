@@ -86,12 +86,15 @@ public abstract class Movable extends ABDrawable {
 	}
 
 	/**
-	 * Stops the constant forward motion for use with colliding with an obstacle from below
+	 * Stops the constant forward motion for use with colliding with an obstacle from below. 1 eliminates forward bias, animals will move fully randomly.
+	 * 0 is unchanged from normal motion.
 	 * 
+	 * @param amount		float from 0 to 1
 	 * @param cameraSpeed
+	 * @param delta
 	 */
-	public void stopForwardBias(float cameraSpeed,float delta) {
-		position.y -= (moveBias*cameraSpeed) * (AnimalBookGame.TARGET_FRAME_RATE*delta);
+	public void adjustForwardBias(float amount,float cameraSpeed,float delta) {
+		position.y -= amount * (moveBias*cameraSpeed) * (AnimalBookGame.TARGET_FRAME_RATE*delta);
 	}
 
 	/**

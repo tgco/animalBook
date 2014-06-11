@@ -143,6 +143,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		dnd = new DragAndDrop();
 		if (Consumable.DropType.values().length > 0){
 			Image test = new Image(new Texture(Gdx.files.internal(Consumable.DropType.values()[0].getTexturePath())));
+			//CRITICAL: tweak these values for niceness of dragging
 			dnd.setDragActorPosition(-test.getWidth()/4f, test.getHeight()/4f);
 		}
 	}
@@ -576,8 +577,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//after all components are taken care of...
 		menuGroup.pack();
 		menuGroup.setPosition(alexButton.getX(), alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE);
-		menuGroupImage.setPosition(alexButton.getX() - .5f*EDGE_TOLERANCE, alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE*2f);
-		menuGroupImage.setSize(alexButton.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE*2f);
+		menuGroupImage.setPosition(menuGroup.getX() - .5f*EDGE_TOLERANCE, menuGroup.getY() - EDGE_TOLERANCE*.5f);
+		menuGroupImage.setSize(menuGroup.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE);
 	}
 
 	/**

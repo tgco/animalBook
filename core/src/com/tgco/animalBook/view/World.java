@@ -1,7 +1,6 @@
 package com.tgco.animalBook.view;
 
 import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -153,7 +152,7 @@ public class World {
 
 
 		market = new Market();
-		market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/8 + laneLength));
+		market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2 + laneLength));
 		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.get("Market").add(market);
 

@@ -107,9 +107,9 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			font.draw(batch, "Your Money: $" + String.valueOf(gameScreen.getWorld().getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 , Gdx.graphics.getHeight() - 3*EDGE_TOLERANCE );
 
 			font.setColor(Color.WHITE);
-			font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-			font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
-			font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE - font.getCapHeight());
+			font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
+			font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
+			font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE - font.getCapHeight());
 
 			batch.end();
 
@@ -288,7 +288,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		levelAnimalButton.setWidth(BUTTON_WIDTH);
 		levelAnimalButton.setHeight(BUTTON_HEIGHT);
 		levelAnimalButton.setX(Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2);
-		levelAnimalButton.setY(Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		levelAnimalButton.setY(Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
 
 		//NEXT LEVEL ANIMAL BUTTON
 		atlas = new TextureAtlas(gameInstance.getLevelHandler().nextLevelTexture());
@@ -303,7 +303,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		nextLevelAnimalButton.setWidth(BUTTON_WIDTH);
 		nextLevelAnimalButton.setHeight(BUTTON_HEIGHT);
 		nextLevelAnimalButton.setX(Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2);
-		nextLevelAnimalButton.setY(Gdx.graphics.getHeight()/3 - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		nextLevelAnimalButton.setY(Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
 
 		//LISTENERS
 		nextLevelButton.addListener(new InputListener() {

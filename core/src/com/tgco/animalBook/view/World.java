@@ -1,7 +1,6 @@
 package com.tgco.animalBook.view;
 
 import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -148,12 +147,14 @@ public class World {
 			increasedCameraSpeed = 4f*cameraSpeed;
 		}
 
+		drawMap.put("Boosts", new Array<ABDrawable>());
+		
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
 
 		market = new Market();
-		market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/8 + laneLength));
+		market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2 + laneLength));
 		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.get("Market").add(market);
 
@@ -385,6 +386,11 @@ public class World {
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
+			//Reduce upward bias if there's a dog
+			if(drawMap.get("Boosts").size > 0) {
+				((Movable) movable).adjustForwardBias(.5f, speed, delta);
+				Gdx.app.log("Doge", "Such adjust, many method call");
+			}
 			//Drop new items
 			if(rand.nextInt(100) <= 50 && drawMap.get("Movable").size <= 30){
 				ABDrawable dropping =  ((Animal)movable).drop(gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
@@ -488,6 +494,10 @@ public class World {
 	 */
 	public void reinitTexturePlayer() {
 		player.resetTexture("objectTextures/player.png");
+	}
+
+	public ArrayMap<String, Array<ABDrawable>> getDrawMap() {
+		return drawMap;
 	}
 
 	public enum Weather{

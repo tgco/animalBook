@@ -31,7 +31,7 @@ public class WorldRenderer {
 	 * Dimensions for the progress bar and slider
 	 */
 	private static final float PROGRESS_BAR_WIDTH = .019f*Gdx.graphics.getWidth();
-	private static final float PROGRESS_BAR_HEIGHT = .31f*Gdx.graphics.getHeight();
+	private static final float PROGRESS_BAR_HEIGHT = .95f*Gdx.graphics.getHeight();
 	private static final float PROGRESS_SLIDER_WIDTH = .019f*Gdx.graphics.getWidth();
 	private static final float PROGRESS_SLIDER_HEIGHT = .015f*Gdx.graphics.getHeight();
 
@@ -76,7 +76,7 @@ public class WorldRenderer {
 		for (Array<ABDrawable> a : drawables.values()){
 			for (ABDrawable drawable : a) {
 				drawable.draw(batch);
-				/*
+				/* will render all object bounds when uncommented
 				batch.end();
 				ShapeRenderer render = new ShapeRenderer();
 				render.setProjectionMatrix(cam.combined);
@@ -93,13 +93,10 @@ public class WorldRenderer {
 
 		SpriteBatch projectedBatch = new SpriteBatch();
 		projectedBatch.begin();
-		//Health bar
-		//projectedBatch.draw(black,Gdx.graphics.getWidth()/2 - .046f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .073f*Gdx.graphics.getHeight(), .093f*Gdx.graphics.getWidth(), .037f*Gdx.graphics.getHeight());
-		//projectedBatch.draw(red,Gdx.graphics.getWidth()/2 - .0435f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .069f*Gdx.graphics.getHeight(), .087f*Gdx.graphics.getWidth()*(playerHealth/100), .028f*Gdx.graphics.getHeight());
 
 		//Progress bar
 		projectedBatch.draw(blue,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
-		projectedBatch.draw(black,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT - PROGRESS_SLIDER_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
+		projectedBatch.draw(black,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
 
 		projectedBatch.end();
 		projectedBatch.dispose();
@@ -133,22 +130,7 @@ public class WorldRenderer {
 				drawable.draw(batch);
 			}
 		}
-
-		batch.end();
-
-		SpriteBatch projectedBatch = new SpriteBatch();
-		projectedBatch.begin();
-
-		//Health bar
-		//projectedBatch.draw(black,Gdx.graphics.getWidth()/2 - .046f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .073f*Gdx.graphics.getHeight(), .093f*Gdx.graphics.getWidth(), .037f*Gdx.graphics.getHeight());
-		//projectedBatch.draw(red,Gdx.graphics.getWidth()/2 - .0435f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - .069f*Gdx.graphics.getHeight(), .087f*Gdx.graphics.getWidth()*(playerHealth/100), .028f*Gdx.graphics.getHeight());
-
-		projectedBatch.end();
-		projectedBatch.dispose();
-
-
-
-		batch.begin();
+		
 		//Swipes on screen
 		for (Swipe swipe : swipes) {
 			if (swipe.getLifeTime() <= 1f) {

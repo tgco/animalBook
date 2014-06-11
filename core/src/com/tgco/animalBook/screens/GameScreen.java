@@ -102,7 +102,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * The font used when rendering strings
 	 */
 	private BitmapFont font;
-	private final float FONT_SCALE = .75f;
+	private final float FONT_SCALE = Gdx.graphics.getHeight()/1000f;
 
 	/**
 	 * textures for health bar, etc
@@ -147,6 +147,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		dnd = new DragAndDrop();
 		if (Consumable.DropType.values().length > 0){
 			Image test = new Image(new Texture(Gdx.files.internal(Consumable.DropType.values()[0].getTexturePath())));
+			//CRITICAL: tweak these values for niceness of dragging
 			dnd.setDragActorPosition(-test.getWidth()/4f, test.getHeight()/4f);
 		}
 	}
@@ -580,8 +581,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//after all components are taken care of...
 		menuGroup.pack();
 		menuGroup.setPosition(alexButton.getX(), alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE);
-		menuGroupImage.setPosition(alexButton.getX() - .5f*EDGE_TOLERANCE, alexButton.getY() - menuGroup.getHeight() - EDGE_TOLERANCE*2f);
-		menuGroupImage.setSize(alexButton.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE*2f);
+		menuGroupImage.setPosition(menuGroup.getX() - .5f*EDGE_TOLERANCE, menuGroup.getY() - EDGE_TOLERANCE*.5f);
+		menuGroupImage.setSize(menuGroup.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE);
 	}
 
 	/**
@@ -985,6 +986,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				if(!dogButton.isDisabled()) {
 					SoundHandler.playButtonClick();
+					getWorld().getPlayer().subtractPlayerMoney(dogMoney);
 					//TODO
 					//Add dog texture. Using cow for now
 					boostArray.add(new Dog("objectTextures/cow.png", new Vector2(0, Gdx.graphics.getHeight()), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY()));
@@ -1032,6 +1034,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesStatusGroup.addActor(fruitfulLabel);
 		upgradesStatusGroup.addActor(longerLabel);
 		upgradesStatusGroup.addActor(moreLabel);
+		upgradesStatusGroup.addActor(dogButton);
 
 		upgradesStatusGroup.pack();
 		upgradesStatusGroup.setPosition(Gdx.graphics.getWidth()/2f - upgradesStatusGroup.getWidth()/2f,
@@ -1047,7 +1050,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesGroup1.addActor(fruitfulButton);
 		upgradesGroup1.addActor(longerButton);
 		upgradesGroup1.addActor(moreButton);
-		//upgradesGroup2.addActor(new Actor());
+		upgradesGroup2.addActor(dogButton);
 
 		upgradesGroup1.pack();
 		upgradesGroup1.setHeight(BUTTON_HEIGHT);
@@ -1304,9 +1307,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(false);
 
 			if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
-				((Button) upgradesGroup1.findActor("dogButton")).setDisabled(true);
+				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(true);
 			else
-				((Button) upgradesGroup1.findActor("dogButton")).setDisabled(false);
+				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(false);
 
 			System.out.println(((Button) upgradesGroup1.findActor("fruitfulButton")).isDisabled());
 		}

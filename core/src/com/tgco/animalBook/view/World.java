@@ -98,7 +98,7 @@ public class World {
 	 * Handles all of the game object rendering responsibility
 	 */
 	private WorldRenderer worldRender;
-	
+
 	private Weather weather;
 
 	/**
@@ -135,8 +135,10 @@ public class World {
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 
-
-		tolerance = drawMap.get("Movable").get(0).getWidth();
+		if (drawMap.get("Movable").size != 0) {
+			tolerance = drawMap.get("Movable").get(0).getWidth();
+		} else tolerance = 100f;
+		
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
@@ -148,7 +150,7 @@ public class World {
 		}
 
 		drawMap.put("Boosts", new Array<ABDrawable>());
-		
+
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
@@ -200,7 +202,7 @@ public class World {
 				}
 			}
 			drawMap.put("Obstacle", obstacles);
-			
+
 		}
 		weather = Weather.CLEAR;
 	}
@@ -448,7 +450,7 @@ public class World {
 			gameInstance.setHitBack(false);
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
-		
+
 		gameInstance.getGameScreen().setInfolabel();
 	}
 

@@ -113,7 +113,7 @@ public class HelpScreen extends ButtonScreenAdapter implements Screen {
 		backButton = new Button(backButtonStyle);
 		backButton.setWidth(BUTTON_WIDTH);
 		backButton.setHeight(BUTTON_HEIGHT);
-		backButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
+		backButton.setX(EDGE_TOLERANCE);
 		backButton.setY(EDGE_TOLERANCE);
 		
 		//LISTENERS

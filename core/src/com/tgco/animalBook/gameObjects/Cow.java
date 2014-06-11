@@ -30,8 +30,8 @@ public class Cow extends Animal {
 	 * 
 	 * @param pos the location in world coordinates that the animal is located at
 	 */
-	public Cow(Vector2 pos) {
-		super(texturePath, pos, 5);
+	public Cow(Vector2 pos, int aX, int aY) {
+		super(texturePath, pos, aX, aY);
 		
 		speed = 1/14f;
 		

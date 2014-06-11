@@ -30,7 +30,7 @@ public class HelpScreen extends ButtonScreenAdapter implements Screen {
 	 * as the background. Initializes a new input multiplexer and processor to handle user inputs.
 	 * 
 	 * @param gameInstance the game instance to reference
-	 * @param fromScreen the screen help is called fron (0, Options; 1, Game)
+	 * @param fromScreen the screen help is called from (0, Options; 1, Game)
 	 */
 	public HelpScreen(AnimalBookGame gameInstance, int fromScreen) {
 		super(gameInstance);

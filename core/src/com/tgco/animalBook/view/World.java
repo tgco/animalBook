@@ -143,9 +143,9 @@ public class World {
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
 
 		if(gameInstance.getLevelHandler().getLevel()>1){
-			increasedCameraSpeed = 2f*cameraSpeed;
-		}else{
 			increasedCameraSpeed = 3f*cameraSpeed;
+		}else{
+			increasedCameraSpeed = 4f*cameraSpeed;
 		}
 
 		//Make the market and set it at the end
@@ -325,7 +325,7 @@ public class World {
 		}
 
 		//draw objects
-		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera,delta);
+		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - camera.position.y)/(laneLength),camera,delta);
 	}
 
 	/**
@@ -435,8 +435,8 @@ public class World {
 			}
 		}
 
-		//check if player reached market
-		if (player.getBounds().overlaps(market.getBounds())) {
+		//check if market is in middle of screen to move on
+		if (Math.abs(market.getPosition().y - camera.position.y) < 20) {
 			SoundHandler.pauseBackgroundMusic();
 			gameInstance.getLevelHandler().resetNextLevelStart();
 			gameInstance.setHitBack(false);

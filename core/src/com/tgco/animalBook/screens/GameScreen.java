@@ -987,10 +987,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				if(!dogButton.isDisabled()) {
 					SoundHandler.playButtonClick();
 					getWorld().getPlayer().subtractPlayerMoney(dogMoney);
-					//TODO
-					//Add dog texture. Using cow for now
-					boostArray.add(new Dog("objectTextures/cow.png", new Vector2(0, Gdx.graphics.getHeight()), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY()));
+					boostArray.add(new Dog(new Vector2(0, Gdx.graphics.getHeight()), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY()));
 					getWorld().getDrawMap().put("Boosts", boostArray);
+					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);

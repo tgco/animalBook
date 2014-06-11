@@ -153,7 +153,7 @@ public class SoundHandler {
 	 * method calls the play method of the Sound object.
 	 */
 	public static void playWhistle() {
-		if (whistle.isPlaying()) {
+		if (!whistle.isPlaying()) {
 			if (soundMuted) {
 				return;
 			} else {

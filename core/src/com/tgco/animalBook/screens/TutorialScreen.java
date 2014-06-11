@@ -16,33 +16,31 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.AnimalBookGame.state;
 import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Consumable;
-import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
-import com.tgco.animalBook.handlers.GameScreenInputHandler;
+import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.handlers.TutorialScreenInputHandler;
 import com.tgco.animalBook.view.TutorialWorld;
-import com.tgco.animalBook.view.World;
 
 /**
  * Extends the button screen to play a sequence of tutorials and teach the player
@@ -67,7 +65,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	private VerticalGroup menuGroup;
 	private Image alexInfoImage, menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
 	private Label infoLabel;
-	private HorizontalGroup inventoryGroup, upgradesGroup, optionsGroup, upgradesStatusGroup;
+	private HorizontalGroup inventoryGroup, upgradesGroup1, upgradesGroup2, optionsGroup, upgradesStatusGroup;
 
 	private DragAndDrop dnd;
 
@@ -741,16 +739,25 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		inventoryGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
 				alexButton.getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
-		//Upgrade Group
-		upgradesGroup = new HorizontalGroup();
-		upgradesGroup.center();
-		upgradesGroup.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
+		//Upgrade Group 1
+		upgradesGroup1 = new HorizontalGroup();
+		upgradesGroup1.center();
+		upgradesGroup1.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
 				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);
-		upgradesGroup.space(EDGE_TOLERANCE);
+		upgradesGroup1.space(EDGE_TOLERANCE);
 
 		upgradesGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
 		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
 				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);
+		
+		//Upgrade Group 2
+		upgradesGroup2 = new HorizontalGroup();
+		upgradesGroup2.center();
+		upgradesGroup2.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
+				alexButton.getY() - 3f*BUTTON_HEIGHT - EDGE_TOLERANCE);
+		upgradesGroup2.space(EDGE_TOLERANCE);
+
+		upgradesGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
 
 		//Option Group
 		optionsGroup = new HorizontalGroup();
@@ -1178,13 +1185,25 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 				upgradesStatusGroup.getHeight() + EDGE_TOLERANCE*2f);
 
 
-		upgradesGroup.addActor(fruitfulButton);
-		upgradesGroup.addActor(longerButton);
-		upgradesGroup.addActor(moreButton);
+		upgradesGroup1.addActor(fruitfulButton);
+		upgradesGroup1.addActor(longerButton);
+		upgradesGroup1.addActor(moreButton);
+		//upgradesGroup2.addActor(new Actor());
 
-		upgradesGroup.pack();
-		upgradesGroup.setHeight(BUTTON_HEIGHT);
-		upgradesGroupImage.setSize(upgradesGroup.getWidth() + EDGE_TOLERANCE*2f, upgradesGroup.getHeight());
+		upgradesGroup1.pack();
+		upgradesGroup1.setHeight(BUTTON_HEIGHT);
+		upgradesGroup2.pack();
+		upgradesGroup2.setHeight(BUTTON_HEIGHT);
+		
+		//For two rows
+		upgradesGroupImage.setSize(Math.max(upgradesGroup1.getWidth(), upgradesGroup2.getWidth()) + EDGE_TOLERANCE*2f,
+				upgradesGroup1.getHeight() + upgradesGroup2.getHeight() - EDGE_TOLERANCE);
+		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
+				alexButton.getY() - 3f*BUTTON_HEIGHT - EDGE_TOLERANCE);
+		//For single row
+		/*upgradesGroupImage.setSize(upgradesGroup1.getWidth() + 2f*EDGE_TOLERANCE, upgradesGroup1.getHeight());
+		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
+				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);*/
 	}
 
 	/**
@@ -1384,28 +1403,28 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public void handleUpgradesMenu(boolean checked){
 		if (checked){
 			buttonStage.addActor(upgradesGroupImage);
-			buttonStage.addActor(upgradesGroup);
+			buttonStage.addActor(upgradesGroup1);
 			buttonStage.addActor(upgradesStatusGroupImage);
 			buttonStage.addActor(upgradesStatusGroup);
 
 			if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
-				((Button) upgradesGroup.findActor("fruitfulButton")).setDisabled(true);
+				((Button) upgradesGroup1.findActor("fruitfulButton")).setDisabled(true);
 			else
-				((Button) upgradesGroup.findActor("fruitfulButton")).setDisabled(false);
+				((Button) upgradesGroup1.findActor("fruitfulButton")).setDisabled(false);
 
 			if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
-				((Button) upgradesGroup.findActor("longerButton")).setDisabled(true);
+				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(true);
 			else
-				((Button) upgradesGroup.findActor("longerButton")).setDisabled(false);
+				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(false);
 
 			if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
-				((Button) upgradesGroup.findActor("moreButton")).setDisabled(true);
+				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(true);
 			else
-				((Button) upgradesGroup.findActor("moreButton")).setDisabled(false);
-			System.out.println(((Button) upgradesGroup.findActor("fruitfulButton")).isDisabled());
+				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(false);
+			System.out.println(((Button) upgradesGroup1.findActor("fruitfulButton")).isDisabled());
 		}
 		else{
-			upgradesGroup.remove();
+			upgradesGroup1.remove();
 			upgradesGroupImage.remove();
 			if (upgradesStatusGroup!=null){
 				upgradesStatusGroup.remove();

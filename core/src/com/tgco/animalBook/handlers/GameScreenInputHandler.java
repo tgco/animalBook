@@ -153,6 +153,7 @@ public class GameScreenInputHandler implements InputProcessor {
 					SoundHandler.playPickup();
 					if (dropping.getDropped() instanceof Animal) {
 						gameScreen.getWorld().removeFromABDrawable(dropping);
+						SoundHandler.playNewAnimalSound(gameInstance.getLevelHandler().getLevel());
 						dropping.dispose();
 					} else {
 						dropping.pickUp();

@@ -617,7 +617,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
 			inventoryButton.bottom();
 			inventoryButton.right();
-
+			inventoryButton.setName(Consumable.DropType.values()[i].getName());
 			dnd.addSource(new Source(inventoryButton){
 
 				/**
@@ -1179,6 +1179,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		if (checked){
 			buttonStage.addActor(inventoryGroupImage);
 			buttonStage.addActor(inventoryGroup);
+			for (Consumable.DropType d : Consumable.DropType.values()){
+				((ImageTextButton) inventoryGroup.findActor(d.getName())).setText("x" + getWorld().getPlayer().getInventory().getInventory().get(d).size);
+			}
 			//from here has to update on button visibility
 		}
 		else{
@@ -1316,6 +1319,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	
 	public void setAlexButton(boolean set) {
 		alexButton.setChecked(set);
+	}
+	public void comingFromHelpScreen(boolean set) {
+		alexButton.setChecked(true);
+		handleMainMenu(true);
+		optionsGroupButton.setChecked(true);
+		handleOptionsMenu(true);
 	}
 
 	@Override

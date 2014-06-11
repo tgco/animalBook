@@ -323,6 +323,12 @@ public class TutorialWorld {
 					movable.dispose();
 				}
 			}
+			
+			//check if market is at the middle of the screen
+			if (Math.abs(market.getPosition().y - camera.position.y) < 20) {
+				SoundHandler.pauseBackgroundMusic();
+				gameInstance.setScreen(new TutorialMarketScreen(gameInstance, (TutorialScreen)gameInstance.getScreen()));
+			}
 
 
 			//check for collisions between movable and obstacles

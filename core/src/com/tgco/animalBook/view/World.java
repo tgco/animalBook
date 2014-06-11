@@ -436,6 +436,8 @@ public class World {
 			gameInstance.setHitBack(false);
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
+		
+		gameInstance.getGameScreen().setInfolabel();
 	}
 
 	/**

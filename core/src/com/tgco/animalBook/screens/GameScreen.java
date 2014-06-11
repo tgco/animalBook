@@ -331,16 +331,19 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		infoLabelStyle.font = font;
 		infoLabelStyle.fontColor = Color.WHITE;
 		infoLabelStyle.font.setScale(FONT_SCALE);
-		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
+		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount()
+				, infoLabelStyle);
+		infoLabel.pack();
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
-				alexButton.getY() + alexButton.getHeight() - 2.5f*EDGE_TOLERANCE);
-
+				alexButton.getY() + alexButton.getHeight() - infoLabel.getHeight() - 1.7f*EDGE_TOLERANCE);
+		infoLabel.setAlignment(Align.left);
+		
 		//The label's background image
 		alexInfoImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
-		alexInfoImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
-				infoLabel.getY() - EDGE_TOLERANCE*.5f);
-		alexInfoImage.setSize(11f*EDGE_TOLERANCE, alexButton.getHeight() - 2f*EDGE_TOLERANCE);
-
+		alexInfoImage.setSize(11f*EDGE_TOLERANCE, alexButton.getY() + alexButton.getHeight() - infoLabel.getY() + .5f*EDGE_TOLERANCE);
+		alexInfoImage.setPosition(infoLabel.getX() - .5f*EDGE_TOLERANCE,
+				infoLabel.getY() - .5f*EDGE_TOLERANCE);
 		buttonStage.addActor(alexInfoImage);
 		buttonStage.addActor(infoLabel);
 
@@ -859,7 +862,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(fruitfulMoney) + "\n" +
 									String.format("%.1f",((Animal) getWorld().getMovables().get(0)).getFertilityRate())+ "%"
 							);
-					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
+					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
@@ -1427,5 +1431,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void pause() {
 		Gdx.app.log("My Tagg", "This is screen pause");
 
+	}
+	
+	public void setInfolabel(){
+		infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 	}
 }

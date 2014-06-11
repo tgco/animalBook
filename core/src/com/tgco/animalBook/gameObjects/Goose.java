@@ -30,8 +30,8 @@ public class Goose extends Animal {
 	 * 
 	 * @param pos the desired position in world coordinates for this animal
 	 */
-	public Goose(Vector2 pos) {
-		super(texturePath, pos, 1);
+	public Goose(Vector2 pos,  int aX, int aY) {
+		super(texturePath, pos, aX, aY);
 		speed = 1/10f;
 
 		//width = .336*height

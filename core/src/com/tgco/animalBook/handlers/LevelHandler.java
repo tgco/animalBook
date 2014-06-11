@@ -77,6 +77,7 @@ public class LevelHandler {
 		this.kidMode = kidMode;
 		storedAmount = 0;
 
+		//regular +5 for each level. kidMode +3
 		switch(level) {
 		case 1:
 			if (kidMode)
@@ -86,25 +87,25 @@ public class LevelHandler {
 			break;
 		case 2:
 			if (kidMode)
-				passLevelAmount = 10;
+				passLevelAmount = 8;
 			else
 				passLevelAmount = 10;
 			break;
 		case 3:
 			if (kidMode)
-				passLevelAmount = 15;
+				passLevelAmount = 11;
 			else
 				passLevelAmount = 15;
 			break;
 		case 4:
 			if (kidMode)
-				passLevelAmount = 20;
+				passLevelAmount = 14;
 			else
 				passLevelAmount = 20;
 			break;
 		case 5:
 			if (kidMode)
-				passLevelAmount = 25;
+				passLevelAmount = 17;
 			else
 				passLevelAmount = 25;
 			break;
@@ -139,19 +140,19 @@ public class LevelHandler {
 				animalHeight = (float) (Gdx.graphics.getHeight()/2 -1*x*x - 2*x );
 				switch(level) {
 				case 1 :
-					animals.add(new Goose(new Vector2(animalWidth, animalHeight)));
+					animals.add(new Goose(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
 					break;
 				case 2 :
-					animals.add(new Pig(new Vector2(animalWidth, animalHeight)));
+					animals.add(new Pig(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
 					break;
 				case 3 :
-					animals.add(new Goat(new Vector2(animalWidth, animalHeight)));
+					animals.add(new Goat(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
 					break;
 				case 4 :
-					animals.add(new Sheep(new Vector2(animalWidth, animalHeight)));
+					animals.add(new Sheep(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
 					break;
 				case 5 :
-					animals.add(new Cow(new Vector2(animalWidth, animalHeight)));
+					animals.add(new Cow(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
 					break;
 				}
 
@@ -162,19 +163,19 @@ public class LevelHandler {
 				animalHeight = (float) (Gdx.graphics.getHeight()/2 -1*x*x - 2*x );
 				switch(level) {
 				case 1 :
-					animals.add(new Goose(new Vector2(animalWidth, animalHeight)));
+					animals.add(new Goose(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
 					break;
 				case 2 :
-					animals.add(new Pig(new Vector2(animalWidth, animalHeight)));
+					animals.add(new Pig(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
 					break;
 				case 3 :
-					animals.add(new Goat(new Vector2(animalWidth, animalHeight)));
+					animals.add(new Goat(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
 					break;
 				case 4 :
-					animals.add(new Sheep(new Vector2(animalWidth, animalHeight)));
+					animals.add(new Sheep(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
 					break;
 				case 5 :
-					animals.add(new Cow(new Vector2(animalWidth, animalHeight)));
+					animals.add(new Cow(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
 					break;
 				}
 
@@ -193,9 +194,9 @@ public class LevelHandler {
 	 */
 	public float returnCameraSpeed(int level) {
 		if (kidMode)
-			return .25f*level;
+			return .24f*level;
 		else
-			return .25f*level;
+			return .26f*level;
 	}
 
 	/**
@@ -206,9 +207,9 @@ public class LevelHandler {
 	 */
 	public float returnLaneLength(int level) {
 		if (kidMode)
-			return 800 + 1200*(level - 1);
+			return 800 + 1000*(level - 1);
 		else
-			return 800 + 1200*(level - 1);
+			return 1000 + 1200*(level - 1);
 	}
 
 	/**
@@ -308,25 +309,25 @@ public class LevelHandler {
 			break;
 		case 2:
 			if (kidMode)
-				passLevelAmount = 10;
+				passLevelAmount = 8;
 			else
 				passLevelAmount = 10;
 			break;
 		case 3:
 			if (kidMode)
-				passLevelAmount = 15;
+				passLevelAmount = 11;
 			else
 				passLevelAmount = 15;
 			break;
 		case 4:
 			if (kidMode)
-				passLevelAmount = 20;
+				passLevelAmount = 14;
 			else
 				passLevelAmount = 20;
 			break;
 		case 5:
 			if (kidMode)
-				passLevelAmount = 25;
+				passLevelAmount = 17;
 			else
 				passLevelAmount = 25;
 			break;
@@ -400,5 +401,67 @@ public class LevelHandler {
 
 	public boolean isKidMode() {
 		return kidMode;
+	}
+	
+	public int animalChangeX(){
+		switch(level) {
+		case 1:
+			if (kidMode)
+				return  (int) (.139f*Gdx.graphics.getWidth());
+			else
+				return  (int) (.171f*Gdx.graphics.getWidth());
+		case 2:
+			if (kidMode)
+				return  (int) (.2f*Gdx.graphics.getWidth());
+			else
+				return  (int) (.285f*Gdx.graphics.getWidth());
+		case 3:
+			if (kidMode)
+				return  (int) (.285f*Gdx.graphics.getWidth());
+			else
+				return  (int) (.428f*Gdx.graphics.getWidth());
+		case 4:
+			if (kidMode)
+				return  (int) (.371f*Gdx.graphics.getWidth());
+			else
+				return  (int) (.571f*Gdx.graphics.getWidth());
+		case 5:
+			if (kidMode)
+				return  (int) (.485f*Gdx.graphics.getWidth());
+			else
+				return  (int) (.714f*Gdx.graphics.getWidth());
+		}
+		return  (int) (.139f*Gdx.graphics.getWidth()*level);
+	}
+	
+	public int animalChangeY(){
+		switch(level) {
+		case 1:
+			if (kidMode)
+				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+			else
+				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+		case 2:
+			if (kidMode)
+				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+			else
+				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+		case 3:
+			if (kidMode)
+				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+			else
+				return (int) (.221f*Gdx.graphics.getHeight()*level);
+		case 4:
+			if (kidMode)
+				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+			else
+				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+		case 5:
+			if (kidMode)
+				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+			else
+				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+		}
+		return  (int) (.221f*Gdx.graphics.getHeight()*level);
 	}
 }

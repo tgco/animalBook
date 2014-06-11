@@ -30,8 +30,8 @@ public class Sheep extends Animal {
 	 * 
 	 * @param pos the desired position in world coordinates for this animal
 	 */
-	public Sheep(Vector2 pos) {
-		super(texturePath, pos, 4);
+	public Sheep(Vector2 pos, int aX, int aY) {
+		super(texturePath, pos, aX, aY);
 		
 		speed = 1/14f;
 		width = .093f*Gdx.graphics.getWidth();

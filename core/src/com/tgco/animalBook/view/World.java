@@ -196,11 +196,6 @@ public class World {
 			}
 			drawMap.put("Obstacle", obstacles);
 		}
-
-
-		//Add player to drawmap
-		//drawMap.put("Player", new Array<ABDrawable>());
-		//drawMap.get("Player").add(player);
 	}
 
 
@@ -490,3 +485,8 @@ public class World {
 	}
 
 }
+/*
+ * if (wind.getPosition().x < 0 || wind.getPosition().x > Gdx.graphics.getWidth()){
+				winds.removeValue(wind, false);
+				wind.dispose();
+			}*/

@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Swipe;
+import com.tgco.animalBook.gameObjects.Wind;
 
 
 /**
@@ -24,6 +25,7 @@ public class WorldRenderer {
 	 * Stores all swipes to be drawn on screen
 	 */
 	private Array<Swipe> swipes;
+	private Array<Wind> winds;
 
 	/**
 	 * Dimensions for the progress bar and slider
@@ -112,7 +114,6 @@ public class WorldRenderer {
 			} else
 				swipe.draw(batch,delta);
 		}
-
 	}
 
 	/**

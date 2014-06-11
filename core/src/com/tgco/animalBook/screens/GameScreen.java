@@ -249,8 +249,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
-
-
 	/**
 	 * Initializes all button objects
 	 */

@@ -19,9 +19,10 @@ public class SoundHandler {
 	private static Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/farmNoise.wav"));
 	private static Music storyBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/storyNoise.wav"));
 	private static Music marketBackgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/marketNoise.mp3"));
-	private static Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
 	private static Music whistle = Gdx.audio.newMusic(Gdx.files.internal("sounds/whistle.wav"));
+	private static Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
 	private static Sound pickup = Gdx.audio.newSound(Gdx.files.internal("sounds/pickup.wav"));
+	private static Sound gooseHonk = Gdx.audio.newSound(Gdx.files.internal("sounds/gooseHonk.wav"));
 
 	/**
 	 * Booleans that store if the sound or music is currently muted
@@ -175,6 +176,30 @@ public class SoundHandler {
 			return;
 		} else {
 			pickup.play(1);
+		}
+	}
+	
+	public static void playNewAnimalSound(int level) {
+		if (soundMuted) {
+			return;
+		} else {
+			switch(level) {
+			case 1:
+				gooseHonk.play(.2f);
+				break;
+			case 2:
+				//play pig sound
+				break;
+			case 3:
+				//play goat sound
+				break;
+			case 4:
+				//play sheep sound
+				break;
+			case 5:
+				//play cow sound
+				break;
+			}
 		}
 	}
 

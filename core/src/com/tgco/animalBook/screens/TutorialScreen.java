@@ -98,6 +98,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	 * The font used when rendering strings
 	 */
 	private BitmapFont font;
+	private final float FONT_SCALE = Gdx.graphics.getHeight()/1000f;
 
 	/**
 	 * If the tutorial screen is paused
@@ -162,7 +163,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 		//Initialize rendering objects
 		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
-		font.setScale(.75f);
+		font.setScale(FONT_SCALE);
 		//font = new BitmapFont();
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(tutorialWorld.getCamera().combined);
@@ -516,7 +517,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		LabelStyle infoLabelStyle = new LabelStyle();
 		infoLabelStyle.font = font;
 		infoLabelStyle.fontColor = Color.WHITE;
-		infoLabelStyle.font.setScale(.75f);
+		infoLabelStyle.font.setScale(FONT_SCALE);
 		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
 				alexButton.getY() + alexButton.getHeight() - 2.5f*EDGE_TOLERANCE);
@@ -843,6 +844,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 				}
 			};
 			inventoryButton.getLabel().setColor(Color.RED);
+			inventoryButton.getStyle().font.setScale(FONT_SCALE);
 			inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
 			inventoryButton.bottom();
 			inventoryButton.right();

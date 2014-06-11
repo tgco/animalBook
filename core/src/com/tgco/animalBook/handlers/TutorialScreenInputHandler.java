@@ -214,6 +214,11 @@ public class TutorialScreenInputHandler implements InputProcessor {
 					//change to adjust how much a goose reacts to a drag (should depend on distance of goose from drag center)
 					float reactionScale = 70000 * 1/positionCenter.cpy().sub(dragCenter).len();
 
+					//cap the amount of influence to avoid flying animals when you swip on them
+					if (reactionScale > 7000)
+						reactionScale = 7000;
+					
+					Gdx.app.log("Influence scale", String.valueOf(reactionScale));
 					movable.addToCurrentTarget(perpProjection.cpy().nor().scl(reactionScale));
 
 					//Add a line to draw the direction the goose was influenced

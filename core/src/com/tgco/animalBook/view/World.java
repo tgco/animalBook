@@ -99,6 +99,8 @@ public class World {
 	 * Handles all of the game object rendering responsibility
 	 */
 	private WorldRenderer worldRender;
+	
+	private Weather weather;
 
 	/**
 	 * Constructor with game instance and pulls stored info from gameInstance if there is anything stored
@@ -133,8 +135,8 @@ public class World {
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
-		
-		
+
+
 		tolerance = drawMap.get("Movable").get(0).getWidth();
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
@@ -197,7 +199,9 @@ public class World {
 				}
 			}
 			drawMap.put("Obstacle", obstacles);
+			
 		}
+		weather = Weather.CLEAR;
 	}
 
 
@@ -439,7 +443,7 @@ public class World {
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 	}
-	
+
 	/**
 	 * on reseting from Main menu this reinitalizes the movable object pictures
 	 */
@@ -466,7 +470,7 @@ public class World {
 			((Obstacle) obstacle).resetText();
 		}
 	}
-	
+
 	/**
 	 * returns the obstacles array for use in changing to Main Menu and gameScreen
 	 * @return
@@ -478,12 +482,29 @@ public class World {
 		}
 		return obstacles;
 	}
-	
+
 	/**
 	 * on resetting objects, this reinitializes the players texture
 	 */
 	public void reinitTexturePlayer() {
 		player.resetTexture("objectTextures/player.png");
+	}
+
+	public enum Weather{
+		CLEAR ("Clear"),
+		RAINY ("Rainy"),
+		WINDY ("Windy");
+
+		private Weather(String weatherName){
+			this.weatherName = weatherName;
+		}
+
+		private final String weatherName;
+
+		public final String getName(){
+			return weatherName;
+		}
+
 	}
 
 }

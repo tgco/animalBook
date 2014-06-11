@@ -98,7 +98,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * The font used when rendering strings
 	 */
 	private BitmapFont font;
-	private final float FONT_SCALE = .75f;
+	private final float FONT_SCALE = Gdx.graphics.getHeight()/1000f;
 
 	/**
 	 * textures for health bar, etc
@@ -1000,7 +1000,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesGroup1.addActor(fruitfulButton);
 		upgradesGroup1.addActor(longerButton);
 		upgradesGroup1.addActor(moreButton);
-		//upgradesGroup2.addActor(new Actor());
+		upgradesGroup2.addActor(dogButton);
 
 		upgradesGroup1.pack();
 		upgradesGroup1.setHeight(BUTTON_HEIGHT);
@@ -1257,9 +1257,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(false);
 
 			if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
-				((Button) upgradesGroup1.findActor("dogButton")).setDisabled(true);
+				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(true);
 			else
-				((Button) upgradesGroup1.findActor("dogButton")).setDisabled(false);
+				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(false);
 
 			System.out.println(((Button) upgradesGroup1.findActor("fruitfulButton")).isDisabled());
 		}

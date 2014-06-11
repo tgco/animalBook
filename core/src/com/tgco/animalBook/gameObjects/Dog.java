@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
-public class Dog extends Animal {
 
-	public Dog(String texturePath, Vector2 position, int animalX, int animalY) {
+public class Dog extends Animal {
+	private static final String texturePath = "objectTextures/cow.png";
+
+	public Dog(Vector2 position, int animalX, int animalY) {
 		super(texturePath, position, animalX, animalY);
 		// TODO Auto-generated constructor stub
 	}

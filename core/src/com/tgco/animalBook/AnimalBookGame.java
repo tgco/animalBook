@@ -169,11 +169,14 @@ public class AnimalBookGame extends Game {
 			//Player data
 			prefs.putInteger("money", ((Player) levelData.get(1)).getPlayerMoney());
 			prefs.putFloat("health", ((Player) levelData.get(1)).getHealth());
-			prefs.putInteger("Eggs", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[0]).size);
-			prefs.putInteger("Bacon", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[1]).size);
-			prefs.putInteger("Cheese", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[2]).size);
-			prefs.putInteger("Wool", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[3]).size);
-			prefs.putInteger("Milk", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[4]).size);
+			for (int i = 0; i < Consumable.DropType.values().length; i++){
+				prefs.putInteger(Consumable.DropType.values()[i].getName(),
+						((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[i]).size);
+			}
+			//prefs.putInteger("Bacon", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[1]).size);
+			//prefs.putInteger("Cheese", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[2]).size);
+			//prefs.putInteger("Wool", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[3]).size);
+			//prefs.putInteger("Milk", ((Player) levelData.get(1)).getInventory().getInventory().get(Consumable.DropType.values()[4]).size);
 
 			//animal data,   0 = fruitfullness, 1=dropInterval, 2=duration
 			prefs.putInteger("numAnimals", levelHandler.getNextLevelStart());
@@ -287,8 +290,14 @@ public class AnimalBookGame extends Game {
 
 
 		//the consumables adding back in
+		for (int i = 0; i < Consumable.DropType.values().length; i++){
+			numConsumables = prefs.getInteger(Consumable.DropType.values()[i].getName());
+			for(int j =0; j<numConsumables; j++){
+				player.getInventory().addItem(new Consumable(DropType.values()[i]));
+			}
+		}
 
-		numConsumables = prefs.getInteger("Eggs");
+		/*numConsumables = prefs.getInteger("Eggs");
 		for(int i =0; i<numConsumables; i++){
 			player.getInventory().addItem(new Consumable(DropType.EGG));
 		}
@@ -303,15 +312,15 @@ public class AnimalBookGame extends Game {
 			player.getInventory().addItem(new Consumable(DropType.CHEESE));
 		}
 
-		numConsumables = prefs.getInteger("Wool");
+		numConsumables = prefs.getInteger("Mutton");
 		for(int i =0; i<numConsumables; i++){
-			player.getInventory().addItem(new Consumable(DropType.WOOL));
+			player.getInventory().addItem(new Consumable(DropType.MUTTON));
 		}
 
 		numConsumables = prefs.getInteger("Milk");
 		for(int i =0; i<numConsumables; i++){
 			player.getInventory().addItem(new Consumable(DropType.MILK));
-		}
+		}*/
 
 
 		//animal data
@@ -357,7 +366,14 @@ public class AnimalBookGame extends Game {
 
 
 			//the consumables adding back in
+			for (int i = 0; i < Consumable.DropType.values().length; i++){
+				numConsumables = prefs.getInteger(Consumable.DropType.values()[i].getName());
+				for(int j =0; j<numConsumables; j++){
+					player.getInventory().addItem(new Consumable(DropType.values()[i]));
+				}
+			}
 
+/*
 			numConsumables = prefs.getInteger("Eggs");
 			for(int i =0; i<numConsumables; i++){
 				player.getInventory().addItem(new Consumable(DropType.EGG));
@@ -375,14 +391,14 @@ public class AnimalBookGame extends Game {
 
 			numConsumables = prefs.getInteger("Wool");
 			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.WOOL));
+				player.getInventory().addItem(new Consumable(DropType.MUTTON));
 			}
 
 			numConsumables = prefs.getInteger("Milk");
 			for(int i =0; i<numConsumables; i++){
 				player.getInventory().addItem(new Consumable(DropType.MILK));
 			}
-		
+		*/
 		
 			//animal data
 			levelHandler.setNextLevelStart(prefs.getInteger("numAnimals"));
@@ -409,11 +425,14 @@ public class AnimalBookGame extends Game {
 		//Player data
 		prefs.putInteger("money", 0);
 		prefs.putFloat("health", 0);
-		prefs.putInteger("Eggs", 0);
-		prefs.putInteger("Bacon", 0);
+		
+		for (int i = 0; i < Consumable.DropType.values().length; i++)
+			prefs.putInteger(Consumable.DropType.values()[i].getName(), 0);
+		
+		/*prefs.putInteger("Bacon", 0);
 		prefs.putInteger("Cheese", 0);
 		prefs.putInteger("Wool", 0);
-		prefs.putInteger("Milk", 0);
+		prefs.putInteger("Milk", 0);*/
 
 		//animal data,   0 = fruitfullness, 1=dropInterval, 2=duration
 		prefs.putInteger("numAnimals", 0);

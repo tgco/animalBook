@@ -64,7 +64,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private VerticalGroup menuGroup;
 	private Image alexInfoImage, menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
 	private Label infoLabel;
-	private HorizontalGroup inventoryGroup, upgradesGroup, optionsGroup, upgradesStatusGroup;
+	private HorizontalGroup inventoryGroup, upgradesGroup1, upgradesGroup2, optionsGroup, upgradesStatusGroup;
 
 	private DragAndDrop dnd;
 
@@ -91,7 +91,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * The font used when rendering strings
 	 */
 	private BitmapFont font;
-
+	private final float FONT_SCALE = .75f;
 
 	/**
 	 * textures for health bar, etc
@@ -118,7 +118,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		//Initialize rendering objects
 		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
-		font.setScale(.75f);
+		font.setScale(FONT_SCALE);
 		//font = new BitmapFont();
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
@@ -249,6 +249,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		initializeButtons();
 	}
 
+
+
 	/**
 	 * Initializes all button objects
 	 */
@@ -288,7 +290,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		LabelStyle infoLabelStyle = new LabelStyle();
 		infoLabelStyle.font = font;
 		infoLabelStyle.fontColor = Color.WHITE;
-		infoLabelStyle.font.setScale(.75f);
+		infoLabelStyle.font.setScale(FONT_SCALE);
 		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
 				alexButton.getY() + alexButton.getHeight() - 2.5f*EDGE_TOLERANCE);
@@ -315,8 +317,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 				if (payload.getObject() instanceof Consumable)
-					if (((Consumable)payload.getObject()).getType() == Consumable.DropType.WOOL ||
-					getWorld().getPlayer().getHealth() == 100f){
+					if (getWorld().getPlayer().getHealth() == 100f){
 						this.getActor().setColor(Color.RED);
 						return false;
 					}
@@ -510,16 +511,21 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
 				alexButton.getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
-		//Upgrade Group
-		upgradesGroup = new HorizontalGroup();
-		upgradesGroup.center();
-		upgradesGroup.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
+		//Upgrade Group 1
+		upgradesGroup1 = new HorizontalGroup();
+		upgradesGroup1.center();
+		upgradesGroup1.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
 				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);
-		upgradesGroup.space(EDGE_TOLERANCE);
+		upgradesGroup1.space(EDGE_TOLERANCE);
+
+		//Upgrade Group 2
+		upgradesGroup2 = new HorizontalGroup();
+		upgradesGroup2.center();
+		upgradesGroup2.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
+				alexButton.getY() - 3f*BUTTON_HEIGHT - EDGE_TOLERANCE);
+		upgradesGroup2.space(EDGE_TOLERANCE);
 
 		upgradesGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
-		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
-				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);
 
 		//Option Group
 		optionsGroup = new HorizontalGroup();
@@ -571,6 +577,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				}
 			};
 			inventoryButton.getLabel().setColor(Color.RED);
+			inventoryButton.getStyle().font.setScale(FONT_SCALE);
 			inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
 			inventoryButton.bottom();
 			inventoryButton.right();
@@ -718,7 +725,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		LabelStyle upgradeLabelStyle = new LabelStyle();
 		//upgradeLabelStyle.font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
 		upgradeLabelStyle.font = font;
-		upgradeLabelStyle.font.setScale(1.10f);
 		//upgradeLabelStyle.fontColor = Color.WHITE;
 
 		upgradeLabel = new Label(
@@ -918,13 +924,25 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				upgradesStatusGroup.getHeight() + EDGE_TOLERANCE*2f);
 
 
-		upgradesGroup.addActor(fruitfulButton);
-		upgradesGroup.addActor(longerButton);
-		upgradesGroup.addActor(moreButton);
+		upgradesGroup1.addActor(fruitfulButton);
+		upgradesGroup1.addActor(longerButton);
+		upgradesGroup1.addActor(moreButton);
+		//upgradesGroup2.addActor(new Actor());
 
-		upgradesGroup.pack();
-		upgradesGroup.setHeight(BUTTON_HEIGHT);
-		upgradesGroupImage.setSize(upgradesGroup.getWidth() + EDGE_TOLERANCE*2f, upgradesGroup.getHeight());
+		upgradesGroup1.pack();
+		upgradesGroup1.setHeight(BUTTON_HEIGHT);
+		upgradesGroup2.pack();
+		upgradesGroup2.setHeight(BUTTON_HEIGHT);
+		
+		//For two rows
+		upgradesGroupImage.setSize(Math.max(upgradesGroup1.getWidth(), upgradesGroup2.getWidth()) + EDGE_TOLERANCE*2f,
+				upgradesGroup1.getHeight() + upgradesGroup2.getHeight() - EDGE_TOLERANCE);
+		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
+				alexButton.getY() - 3f*BUTTON_HEIGHT - EDGE_TOLERANCE);
+		//For single row
+		/*upgradesGroupImage.setSize(upgradesGroup1.getWidth() + 2f*EDGE_TOLERANCE, upgradesGroup1.getHeight());
+		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
+				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);*/
 	}
 
 	/**
@@ -1142,28 +1160,30 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void handleUpgradesMenu(boolean checked){
 		if (checked){
 			buttonStage.addActor(upgradesGroupImage);
-			buttonStage.addActor(upgradesGroup);
+			buttonStage.addActor(upgradesGroup1);
 			buttonStage.addActor(upgradesStatusGroupImage);
 			buttonStage.addActor(upgradesStatusGroup);
+			buttonStage.addActor(upgradesGroup2);
 
 			if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
-				((Button) upgradesGroup.findActor("fruitfulButton")).setDisabled(true);
+				((Button) upgradesGroup1.findActor("fruitfulButton")).setDisabled(true);
 			else
-				((Button) upgradesGroup.findActor("fruitfulButton")).setDisabled(false);
+				((Button) upgradesGroup1.findActor("fruitfulButton")).setDisabled(false);
 
 			if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
-				((Button) upgradesGroup.findActor("longerButton")).setDisabled(true);
+				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(true);
 			else
-				((Button) upgradesGroup.findActor("longerButton")).setDisabled(false);
+				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(false);
 
 			if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
-				((Button) upgradesGroup.findActor("moreButton")).setDisabled(true);
+				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(true);
 			else
-				((Button) upgradesGroup.findActor("moreButton")).setDisabled(false);
-			System.out.println(((Button) upgradesGroup.findActor("fruitfulButton")).isDisabled());
+				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(false);
+			System.out.println(((Button) upgradesGroup1.findActor("fruitfulButton")).isDisabled());
 		}
 		else{
-			upgradesGroup.remove();
+			upgradesGroup1.remove();
+			upgradesGroup2.remove();
 			upgradesGroupImage.remove();
 			if (upgradesStatusGroup!=null){
 				upgradesStatusGroup.remove();

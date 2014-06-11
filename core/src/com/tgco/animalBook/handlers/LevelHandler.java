@@ -26,10 +26,7 @@ public class LevelHandler {
 	 */
 	private int level;
 
-	/**
-	 * true if the game is in kid mode, where levels are easier
-	 */
-	private static boolean kidMode = false;
+	
 
 	/**
 	 * The amount of animals needed in order to progress to the next level
@@ -58,6 +55,10 @@ public class LevelHandler {
 	 */
 	private boolean onRetry = false;
 
+
+
+	private boolean kidMode;
+
 	/**
 	 * Boolean to determine if the tutorial should be played
 	 */
@@ -70,10 +71,10 @@ public class LevelHandler {
 	 * 
 	 * @param level the level that the handler will return values for
 	 */
-	public LevelHandler(int level) {
+	public LevelHandler(int level, boolean kidMode) {
 		Gdx.app.log("My Tagg", "The initializing of the level Handler");
 		this.level = level;
-
+		this.kidMode = kidMode;
 		storedAmount = 0;
 
 		switch(level) {
@@ -393,11 +394,11 @@ public class LevelHandler {
 		onRetry = true;
 	}
 	
+	public void updateKidMode(boolean kM){
+		this.kidMode = kM;
+	}
+
 	public boolean isKidMode() {
 		return kidMode;
-	}
-	
-	public void setKidMode(boolean kidMode) {
-		this.kidMode = kidMode;
 	}
 }

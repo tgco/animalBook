@@ -53,6 +53,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		Gdx.input.setCatchBackKey(true);
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		SoundHandler.toggleMusic();
 
 	}
 
@@ -186,6 +187,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
+				SoundHandler.toggleMusic();
 				//Change the screen when the button is let go
 				gameInstance.setData();
 				if(gameInstance.getLevelHandler().isDoTutorial()){
@@ -204,6 +206,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
+				SoundHandler.toggleMusic();
 				//Change the screen when the button is let go
 				Gdx.input.setCatchBackKey(true);
 				gameInstance.setScreen(new OptionsScreen(gameInstance));
@@ -219,6 +222,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!testButton.isDisabled()){
 					SoundHandler.playButtonClick();
+					SoundHandler.toggleMusic();
 					gameInstance.setScreen(new StoryScreen(gameInstance));
 				}
 			}

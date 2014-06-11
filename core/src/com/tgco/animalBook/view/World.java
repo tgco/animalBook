@@ -441,6 +441,8 @@ public class World {
 			}
 		}
 
+		gameInstance.getGameScreen().setInfolabel();
+		
 		//check if market is in middle of screen to move on
 		if (Math.abs(market.getPosition().y - camera.position.y) < 20) {
 			SoundHandler.pauseBackgroundMusic();
@@ -448,8 +450,6 @@ public class World {
 			gameInstance.setHitBack(false);
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
-		
-		gameInstance.getGameScreen().setInfolabel();
 	}
 
 	/**

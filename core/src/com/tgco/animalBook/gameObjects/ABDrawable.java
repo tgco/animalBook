@@ -27,15 +27,15 @@ public abstract class ABDrawable {
 	protected Vector2 position;
 
 	/** 
-	 * The consturctor sets up the pciture, how big it is, and the bounds.
+	 * The constructor sets up the picture, how big it is, and the bounds.
 	 * @param texturePath the string of where the picture is
 	 */
 	public ABDrawable(String texturePath) {
 		this.texture = new Texture(Gdx.files.internal(texturePath));
 		this.texturePath = texturePath;
 		position = new Vector2();
-		width = .093f*Gdx.graphics.getWidth();
-		height = .147f*Gdx.graphics.getHeight();
+		//width = .077f*Gdx.graphics.getWidth();
+		//height = .147f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 	

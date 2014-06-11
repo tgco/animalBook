@@ -1,7 +1,6 @@
 package com.tgco.animalBook.view;
 
 import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -99,6 +98,8 @@ public class World {
 	 * Handles all of the game object rendering responsibility
 	 */
 	private WorldRenderer worldRender;
+	
+	private Weather weather;
 
 	/**
 	 * Constructor with game instance and pulls stored info from gameInstance if there is anything stored
@@ -120,7 +121,7 @@ public class World {
 
 		//spot 3 is storing movable array
 		if(levelSize && gameInstance.getLevelData().get(2) !=null){
-			//Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
+			Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
 			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
 			reinitTextureMovable();
 		}else{
@@ -134,32 +135,37 @@ public class World {
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 
+
 		tolerance = drawMap.get("Movable").get(0).getWidth();
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
 
 		if(gameInstance.getLevelHandler().getLevel()>1){
-			increasedCameraSpeed = 2f*cameraSpeed;
-		}else{
 			increasedCameraSpeed = 3f*cameraSpeed;
+		}else{
+			increasedCameraSpeed = 4f*cameraSpeed;
 		}
 
+		drawMap.put("Boosts", new Array<ABDrawable>());
+		
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
 
 		market = new Market();
-		market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/8 + laneLength));
+		market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2 + laneLength));
 		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.get("Market").add(market);
 
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
+			Gdx.app.log("My Tagg", "The hit back is " + gameInstance.isHitBack());
 			if (!gameInstance.isHitBack()) {
 				reinitTexturePlayer();
 				player.resetPlayerPosition();
 			} else {
+				//Gdx.app.log("My Tagg", "the player pos " + );
 				camera.position.set(Gdx.graphics.getWidth()/2, player.getPosition().cpy().y + 3f*Gdx.graphics.getHeight()/8, 0);
 				reinitTexturePlayer();
 				market.setPosition(new Vector2(player.getPosition().cpy().x, Gdx.graphics.getHeight()/8 + laneLength + player.getHeight()));
@@ -187,19 +193,16 @@ public class World {
 				if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) > 0 && rand.nextInt(1) == 0){
 					o = new Obstacle();
 					o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
-					System.out.println("new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i );
+					Gdx.app.log("Obstacle", "new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i);
 					if (o.getPosition().dst(market.getPosition()) > 250f)
 						obstacles.add(o);
 					i += 400f;
 				}
 			}
 			drawMap.put("Obstacle", obstacles);
+			
 		}
-
-
-		//Add player to drawmap
-		drawMap.put("Player", new Array<ABDrawable>());
-		drawMap.get("Player").add(player);
+		weather = Weather.CLEAR;
 	}
 
 
@@ -323,7 +326,7 @@ public class World {
 		}
 
 		//draw objects
-		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - player.getPosition().y - player.getHeight())/(laneLength),camera,delta);
+		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - camera.position.y)/(laneLength),camera,delta);
 	}
 
 	/**
@@ -352,18 +355,19 @@ public class World {
 		//Update Camera bounds
 		cameraBounds.setY(camera.position.y - Gdx.graphics.getHeight()/2 - tolerance);
 		Vector3 buttonLoc = new Vector3(EDGE_TOLERANCE + BUTTON_WIDTH/2, 
-				1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
+				BUTTON_HEIGHT - EDGE_TOLERANCE, 0);
 		camera.unproject(buttonLoc);
 		Vector2 buttonLoc2 = new Vector2();
 		Rectangle buttonBounds = new Rectangle();
 
 		for (ABDrawable dropped : drawMap.get("Dropped")){
+			((Dropped) dropped).decreaseTimeLeft();
 			buttonBounds.setX(buttonLoc.x - BUTTON_WIDTH/2);
 			buttonBounds.setY(buttonLoc.y - BUTTON_HEIGHT);
 			buttonBounds.setWidth(BUTTON_WIDTH);
-			buttonBounds.setHeight(BUTTON_HEIGHT);
-			buttonLoc2.x = buttonLoc.x;
-			buttonLoc2.y = buttonLoc.y;
+			buttonBounds.setHeight(BUTTON_HEIGHT*2);
+			buttonLoc2.x = buttonLoc.x - EDGE_TOLERANCE;
+			buttonLoc2.y = buttonLoc.y + EDGE_TOLERANCE;
 			((Dropped) dropped).droppedMove(buttonLoc2.cpy(), delta);
 			//Remove uncollected drops
 			if((((Dropped) dropped).getTimeLeft() <= 0) && !((Dropped) dropped).isPickedUp()){
@@ -382,9 +386,14 @@ public class World {
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
+			//Reduce upward bias if there's a dog
+			if(drawMap.get("Boosts").size > 0) {
+				((Movable) movable).adjustForwardBias(.5f, speed, delta);
+				Gdx.app.log("Doge", "Such adjust, many method call");
+			}
 			//Drop new items
 			if(rand.nextInt(100) <= 50 && drawMap.get("Movable").size <= 30){
-				ABDrawable dropping =  ((Animal)movable).drop();
+				ABDrawable dropping =  ((Animal)movable).drop(gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
 				if(dropping != null){
 					drawMap.get("Dropped").add(dropping);
 				}
@@ -415,7 +424,7 @@ public class World {
 				if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable.getClass().equals(Player.class))) {
 					((Movable)movable).bounce(null, (Obstacle)obstacle);
 					if ((movable.getPosition().y + movable.getHeight()/2) < (obstacle.getPosition().y))
-						((Movable)movable).stopForwardBias(cameraSpeed,delta);
+						((Movable)movable).adjustForwardBias(1,cameraSpeed,delta);
 				}
 			}
 		}
@@ -432,15 +441,17 @@ public class World {
 			}
 		}
 
-		//check if player reached market
-		if (player.getBounds().overlaps(market.getBounds())) {
+		//check if market is in middle of screen to move on
+		if (Math.abs(market.getPosition().y - camera.position.y) < 20) {
 			SoundHandler.pauseBackgroundMusic();
 			gameInstance.getLevelHandler().resetNextLevelStart();
 			gameInstance.setHitBack(false);
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
+		
+		gameInstance.getGameScreen().setInfolabel();
 	}
-	
+
 	/**
 	 * on reseting from Main menu this reinitalizes the movable object pictures
 	 */
@@ -467,7 +478,7 @@ public class World {
 			((Obstacle) obstacle).resetText();
 		}
 	}
-	
+
 	/**
 	 * returns the obstacles array for use in changing to Main Menu and gameScreen
 	 * @return
@@ -479,7 +490,7 @@ public class World {
 		}
 		return obstacles;
 	}
-	
+
 	/**
 	 * on resetting objects, this reinitializes the players texture
 	 */
@@ -487,4 +498,30 @@ public class World {
 		player.resetTexture("objectTextures/player.png");
 	}
 
+	public ArrayMap<String, Array<ABDrawable>> getDrawMap() {
+		return drawMap;
+	}
+
+	public enum Weather{
+		CLEAR ("Clear"),
+		RAINY ("Rainy"),
+		WINDY ("Windy");
+
+		private Weather(String weatherName){
+			this.weatherName = weatherName;
+		}
+
+		private final String weatherName;
+
+		public final String getName(){
+			return weatherName;
+		}
+
+	}
+
 }
+/*
+ * if (wind.getPosition().x < 0 || wind.getPosition().x > Gdx.graphics.getWidth()){
+				winds.removeValue(wind, false);
+				wind.dispose();
+			}*/

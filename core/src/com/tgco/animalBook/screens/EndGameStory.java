@@ -146,6 +146,9 @@ public class EndGameStory extends ButtonScreenAdapter implements Screen {
 
 			timeCounter += delta;
 		} else {
+			Gdx.gl.glClearColor(1, 1, 1, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			
 			popupStage.act(delta);
 			popupStage.draw();
 		}
@@ -177,7 +180,7 @@ public class EndGameStory extends ButtonScreenAdapter implements Screen {
 		continueButton = new Button(buttonStyle);
 		continueButton.setWidth(BUTTON_WIDTH);
 		continueButton.setHeight(BUTTON_HEIGHT);
-		continueButton.setPosition(BUTTON_WIDTH + EDGE_TOLERANCE,  BUTTON_HEIGHT + EDGE_TOLERANCE );
+		continueButton.setPosition(EDGE_TOLERANCE, EDGE_TOLERANCE );
 
 		continueButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -193,26 +196,43 @@ public class EndGameStory extends ButtonScreenAdapter implements Screen {
 					fadingOut = true;
 				}
 				else{
-					setDialog();
+					setEndDialog();
 				}
 			}
 		});
 		buttonStage.addActor(continueButton);
-		Gdx.input.setInputProcessor(buttonStage);
+		inputMultiplexer.addProcessor(buttonStage);
 	}
 	
 	/**
 	 * Sets the game to the end game dialog when the continue button is pressed on the last story screen
 	 */
 	
-	public void setDialog() {
+	public void setEndDialog() {
 		endGame  = true;
 		Skin skin = new Skin(Gdx.files.internal("confirmSkin/uiskin.json"));
-		EndGameDialog endD = new EndGameDialog("You Won!", skin, gameInstance);
+		EndGameDialog endD = new EndGameDialog("You Won!", skin, gameInstance, this);
 		endD.show(popupStage);
 		popupStage.addActor(endD);
 		inputMultiplexer.addProcessor(popupStage);
 		inputMultiplexer.removeProcessor(buttonStage);
+	}
+	
+	public void setConfirmDialog() {
+		//endGame  = true;
+		Skin skin = new Skin(Gdx.files.internal("confirmSkin/uiskin.json"));
+		ConfirmDialog confD = new ConfirmDialog("RESET DATA", skin, gameInstance, "All progress will be deleted. Are you Sure you want to reset?", 3);
+		confD.show(popupStage);
+		popupStage.addActor(confD);
+		//inputMultiplexer.addProcessor(popupStage);
+		//inputMultiplexer.removeProcessor(buttonStage);
+	}
+	
+	public void setDone() {
+		endGame = false;
+		inputMultiplexer.removeProcessor(popupStage);
+		inputMultiplexer.addProcessor(buttonStage);
+		popupStage = new Stage();	
 	}
 
 

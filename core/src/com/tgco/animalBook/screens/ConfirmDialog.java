@@ -35,6 +35,10 @@ public class ConfirmDialog extends Dialog{
 			case 2:
 				button("Yes", "yes2");
 				button("No", "no2");
+				break;
+			case 3:
+				button("Yes", "yes3");
+				button("No", "no3");
 		}
 	}
 	
@@ -64,6 +68,11 @@ public class ConfirmDialog extends Dialog{
 			((OptionsScreen) gameInstance.getScreen()).setExitDialog();
 		}else if(object.equals("no2")){
 			((OptionsScreen) gameInstance.getScreen()).setExitDialog();
+		} else if (object.equals("yes3")) {
+			gameInstance.resetData();
+			gameInstance.setScreen(new MainMenuScreen(gameInstance));
+		} else if (object.equals("no3")) {
+			((EndGameStory) gameInstance.getScreen()).setEndDialog();
 		}
 	}
 }

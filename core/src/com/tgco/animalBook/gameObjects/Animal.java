@@ -42,6 +42,10 @@ public abstract class Animal extends Movable {
 	/** the animal will have different target changes for different levels */
 	private int  animalLevel;
 
+	private int animalX;
+
+	private int animalY;
+
 	/**
 	 * animal construct which every child must have a string to it's picture which is needed for ABDrawbles
 	 *  along with a position
@@ -49,12 +53,13 @@ public abstract class Animal extends Movable {
 	 * @param position the starting position when the animal is created
 	 * @param animalLevel the level the animal is on
 	 */
-	public Animal(String texturePath, Vector2 position, int animalLevel) {
+	public Animal(String texturePath, Vector2 position, int animalX, int animalY) {
 		super(texturePath);
 		this.position = position;
 		previousTarget = position.cpy();
 		currentTarget = previousTarget.cpy();
-		this.animalLevel = animalLevel;
+		this.animalX = animalX;
+		this.animalY = animalY;
 
 		//leeway for collection
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
@@ -87,8 +92,8 @@ public abstract class Animal extends Movable {
 	}
 
 	private void changeTarget(){
-		int xChangeDistance = (int) (.139f*Gdx.graphics.getWidth()*animalLevel);
-		int yChangeDistance = (int) (.221f*Gdx.graphics.getHeight()*animalLevel);
+		int xChangeDistance = animalX;
+		int yChangeDistance = animalY;
 
 		currentTarget = new Vector2(position.x + rand.nextInt(xChangeDistance) - xChangeDistance/2, position.y + rand.nextInt(yChangeDistance) - yChangeDistance/2);
 	}
@@ -99,23 +104,23 @@ public abstract class Animal extends Movable {
 	 * 
 	 * @return ABDrawable which is either an animal or consumable to the Dropped class
 	 */
-	public ABDrawable drop() {
+	public ABDrawable drop(int animalX, int animalY) {
 		
 		
 		if(dropCount  % dropInterval == 0){
 			if(rand.nextInt(100) < fertilityRate){
 				if (this.getClass().equals(Goose.class)) 
-					return new Dropped(new Goose(this.position.cpy()),this.position.cpy(), timeOnGround);
+					return new Dropped(new Goose(this.position.cpy(), animalX, animalY),this.position.cpy(), timeOnGround);
 				else if (this.getClass().equals(Pig.class))
-					return new Dropped(new Pig(this.position.cpy()),this.position.cpy(), timeOnGround);
+					return new Dropped(new Pig(this.position.cpy(), animalX, animalY),this.position.cpy(), timeOnGround);
 				else if (this.getClass().equals(Goat.class))
-					return new Dropped(new Goat(this.position.cpy()),this.position.cpy(), timeOnGround);
+					return new Dropped(new Goat(this.position.cpy(), animalX, animalY),this.position.cpy(), timeOnGround);
 				else if (this.getClass().equals(Sheep.class))
-					return new Dropped(new Sheep(this.position.cpy()),this.position.cpy(), timeOnGround);
+					return new Dropped(new Sheep(this.position.cpy(), animalX, animalY),this.position.cpy(), timeOnGround);
 				else if (this.getClass().equals(Cow.class))
-					return new Dropped(new Cow(this.position.cpy()),this.position.cpy(), timeOnGround);
+					return new Dropped(new Cow(this.position.cpy(), animalX, animalY),this.position.cpy(), timeOnGround);
 				else
-					return new Dropped(new Goose(this.position.cpy()),this.position.cpy(), timeOnGround);
+					return new Dropped(new Goose(this.position.cpy(), animalX, animalY),this.position.cpy(), timeOnGround);
 			}
 			else{
 				if (this.getClass().equals(Goose.class))

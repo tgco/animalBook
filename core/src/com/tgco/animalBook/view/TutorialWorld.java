@@ -118,9 +118,6 @@ public class TutorialWorld {
 		drawMap.put("Dropped", new Array<ABDrawable>());
 		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.put("Obstacle", new Array<ABDrawable>());
-		drawMap.put("Player", new Array<ABDrawable>());
-		drawMap.get("Player").add(player);
-
 	}
 
 	/**
@@ -288,6 +285,8 @@ public class TutorialWorld {
 
 		if(getMovables().size <=0 && gameInstance.getLevelHandler().getStoredAmount() > 0) {
 			speed = increasedCameraSpeed*(player.getHealth()/100);
+			SoundHandler.pauseBackgroundMusic();
+			gameInstance.setScreen(new TutorialMarketScreen(gameInstance, (TutorialScreen)gameInstance.getScreen()));
 		} else {
 			speed = cameraSpeed*(player.getHealth()/100);
 		}
@@ -324,6 +323,12 @@ public class TutorialWorld {
 					movable.dispose();
 				}
 			}
+			
+			//check if market is at the middle of the screen
+			if (Math.abs(market.getPosition().y - camera.position.y) < 20) {
+				SoundHandler.pauseBackgroundMusic();
+				gameInstance.setScreen(new TutorialMarketScreen(gameInstance, (TutorialScreen)gameInstance.getScreen()));
+			}
 
 
 			//check for collisions between movable and obstacles
@@ -332,17 +337,9 @@ public class TutorialWorld {
 					if (movable.getBounds().overlaps(obstacle.getBounds()) && !(movable.getClass().equals(Player.class))) {
 						((Movable)movable).bounce(null, (Obstacle)obstacle);
 						if ((movable.getPosition().y + movable.getHeight()/2) < (obstacle.getPosition().y))
-							((Movable)movable).stopForwardBias(cameraSpeed,delta);
+							((Movable)movable).adjustForwardBias(1,cameraSpeed,delta);
 					}
 				}
-			}
-			
-			
-
-			//check if player reached market
-			if (player.getBounds().overlaps(market.getBounds())) {
-				SoundHandler.pauseBackgroundMusic();
-				gameInstance.setScreen(new TutorialMarketScreen(gameInstance, (TutorialScreen)gameInstance.getScreen()));
 			}
 		}
 	}

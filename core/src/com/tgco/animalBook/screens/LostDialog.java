@@ -48,17 +48,17 @@ public class LostDialog extends Dialog{
 	 */
 	@Override
 	public void result(Object object){
-		SoundHandler.toggleSounds();
-		SoundHandler.toggleMusic();
+		//SoundHandler.toggleSounds();
+		//SoundHandler.toggleMusic();
 		if(object.equals("retry")){
-			GameScreen temp = gameInstance.getGameScreen();
+			gameInstance.setHitBack(false);
+			gameInstance.getGameScreen().dispose();
+			gameInstance.retryData();
 			gameInstance.setScreen(new GameScreen(gameInstance));
-			temp.dispose();
 		}
 		else if(object.equals("quit")){
-			GameScreen temp = gameInstance.getGameScreen();
+			gameInstance.getGameScreen().dispose();
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));
-			temp.dispose();
 		}
 	}
 }

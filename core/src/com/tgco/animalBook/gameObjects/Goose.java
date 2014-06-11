@@ -30,12 +30,13 @@ public class Goose extends Animal {
 	 * 
 	 * @param pos the desired position in world coordinates for this animal
 	 */
-	public Goose(Vector2 pos) {
-		super(texturePath, pos, 1);
+	public Goose(Vector2 pos,  int aX, int aY) {
+		super(texturePath, pos, aX, aY);
 		speed = 1/10f;
 
-		width = .093f*Gdx.graphics.getWidth();
-		height = .147f*Gdx.graphics.getHeight();
+		//width = .336*height
+		width = .037f*Gdx.graphics.getWidth();
+		height = .110f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 

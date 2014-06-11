@@ -30,11 +30,13 @@ public class Cow extends Animal {
 	 * 
 	 * @param pos the location in world coordinates that the animal is located at
 	 */
-	public Cow(Vector2 pos) {
-		super(texturePath, pos, 5);
+	public Cow(Vector2 pos, int aX, int aY) {
+		super(texturePath, pos, aX, aY);
 		
 		speed = 1/14f;
-		width = .139f*Gdx.graphics.getWidth();
+		
+		//width = .3045*height
+		width = .067f*Gdx.graphics.getWidth();
 		height = .22f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}

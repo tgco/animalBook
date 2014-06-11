@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
@@ -25,8 +28,13 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	private Button mainMenuButton;
 	private Button helpButton;
 	private Button resetButton;
+
+	//Gamescreen
+	GameScreen gameScreen;
 	private boolean hasConfirm = false;
 	private Stage popupStage;
+	private Button kidCheck;
+	private BitmapFont font;
 
 	/**
 	 * Constructs a new Options Screen with a game instance
@@ -39,6 +47,11 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	public OptionsScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 		popupStage = new Stage();
+		
+		//Initialize rendering objects
+		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+		font.setScale(.75f);
+
 		//Background Rendering
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/optionsBackground.jpg"));
@@ -57,7 +70,6 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
-
 		if(!hasConfirm){
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -188,6 +200,24 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		resetButton.setHeight(BUTTON_HEIGHT);
 		resetButton.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
 		resetButton.setY(Gdx.graphics.getHeight()/2 - BUTTON_HEIGHT/2);
+		
+		
+		//KidMode BUTTON
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/kidCheck.atlas"));
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(atlas);
+
+		CheckBoxStyle kidButtonStyle = new CheckBoxStyle();
+		kidButtonStyle.font = font;
+		kidButtonStyle.checkboxOn = buttonSkin.getDrawable("checked");
+		kidButtonStyle.checkboxOff = buttonSkin.getDrawable("unchecked");
+
+		kidCheck = new CheckBox("Kid Mode",kidButtonStyle);
+		kidCheck.setWidth(BUTTON_WIDTH + 30);
+		kidCheck.setHeight(BUTTON_HEIGHT/5f);
+		kidCheck.setX(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2);
+		kidCheck.setY(Gdx.graphics.getHeight()/2 - 3*BUTTON_HEIGHT/2f);
+		kidCheck.setChecked(gameInstance.isKidMode());
 
 		//LISTENERS
 		soundButton.addListener(new InputListener() {
@@ -220,9 +250,17 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				SoundHandler.playButtonClick();
-				gameInstance.setScreen(new MainMenuScreen(gameInstance));
-				dispose();
+				if (gameScreen == null){
+					SoundHandler.playButtonClick();
+					gameInstance.setScreen(new MainMenuScreen(gameInstance));
+					dispose();
+				}
+				else{
+					SoundHandler.playButtonClick();
+					gameScreen.resetInputProcessors();
+					gameInstance.setScreen(gameScreen);
+					dispose();
+				}
 			}
 		});
 
@@ -233,9 +271,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				gameInstance.setScreen(new HelpScreen(gameInstance));
+				gameInstance.setScreen(new HelpScreen(gameInstance, 0));
 				dispose();
-
 			}
 		});
 
@@ -249,12 +286,31 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 				setDialog();
 			}
 		});
+		
+		kidCheck.addListener(new InputListener(){
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				if(kidCheck.isChecked()){
+					gameInstance.setKidMode(true);
+				}else {
+					gameInstance.setKidMode(false);
+				}
+				
+				if(gameInstance.getLevelHandler() != null)
+					gameInstance.getLevelHandler().updateKidMode(gameInstance.isKidMode());
+			}
+		});
 
 		buttonStage.addActor(soundButton);
 		buttonStage.addActor(musicButton);
 		buttonStage.addActor(mainMenuButton);
 		buttonStage.addActor(helpButton);
+
 		buttonStage.addActor(resetButton);
+		buttonStage.addActor(kidCheck);
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}
@@ -288,7 +344,6 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
-
 	}
 
 	/**

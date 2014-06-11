@@ -124,15 +124,16 @@ public class GameScreenInputHandler implements InputProcessor {
 	 */
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		
 		Vector3 touch = new Vector3(screenX,screenY,0);
 		//unproject touch to world coordinates
 		gameScreen.getWorld().getCamera().unproject(touch);
 
 		//Determine if drag is registered
 		if (lastTouch != null) {
-			if ( touch.cpy().sub(lastTouch.cpy()).len() > touchToDragTolerance ) {
+			if ( touch.cpy().sub(lastTouch.cpy()).len() > touchToDragTolerance && pointer == 0 ) {
 				//Drag gesture is detected, create an influence barrier between touch and last touch
-				if (!gameScreen.isPaused()) {
+				if (!gameScreen.inMenu()) {
 					gameScreen.getWorld().addSwipeToWorld(lastTouch, touch);
 					SoundHandler.playWhistle();
 					herdWithDrag(lastTouch, touch, gameScreen.getWorld().getMovables());
@@ -143,7 +144,7 @@ public class GameScreenInputHandler implements InputProcessor {
 		//Remove dropped items that were touched
 		for (int i = 0; i < gameScreen.getWorld().getDropped().size ; i++){
 			Dropped dropping = 	gameScreen.getWorld().getDropped().get(i);
-			if (!gameScreen.isPaused()){
+			if (!gameScreen.inMenu()){
 				Vector3 vect = new Vector3(screenX,screenY,0);
 				//unproject operations
 				gameScreen.getWorld().getCamera().unproject(vect);
@@ -196,6 +197,10 @@ public class GameScreenInputHandler implements InputProcessor {
 					//change to adjust how much a goose reacts to a drag (should depend on distance of goose from drag center)
 					float reactionScale = 70000 * 1/positionCenter.cpy().sub(dragCenter).len();
 
+					//cap the amount of influence to avoid flying animals when you swip on them
+					if (reactionScale > 7000)
+						reactionScale = 7000;
+					
 					movable.addToCurrentTarget(perpProjection.cpy().nor().scl(reactionScale));
 
 					//Add a line to draw the direction the goose was influenced
@@ -234,7 +239,7 @@ public class GameScreenInputHandler implements InputProcessor {
 			gameScreen.dispose();
 		}
 		else if(keycode == Keys.BACK){
-			gameScreen.setMain();
+			gameScreen.setMain(true);
 		}
 		return false;
 	}

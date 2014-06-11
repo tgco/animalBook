@@ -2,6 +2,7 @@ package com.tgco.animalBook.gameObjects;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
 public class Inventory {
 	

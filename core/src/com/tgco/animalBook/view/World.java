@@ -486,6 +486,9 @@ public class World {
 		player.resetTexture("objectTextures/player.png");
 	}
 
+	public ArrayMap<String, Array<ABDrawable>> getDrawMap() {
+		return drawMap;
+	}
 }
 /*
  * if (wind.getPosition().x < 0 || wind.getPosition().x > Gdx.graphics.getWidth()){

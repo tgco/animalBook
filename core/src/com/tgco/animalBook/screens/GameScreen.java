@@ -33,8 +33,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Consumable;
+import com.tgco.animalBook.gameObjects.Dog;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.AnimalBookGame.state;
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
@@ -50,6 +52,8 @@ import com.tgco.animalBook.view.World;
  * 
  */
 public class GameScreen extends ButtonScreenAdapter implements Screen {
+
+	private Array<ABDrawable> boostArray = new Array<ABDrawable>();
 
 	/**
 	 * Reference to the game world where all objects are located
@@ -870,6 +874,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					moreButton.setDisabled(true);
 				else
 					moreButton.setDisabled(false);
+				
+				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+					dogButton.setDisabled(true);
+				else
+					dogButton.setDisabled(false);
 			}
 		});
 		longerButton.addListener(new InputListener(){
@@ -912,7 +921,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
 					moreButton.setDisabled(true);
 				else
-					moreButton.setDisabled(false);	
+					moreButton.setDisabled(false);
+				
+				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+					dogButton.setDisabled(true);
+				else
+					dogButton.setDisabled(false);
 			}
 		});
 		moreButton.addListener(new InputListener(){
@@ -956,27 +970,60 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					moreButton.setDisabled(true);
 				else
 					moreButton.setDisabled(false);
+				
+				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+					dogButton.setDisabled(true);
+				else
+					dogButton.setDisabled(false);
 			}
 		});
 		
-//		dogButton.addListener(new InputListener(){
-//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//				return true;
-//			}
-//			public void touchUp
-//		}
+		dogButton.addListener(new InputListener(){
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				if(!dogButton.isDisabled()) {
+					SoundHandler.playButtonClick();
+					//TODO
+					//Add dog texture. Using cow for now
+					boostArray.add(new Dog("objectTextures/cow.png", new Vector2(0, Gdx.graphics.getHeight()), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY()));
+					getWorld().getDrawMap().put("Boosts", boostArray);
+				}
+				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
+					fruitfulButton.setDisabled(true);
+				else
+					fruitfulButton.setDisabled(false);
+
+				if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
+					longerButton.setDisabled(true);
+				else
+					longerButton.setDisabled(false);
+
+				if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
+					moreButton.setDisabled(true);
+				else
+					moreButton.setDisabled(false);
+				
+				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+					dogButton.setDisabled(true);
+				else
+					dogButton.setDisabled(false);
+			}
+			
+		});
 
 		//set disabled
-		if(getWorld().getPlayer().getPlayerMoney() < 500){
+		if(getWorld().getPlayer().getPlayerMoney() < 15){
 			fruitfulButton.setDisabled(true);
 		}
-		if(getWorld().getPlayer().getPlayerMoney() < 1000){
+		if(getWorld().getPlayer().getPlayerMoney() < 5){
 			longerButton.setDisabled(true);
 		}
-		if(getWorld().getPlayer().getPlayerMoney() < 1500){
+		if(getWorld().getPlayer().getPlayerMoney() < 10){
 			moreButton.setDisabled(true);
 		}
-		if(getWorld().getPlayer().getPlayerMoney() < 10000){
+		if(getWorld().getPlayer().getPlayerMoney() < 100){
 			dogButton.setDisabled(true);
 		}
 

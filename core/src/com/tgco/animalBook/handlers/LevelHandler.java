@@ -135,7 +135,7 @@ public class LevelHandler {
 
 		Array<ABDrawable> animals = new Array<ABDrawable>();
 
-		Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
+		//Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
 		int x;
 		float animalWidth;
 		float animalHeight;

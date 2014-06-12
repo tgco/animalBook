@@ -86,7 +86,7 @@ public class UpgradesScreen extends ButtonScreenAdapter implements Screen {
 		super(gameInstance);
 
 		this.gameScreen = gameScreen;
-		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 		font.setScale(.75f);
 		//Background rendering
 		batch = new SpriteBatch();

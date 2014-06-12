@@ -168,7 +168,7 @@ public class InventoryScreen extends ButtonScreenAdapter implements Screen {
 			final int index = i;
 
 			//associated BitmapFont object for consumable[i]
-			fonts[i] = new BitmapFont();
+			fonts[i] = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 
 			//create atlas and add it to a new skin
 			atlas = new TextureAtlas(Gdx.files.internal(Consumable.DropType.values()[i].getAtlasPath()));

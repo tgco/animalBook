@@ -135,11 +135,12 @@ public class LevelHandler {
 
 		Array<ABDrawable> animals = new Array<ABDrawable>();
 
-		Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
+		//Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
 		int x;
 		float animalWidth;
 		float animalHeight;
 		for(int i = 0; i < startAnimals; i++){
+			Gdx.app.log("My Tagg", "make animals " + i);
 			if(i < .5*startAnimals){
 				x = -i;
 				animalWidth = Gdx.graphics.getWidth()/2 + x*30 -10;
@@ -403,7 +404,6 @@ public class LevelHandler {
 
 	public void setRetry(){
 		onRetry = true;
-		
 	}
 	
 	public void updateKidMode(boolean kM){
@@ -506,5 +506,15 @@ public class LevelHandler {
 			}
 		}
 		return obstacles;
+	}
+
+	public float getHealthDecrease() {
+		float healthAmount;
+		if(kidMode){
+			healthAmount = .005f;
+		}else{
+			healthAmount = .01f;
+		}
+		return healthAmount;
 	}
 }

@@ -71,6 +71,8 @@ public class AnimalBookGame extends Game {
 	 * true if the game is in kid mode, where levels are easier
 	 */
 	private static boolean kidMode = false;
+	
+	private float progPercentage =0; 
 
 	/**
 	 * every game starts with the create function.
@@ -82,7 +84,7 @@ public class AnimalBookGame extends Game {
 		for(int i=0; i< 5; i++){
 			levelData.insert(i, null);
 		}
-
+		
 		//Set the initial screen
 		setScreen(new SplashScreen(this));
 
@@ -367,50 +369,30 @@ public class AnimalBookGame extends Game {
 		if (levelHandler == null) {
 			Preferences prefs = Gdx.app.getPreferences(DATA_PREFS);
 			level = prefs.getInteger("level");
-			levelHandler = new LevelHandler(level, kidMode);	
-			Player player = new Player(levelHandler.returnCameraSpeed(level));
-			player.setValues(prefs.getFloat("health"), prefs.getInteger("money"));
+			if(level>0){
+				levelHandler = new LevelHandler(level, kidMode);	
+				Player player = new Player(levelHandler.returnCameraSpeed(level));
+				player.setValues(prefs.getFloat("health"), prefs.getInteger("money"));
 
-			addToDatalevel(player,1);
+				addToDatalevel(player,1);
 
 
-			//the consumables adding back in
-			for (int i = 0; i < Consumable.DropType.values().length; i++){
-				numConsumables = prefs.getInteger(Consumable.DropType.values()[i].getName());
-				for(int j =0; j<numConsumables; j++){
-					player.getInventory().addItem(new Consumable(DropType.values()[i]));
+				//the consumables adding back in
+				for (int i = 0; i < Consumable.DropType.values().length; i++){
+					numConsumables = prefs.getInteger(Consumable.DropType.values()[i].getName());
+					for(int j =0; j<numConsumables; j++){
+						player.getInventory().addItem(new Consumable(DropType.values()[i]));
+					}
 				}
+				levelHandler.setNextLevelStart(prefs.getInteger("numAnimals"));
 			}
-
-/*
-			numConsumables = prefs.getInteger("Eggs");
-			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.EGG));
+			else{
+				level = 1;
+				
+				levelHandler = new LevelHandler(level, kidMode);
+				Player player = new Player(levelHandler.returnCameraSpeed(level));
+				addToDatalevel(player,1);
 			}
-
-			numConsumables = prefs.getInteger("Bacon");
-			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.BACON));
-			}
-
-			numConsumables = prefs.getInteger("Cheese");
-			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.CHEESE));
-			}
-
-			numConsumables = prefs.getInteger("Wool");
-			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.MUTTON));
-			}
-
-			numConsumables = prefs.getInteger("Milk");
-			for(int i =0; i<numConsumables; i++){
-				player.getInventory().addItem(new Consumable(DropType.MILK));
-			}
-		*/
-		
-			//animal data
-			levelHandler.setNextLevelStart(prefs.getInteger("numAnimals"));
 		}
 	}
 
@@ -490,6 +472,7 @@ public class AnimalBookGame extends Game {
 		this.hitBack = hitBack;
 	}
 	
+	
 	public void retryData(){
 		levelHandler = null;
 		for(int i=0; i< 5; i++){
@@ -510,5 +493,14 @@ public class AnimalBookGame extends Game {
 	public void setKidMode(boolean kidMode) {
 		this.kidMode = kidMode;
 	}
+
+	public float getProgPercentage() {
+		return progPercentage;
+	}
+
+	public void setProgPercentage(float progPercentage) {
+		this.progPercentage = progPercentage;
+	}
+	
 	
 }

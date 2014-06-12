@@ -236,7 +236,7 @@ public class GameScreenInputHandler implements InputProcessor {
 			gameInstance.addToDatalevel(gameScreen.getWorld().getDropped(), 3);
 
 			gameInstance.addToDatalevel(gameScreen.getWorld().getObstacles(), 4);
-
+			gameInstance.setProgPercentage(gameScreen.getWorld().getPrecentage());
 			gameScreen.dispose();
 		}
 		else if(keycode == Keys.BACK){

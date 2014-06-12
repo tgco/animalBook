@@ -19,7 +19,7 @@ public class Player extends Movable {
 	private int playerMoney = 10000;
 	/** it starts at full health */
 	private static final float MAX_HEALTH = 100f;
-	private float playerHealth;;
+	private float playerHealth;
 
 	/**
 	 * the constructor which sets the variables of it's parent

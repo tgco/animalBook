@@ -161,18 +161,20 @@ public class World {
 
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
-			//Gdx.app.log("My Tagg", "The hit back is " + gameInstance.isHitBack());
+			Gdx.app.log("My Tagg", "The hit back is " + gameInstance.isHitBack());
 			if (!gameInstance.isHitBack()) {
 				reinitTexturePlayer();
 				player.resetPlayerPosition();
 			} else {
-				//Gdx.app.log("My Tagg", "the player pos " + );
-				camera.position.set(Gdx.graphics.getWidth()/2, player.getPosition().cpy().y + 3f*Gdx.graphics.getHeight()/8, 0);
+				//Gdx.app.log("My Tagg", "the player pos and prog Precen " + gameInstance.getProgPercentage()  + " laneLength: " + laneLength);
+				camera.position.set(Gdx.graphics.getWidth()/2, gameInstance.getProgPercentage()*laneLength + Gdx.graphics.getHeight()/2, 0);
 				reinitTexturePlayer();
-				market.setPosition(new Vector2(player.getPosition().cpy().x, Gdx.graphics.getHeight()/8 + laneLength + player.getHeight()));
+				market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2 + laneLength));
 			}
 		}else{
+			Gdx.app.log("My Tagg", "The player yo");
 			player = new Player(cameraSpeed);
+			Gdx.app.log("My Tagg", "Health " + player.getHealth());
 		}
 
 		if(levelSize && gameInstance.getLevelData().get(3) != null){
@@ -213,11 +215,15 @@ public class World {
 		if(getMovables().size <=0 &&  gameInstance.getLevelHandler().getStoredAmount() <= 0 ){
 			SoundHandler.toggleSounds();
 			SoundHandler.toggleMusic();
+			gameInstance.setHitBack(true);
+			gameInstance.setProgPercentage(getPrecentage());
 			gameInstance.getGameScreen().setLost(true);
 		}
 		else if( player.getHealth() <=0){
 			SoundHandler.toggleSounds();
 			SoundHandler.toggleMusic();
+			gameInstance.setHitBack(true);
+			gameInstance.setProgPercentage(getPrecentage());
 			gameInstance.getGameScreen().setLost(false);
 		}
 	}
@@ -327,8 +333,9 @@ public class World {
 	public void updateGameLogic(float delta) {
 
 		float speed;
+		
 		//Health effects
-		player.decreaseHealth(.01f);
+		player.decreaseHealth(gameInstance.getLevelHandler().getHealthDecrease());
 
 		if(getMovables().size <=0 && gameInstance.getLevelHandler().getStoredAmount() > 0) {
 			speed = increasedCameraSpeed*(player.getHealth()/100);
@@ -372,7 +379,6 @@ public class World {
 			}
 
 		}
-
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
@@ -493,6 +499,9 @@ public class World {
 		return drawMap;
 	}
 
+	public float getPrecentage(){
+		return (camera.position.y - Gdx.graphics.getHeight()/2f)/(laneLength);
+	}
 	public enum Weather{
 		CLEAR ("Clear"),
 		RAINY ("Rainy"),

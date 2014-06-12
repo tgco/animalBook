@@ -23,6 +23,10 @@ public class SoundHandler {
 	private static Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
 	private static Sound pickup = Gdx.audio.newSound(Gdx.files.internal("sounds/pickup.wav"));
 	private static Sound gooseHonk = Gdx.audio.newSound(Gdx.files.internal("sounds/gooseHonk.wav"));
+	private static Sound pigOink = Gdx.audio.newSound(Gdx.files.internal("sounds/pigOink.wav"));
+	private static Sound goatBleat = Gdx.audio.newSound(Gdx.files.internal("sounds/goat.wav"));
+	private static Sound sheepBaa = Gdx.audio.newSound(Gdx.files.internal("sounds/sheepBaa.wav"));
+	private static Sound cowMoo = Gdx.audio.newSound(Gdx.files.internal("sounds/moo.wav"));
 
 	/**
 	 * Booleans that store if the sound or music is currently muted
@@ -188,16 +192,16 @@ public class SoundHandler {
 				gooseHonk.play(.2f);
 				break;
 			case 2:
-				//play pig sound
+				pigOink.play(.2f);
 				break;
 			case 3:
-				//play goat sound
+				goatBleat.play(.1f);
 				break;
 			case 4:
-				//play sheep sound
+				sheepBaa.play(.1f);
 				break;
 			case 5:
-				//play cow sound
+				cowMoo.play(.05f);
 				break;
 			}
 		}

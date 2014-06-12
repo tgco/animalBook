@@ -47,6 +47,7 @@ public class AnimalBookGame extends Game {
 	 * The current level from the preferences file
 	 */
 	private  int level = 1;
+
 	/**
 	 * Load all information that differs between levels
 	 */

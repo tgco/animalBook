@@ -60,8 +60,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * The width and height of tiles for the background
 	 */
-	private float tileWidth = Gdx.graphics.getWidth()/4f;
-	private float tileHeight = Gdx.graphics.getHeight()/4f;
+	private float tileWidth = Gdx.graphics.getWidth()/1f;
+	private float tileHeight = Gdx.graphics.getHeight()/1f;
 
 	/**
 	 * Each button used on the game screen user interface overlay
@@ -181,7 +181,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		dnd = new DragAndDrop();
 		if (Consumable.DropType.values().length > 0){
 			Image test = new Image(new Texture(Gdx.files.internal(Consumable.DropType.values()[0].getTexturePath())));
-			dnd.setDragActorPosition(-test.getWidth()/4f, test.getHeight()/4f);
+			dnd.setDragActorPosition(-test.getWidth()/2f, test.getHeight()/2f);
 		}
 	}
 

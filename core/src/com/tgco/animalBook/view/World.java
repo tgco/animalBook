@@ -98,7 +98,7 @@ public class World {
 	 * Handles all of the game object rendering responsibility
 	 */
 	private WorldRenderer worldRender;
-	
+
 	private Weather weather;
 
 	/**
@@ -120,7 +120,7 @@ public class World {
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
 		//spot 3 is storing movable array
-		if(levelSize && gameInstance.getLevelData().get(2) !=null){
+		if(levelSize && gameInstance.getLevelData().get(2) != null){
 			Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
 			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
 			reinitTextureMovable();
@@ -137,6 +137,7 @@ public class World {
 
 		Gdx.app.log("My Tagg", "The movable: " + drawMap.get("Movable").size );
 		tolerance = drawMap.get("Movable").get(0).getWidth();
+
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
@@ -148,7 +149,7 @@ public class World {
 		}
 
 		drawMap.put("Boosts", new Array<ABDrawable>());
-		
+
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
@@ -186,9 +187,10 @@ public class World {
 			drawMap.put("Obstacle", (Array<ABDrawable>) gameInstance.getLevelData().get(4));
 			reinitTextureObstacle();
 		}else{
-			
+
+
 			drawMap.put("Obstacle",  gameInstance.getLevelHandler().addObstacles( gameInstance.getLevelHandler().getLevel(), market.getPosition()));
-			
+
 		}
 		weather = Weather.CLEAR;
 	}
@@ -430,7 +432,7 @@ public class World {
 		}
 
 		gameInstance.getGameScreen().setInfolabel();
-		
+
 		//check if market is in middle of screen to move on
 		if (Math.abs(market.getPosition().y - camera.position.y) < 20) {
 			SoundHandler.pauseBackgroundMusic();
@@ -438,6 +440,7 @@ public class World {
 			gameInstance.setHitBack(false);
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
+
 	}
 
 	/**

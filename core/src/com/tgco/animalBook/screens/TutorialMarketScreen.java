@@ -62,7 +62,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/tutorialMarketScreenBackground.png"));
 
-		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 
 		SoundHandler.playMarketBackgroundMusic(true);
 
@@ -157,7 +157,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 			final int foodIndex = i;
 
 			//associated BitmapFont object for consumable[i]
-			fonts[i] = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+			fonts[i] = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 			fonts[i].setColor(Color.CYAN);
 
 			//create atlas and add it to a new skin

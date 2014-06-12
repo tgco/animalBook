@@ -102,7 +102,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	 * The font used when rendering strings
 	 */
 	private BitmapFont font;
-	private final float FONT_SCALE = Gdx.graphics.getHeight()/1000f;
+	private final float FONT_SCALE = Gdx.graphics.getHeight()/750f;
 
 	/**
 	 * textures for health bar, etc
@@ -128,7 +128,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		gameWorld = new World(gameInstance);
 
 		//Initialize rendering objects
-		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 		font.setScale(FONT_SCALE);
 		//font = new BitmapFont();
 		batch = new SpriteBatch();
@@ -331,7 +331,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		infoLabelStyle.font = font;
 		infoLabelStyle.fontColor = Color.WHITE;
 		infoLabelStyle.font.setScale(FONT_SCALE);
-		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+		infoLabel = new Label("Money: $" + getWorld().getPlayer().getPlayerMoney()
 				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount()
 				, infoLabelStyle);
 		infoLabel.pack();
@@ -862,7 +862,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(fruitfulMoney) + "\n" +
 									String.format("%.1f",((Animal) getWorld().getMovables().get(0)).getFertilityRate())+ "%"
 							);
-					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+					infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
@@ -911,7 +911,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(longerMoney) + "\n" +
 									String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getTimeOnGround())+ "%"
 							);
-					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+					infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
@@ -960,7 +960,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(moreMoney) + "\n" +
 									String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getDropInterval())+ "%"	
 							);
-					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+					infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
@@ -996,7 +996,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 						getWorld().getPlayer().subtractPlayerMoney(dogMoney);
 						Dog newDog = new Dog(new Vector2(0, Gdx.graphics.getHeight()), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
 						getWorld().getDrawMap().get("Boosts").add(newDog);
-						infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+						infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 								+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 					} else {
 						getWorld().getDrawMap().get("Boosts").clear();
@@ -1436,7 +1436,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	}
 	
 	public void setInfolabel(){
-		infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+		infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 	}
 }

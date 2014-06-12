@@ -79,6 +79,12 @@ public class TutorialScreenInputHandler implements InputProcessor {
 	 */
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		//Start the tutorial
+		if (tutorialScreen.isStart() == false) {
+			tutorialScreen.setStart(true);
+			tutorialScreen.setPaused(false);
+		}
+		
 		//Store touch if one isn't already stored
 		if (lastTouch == null) {
 			lastTouch = new Vector3(screenX,screenY,0);

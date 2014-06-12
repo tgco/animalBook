@@ -264,6 +264,10 @@ public class SoundHandler {
 		whistle.dispose();
 		pickup.dispose();
 		gooseHonk.dispose();
+		pigOink.dispose();
+		goatBleat.dispose();
+		sheepBaa.dispose();
+		cowMoo.dispose();
 	}
 
 	public static boolean isSoundMuted() {

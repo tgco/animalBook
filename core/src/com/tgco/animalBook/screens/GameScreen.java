@@ -133,7 +133,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//font = new BitmapFont();
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
-		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass.jpg"));
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass2.jpg"));
 
 		//Setup input processing
 		inputMultiplexer = new InputMultiplexer();
@@ -611,12 +611,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			final ImageTextButton inventoryButton = new ImageTextButton("", inventoryButtonStyle){
 				@Override
 				public float getPrefHeight(){
-					return BUTTON_HEIGHT*2/3;
+					return BUTTON_HEIGHT*2f/3f;
 				};
 
 				@Override
 				public float getPrefWidth(){
-					return BUTTON_WIDTH*2/3;
+					return BUTTON_WIDTH*2f/3f;
 				}
 			};
 			inventoryButton.getLabel().setColor(Color.RED);

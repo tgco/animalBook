@@ -118,6 +118,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Booleans used for tutorial progression
 	 */
+	private boolean start = false;
 	private boolean swiped = false;
 	private boolean tapped = false;
 	private boolean pickedUp = false;
@@ -149,7 +150,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public TutorialScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
 
-		paused = false;
+		paused = true;
 
 		popupStage = new Stage();
 
@@ -214,7 +215,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 				tutorialWorld.render(batch,paused,delta);
 
 				//Select the correct waiting function and draw correct words
-				if (paused || tutorialStage == 5) {
+				if ((paused && start) || tutorialStage == 5) {
 					waitForInput();
 				}
 
@@ -1606,6 +1607,18 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 	public void incrementTutorialStage() {
 		tutorialStage += 1;
+	}
+	
+	public boolean isStart() {
+		return start;
+	}
+	
+	public void setStart(boolean start) {
+		this.start = start;
+	}
+	
+	public void setPaused(boolean paused) {
+		this.paused = paused;
 	}
 
 	@Override

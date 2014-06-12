@@ -169,7 +169,7 @@ public class World {
 				//Gdx.app.log("My Tagg", "the player pos " + );
 				camera.position.set(Gdx.graphics.getWidth()/2, player.getPosition().cpy().y + 3f*Gdx.graphics.getHeight()/8, 0);
 				reinitTexturePlayer();
-				market.setPosition(new Vector2(player.getPosition().cpy().x, Gdx.graphics.getHeight()/8 + laneLength + player.getHeight()));
+				market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2 + laneLength));
 			}
 		}else{
 			player = new Player(cameraSpeed);
@@ -187,8 +187,6 @@ public class World {
 			drawMap.put("Obstacle", (Array<ABDrawable>) gameInstance.getLevelData().get(4));
 			reinitTextureObstacle();
 		}else{
-
-
 			drawMap.put("Obstacle",  gameInstance.getLevelHandler().addObstacles( gameInstance.getLevelHandler().getLevel(), market.getPosition()));
 
 		}

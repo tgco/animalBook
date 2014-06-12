@@ -129,6 +129,9 @@ public class LevelHandler {
 		else if(onRetry){
 			startAnimals = (int) Math.ceil(passLevelAmount/2.0);
 		}
+		else if(startAnimals <= 5){
+			startAnimals =5;
+		}
 
 		Array<ABDrawable> animals = new Array<ABDrawable>();
 
@@ -157,6 +160,9 @@ public class LevelHandler {
 				case 5 :
 					animals.add(new Cow(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
 					break;
+				default: 
+					animals.add(new Goose(new Vector2(animalWidth, animalHeight), animalChangeX(), animalChangeY()));
+					break;
 				}
 
 			}
@@ -184,6 +190,7 @@ public class LevelHandler {
 
 			}
 		}
+		Gdx.app.log("My Tagg", "The animals is " + animals.size);
 		return animals;
 
 

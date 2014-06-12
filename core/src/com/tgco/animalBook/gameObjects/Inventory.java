@@ -20,6 +20,8 @@ public class Inventory {
 		Consumable.DropType[] dropTypes = Consumable.DropType.values();
 		for (int i = 0; i < dropTypes.length; i++){
 			inventory.put(dropTypes[i], new Array<Consumable>(false, MAX_CAPACITY));
+			for (int j = 0; j < 2; j++)
+				inventory.get(Consumable.DropType.values()[i]).add(new Consumable(Consumable.DropType.values()[i]));
 		}
 	}
 	

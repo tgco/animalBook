@@ -189,8 +189,6 @@ public class World {
 			drawMap.put("Obstacle", (Array<ABDrawable>) gameInstance.getLevelData().get(4));
 			reinitTextureObstacle();
 		}else{
-
-
 			drawMap.put("Obstacle",  gameInstance.getLevelHandler().addObstacles( gameInstance.getLevelHandler().getLevel(), market.getPosition()));
 
 		}

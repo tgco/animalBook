@@ -911,7 +911,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(longerMoney) + "\n" +
 									String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getTimeOnGround())+ "%"
 							);
-					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
+					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
@@ -959,7 +960,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(moreMoney) + "\n" +
 									String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getDropInterval())+ "%"	
 							);
-					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
+					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
@@ -994,7 +996,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 						getWorld().getPlayer().subtractPlayerMoney(dogMoney);
 						Dog newDog = new Dog(new Vector2(0, Gdx.graphics.getHeight()), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
 						getWorld().getDrawMap().get("Boosts").add(newDog);
-						infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
+						infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney()
+								+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 					} else {
 						getWorld().getDrawMap().get("Boosts").clear();
 					}

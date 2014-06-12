@@ -522,7 +522,11 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
 				alexButton.getY() + alexButton.getHeight() - 2.5f*EDGE_TOLERANCE);
-
+		infoLabel.pack();
+		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
+				alexButton.getY() + alexButton.getHeight() - infoLabel.getHeight() - 1.7f*EDGE_TOLERANCE);
+		infoLabel.setAlignment(Align.left);
+		
 		//The label's background image
 		alexInfoImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
 		alexInfoImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,

@@ -66,7 +66,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/marketScreenBackground.png"));
 
-		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 
 		SoundHandler.playMarketBackgroundMusic(true);
 

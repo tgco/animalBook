@@ -98,7 +98,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	 * The font used when rendering strings
 	 */
 	private BitmapFont font;
-	private final float FONT_SCALE = Gdx.graphics.getHeight()/1000f;
+	private final float FONT_SCALE = Gdx.graphics.getHeight()/750f;
 
 	/**
 	 * If the tutorial screen is paused
@@ -163,7 +163,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		tutorialWorld = new TutorialWorld(gameInstance);
 
 		//Initialize rendering objects
-		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 		font.setScale(FONT_SCALE);
 		//font = new BitmapFont();
 		batch = new SpriteBatch();

@@ -332,7 +332,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		infoLabelStyle.fontColor = Color.WHITE;
 		infoLabelStyle.font.setScale(FONT_SCALE);
 		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney()
-				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount()
+				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size + gameInstance.getLevelHandler().getNextLevelStart()) + " of " + gameInstance.getLevelHandler().getPassLevelAmount()
 				, infoLabelStyle);
 		infoLabel.pack();
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
@@ -1438,6 +1438,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	
 	public void setInfolabel(){
 		infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney()
-				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
+				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size + gameInstance.getLevelHandler().getNextLevelStart()) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 	}
 }

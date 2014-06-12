@@ -519,7 +519,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		infoLabelStyle.font = font;
 		infoLabelStyle.fontColor = Color.WHITE;
 		infoLabelStyle.font.setScale(FONT_SCALE);
-		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
+		infoLabel = new Label("Money: $" + getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
 				alexButton.getY() + alexButton.getHeight() - 2.5f*EDGE_TOLERANCE);
 		infoLabel.pack();
@@ -1073,7 +1073,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(fruitfulMoney) + "\n" +
 									String.format("%.1f",((Animal) getWorld().getMovables().get(0)).getFertilityRate())+ "%"
 							);
-					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
+					infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
@@ -1126,7 +1126,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(longerMoney) + "\n" +
 									String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getTimeOnGround())+ "%"
 							);
-					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
+					infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
@@ -1179,7 +1179,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 									"$" + String.valueOf(moreMoney) + "\n" +
 									String.format("%.2f",((Animal) getWorld().getMovables().get(0)).getDropInterval())+ "%"	
 							);
-					infoLabel.setText("Money: ##" + getWorld().getPlayer().getPlayerMoney());
+					infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney());
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);

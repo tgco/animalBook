@@ -88,7 +88,16 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	public void render(float delta) {
 		if(!hasConfirm){
 			int storedAnimal = gameInstance.getLevelHandler().getStoredAmount();
-			int nextLevel = gameInstance.getLevelHandler().getNextLevelStart();
+			int nextLevel ;
+			if(gameInstance.getLevelHandler().getLevel() == 5){
+				if(gameInstance.getLevelHandler().getNextLevelStart() == 25)
+					nextLevel = 1;
+				else
+					nextLevel =0;
+			}else{
+				nextLevel = gameInstance.getLevelHandler().getNextLevelStart();
+			}
+				
 			int needAnimals = gameInstance.getLevelHandler().getPassLevelAmount();
 			String needAnimalsString = "Need: " + String.valueOf(needAnimals);
 

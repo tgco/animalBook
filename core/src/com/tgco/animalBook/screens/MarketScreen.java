@@ -90,7 +90,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			int storedAnimal = gameInstance.getLevelHandler().getStoredAmount();
 			int nextLevel ;
 			if(gameInstance.getLevelHandler().getLevel() == 5){
-				if(gameInstance.getLevelHandler().getNextLevelStart() == 25)
+				if(gameInstance.getLevelHandler().getNextLevelStart() >= 25)
 					nextLevel = 1;
 				else
 					nextLevel =0;
@@ -98,8 +98,11 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 				nextLevel = gameInstance.getLevelHandler().getNextLevelStart();
 			}
 				
-			int needAnimals = gameInstance.getLevelHandler().getPassLevelAmount();
-			String needAnimalsString = "Need: " + String.valueOf(needAnimals);
+			int needAnimals = gameInstance.getLevelHandler().getPassLevelAmount() - (gameInstance.getLevelHandler().getNextLevelStart());
+			if(needAnimals <=0){
+				needAnimals =0;
+			}
+			String needAnimalsString = "Need " + String.valueOf(needAnimals) + " more";
 
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

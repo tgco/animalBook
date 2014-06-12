@@ -1196,6 +1196,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				gameInstance.addToDatalevel(gameWorld.getDropped(), 3);
 
 				gameInstance.addToDatalevel(gameWorld.getObstacles(), 4);
+				gameInstance.setProgPercentage(gameWorld.getPrecentage());
 
 				dispose();
 			}

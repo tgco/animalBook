@@ -48,8 +48,6 @@ public class LostDialog extends Dialog{
 	 */
 	@Override
 	public void result(Object object){
-		//SoundHandler.toggleSounds();
-		//SoundHandler.toggleMusic();
 		if(object.equals("retry")){
 			gameInstance.setHitBack(false);
 			gameInstance.getGameScreen().dispose();

@@ -4,12 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Swipe;
-import com.tgco.animalBook.view.World.Weather;
+import com.tgco.animalBook.handlers.Weather.WeatherType;
 
 
 /**
@@ -51,7 +53,6 @@ public class WorldRenderer {
 	 * Default constructor
 	 */
 	public WorldRenderer() {
-
 		swipes = new Array<Swipe>();
 	}
 
@@ -80,7 +81,8 @@ public class WorldRenderer {
 		for (Array<ABDrawable> a : drawables.values()){
 			for (ABDrawable drawable : a) {
 				drawable.draw(batch);
-				/* will render all object bounds when uncommented
+				/*
+				// will render all object bounds for collision detection when uncommented
 				batch.end();
 				ShapeRenderer render = new ShapeRenderer();
 				render.setProjectionMatrix(cam.combined);
@@ -90,6 +92,7 @@ public class WorldRenderer {
 				render.dispose();
 				batch.begin();
 				*/
+				
 			}
 		}
 
@@ -154,10 +157,4 @@ public class WorldRenderer {
 		red.dispose();
 		progressBar.dispose();
 	}
-
-	public void renderWeather(Weather weather) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

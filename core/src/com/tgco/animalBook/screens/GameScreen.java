@@ -1127,7 +1127,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				return BUTTON_WIDTH*2/3;
 			}
 		};
-
+		if(SoundHandler.isSoundMuted()){
+			soundButton.setChecked(true);
+		}
 		//MUSIC BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/musicButton.atlas"));
 		buttonSkin = new Skin();
@@ -1149,7 +1151,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				return BUTTON_WIDTH*2/3;
 			}
 		};
-
+		if(SoundHandler.isMusicMuted()){
+			musicButton.setChecked(true);
+		}
 		//HELP BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/helpButton.atlas"));
 		buttonSkin = new Skin();

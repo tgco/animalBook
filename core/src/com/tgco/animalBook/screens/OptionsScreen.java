@@ -50,7 +50,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		
 		//Initialize rendering objects
 		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
-		font.setScale(.75f);
+		font.setScale(Gdx.graphics.getHeight()/750f);
 
 		//Background Rendering
 		batch = new SpriteBatch();
@@ -353,7 +353,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	public void setDialog(){
 		hasConfirm  = true;
 		Skin skin = new Skin(Gdx.files.internal("confirmSkin/uiskin.json"));
-		ConfirmDialog resetD = new ConfirmDialog("RESET DATA", skin, gameInstance,"All progress will be deleted. Are you Sure you want to reset?", 2);
+		ConfirmDialog resetD = new ConfirmDialog("RESET DATA", skin, gameInstance,"All progress will be lost. Are you sure you want to reset?", 2);
 		resetD.show(popupStage);
 		popupStage.addActor(resetD);
 		inputMultiplexer.addProcessor(popupStage);

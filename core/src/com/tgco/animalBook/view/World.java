@@ -19,6 +19,8 @@ import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Obstacle;
 import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.handlers.SoundHandler;
+import com.tgco.animalBook.handlers.Weather;
+import com.tgco.animalBook.handlers.Weather.WeatherType;
 import com.tgco.animalBook.screens.MarketScreen;
 
 /**
@@ -100,6 +102,9 @@ public class World {
 	private WorldRenderer worldRender;
 
 	private Weather weather;
+	private float weatherTime = 0f;
+	private float targetWeatherTime = 0f;
+	private final float WEATHER_DURATION = 10f;
 
 	/**
 	 * Constructor with game instance and pulls stored info from gameInstance if there is anything stored
@@ -192,7 +197,9 @@ public class World {
 			drawMap.put("Obstacle",  gameInstance.getLevelHandler().addObstacles( gameInstance.getLevelHandler().getLevel(), market.getPosition()));
 
 		}
-		weather = Weather.CLEAR;
+		weather = new Weather();
+		weather.setWeatherType(WeatherType.CLEAR);
+		targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
 	}
 
 
@@ -319,8 +326,9 @@ public class World {
 			checkLost();
 		}
 
-		//draw objects
+		
 		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - camera.position.y)/(laneLength),camera,delta);
+		
 	}
 
 	/**
@@ -444,7 +452,16 @@ public class World {
 			gameInstance.setHitBack(false);
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
-
+		
+		//handle weather elements
+		if (weatherTime > targetWeatherTime){
+			weather.setWeatherType(weather.getNewWeather());
+			weatherTime = 0f;
+			targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
+		}
+		else{
+			weatherTime += delta;
+		}
 	}
 
 	/**
@@ -500,23 +517,6 @@ public class World {
 	public float getPrecentage(){
 		return (camera.position.y - Gdx.graphics.getHeight()/2f)/(laneLength);
 	}
-	public enum Weather{
-		CLEAR ("Clear"),
-		RAINY ("Rainy"),
-		WINDY ("Windy");
-
-		private Weather(String weatherName){
-			this.weatherName = weatherName;
-		}
-
-		private final String weatherName;
-
-		public final String getName(){
-			return weatherName;
-		}
-
-	}
-
 }
 /*
  * if (wind.getPosition().x < 0 || wind.getPosition().x > Gdx.graphics.getWidth()){

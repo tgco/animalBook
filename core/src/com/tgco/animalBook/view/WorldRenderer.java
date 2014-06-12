@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Swipe;
-import com.tgco.animalBook.view.World.Weather;
+import com.tgco.animalBook.handlers.Weather.WeatherType;
 
 
 /**
@@ -46,7 +46,6 @@ public class WorldRenderer {
 	 * Default constructor
 	 */
 	public WorldRenderer() {
-
 		swipes = new Array<Swipe>();
 	}
 
@@ -148,10 +147,4 @@ public class WorldRenderer {
 		blue.dispose();
 		red.dispose();
 	}
-
-	public void renderWeather(Weather weather) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

@@ -254,10 +254,10 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	public void drawTiledBackground(SpriteBatch batch) {
-		
+
 		//Find the node on screen to draw grass around
 		Array<Vector2> tileNodes = findTileNodesOnScreen();
-		
+
 		for(Vector2 tileNode : tileNodes) {
 			//Draw four grass textures around the node on screen
 			batch.draw(backgroundTexture, tileNode.x*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
@@ -266,7 +266,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			batch.draw(backgroundTexture, (tileNode.x-1)*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
 		}
 	}
-	
+
 	/**
 	 * Returns the point in world coordinates that grass should be drawn around so that grass
 	 * is only rendered when it is on screen.
@@ -282,22 +282,22 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			flipX = true;
 		if (gameWorld.getCamera().position.y < 0)
 			flipY = true;
-			*/
-		
+		 */
+
 		//Reference to the center of the camera
 		Vector3 camCorner = tutorialWorld.getCamera().position.cpy();
 		//adjust to lower left of camera
 		camCorner.sub(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
-		
+
 		int xCoordinate = (int) ( Math.abs(camCorner.x / tileWidth) - .5);
 		int yCoordinate = (int) ( Math.abs(camCorner.y / tileHeight) - .5);
-		
+
 		//Fill array with all nodes on screen
 		Array<Vector2> tileNodes = new Array<Vector2>();
 		Vector2 node;
-		
+
 		int initYCoordinate = yCoordinate;
-		
+
 		while (xCoordinate*tileWidth < (camCorner.x + Gdx.graphics.getWidth()) + tileWidth) {
 			while(yCoordinate*tileHeight < (camCorner.y + Gdx.graphics.getHeight() + tileHeight)) {
 				node = new Vector2(xCoordinate,yCoordinate);
@@ -313,7 +313,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			xCoordinate *= -1;
 		if (flipY)
 			yCoordinate *= -1;
-			*/
+		 */
 
 		return tileNodes;
 	}
@@ -526,7 +526,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
 				alexButton.getY() + alexButton.getHeight() - infoLabel.getHeight() - 1.7f*EDGE_TOLERANCE);
 		infoLabel.setAlignment(Align.left);
-		
+
 		//The label's background image
 		alexInfoImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
 		alexInfoImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
@@ -1296,7 +1296,9 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 				return BUTTON_WIDTH*2/3;
 			}
 		};
-
+		if(SoundHandler.isSoundMuted()){
+			soundButton.setChecked(true);
+		}
 		//MUSIC BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/musicButton.atlas"));
 		buttonSkin = new Skin();
@@ -1318,6 +1320,9 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 				return BUTTON_WIDTH*2/3;
 			}
 		};
+		if(SoundHandler.isMusicMuted()){
+			musicButton.setChecked(true);
+		}
 
 		//HELP BUTTON
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/optionsScreen/helpButton.atlas"));
@@ -1612,15 +1617,15 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public void incrementTutorialStage() {
 		tutorialStage += 1;
 	}
-	
+
 	public boolean isStart() {
 		return start;
 	}
-	
+
 	public void setStart(boolean start) {
 		this.start = start;
 	}
-	
+
 	public void setPaused(boolean paused) {
 		this.paused = paused;
 	}

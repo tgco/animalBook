@@ -1,5 +1,7 @@
 package com.tgco.animalBook.handlers;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
@@ -9,6 +11,7 @@ import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Cow;
 import com.tgco.animalBook.gameObjects.Goat;
 import com.tgco.animalBook.gameObjects.Goose;
+import com.tgco.animalBook.gameObjects.Obstacle;
 import com.tgco.animalBook.gameObjects.Pig;
 import com.tgco.animalBook.gameObjects.Sheep;
 
@@ -393,6 +396,7 @@ public class LevelHandler {
 
 	public void setRetry(){
 		onRetry = true;
+		
 	}
 	
 	public void updateKidMode(boolean kM){
@@ -438,30 +442,62 @@ public class LevelHandler {
 		switch(level) {
 		case 1:
 			if (kidMode)
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.2f*Gdx.graphics.getHeight());
 			else
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.228f*Gdx.graphics.getHeight());
 		case 2:
 			if (kidMode)
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.285f*Gdx.graphics.getHeight());
 			else
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.485f*Gdx.graphics.getHeight());
 		case 3:
 			if (kidMode)
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.428f*Gdx.graphics.getHeight());
 			else
-				return (int) (.221f*Gdx.graphics.getHeight()*level);
+				return (int) (.714f*Gdx.graphics.getHeight());
 		case 4:
 			if (kidMode)
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.628f*Gdx.graphics.getHeight());
 			else
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.914f*Gdx.graphics.getHeight());
 		case 5:
 			if (kidMode)
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (.857f*Gdx.graphics.getHeight());
 			else
-				return  (int) (.221f*Gdx.graphics.getHeight()*level);
+				return  (int) (1.142f*Gdx.graphics.getHeight());
 		}
 		return  (int) (.221f*Gdx.graphics.getHeight()*level);
+	}
+
+	public Array<ABDrawable> addObstacles(int level2, Vector2 mPos) {
+		Random rand = new Random();
+		Array<ABDrawable> obstacles = new Array<ABDrawable>();
+		Obstacle o;
+		if(kidMode){
+			for (float i = 700f; i < returnLaneLength(level); i += 10f){
+				//50% of time, level number -1
+				if (rand.nextInt(level) > 0 && rand.nextInt(5) > 3){
+					o = new Obstacle();
+					o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
+					Gdx.app.log("Obstacle", "new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + returnLaneLength(level)/1000f*i);
+					if (o.getPosition().dst(mPos) > 250f)
+						obstacles.add(o);
+					i += 400f;
+				}
+			}
+		}else{
+
+			for (float i = 700f; i < returnLaneLength(level); i += 10f){
+				if (rand.nextInt(level) > 0 && rand.nextInt(1) == 0){
+					o = new Obstacle();
+					o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
+					Gdx.app.log("Obstacle", "new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + returnLaneLength(level)/1000f*i);
+					if (o.getPosition().dst(mPos) > 250f)
+						obstacles.add(o);
+					i += 400f;
+				}
+			}
+		}
+		return obstacles;
 	}
 }

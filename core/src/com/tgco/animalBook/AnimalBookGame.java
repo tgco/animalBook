@@ -46,7 +46,7 @@ public class AnimalBookGame extends Game {
 	/**
 	 * The current level from the preferences file
 	 */
-	private  int level = 1;
+	private  int level = 3;
 	/**
 	 * Load all information that differs between levels
 	 */
@@ -495,6 +495,11 @@ public class AnimalBookGame extends Game {
 			levelData.set(i, null);
 		}
 		setDataRetry();
+	}
+	public void retryLevel(){
+		for(int i=0; i< 5; i++){
+			levelData.set(i, null);
+		}
 	}
 	
 	public boolean isKidMode() {

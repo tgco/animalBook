@@ -1406,7 +1406,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void resume() {
 		AnimalBookGame.currState = state.RESUME;
-
 	}
 
 	public boolean toMain() {

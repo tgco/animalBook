@@ -98,7 +98,7 @@ public class World {
 	 * Handles all of the game object rendering responsibility
 	 */
 	private WorldRenderer worldRender;
-	
+
 	private Weather weather;
 
 	/**
@@ -120,7 +120,7 @@ public class World {
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
 		//spot 3 is storing movable array
-		if(levelSize && gameInstance.getLevelData().get(2) !=null){
+		if(levelSize && gameInstance.getLevelData().get(2) != null){
 			Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
 			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
 			reinitTextureMovable();
@@ -135,8 +135,8 @@ public class World {
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 
-
 		tolerance = drawMap.get("Movable").get(0).getWidth();
+
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
 		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
@@ -148,7 +148,7 @@ public class World {
 		}
 
 		drawMap.put("Boosts", new Array<ABDrawable>());
-		
+
 		//Make the market and set it at the end
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
@@ -160,7 +160,7 @@ public class World {
 
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
-			Gdx.app.log("My Tagg", "The hit back is " + gameInstance.isHitBack());
+			//Gdx.app.log("My Tagg", "The hit back is " + gameInstance.isHitBack());
 			if (!gameInstance.isHitBack()) {
 				reinitTexturePlayer();
 				player.resetPlayerPosition();
@@ -186,21 +186,10 @@ public class World {
 			drawMap.put("Obstacle", (Array<ABDrawable>) gameInstance.getLevelData().get(4));
 			reinitTextureObstacle();
 		}else{
-			Random rand = new Random();
-			Array<ABDrawable> obstacles = new Array<ABDrawable>();
-			Obstacle o;
-			for (float i = 700f; i < laneLength; i += 10f){
-				if (rand.nextInt(gameInstance.getLevelHandler().getLevel()) > 0 && rand.nextInt(1) == 0){
-					o = new Obstacle();
-					o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
-					Gdx.app.log("Obstacle", "new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + laneLength/1000f*i);
-					if (o.getPosition().dst(market.getPosition()) > 250f)
-						obstacles.add(o);
-					i += 400f;
-				}
-			}
-			drawMap.put("Obstacle", obstacles);
-			
+
+
+			drawMap.put("Obstacle",  gameInstance.getLevelHandler().addObstacles( gameInstance.getLevelHandler().getLevel(), market.getPosition()));
+
 		}
 		weather = Weather.CLEAR;
 	}
@@ -441,6 +430,8 @@ public class World {
 			}
 		}
 
+		gameInstance.getGameScreen().setInfolabel();
+
 		//check if market is in middle of screen to move on
 		if (Math.abs(market.getPosition().y - camera.position.y) < 20) {
 			SoundHandler.pauseBackgroundMusic();
@@ -448,8 +439,7 @@ public class World {
 			gameInstance.setHitBack(false);
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
-		
-		gameInstance.getGameScreen().setInfolabel();
+
 	}
 
 	/**

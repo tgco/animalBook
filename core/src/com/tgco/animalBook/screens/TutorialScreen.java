@@ -98,7 +98,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	 * The font used when rendering strings
 	 */
 	private BitmapFont font;
-	private final float FONT_SCALE = Gdx.graphics.getHeight()/1000f;
+	private final float FONT_SCALE = Gdx.graphics.getHeight()/750f;
 
 	/**
 	 * If the tutorial screen is paused
@@ -163,7 +163,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		tutorialWorld = new TutorialWorld(gameInstance);
 
 		//Initialize rendering objects
-		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 		font.setScale(FONT_SCALE);
 		//font = new BitmapFont();
 		batch = new SpriteBatch();
@@ -522,7 +522,11 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		infoLabel = new Label("Money: ##" + getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
 				alexButton.getY() + alexButton.getHeight() - 2.5f*EDGE_TOLERANCE);
-
+		infoLabel.pack();
+		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
+				alexButton.getY() + alexButton.getHeight() - infoLabel.getHeight() - 1.7f*EDGE_TOLERANCE);
+		infoLabel.setAlignment(Align.left);
+		
 		//The label's background image
 		alexInfoImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
 		alexInfoImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,

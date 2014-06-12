@@ -34,6 +34,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	private Button testButton;
 	private boolean hasConfirm = false;
 	private Stage popupStage;
+	private boolean toggleOn = false;
 
 	private static final double REGION_HEIGHT = BUTTON_HEIGHT*1.25f;
 	private static final double REGION_WIDTH = BUTTON_WIDTH*3.1f;
@@ -53,7 +54,10 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		Gdx.input.setCatchBackKey(true);
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		SoundHandler.toggleMusic();
+		if(!SoundHandler.isMusicMuted()){
+			SoundHandler.toggleMusic();
+			toggleOn  = true;
+		}
 
 	}
 
@@ -187,7 +191,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				SoundHandler.toggleMusic();
+				toggleMusicOn();
 				//Change the screen when the button is let go
 				gameInstance.setData();
 				if(gameInstance.getLevelHandler().isDoTutorial()){
@@ -206,7 +210,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				SoundHandler.toggleMusic();
+				toggleMusicOn();
 				//Change the screen when the button is let go
 				Gdx.input.setCatchBackKey(true);
 				gameInstance.setScreen(new OptionsScreen(gameInstance));
@@ -222,7 +226,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!testButton.isDisabled()){
 					SoundHandler.playButtonClick();
-					SoundHandler.toggleMusic();
+					toggleMusicOn();
 					gameInstance.setScreen(new StoryScreen(gameInstance));
 				}
 			}
@@ -242,7 +246,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	public void setDialog(){
 		hasConfirm  = true;
-		SoundHandler.toggleMusic();
+		toggleMusicOn();
 		Skin skin = new Skin(Gdx.files.internal("confirmSkin/uiskin.json"));
 		ConfirmDialog backD = new ConfirmDialog("Quit Game", skin, gameInstance,"Are you Sure you want to Quit?", 1);
 		backD.show(popupStage);
@@ -252,9 +256,16 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	}
 	public void setCancel(){
 		hasConfirm = false;
-		SoundHandler.toggleMusic();
+		toggleMusicOn();
 		inputMultiplexer.removeProcessor(popupStage);
 		inputMultiplexer.addProcessor(buttonStage);
 		popupStage = new Stage();	
+	}
+	
+	public void toggleMusicOn(){
+		if(toggleOn){
+			SoundHandler.toggleMusic();
+			toggleOn = false;
+		}
 	}
 }

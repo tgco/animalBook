@@ -49,7 +49,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 		popupStage = new Stage();
 		
 		//Initialize rendering objects
-		font = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
+		font = new BitmapFont(Gdx.files.internal("fonts/Snokum.fnt"));
 		font.setScale(.75f);
 
 		//Background Rendering

@@ -135,12 +135,11 @@ public class LevelHandler {
 
 		Array<ABDrawable> animals = new Array<ABDrawable>();
 
-		Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
+		//Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
 		int x;
 		float animalWidth;
 		float animalHeight;
 		for(int i = 0; i < startAnimals; i++){
-			Gdx.app.log("My Tagg", "make animals " + i);
 			if(i < .5*startAnimals){
 				x = -i;
 				animalWidth = Gdx.graphics.getWidth()/2 + x*30 -10;

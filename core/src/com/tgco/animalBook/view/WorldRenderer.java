@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
@@ -29,10 +31,10 @@ public class WorldRenderer {
 	/**
 	 * Dimensions for the progress bar and slider
 	 */
-	private static final float PROGRESS_BAR_WIDTH = .019f*Gdx.graphics.getWidth();
-	private static final float PROGRESS_BAR_HEIGHT = .95f*Gdx.graphics.getHeight();
-	private static final float PROGRESS_SLIDER_WIDTH = .019f*Gdx.graphics.getWidth();
-	private static final float PROGRESS_SLIDER_HEIGHT = .015f*Gdx.graphics.getHeight();
+	private static final float PROGRESS_BAR_WIDTH = .02f*Gdx.graphics.getWidth();
+	private static final float PROGRESS_BAR_HEIGHT = .85f*Gdx.graphics.getHeight();
+	private static final float PROGRESS_SLIDER_WIDTH = .015f*Gdx.graphics.getWidth();
+	private static final float PROGRESS_SLIDER_HEIGHT = .01f*Gdx.graphics.getHeight();
 
 	/**
 	 * Textures for drawing primitive rectangles
@@ -40,6 +42,11 @@ public class WorldRenderer {
 	private Texture black = new Texture(Gdx.files.internal("primitiveTextures/black.png"));
 	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
 	private Texture blue = new Texture(Gdx.files.internal("primitiveTextures/blue.png"));
+	
+	/**
+	 * Texture for the progress bar
+	 */
+	private Texture progressBar = new Texture(Gdx.files.internal("objectTextures/progressBar.png"));
 
 
 	/**
@@ -74,7 +81,8 @@ public class WorldRenderer {
 		for (Array<ABDrawable> a : drawables.values()){
 			for (ABDrawable drawable : a) {
 				drawable.draw(batch);
-				/* will render all object bounds when uncommented
+				/*
+				// will render all object bounds for collision detection when uncommented
 				batch.end();
 				ShapeRenderer render = new ShapeRenderer();
 				render.setProjectionMatrix(cam.combined);
@@ -84,6 +92,7 @@ public class WorldRenderer {
 				render.dispose();
 				batch.begin();
 				*/
+				
 			}
 		}
 
@@ -93,8 +102,8 @@ public class WorldRenderer {
 		projectedBatch.begin();
 
 		//Progress bar
-		projectedBatch.draw(blue,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
-		projectedBatch.draw(black,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
+		projectedBatch.draw(progressBar,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
+		projectedBatch.draw(black,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth() + .0025f*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
 
 		projectedBatch.end();
 		projectedBatch.dispose();
@@ -146,5 +155,6 @@ public class WorldRenderer {
 		black.dispose();
 		blue.dispose();
 		red.dispose();
+		progressBar.dispose();
 	}
 }

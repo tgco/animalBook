@@ -345,8 +345,10 @@ public class World {
 
 		if(getMovables().size <=0 && gameInstance.getLevelHandler().getStoredAmount() > 0) {
 			speed = increasedCameraSpeed*(player.getHealth()/100);
+		} else if (weather.getWeather() == WeatherType.RAINY) {
+			speed = (cameraSpeed*(player.getHealth()/100))/2f;
 		} else {
-			speed = cameraSpeed*(player.getHealth()/100);
+			speed = (cameraSpeed*(player.getHealth()/100));
 		}
 
 		player.setSpeed(speed);

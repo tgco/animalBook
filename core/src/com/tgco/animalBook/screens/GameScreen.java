@@ -570,14 +570,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesGroup1 = new HorizontalGroup();
 		upgradesGroup1.center();
 		upgradesGroup1.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
-				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);
+				alexButton.getY() - 1.5f*BUTTON_HEIGHT - 2.5f*EDGE_TOLERANCE);
 		upgradesGroup1.space(EDGE_TOLERANCE);
 
 		//Upgrade Group 2
 		upgradesGroup2 = new HorizontalGroup();
 		upgradesGroup2.center();
 		upgradesGroup2.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
-				alexButton.getY() - 3f*BUTTON_HEIGHT - EDGE_TOLERANCE);
+				upgradesGroup1.getY() - BUTTON_HEIGHT + EDGE_TOLERANCE);
 		upgradesGroup2.space(EDGE_TOLERANCE);
 
 		upgradesGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
@@ -737,8 +737,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		longerButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		longerButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
-		//trLongerButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
-		//trLongerButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
 		trLongerButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
 		trLongerButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
 		
@@ -1101,7 +1099,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesGroupImage.setSize(Math.max(upgradesGroup1.getWidth(), upgradesGroup2.getWidth()) + EDGE_TOLERANCE*2f,
 				upgradesGroup1.getHeight() + upgradesGroup2.getHeight() - EDGE_TOLERANCE);
 		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
-				alexButton.getY() - 3f*BUTTON_HEIGHT - EDGE_TOLERANCE);
+				upgradesGroup2.getY());
 		//For single row
 		/*upgradesGroupImage.setSize(upgradesGroup1.getWidth() + 2f*EDGE_TOLERANCE, upgradesGroup1.getHeight());
 		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,

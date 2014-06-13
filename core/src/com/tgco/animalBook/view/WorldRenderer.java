@@ -107,39 +107,16 @@ public class WorldRenderer {
 				render.dispose();
 				batch.begin();
 				 */
-
 			}
 		}
-		/*
-		if (goingToRain && timeCounter <= TIME_TO_RAIN){
-			rainySprite.draw(batch, .5f*timeCounter/TIME_TO_RAIN);
+		//Swipes on screen
+		for (Swipe swipe : swipes) {
+			if (swipe.getLifeTime() <= 1f) {
+				swipes.removeValue(swipe, false);
+				swipe.dispose();
+			} else
+				swipe.draw(batch,delta);
 		}
-		else{
-			if (goingToRain) {
-				goingToRain = false;
-				timeCounter = 0;
-				steadyRain = true;
-			}
-		}
-		if (steadyRain){
-			rainySprite.draw(batch, .5f);
-		}
-		if (goingToClear && timeCounter <= FADE_TO_CLEAR){
-			if (steadyRain)
-				steadyRain = false;
-			float alphaValue = 1f - timeCounter;
-			if (alphaValue < 0f){
-				alphaValue = 0f;
-			}
-			rainySprite.draw(batch, .5f*alphaValue/FADE_TO_CLEAR);
-		} else {
-			if (goingToClear) {
-				goingToClear = false;
-				timeCounter = 0;
-			}
-		}*/
-
-
 		batch.end();
 
 		SpriteBatch projectedBatch = new SpriteBatch();
@@ -161,20 +138,22 @@ public class WorldRenderer {
 		}
 		else{
 			if (fadeToClear && timeCounter < TIME_TO_CLEAR){
+				if (steadyRain){
+					steadyRain = false;
+				}
 				rainySprite.draw(projectedBatch, .5f - .5f*timeCounter/TIME_TO_CLEAR);
 
 			}
 			else{
 				if (fadeToClear){
 					fadeToClear = false;
-					steadyRain = false;
 					timeCounter = 0;
 				}
 			}
 		}
-		if (fadeToClear || fadeToRain)
+		if (!steadyRain && (fadeToRain || fadeToClear))
 			timeCounter+=delta;
-
+		
 		//Progress bar
 		projectedBatch.draw(progressBar,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 		projectedBatch.draw(black,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth() + .0025f*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
@@ -184,15 +163,6 @@ public class WorldRenderer {
 
 
 		batch.begin();
-		//Swipes on screen
-		for (Swipe swipe : swipes) {
-			if (swipe.getLifeTime() <= 1f) {
-				swipes.removeValue(swipe, false);
-				swipe.dispose();
-			} else
-				swipe.draw(batch,delta);
-		}
-
 	}
 
 	/**
@@ -236,13 +206,11 @@ public class WorldRenderer {
 	}
 
 	public void setRainy(boolean incomingRain){
-
-		if (incomingRain && !rainy){
+		if (incomingRain & !rainy){
 			fadeToRain = true;
 		}
 		else{
-			if (rainy){
-				steadyRain = false;
+			if (!incomingRain & rainy){
 				fadeToClear = true;
 			}
 		}

@@ -463,7 +463,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		menuGroup.addActor(inventoryGroupButton);
 
 		//Upgrade Group Button
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/upgradeButton.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/shopButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
@@ -690,9 +690,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		fruitfulButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		fruitfulButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trFruitfulButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/fruitfullButtonDis.png")) );
-		trFruitfulButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
-		trFruitfulButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
-
+		//trFruitfulButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
+		//trFruitfulButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+		trFruitfulButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
+		trFruitfulButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
+		
 		fruitfulButtonStyle.disabled = new TextureRegionDrawable(trFruitfulButton);
 
 		fruitfulButton = new Button(fruitfulButtonStyle){
@@ -717,8 +719,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		longerButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		longerButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
-		trLongerButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
-		trLongerButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+		//trLongerButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
+		//trLongerButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+		trLongerButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
+		trLongerButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
+		
 		longerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
 
 		longerButton = new Button(longerButtonStyle){
@@ -743,9 +748,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		MoreButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		MoreButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trMoreButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/MoreButtonDis.png")) );
-		trMoreButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
-		trMoreButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
-
+		//trMoreButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
+		//trMoreButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+		trMoreButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
+		trMoreButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
+		
 		MoreButtonStyle.disabled = new TextureRegionDrawable(trMoreButton);
 
 		moreButton = new Button(MoreButtonStyle) {
@@ -770,8 +777,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		dogButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		dogButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trDogButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/dogButtonDis.png")) );
-		trDogButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
-		trDogButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+		//trDogButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
+		//trDogButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+		trDogButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
+		trDogButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
 
 		dogButtonStyle.disabled = new TextureRegionDrawable(trDogButton);
 

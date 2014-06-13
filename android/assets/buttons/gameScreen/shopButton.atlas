@@ -1,19 +1,19 @@
 
-upgradeButton.png
+shopButton.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 buttonUnpressed
   rotate: false
   xy: 0, 0
-  size: 400, 400
-  orig: 400, 400
+  size: 94, 94
+  orig: 94, 94
   offset: 0, 0
   index: -1
 buttonPressed
   rotate: false
-  xy: 400, 0
-  size: 400, 400
-  orig: 400, 400
+  xy: 94, 0
+  size: 94, 94
+  orig: 94, 94
   offset: 0, 0
   index: -1

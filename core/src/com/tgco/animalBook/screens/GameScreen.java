@@ -111,6 +111,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
 	private Texture yellow = new Texture(Gdx.files.internal("primitiveTextures/yellow.png"));
 	private Texture green = new Texture(Gdx.files.internal("primitiveTextures/green.png"));
+	
+	
 	private Texture redOp = new Texture(Gdx.files.internal("primitiveTextures/redOp.png"));
 
 	private boolean isMain = true;
@@ -201,6 +203,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				buttonStage.draw();
 
 				batch.begin();
+				
 				//Draw health bar (test)
 				Vector3 vectHealth = new Vector3(alexButton.getX() + alexButton.getWidth() + 1.4f*EDGE_TOLERANCE,
 						Gdx.graphics.getHeight() - (alexButton.getY() + alexButton.getHeight() - 1.5f*EDGE_TOLERANCE)
@@ -374,6 +377,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 
+	public Vector2 alexsPosition(){
+		return new Vector2(alexButton.getX() + alexButton.getWidth(),alexButton.getY() + alexButton.getHeight());
+	}
 	/**
 	 * Initialize main menu group items
 	 */
@@ -582,14 +588,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesGroup1 = new HorizontalGroup();
 		upgradesGroup1.center();
 		upgradesGroup1.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
-				alexButton.getY() - 1.5f*BUTTON_HEIGHT - 2.5f*EDGE_TOLERANCE);
+				alexButton.getY() - 1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE);
 		upgradesGroup1.space(EDGE_TOLERANCE);
 
 		//Upgrade Group 2
 		upgradesGroup2 = new HorizontalGroup();
 		upgradesGroup2.center();
 		upgradesGroup2.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE*2f,
-				upgradesGroup1.getY() - BUTTON_HEIGHT + EDGE_TOLERANCE);
+				upgradesGroup1.getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 		upgradesGroup2.space(EDGE_TOLERANCE);
 
 		upgradesGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
@@ -730,12 +736,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		fruitfulButton = new Button(fruitfulButtonStyle){
 			@Override
 			public float getPrefHeight(){
-				return BUTTON_HEIGHT*2/3;
+				return BUTTON_HEIGHT;
 			};
 
 			@Override
 			public float getPrefWidth(){
-				return BUTTON_WIDTH*2/3;
+				return BUTTON_WIDTH;
 			}
 		};
 		fruitfulButton.setName("fruitfulButton");
@@ -757,12 +763,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		longerButton = new Button(longerButtonStyle){
 			@Override
 			public float getPrefHeight(){
-				return BUTTON_HEIGHT*2/3;
+				return BUTTON_HEIGHT;
 			};
 
 			@Override
 			public float getPrefWidth(){
-				return BUTTON_WIDTH*2/3;
+				return BUTTON_WIDTH;
 			}
 		};
 		longerButton.setName("longerButton");
@@ -786,12 +792,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		moreButton = new Button(MoreButtonStyle) {
 			@Override
 			public float getPrefHeight(){
-				return BUTTON_HEIGHT*2/3;
+				return BUTTON_HEIGHT;
 			};
 
 			@Override
 			public float getPrefWidth(){
-				return BUTTON_WIDTH*2/3;
+				return BUTTON_WIDTH;
 			}
 		};
 		moreButton.setName("moreButton");
@@ -815,12 +821,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		dogButton = new Button(dogButtonStyle) {
 			@Override
 			public float getPrefHeight(){
-				return BUTTON_HEIGHT*2/3;
+				return BUTTON_HEIGHT;
 			};
 
 			@Override
 			public float getPrefWidth(){
-				return BUTTON_WIDTH*2/3;
+				return BUTTON_WIDTH;
 			}
 		};
 		dogButton.setName("dogButton");
@@ -1109,9 +1115,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		//For two rows
 		upgradesGroupImage.setSize(Math.max(upgradesGroup1.getWidth(), upgradesGroup2.getWidth()) + EDGE_TOLERANCE*2f,
-				upgradesGroup1.getHeight() + upgradesGroup2.getHeight() - EDGE_TOLERANCE);
+				upgradesGroup1.getHeight() + upgradesGroup2.getHeight() + 3f*EDGE_TOLERANCE);
 		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
-				upgradesGroup2.getY());
+				upgradesGroup2.getY() - EDGE_TOLERANCE);
 		//For single row
 		/*upgradesGroupImage.setSize(upgradesGroup1.getWidth() + 2f*EDGE_TOLERANCE, upgradesGroup1.getHeight());
 		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
@@ -1417,6 +1423,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		yellow.dispose();
 		green.dispose();
 		red.dispose();
+		redOp.dispose();
 		black.dispose();
 	}
 

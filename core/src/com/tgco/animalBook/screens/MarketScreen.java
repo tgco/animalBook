@@ -11,12 +11,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
@@ -45,6 +50,18 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	private Stage popupStage;
 
 	private boolean hasConfirm = false;
+	private final float FONT_SCALE = Gdx.graphics.getHeight()/750f;
+	private Label infoLabel;
+
+	private Image alexInfoImage;
+	
+	/**
+	 * textures for health bar, etc
+	 */
+	private Texture black = new Texture(Gdx.files.internal("primitiveTextures/black.png"));
+	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
+	private Texture yellow = new Texture(Gdx.files.internal("primitiveTextures/yellow.png"));
+	private Texture green = new Texture(Gdx.files.internal("primitiveTextures/green.png"));
 
 	/**
 	 * Constructs a new Market Screen with a game instance and a game screen.
@@ -113,16 +130,13 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			batch.begin();
 			batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-			//Draw money
-			font.setColor(Color.WHITE);
-			font.setScale(1.2f);
-			font.draw(batch, "Your Money: $" + String.valueOf(gameScreen.getWorld().getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 , Gdx.graphics.getHeight() - 3*EDGE_TOLERANCE );
-
 			font.setColor(Color.WHITE);
 			font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
 			font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
 			font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE - font.getCapHeight());
 
+			infoLabel.setText("Money: $" + gameScreen.getWorld().getPlayer().getPlayerMoney());
+			
 			batch.end();
 
 			//Draw buttons
@@ -136,7 +150,22 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			if(Gdx.input.isKeyPressed(Keys.BACK)){
 				setDialog();
 			}
+			
+			batch.begin();
+			//Draw health bar (test)
+			batch.draw(black,gameScreen.alexsPosition().x + 1.5f*EDGE_TOLERANCE, gameScreen.alexsPosition().y - 1.5f*EDGE_TOLERANCE, 10.2f*EDGE_TOLERANCE, 1.1f*EDGE_TOLERANCE);
+			if (gameScreen.getWorld().getPlayer().getHealth()/100f > .50f)	
+				batch.draw(green,gameScreen.alexsPosition().x + 1.6f*EDGE_TOLERANCE, gameScreen.alexsPosition().y
+						- 1.5f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(gameScreen.getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
+			else if (gameScreen.getWorld().getPlayer().getHealth()/100f > .25f)
+				batch.draw(yellow,gameScreen.alexsPosition().x + 1.6f*EDGE_TOLERANCE,gameScreen.alexsPosition().y
+						- 1.5f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(gameScreen.getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
+			else
+				batch.draw(red,gameScreen.alexsPosition().x + 1.6f*EDGE_TOLERANCE,gameScreen.alexsPosition().y
+						- 1.5f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(gameScreen.getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
 
+	
+			batch.end();
 			//Gdx.gl.glClearColor(1, 1, 1, 1);
 			//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -221,6 +250,10 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			});
 			//add actor inventoryButton actor to the buttonStage
 			buttonStage.addActor(marketButton);
+			
+			
+			
+			
 
 			//update the text for the corresponding item in the market
 			updateMarketScreenItems(i);
@@ -407,6 +440,28 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.addActor(retryButton);
 		buttonStage.addActor(levelAnimalButton);
 		buttonStage.addActor(nextLevelAnimalButton);
+		
+		
+		
+		//Information Label
+		LabelStyle infoLabelStyle = new LabelStyle();
+		infoLabelStyle.font = font;
+		infoLabelStyle.fontColor = Color.WHITE;
+		infoLabelStyle.font.setScale(FONT_SCALE);
+		infoLabel = new Label("Money: $" + gameScreen.getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
+		infoLabel.pack();
+		infoLabel.setPosition(gameScreen.alexsPosition().x + 1.5f*EDGE_TOLERANCE,
+				gameScreen.alexsPosition().y - infoLabel.getHeight() - 1.7f*EDGE_TOLERANCE);
+		infoLabel.setAlignment(Align.left);
+		
+		//The label's background image
+		alexInfoImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+		alexInfoImage.setSize(11f*EDGE_TOLERANCE, gameScreen.alexsPosition().y -infoLabel.getY() + .5f*EDGE_TOLERANCE);
+		alexInfoImage.setPosition(infoLabel.getX() - .5f*EDGE_TOLERANCE,
+				infoLabel.getY() - .5f*EDGE_TOLERANCE);
+		buttonStage.addActor(alexInfoImage);
+		buttonStage.addActor(infoLabel);
+		
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}
@@ -430,6 +485,11 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		for (BitmapFont font : fonts) {
 			font.dispose();
 		}
+		
+		red.dispose();
+		green.dispose();
+		black.dispose();
+		yellow.dispose();
 	}
 
 	/**

@@ -69,7 +69,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Each button used on the game screen user interface overlay
 	 */
-	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, dogButton;
+	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, fruitfulButton, longerButton, moreButton, dogButton;
 
 	private VerticalGroup menuGroup;
 	private Image alexInfoImage, menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
@@ -1040,7 +1040,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					if(getWorld().getDrawMap().get("Boosts").size <= 0) {
 						SoundHandler.playButtonClick();
 						getWorld().getPlayer().subtractPlayerMoney(dogMoney);
-						Dog newDog = new Dog(new Vector2(0, Gdx.graphics.getHeight()), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
+						Dog newDog = new Dog(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
+						Gdx.app.log("Doge", "Added new dog at " + newDog.getPosition().toString());
 						getWorld().getDrawMap().get("Boosts").add(newDog);
 						infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 								+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
@@ -1485,6 +1486,28 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void pause() {
 		Gdx.app.log("My Tagg", "This is screen pause");
 
+	}
+	
+	private void updateCosts() {
+		if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
+			fruitfulButton.setDisabled(true);
+		else
+			fruitfulButton.setDisabled(false);
+
+		if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
+			longerButton.setDisabled(true);
+		else
+			longerButton.setDisabled(false);
+
+		if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
+			moreButton.setDisabled(true);
+		else
+			moreButton.setDisabled(false);
+
+		if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+			dogButton.setDisabled(true);
+		else
+			dogButton.setDisabled(false);
 	}
 	
 	public void setInfolabel(){

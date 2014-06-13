@@ -1,6 +1,7 @@
 package com.tgco.animalBook.view;
 
 import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +14,7 @@ import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Consumable;
+import com.tgco.animalBook.gameObjects.Dog;
 import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
@@ -389,6 +391,7 @@ public class World {
 			}
 
 		}
+		
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
@@ -399,7 +402,6 @@ public class World {
 			//Reduce upward bias if there's a dog
 			if(drawMap.get("Boosts").size > 0) {
 				((Movable) movable).adjustForwardBias(.5f, speed, delta);
-				Gdx.app.log("Doge", "Such adjust, many method call");
 			}
 
 			//Drop new items

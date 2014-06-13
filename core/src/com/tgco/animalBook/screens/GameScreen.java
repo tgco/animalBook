@@ -111,6 +111,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
 	private Texture yellow = new Texture(Gdx.files.internal("primitiveTextures/yellow.png"));
 	private Texture green = new Texture(Gdx.files.internal("primitiveTextures/green.png"));
+	
+	
 	private Texture redOp = new Texture(Gdx.files.internal("primitiveTextures/redOp.png"));
 
 	private boolean isMain = true;
@@ -201,6 +203,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				buttonStage.draw();
 
 				batch.begin();
+				
 				//Draw health bar (test)
 				Vector3 vectHealth = new Vector3(alexButton.getX() + alexButton.getWidth() + 1.4f*EDGE_TOLERANCE,
 						Gdx.graphics.getHeight() - (alexButton.getY() + alexButton.getHeight() - 1.5f*EDGE_TOLERANCE)
@@ -374,6 +377,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 
+	public Vector2 alexsPosition(){
+		return new Vector2(alexButton.getX() + alexButton.getWidth(),alexButton.getY() + alexButton.getHeight());
+	}
 	/**
 	 * Initialize main menu group items
 	 */
@@ -1419,6 +1425,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		yellow.dispose();
 		green.dispose();
 		red.dispose();
+		redOp.dispose();
 		black.dispose();
 	}
 

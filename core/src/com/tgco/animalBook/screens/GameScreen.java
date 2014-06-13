@@ -174,8 +174,17 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 				drawTiledBackground(batch);
 
+				//add in endline when market is on screen
+				if(gameWorld.getCamera().position.y > gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel())+ Gdx.graphics.getHeight()/5){
+					Vector3 vectEnd = new Vector3(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
+					gameWorld.getCamera().unproject(vectEnd);
+					batch.draw(red, vectEnd.x - 75, vectEnd.y - .292f*Gdx.graphics.getHeight()/2, 150, 4);
+				}
+				
 				//Draw world over background
 				gameWorld.render(batch,alexButton.isChecked(),delta);
+				
+				
 				batch.end();
 
 				//Draw buttons over the screen
@@ -195,6 +204,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				else
 					batch.draw(red,vectHealth.x + .1f*EDGE_TOLERANCE, vectHealth.y + .1f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
 
+				
+				
 				batch.end();
 
 			}
@@ -1447,4 +1458,5 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 	}
+
 }

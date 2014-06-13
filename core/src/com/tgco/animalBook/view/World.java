@@ -93,6 +93,8 @@ public class World {
 	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
 
+
+
 	/**
 	 * Generates random numbers for probability
 	 */
@@ -108,6 +110,8 @@ public class World {
 	private float targetWeatherTime = 0f;
 	private final float WEATHER_DURATION = 4f;
 	private Vector2 windVector;
+	private static final float WEATHER_CLICK = .5f;
+	private float weatherClick;
 
 	/**
 	 * Constructor with game instance and pulls stored info from gameInstance if there is anything stored
@@ -204,6 +208,7 @@ public class World {
 		weather.setWeatherType(WeatherType.CLEAR);
 		targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
 		windVector = new Vector2();
+		weatherClick = 0;
 	}
 
 
@@ -484,6 +489,18 @@ public class World {
 		else{
 			weatherTime += delta;
 		}
+		if (weatherClick < WEATHER_CLICK){
+			weatherClick += delta;
+			switch(weather.getWeather()){
+			case RAINY: {break;}
+			case WINDY:	{break;}
+			case CLEAR: {break;}
+			default: {break;}
+			}
+		}
+		else{
+			weatherClick = 0f;
+		}
 	}
 
 	/**
@@ -542,8 +559,3 @@ public class World {
 
 
 }
-/*
- * if (wind.getPosition().x < 0 || wind.getPosition().x > Gdx.graphics.getWidth()){
-				winds.removeValue(wind, false);
-				wind.dispose();
-			}*/

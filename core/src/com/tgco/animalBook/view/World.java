@@ -105,6 +105,7 @@ public class World {
 	private float weatherTime = 0f;
 	private float targetWeatherTime = 0f;
 	private final float WEATHER_DURATION = 4f;
+	private Vector2 windVector;
 
 	/**
 	 * Constructor with game instance and pulls stored info from gameInstance if there is anything stored
@@ -200,6 +201,7 @@ public class World {
 		weather = new Weather();
 		weather.setWeatherType(WeatherType.CLEAR);
 		targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
+		windVector = new Vector2();
 	}
 
 
@@ -390,11 +392,16 @@ public class World {
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
+			if (weather.getWeather() == WeatherType.WINDY){
+				if (rand.nextBoolean())
+					((Movable) movable).addToCurrentTarget(windVector);
+			}
 			//Reduce upward bias if there's a dog
 			if(drawMap.get("Boosts").size > 0) {
 				((Movable) movable).adjustForwardBias(.5f, speed, delta);
 				Gdx.app.log("Doge", "Such adjust, many method call");
 			}
+
 			//Drop new items
 			if(rand.nextInt(100) <= 50 && drawMap.get("Movable").size <= 30){
 				ABDrawable dropping =  ((Animal)movable).drop(gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
@@ -459,6 +466,16 @@ public class World {
 		if (weatherTime > targetWeatherTime){
 			weather.setWeatherType(weather.getNewWeather());
 			worldRender.setRainy(weather.getWeather() == WeatherType.RAINY);
+			if (weather.getWeather() == WeatherType.WINDY){
+				double magnitude = (float)(rand.nextInt(40) - 20);
+				if (magnitude < 0)
+					magnitude-=10.0;
+				else
+					magnitude +=10.0;
+				double radian = (((double)rand.nextInt(360))*2.0*Math.PI/360.0);
+				windVector = new Vector2((float)(magnitude*Math.cos(radian)),(float)(magnitude*Math.sin(radian)));
+				Gdx.app.log("WEATHER:", windVector.toString());
+			}
 			weatherTime = 0f;
 			targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
 		}
@@ -520,8 +537,8 @@ public class World {
 	public float getPrecentage(){
 		return (camera.position.y - Gdx.graphics.getHeight()/2f)/(laneLength);
 	}
-	
-	
+
+
 }
 /*
  * if (wind.getPosition().x < 0 || wind.getPosition().x > Gdx.graphics.getWidth()){

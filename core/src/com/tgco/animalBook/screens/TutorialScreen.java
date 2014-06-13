@@ -81,6 +81,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	private int fruitfulMoney;
 	private int longerMoney;
 	private int moreMoney;
+	private int dogMoney;
 
 	private static boolean mainMenuInitialized, inventoryMenuInitialized, upgradesMenuInitialized, optionsMenuInitialized;
 
@@ -534,7 +535,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		alexInfoImage.setSize(11f*EDGE_TOLERANCE, alexButton.getHeight() - 2f*EDGE_TOLERANCE);
 
 		//SKIP BUTTON
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/tutorialScreen/buttonSkip.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/tutorialScreen/skipButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
@@ -684,7 +685,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		menuGroup.addActor(inventoryGroupButton);
 
 		//Upgrade Group Button
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/upgradeButton.atlas"));
+		atlas = new TextureAtlas(Gdx.files.internal("buttons/gameScreen/shopButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
 
@@ -900,9 +901,10 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 	public void initializeUpgradeItems(){
 		upgradesMenuInitialized = true;
 		//initialize upgrade monies
-		fruitfulMoney = (int) (100*(Math.pow(2,gameInstance.getLevelHandler().getFruitfullMoneyP())));
-		longerMoney = (int) (500*(Math.pow(2,gameInstance.getLevelHandler().getLongerMoneyP())));
-		moreMoney = (int) (1000*(Math.pow(2,gameInstance.getLevelHandler().getMoreMoneyP())));
+		fruitfulMoney = (int) (15*(Math.pow(2,gameInstance.getLevelHandler().getFruitfullMoneyP())));
+		longerMoney = (int) (5*(Math.pow(2,gameInstance.getLevelHandler().getLongerMoneyP())));
+		moreMoney = (int) (10*(Math.pow(2,gameInstance.getLevelHandler().getMoreMoneyP())));
+		dogMoney = 100;
 		final Button fruitfulButton, longerButton, moreButton;
 		final Label upgradeLabel, fruitfulLabel, longerLabel, moreLabel;
 
@@ -915,8 +917,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		fruitfulButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		fruitfulButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trFruitfulButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/fruitfullButtonDis.png")) );
-		trFruitfulButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
-		trFruitfulButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+		trFruitfulButton.setRegionHeight((int) (BUTTON_HEIGHT*.92));
+		trFruitfulButton.setRegionWidth((int) (BUTTON_HEIGHT*.92));
 
 		fruitfulButtonStyle.disabled = new TextureRegionDrawable(trFruitfulButton);
 
@@ -942,8 +944,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		longerButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		longerButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
-		trLongerButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
-		trLongerButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+		trLongerButton.setRegionHeight((int) (BUTTON_HEIGHT*.92));
+		trLongerButton.setRegionWidth((int) (BUTTON_HEIGHT*.92));
 		longerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
 
 		longerButton = new Button(longerButtonStyle){
@@ -968,8 +970,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		MoreButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		MoreButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trMoreButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/MoreButtonDis.png")) );
-		trMoreButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
-		trMoreButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
+		trMoreButton.setRegionHeight((int) (BUTTON_HEIGHT*.92));
+		trMoreButton.setRegionWidth((int) (BUTTON_HEIGHT*.92));
 
 		MoreButtonStyle.disabled = new TextureRegionDrawable(trMoreButton);
 

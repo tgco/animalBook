@@ -3,6 +3,7 @@ package com.tgco.animalBook.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -36,17 +37,28 @@ public class WorldRenderer {
 	private static final float PROGRESS_SLIDER_WIDTH = .015f*Gdx.graphics.getWidth();
 	private static final float PROGRESS_SLIDER_HEIGHT = .01f*Gdx.graphics.getHeight();
 
+	private static final float TIME_TO_RAIN = 2f;
+
+	private static final float TIME_TO_CLEAR = 2f;
+
 	/**
 	 * Textures for drawing primitive rectangles
 	 */
 	private Texture black = new Texture(Gdx.files.internal("primitiveTextures/black.png"));
 	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
 	private Texture blue = new Texture(Gdx.files.internal("primitiveTextures/blue.png"));
-	
+
 	/**
 	 * Texture for the progress bar
 	 */
 	private Texture progressBar = new Texture(Gdx.files.internal("objectTextures/progressBar.png"));
+
+	private boolean rainy;
+	private Sprite rainySprite;
+
+	private boolean fadeToRain, steadyRain, fadeToClear;
+
+	private float timeCounter;
 
 
 
@@ -55,6 +67,9 @@ public class WorldRenderer {
 	 */
 	public WorldRenderer() {
 		swipes = new Array<Swipe>();
+		rainySprite = new Sprite(black);
+		rainySprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		timeCounter = 0;
 	}
 
 	/**
@@ -92,16 +107,54 @@ public class WorldRenderer {
 				render.end();
 				render.dispose();
 				batch.begin();
-				*/
-				
+				 */
 			}
 		}
-
+		//Swipes on screen
+		for (Swipe swipe : swipes) {
+			if (swipe.getLifeTime() <= 1f) {
+				swipes.removeValue(swipe, false);
+				swipe.dispose();
+			} else
+				swipe.draw(batch,delta);
+		}
 		batch.end();
 
 		SpriteBatch projectedBatch = new SpriteBatch();
 		projectedBatch.begin();
 
+		if (rainy){
+			if (fadeToRain && timeCounter < TIME_TO_RAIN){
+				rainySprite.draw(projectedBatch, .5f*timeCounter/TIME_TO_RAIN);
+			}
+			else{
+				if (fadeToRain){
+					fadeToRain = false;
+					steadyRain = true;
+					timeCounter = 0;
+				}
+			}
+			if (steadyRain)
+				rainySprite.draw(projectedBatch, .5f);
+		}
+		else{
+			if (fadeToClear && timeCounter < TIME_TO_CLEAR){
+				if (steadyRain){
+					steadyRain = false;
+				}
+				rainySprite.draw(projectedBatch, .5f - .5f*timeCounter/TIME_TO_CLEAR);
+
+			}
+			else{
+				if (fadeToClear){
+					fadeToClear = false;
+					timeCounter = 0;
+				}
+			}
+		}
+		if (!steadyRain && (fadeToRain || fadeToClear))
+			timeCounter+=delta;
+		
 		//Progress bar
 		projectedBatch.draw(progressBar,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 		projectedBatch.draw(black,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth() + .0025f*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
@@ -112,15 +165,6 @@ public class WorldRenderer {
 
 
 		batch.begin();
-		//Swipes on screen
-		for (Swipe swipe : swipes) {
-			if (swipe.getLifeTime() <= 1f) {
-				swipes.removeValue(swipe, false);
-				swipe.dispose();
-			} else
-				swipe.draw(batch,delta);
-		}
-		
 	}
 
 	/**
@@ -139,7 +183,6 @@ public class WorldRenderer {
 				drawable.draw(batch);
 			}
 		}
-		
 		//Swipes on screen
 		for (Swipe swipe : swipes) {
 			if (swipe.getLifeTime() <= 1f) {
@@ -147,6 +190,10 @@ public class WorldRenderer {
 				swipe.dispose();
 			} else
 				swipe.draw(batch,delta);
+		}
+		if (rainy){
+			batch.begin();
+
 		}
 	}
 
@@ -158,6 +205,18 @@ public class WorldRenderer {
 		blue.dispose();
 		red.dispose();
 		progressBar.dispose();
+	}
+
+	public void setRainy(boolean incomingRain){
+		if (incomingRain & !rainy){
+			fadeToRain = true;
+		}
+		else{
+			if (!incomingRain & rainy){
+				fadeToClear = true;
+			}
+		}
+		rainy = incomingRain;
 	}
 
 }

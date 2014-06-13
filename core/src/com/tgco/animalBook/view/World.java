@@ -104,7 +104,7 @@ public class World {
 	private Weather weather;
 	private float weatherTime = 0f;
 	private float targetWeatherTime = 0f;
-	private final float WEATHER_DURATION = 10f;
+	private final float WEATHER_DURATION = 4f;
 
 	/**
 	 * Constructor with game instance and pulls stored info from gameInstance if there is anything stored
@@ -326,9 +326,9 @@ public class World {
 			checkLost();
 		}
 
-		
+
 		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - camera.position.y)/(laneLength),camera,delta);
-		
+
 	}
 
 	/**
@@ -339,7 +339,7 @@ public class World {
 	public void updateGameLogic(float delta) {
 
 		float speed;
-		
+
 		//Health effects
 		player.decreaseHealth(gameInstance.getLevelHandler().getHealthDecrease());
 
@@ -454,10 +454,11 @@ public class World {
 			gameInstance.setHitBack(false);
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
-		
+
 		//handle weather elements
 		if (weatherTime > targetWeatherTime){
 			weather.setWeatherType(weather.getNewWeather());
+			worldRender.setRainy(weather.getWeather() == WeatherType.RAINY);
 			weatherTime = 0f;
 			targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
 		}

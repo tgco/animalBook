@@ -111,6 +111,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
 	private Texture yellow = new Texture(Gdx.files.internal("primitiveTextures/yellow.png"));
 	private Texture green = new Texture(Gdx.files.internal("primitiveTextures/green.png"));
+	private Texture redOp = new Texture(Gdx.files.internal("primitiveTextures/redOp.png"));
 
 	private boolean isMain = true;
 
@@ -175,10 +176,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				drawTiledBackground(batch);
 
 				//add in endline when market is on screen
-				if(gameWorld.getCamera().position.y > gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel())+ Gdx.graphics.getHeight()/5){
+				if(gameWorld.getCamera().position.y > gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel())+ Gdx.graphics.getHeight()/4){
 					Vector3 vectEnd = new Vector3(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 					gameWorld.getCamera().unproject(vectEnd);
-					batch.draw(red, vectEnd.x - 75, vectEnd.y - .292f*Gdx.graphics.getHeight()/2, 150, 4);
+					batch.draw(redOp, vectEnd.x - 75, vectEnd.y - .222f*Gdx.graphics.getHeight()/2, 150, 4);
 				}
 				
 				//Draw world over background

@@ -520,6 +520,8 @@ public class World {
 	public float getPrecentage(){
 		return (camera.position.y - Gdx.graphics.getHeight()/2f)/(laneLength);
 	}
+	
+	
 }
 /*
  * if (wind.getPosition().x < 0 || wind.getPosition().x > Gdx.graphics.getWidth()){

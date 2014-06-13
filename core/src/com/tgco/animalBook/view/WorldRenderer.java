@@ -61,6 +61,7 @@ public class WorldRenderer {
 	private float timeCounter;
 
 
+
 	/**
 	 * Default constructor
 	 */
@@ -156,7 +157,8 @@ public class WorldRenderer {
 		//Progress bar
 		projectedBatch.draw(progressBar,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 		projectedBatch.draw(black,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth() + .0025f*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
-
+		
+		
 		projectedBatch.end();
 		projectedBatch.dispose();
 
@@ -215,4 +217,5 @@ public class WorldRenderer {
 		}
 		rainy = incomingRain;
 	}
+
 }

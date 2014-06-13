@@ -147,7 +147,16 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//initialize some DnD components and set drag actor based on first Consumable texture
 		dnd = new DragAndDrop();
 		if (Consumable.DropType.values().length > 0){
-			Image test = new Image(new Texture(Gdx.files.internal(Consumable.DropType.values()[0].getTexturePath())));
+			Image test = new Image(new Texture(Gdx.files.internal(Consumable.DropType.values()[0].getTexturePath()))){
+				@Override
+				public float getPrefWidth(){
+					return BUTTON_WIDTH*2f/3f;
+				}
+				@Override
+				public float getPrefHeight(){
+					return BUTTON_HEIGHT*2f/3f;
+				}
+			};
 			//CRITICAL: tweak these values for niceness of dragging
 			dnd.setDragActorPosition(-test.getWidth()/2f, test.getHeight()/2f);
 		}
@@ -652,7 +661,16 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					if (getWorld().getPlayer().getInventory().removeItem(Consumable.DropType.values()[index])){
 						inventoryButton.setText("x" + getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
 						payload.setObject(new Consumable(Consumable.DropType.values()[index]));
-						payload.setDragActor(new Image(inventoryButton.getBackground()));
+						payload.setDragActor(new Image(inventoryButton.getBackground()){
+							@Override
+							public float getPrefWidth(){
+								return BUTTON_WIDTH*2f/3f;
+							}
+							@Override
+							public float getPrefHeight(){
+								return BUTTON_HEIGHT*2f/3f;
+							}
+						});
 						return payload;
 					}
 					return null;

@@ -261,8 +261,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 		TextureRegion trNextLevelButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/marketScreen/nextLevelButtonDis.png")));
 
-		trNextLevelButton.setRegionHeight((int) (REGION_HEIGHT));
-		trNextLevelButton.setRegionWidth((int) (REGION_WIDTH));
+		trNextLevelButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
+		trNextLevelButton.setRegionWidth((int) (.92f*BUTTON_WIDTH));
 
 		nextLevelButtonStyle.disabled = new TextureRegionDrawable(trNextLevelButton);
 
@@ -297,8 +297,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		levelAnimalButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
 		levelAnimalButton = new Button(levelAnimalButtonStyle);
-		levelAnimalButton.setWidth(BUTTON_WIDTH);
-		levelAnimalButton.setHeight(BUTTON_HEIGHT);
+		levelAnimalButton.setWidth(gameInstance.getLevelHandler().getCurrentLevelWidth());
+		levelAnimalButton.setHeight(gameInstance.getLevelHandler().getCurrentLevelHeight());
 		levelAnimalButton.setX(Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2);
 		levelAnimalButton.setY(Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
 
@@ -312,8 +312,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		nextLevelAnimalButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 
 		nextLevelAnimalButton = new Button(nextLevelAnimalButtonStyle);
-		nextLevelAnimalButton.setWidth(BUTTON_WIDTH);
-		nextLevelAnimalButton.setHeight(BUTTON_HEIGHT);
+		nextLevelAnimalButton.setWidth(gameInstance.getLevelHandler().getNextLevelWidth());
+		nextLevelAnimalButton.setHeight(gameInstance.getLevelHandler().getNextLevelHeight());
 		nextLevelAnimalButton.setX(Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2);
 		nextLevelAnimalButton.setY(Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
 

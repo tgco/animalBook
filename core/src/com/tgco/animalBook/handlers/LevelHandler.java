@@ -29,8 +29,6 @@ public class LevelHandler {
 	 */
 	private int level;
 
-	
-
 	/**
 	 * The amount of animals needed in order to progress to the next level
 	 */
@@ -53,12 +51,15 @@ public class LevelHandler {
 	private int LongerMoneyP	= 0;
 	private int MoreMoneyP		= 0;
 
+	private int currentLevelWidth = 0;
+	private int currentLevelHeight = 0;
+	private int nextLevelWidth = 0;
+	private int nextLevelHeight = 0;
+	
 	/**
 	 * Boolean that stores if the user is retrying the level or not
 	 */
 	private boolean onRetry = false;
-
-
 
 	private boolean kidMode;
 
@@ -304,6 +305,91 @@ public class LevelHandler {
 		}
 		return null;
 	}
+	
+	/**
+	 * Returns the width of the current level's animal texture for use on the market screen
+	 * 
+	 * @return the width of the current level's animal texture
+	 */
+	public int getCurrentLevelWidth() {
+		switch(level) {
+		case 1:
+			return 245/6;
+		case 2:
+			return 320/6;
+		case 3:
+			return 329/6;
+		case 4:
+			return 401/6;
+		case 5:
+			return 333/6;
+		}
+		return 0;
+	}
+	
+	/**
+	 * Returns the height of the current level's animal texture for use on the market screen
+	 * 
+	 * @return the height of the current level's animal texture
+	 */
+	public int getCurrentLevelHeight() {
+		switch(level) {
+		case 1:
+			return 465/6;
+		case 2:
+			return 664/6;
+		case 3:
+			return 881/6;
+		case 4:
+			return 823/6;
+		case 5:
+			return 1036/6;
+		}
+		return 0;
+	}
+	
+	/**
+	 * Returns the width of the next level's animal texture for use on the market screen
+	 * 
+	 * @return the width of the next level's animal texture
+	 */
+	public int getNextLevelWidth() {
+		switch(level) {
+		case 1:
+			return 320/6;
+		case 2:
+			return 329/6;
+		case 3:
+			return 401/6;
+		case 4:
+			return 333/6;
+		case 5:
+			return 512/4;
+		}
+		return 0;
+	}
+	
+	/**
+	 * Returns the height of the next level's animal texture for use on the market screen
+	 * 
+	 * @return the height of the next level's animal texture
+	 */
+	public int getNextLevelHeight() {
+		switch(level) {
+		case 1:
+			return 664/6;
+		case 2:
+			return 881/6;
+		case 3:
+			return 823/6;
+		case 4:
+			return 1036/6;
+		case 5:
+			return 512/4;
+		}
+		return 0;
+	}
+	
 	/**
 	 * Increases the level and the pass level amount
 	 * 

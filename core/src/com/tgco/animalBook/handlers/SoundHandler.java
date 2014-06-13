@@ -231,6 +231,7 @@ public class SoundHandler {
 			storyBackgroundMusic.setVolume((float) 0.3);
 			marketBackgroundMusic.setVolume((float) 0.2);
 			musicMuted = false;
+			Gdx.app.log("My Tagg", "The music is not muted anymore");
 		} else {
 			backgroundMusic.setVolume(0);
 			storyBackgroundMusic.setVolume(0);

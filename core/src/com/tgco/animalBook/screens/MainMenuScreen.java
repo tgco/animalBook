@@ -57,6 +57,8 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		if(!SoundHandler.isMusicMuted()){
 			SoundHandler.toggleMusic();
 			toggleOn  = true;
+		}else{
+			toggleOn =false;
 		}
 
 	}

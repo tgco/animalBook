@@ -318,7 +318,11 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				SoundHandler.changeBackgroundVolume((float) .1);
+				if(alexButton.isChecked())
+					SoundHandler.changeBackgroundVolume((float) .1);
+				else{
+					SoundHandler.changeBackgroundVolume((float) .5);
+				}
 				if (!mainMenuInitialized)
 					initializeMenuItems();
 				handleMainMenu(alexButton.isChecked());
@@ -399,7 +403,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
-				SoundHandler.changeBackgroundVolume((float) .1);
+				SoundHandler.changeBackgroundVolume((float) .5);
 				handleMainMenu(false);
 				alexButton.setChecked(false);
 				inventoryGroupButton.setChecked(false);

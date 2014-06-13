@@ -90,6 +90,7 @@ public class AnimalBookGame extends Game {
 		SoundHandler.setMusicMuted(prefs.getBoolean("music"));
 		SoundHandler.setSoundMuted(prefs.getBoolean("sound"));
 		
+		Gdx.app.log("My Tagg", "The music is " + prefs.getBoolean("music"));
 		//Set the initial screen
 		setScreen(new SplashScreen(this));
 

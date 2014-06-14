@@ -854,7 +854,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradeLabel.setAlignment(Align.left);
 
 		fruitfulLabel = new Label(
-				"Fruitfulness\n" +
+				"More Animals \n" +
 						String.valueOf(gameInstance.getLevelHandler().getFruitfullMoneyP()) + "\n" +
 						"+" + String.valueOf(5) + "%\n" +
 						"$" + String.valueOf(fruitfulMoney) + "\n" +
@@ -863,7 +863,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		fruitfulLabel.setAlignment(Align.right);
 
 		longerLabel = new Label(
-				"Item Duration\n" +
+				"Bigger Basket\n" +
 						String.valueOf(gameInstance.getLevelHandler().getLongerMoneyP()) + "\n" +
 						"+" + String.format("%.2f",5/60.0) + " s\n" +
 						"$" + String.valueOf(longerMoney) + "\n" +

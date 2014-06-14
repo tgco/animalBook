@@ -12,10 +12,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
@@ -24,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.SoundHandler;
 
@@ -41,7 +44,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	private static final double REGION_HEIGHT = BUTTON_HEIGHT*3.76f;
 	private static final double REGION_WIDTH = BUTTON_WIDTH*3.76f;
 
-	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
+	private static final Label[] labels = new Label[Consumable.DropType.values().length];
 	private BitmapFont font;
 
 	/**
@@ -62,6 +65,14 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
 	private Texture yellow = new Texture(Gdx.files.internal("primitiveTextures/yellow.png"));
 	private Texture green = new Texture(Gdx.files.internal("primitiveTextures/green.png"));
+
+	private HorizontalGroup consumablesStatusGroup;
+
+	private Image ConsumablesStatusGroupImage;
+
+	private Label consumeLabel;
+
+	private HorizontalGroup consumablesLabelGroup;
 
 	/**
 	 * Constructs a new Market Screen with a game instance and a game screen.
@@ -85,6 +96,34 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 
+
+		//consumableStatusGroup
+		consumablesStatusGroup = new HorizontalGroup();
+		consumablesStatusGroup.center();
+		consumablesStatusGroup.space(EDGE_TOLERANCE);
+
+		consumablesLabelGroup = new HorizontalGroup();
+		consumablesLabelGroup.center();
+		consumablesLabelGroup.space(.69f*BUTTON_WIDTH);
+		
+		//fruitfulLabel
+		LabelStyle consumeLabelStyle = new LabelStyle();
+		consumeLabelStyle.font = font;
+		//upgradeLabelStyle.fontColor = Color.WHITE;
+
+		consumeLabel = new Label(
+				"\n" +
+						"Your Amount: \n" +
+						"Buy Amount: \n"
+						, 
+						consumeLabelStyle);
+		consumeLabel.setAlignment(Align.left);
+		
+		for(int i=0; i<Consumable.DropType.values().length; ++i){
+			labels[i] = new Label("0 \n 0 \n", consumeLabelStyle);
+			labels[i].setAlignment(Align.right);
+		}
+		
 		SoundHandler.playMarketBackgroundMusic(true);
 
 		inputMultiplexer = new InputMultiplexer();
@@ -202,6 +241,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		else{
 			nextLevelButton.setDisabled(false);
 		}
+		
+		
 	}
 
 	private void initializeMarketInterface() {
@@ -211,8 +252,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			final int foodIndex = i;
 
 			//associated BitmapFont object for consumable[i]
-			fonts[i] = new BitmapFont(Gdx.files.internal("fonts/SketchBook.fnt"));
-			fonts[i].setColor(Color.CYAN);
+			//fonts[i] = font;
+			//fonts[i].setColor(Color.CYAN);
 
 			//create atlas and add it to a new skin
 			atlas = new TextureAtlas(Gdx.files.internal(Consumable.DropType.values()[i].getAtlasPath()));
@@ -257,22 +298,47 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 			//update the text for the corresponding item in the market
 			updateMarketScreenItems(i);
+			
 		}
+			//pack labels
+			consumablesStatusGroup.addActor(consumeLabel);
+			
+			for(int i=0; i< Consumable.DropType.values().length; ++i){
+				consumablesLabelGroup.addActor(labels[i]);
+			}
+			
+			consumablesStatusGroup.pack();
+			consumablesStatusGroup.setPosition(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 - 1f*BUTTON_WIDTH,
+					Gdx.graphics.getHeight()/1.5f -EDGE_TOLERANCE*.5f - .7f*BUTTON_HEIGHT);
+			
+			consumablesLabelGroup.pack();
+			consumablesLabelGroup.setPosition(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + .05f*BUTTON_WIDTH,
+					Gdx.graphics.getHeight()/1.5f -EDGE_TOLERANCE*.5f - .5f*BUTTON_HEIGHT);
+			
+			consumablesStatusGroup.setSize(Consumable.DropType.values().length*5f*BUTTON_WIDTH + EDGE_TOLERANCE*2f + .5f*BUTTON_WIDTH,
+					 BUTTON_HEIGHT + EDGE_TOLERANCE*2f);
+			ConsumablesStatusGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+			buttonStage.addActor(ConsumablesStatusGroupImage);
+			
+			ConsumablesStatusGroupImage.setPosition(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 - 1f*BUTTON_WIDTH,
+					Gdx.graphics.getHeight()/1.5f - .2f*EDGE_TOLERANCE - .5f*BUTTON_HEIGHT);
+			ConsumablesStatusGroupImage.setSize(Consumable.DropType.values().length*1f*BUTTON_WIDTH + EDGE_TOLERANCE*2f + .5f*BUTTON_WIDTH,
+					 BUTTON_HEIGHT + EDGE_TOLERANCE*2f);
+			ConsumablesStatusGroupImage.toBack();
+			
+			buttonStage.addActor(consumablesStatusGroup);
+			buttonStage.addActor(consumablesLabelGroup);
+			consumablesLabelGroup.invalidate();
+			
+			
+		
 	}
 
 	protected void updateMarketScreenItems(int consumableIndex) {
 		//get the number of items in the player's inventory for the given index
-		batch.begin();
-		fonts[consumableIndex].setColor(55,55,55,1f);
-		fonts[consumableIndex].draw(batch,
-				String.valueOf(gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size),
-				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex,
-				Gdx.graphics.getHeight()/1.5f);
-		fonts[consumableIndex].draw(batch,
-				String.valueOf(Consumable.DropType.values()[consumableIndex].getMarketValue()),
-				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex,
-				Gdx.graphics.getHeight()/1.5f - fonts[consumableIndex].getCapHeight());
-		batch.end();
+		
+		labels[consumableIndex].setText(String.valueOf(gameScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size) + " \n $" +
+						String.valueOf(Consumable.DropType.values()[consumableIndex].getMarketValue()) + " \n");
 	}
 
 	@Override
@@ -482,9 +548,6 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	public void dispose() {
 		super.dispose();
 		font.dispose();
-		for (BitmapFont font : fonts) {
-			font.dispose();
-		}
 		
 		red.dispose();
 		green.dispose();

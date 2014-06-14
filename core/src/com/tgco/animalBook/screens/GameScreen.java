@@ -1090,7 +1090,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesStatusGroup.addActor(fruitfulLabel);
 		upgradesStatusGroup.addActor(longerLabel);
 		upgradesStatusGroup.addActor(moreLabel);
-		upgradesStatusGroup.addActor(dogButton);
+		//upgradesStatusGroup.addActor(dogButton);
 
 		upgradesStatusGroup.pack();
 		upgradesStatusGroup.setPosition(Gdx.graphics.getWidth()/2f - upgradesStatusGroup.getWidth()/2f,

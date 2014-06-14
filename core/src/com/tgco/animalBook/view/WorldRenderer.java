@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.gameObjects.ABDrawable;
+import com.tgco.animalBook.gameObjects.Dog;
 import com.tgco.animalBook.gameObjects.Swipe;
 import com.tgco.animalBook.handlers.Weather.WeatherType;
 
@@ -97,6 +98,9 @@ public class WorldRenderer {
 		for (Array<ABDrawable> a : drawables.values()){
 			for (ABDrawable drawable : a) {
 				drawable.draw(batch);
+				if (drawable instanceof Dog) {
+					Gdx.app.log("wat", drawable.getPosition().toString() + ", cam: " + cam.position.toString());
+				}
 				/*
 				// will render all object bounds for collision detection when uncommented
 				batch.end();
@@ -110,6 +114,7 @@ public class WorldRenderer {
 				 */
 			}
 		}
+		
 		//Swipes on screen
 		for (Swipe swipe : swipes) {
 			if (swipe.getLifeTime() <= 1f) {

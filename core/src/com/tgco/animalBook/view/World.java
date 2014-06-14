@@ -1,6 +1,7 @@
 package com.tgco.animalBook.view;
 
 import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +14,7 @@ import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Consumable;
+import com.tgco.animalBook.gameObjects.Dog;
 import com.tgco.animalBook.gameObjects.Dropped;
 import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
@@ -91,6 +93,8 @@ public class World {
 	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
 
+
+
 	/**
 	 * Generates random numbers for probability
 	 */
@@ -106,6 +110,8 @@ public class World {
 	private float targetWeatherTime = 0f;
 	private final float WEATHER_DURATION = 4f;
 	private Vector2 windVector;
+	private static final float WEATHER_CLICK = .5f;
+	private float weatherClick;
 
 	/**
 	 * Constructor with game instance and pulls stored info from gameInstance if there is anything stored
@@ -202,6 +208,7 @@ public class World {
 		weather.setWeatherType(WeatherType.CLEAR);
 		targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
 		windVector = new Vector2();
+		weatherClick = 0;
 	}
 
 
@@ -389,6 +396,7 @@ public class World {
 			}
 
 		}
+		
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
@@ -399,7 +407,6 @@ public class World {
 			//Reduce upward bias if there's a dog
 			if(drawMap.get("Boosts").size > 0) {
 				((Movable) movable).adjustForwardBias(.5f, speed, delta);
-				Gdx.app.log("Doge", "Such adjust, many method call");
 			}
 
 			//Drop new items
@@ -482,6 +489,18 @@ public class World {
 		else{
 			weatherTime += delta;
 		}
+		if (weatherClick < WEATHER_CLICK){
+			weatherClick += delta;
+			switch(weather.getWeather()){
+			case RAINY: {break;}
+			case WINDY:	{break;}
+			case CLEAR: {break;}
+			default: {break;}
+			}
+		}
+		else{
+			weatherClick = 0f;
+		}
 	}
 
 	/**
@@ -540,8 +559,3 @@ public class World {
 
 
 }
-/*
- * if (wind.getPosition().x < 0 || wind.getPosition().x > Gdx.graphics.getWidth()){
-				winds.removeValue(wind, false);
-				wind.dispose();
-			}*/

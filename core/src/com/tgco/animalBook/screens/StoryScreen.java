@@ -75,7 +75,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		batch = new SpriteBatch();
 		pageNumber = 0;
 		storyMap.get(0).add("story/story1.png");
-		storyMap.get(0).add("story/story2.jpg");
+		storyMap.get(0).add("story/story2.png");
 		backgroundTexture =  new Texture(Gdx.files.internal(storyMap.get(1-1).first()));
 		fadingSprite = new Sprite(backgroundTexture);
 		fadingSprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

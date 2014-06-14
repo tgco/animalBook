@@ -218,7 +218,7 @@ public class LevelHandler {
 	 */
 	public float returnLaneLength(int level) {
 		if (kidMode)
-			return 300 + 1000*(level - 1);
+			return 800 + 1000*(level - 1);
 		else
 			return 1000 + 1200*(level - 1);
 	}

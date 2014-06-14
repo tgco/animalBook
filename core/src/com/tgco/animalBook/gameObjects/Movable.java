@@ -53,7 +53,13 @@ public abstract class Movable extends ABDrawable {
 	 */
 	@Override
 	public void draw(SpriteBatch batch) {
-		batch.draw(texture, position.x - width/2, position.y - height/2, width/2, height/2, width, height, 1, 1, rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
+		if (this instanceof Dog) {
+			Gdx.app.log("Sanity2", "Wat2");
+			batch.draw(texture, position.x - width/2, position.y - height/2, width, height);
+		}else{
+			batch.draw(texture, position.x - width/2, position.y - height/2, width/2, height/2, width, height, 1, 1, rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
+
+		}
 	}
 
 	/**

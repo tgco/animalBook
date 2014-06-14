@@ -10,7 +10,8 @@ public class Dog extends Animal {
 
 	public Dog(Vector2 position, int animalX, int animalY) {
 		super(texturePath, position, animalY, animalY);
-		// TODO Auto-generated constructor stub
+		width = .04f*Gdx.graphics.getWidth();
+		height = .147f*Gdx.graphics.getHeight();
 	}
 	
 //	@Override

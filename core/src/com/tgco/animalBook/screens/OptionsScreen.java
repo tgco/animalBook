@@ -54,7 +54,7 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 
 		//Background Rendering
 		batch = new SpriteBatch();
-		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/optionsBackground.jpg"));
+		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/options.png"));
 
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);

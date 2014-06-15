@@ -5,16 +5,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.gameObjects.ABDrawable;
-import com.tgco.animalBook.gameObjects.Movable;
+import com.tgco.animalBook.gameObjects.Dog;
 import com.tgco.animalBook.gameObjects.RainDrop;
 import com.tgco.animalBook.gameObjects.Swipe;
-import com.tgco.animalBook.handlers.Weather.WeatherType;
 
 
 /**
@@ -102,6 +99,9 @@ public class WorldRenderer {
 			for (ABDrawable drawable : a) {
 				if (!(drawable instanceof RainDrop))
 				drawable.draw(batch);
+				if (drawable instanceof Dog) {
+					Gdx.app.log("wat", drawable.getPosition().toString() + ", cam: " + cam.position.toString());
+				}
 				/*
 				// will render all object bounds for collision detection when uncommented
 				batch.end();
@@ -115,6 +115,7 @@ public class WorldRenderer {
 				 */
 			}
 		}
+		
 		//Swipes on screen
 		for (Swipe swipe : swipes) {
 			if (swipe.getLifeTime() <= 1f) {

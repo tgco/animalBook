@@ -18,8 +18,8 @@ public class Market extends ABDrawable {
 	public Market() {
 		super(texturePath);
 		
-		width = .185f*Gdx.graphics.getWidth();
-		height = .294f*Gdx.graphics.getHeight();
+		width = .29f*Gdx.graphics.getWidth();
+		height = .224f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 	

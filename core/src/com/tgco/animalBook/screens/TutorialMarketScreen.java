@@ -15,8 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable;
@@ -32,7 +37,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 	private Button nextLevelAnimalButton;
 	private Button playButton;
 
-	private static final BitmapFont[] fonts = new BitmapFont[Consumable.DropType.values().length];
+	private static final Label[] labels = new Label[Consumable.DropType.values().length];
 	private BitmapFont font;
 
 	/**
@@ -41,6 +46,26 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 	private Stage popupStage;
 
 	private boolean hasConfirm = false;
+	private final float FONT_SCALE = Gdx.graphics.getHeight()/750f;
+	private Label infoLabel;
+
+	private Image alexInfoImage;
+	
+	/**
+	 * textures for health bar, etc
+	 */
+	private Texture black = new Texture(Gdx.files.internal("primitiveTextures/black.png"));
+	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
+	private Texture yellow = new Texture(Gdx.files.internal("primitiveTextures/yellow.png"));
+	private Texture green = new Texture(Gdx.files.internal("primitiveTextures/green.png"));
+
+	private HorizontalGroup consumablesStatusGroup;
+
+	private Image ConsumablesStatusGroupImage;
+
+	private Label consumeLabel;
+
+	private HorizontalGroup consumablesLabelGroup;
 
 	/**
 	 * Constructs a new Market Screen with a game instance and a game screen.
@@ -64,6 +89,32 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 
 		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 
+		//consumableStatusGroup
+		consumablesStatusGroup = new HorizontalGroup();
+		consumablesStatusGroup.center();
+		consumablesStatusGroup.space(EDGE_TOLERANCE);
+
+		consumablesLabelGroup = new HorizontalGroup();
+		consumablesLabelGroup.center();
+		consumablesLabelGroup.space(.69f*BUTTON_WIDTH);
+		
+		//fruitfulLabel
+		LabelStyle consumeLabelStyle = new LabelStyle();
+		consumeLabelStyle.font = font;
+		//upgradeLabelStyle.fontColor = Color.WHITE;
+
+		consumeLabel = new Label(
+				"\n" +
+						"Your Amount: \n" +
+						"Buy Amount: \n"
+						, 
+						consumeLabelStyle);
+		consumeLabel.setAlignment(Align.left);
+		
+		for(int i=0; i<Consumable.DropType.values().length; ++i){
+			labels[i] = new Label("0 \n 0 \n", consumeLabelStyle);
+			labels[i].setAlignment(Align.right);
+		}
 		SoundHandler.playMarketBackgroundMusic(true);
 
 		inputMultiplexer = new InputMultiplexer();
@@ -84,9 +135,21 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 	public void render(float delta) {
 		if(!hasConfirm){
 			int storedAnimal = gameInstance.getLevelHandler().getStoredAmount();
-			int nextLevel = gameInstance.getLevelHandler().getNextLevelStart();
-			int needAnimals = gameInstance.getLevelHandler().getPassLevelAmount();
-			String needAnimalsString = "Need: " + String.valueOf(needAnimals);
+			int nextLevel ;
+			if(gameInstance.getLevelHandler().getLevel() == 5){
+				if(gameInstance.getLevelHandler().getNextLevelStart() >= 25)
+					nextLevel = 1;
+				else
+					nextLevel =0;
+			}else{
+				nextLevel = gameInstance.getLevelHandler().getNextLevelStart();
+			}
+				
+			int needAnimals = gameInstance.getLevelHandler().getPassLevelAmount() - (gameInstance.getLevelHandler().getNextLevelStart());
+			if(needAnimals <=0){
+				needAnimals =0;
+			}
+			String needAnimalsString = "Need " + String.valueOf(needAnimals) + " more";
 
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -97,16 +160,13 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 			batch.begin();
 			batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-			//Draw money
-			font.setColor(Color.WHITE);
-			font.setScale(1.2f);
-			font.draw(batch, "Your Money: $" + String.valueOf(tutorialScreen.getWorld().getPlayer().getPlayerMoney()), Gdx.graphics.getWidth()/2 , Gdx.graphics.getHeight() - 3*EDGE_TOLERANCE );
-
+			
 			font.setColor(Color.WHITE);
 			font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
 			font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
 			font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE - font.getCapHeight());
 
+			infoLabel.setText("Money: $" + tutorialScreen.getWorld().getPlayer().getPlayerMoney());
 			batch.end();
 
 			//Draw buttons
@@ -120,9 +180,21 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 				setDialog();
 			}
 
-			//Gdx.gl.glClearColor(1, 1, 1, 1);
-			//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batch.begin();
+			//Draw health bar (test)
+			batch.draw(black,tutorialScreen.alexsPosition().x + 1.5f*EDGE_TOLERANCE, tutorialScreen.alexsPosition().y - 1.5f*EDGE_TOLERANCE, 10.2f*EDGE_TOLERANCE, 1.1f*EDGE_TOLERANCE);
+			if (tutorialScreen.getWorld().getPlayer().getHealth()/100f > .50f)	
+				batch.draw(green,tutorialScreen.alexsPosition().x + 1.6f*EDGE_TOLERANCE, tutorialScreen.alexsPosition().y
+						- 1.5f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(tutorialScreen.getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
+			else if (tutorialScreen.getWorld().getPlayer().getHealth()/100f > .25f)
+				batch.draw(yellow,tutorialScreen.alexsPosition().x + 1.6f*EDGE_TOLERANCE,tutorialScreen.alexsPosition().y
+						- 1.5f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(tutorialScreen.getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
+			else
+				batch.draw(red,tutorialScreen.alexsPosition().x + 1.6f*EDGE_TOLERANCE,tutorialScreen.alexsPosition().y
+						- 1.5f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(tutorialScreen.getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
 
+	
+			batch.end();
 		}
 		else{
 			popupStage.act(delta);
@@ -156,9 +228,6 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 			final int marketValue = Consumable.DropType.values()[i].getMarketValue();
 			final int foodIndex = i;
 
-			//associated BitmapFont object for consumable[i]
-			fonts[i] = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
-			fonts[i].setColor(Color.CYAN);
 
 			//create atlas and add it to a new skin
 			atlas = new TextureAtlas(Gdx.files.internal(Consumable.DropType.values()[i].getAtlasPath()));
@@ -200,21 +269,42 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 			//update the text for the corresponding item in the market
 			updateMarketScreenItems(i);
 		}
+		//pack labels
+		consumablesStatusGroup.addActor(consumeLabel);
+		
+		for(int i=0; i< Consumable.DropType.values().length; ++i){
+			consumablesLabelGroup.addActor(labels[i]);
+		}
+		
+		consumablesStatusGroup.pack();
+		consumablesStatusGroup.setPosition(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 - 1f*BUTTON_WIDTH,
+				Gdx.graphics.getHeight()/1.5f -EDGE_TOLERANCE*.5f - .7f*BUTTON_HEIGHT);
+		
+		consumablesLabelGroup.pack();
+		consumablesLabelGroup.setPosition(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + .05f*BUTTON_WIDTH,
+				Gdx.graphics.getHeight()/1.5f -EDGE_TOLERANCE*.5f - .5f*BUTTON_HEIGHT);
+		
+		consumablesStatusGroup.setSize(Consumable.DropType.values().length*5f*BUTTON_WIDTH + EDGE_TOLERANCE*2f + .5f*BUTTON_WIDTH,
+				 BUTTON_HEIGHT + EDGE_TOLERANCE*2f);
+		ConsumablesStatusGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+		buttonStage.addActor(ConsumablesStatusGroupImage);
+		
+		ConsumablesStatusGroupImage.setPosition(Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 - 1f*BUTTON_WIDTH,
+				Gdx.graphics.getHeight()/1.5f - .2f*EDGE_TOLERANCE - .5f*BUTTON_HEIGHT);
+		ConsumablesStatusGroupImage.setSize(Consumable.DropType.values().length*1f*BUTTON_WIDTH + EDGE_TOLERANCE*2f + .5f*BUTTON_WIDTH,
+				 BUTTON_HEIGHT + EDGE_TOLERANCE*2f);
+		ConsumablesStatusGroupImage.toBack();
+		
+		buttonStage.addActor(consumablesStatusGroup);
+		buttonStage.addActor(consumablesLabelGroup);
+		consumablesLabelGroup.invalidate();
 	}
 
 	protected void updateMarketScreenItems(int consumableIndex) {
 		//get the number of items in the player's inventory for the given index
-		batch.begin();
-		fonts[consumableIndex].setColor(55,55,55,1f);
-		fonts[consumableIndex].draw(batch,
-				String.valueOf(tutorialScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size),
-				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex,
-				Gdx.graphics.getHeight()/1.5f);
-		fonts[consumableIndex].draw(batch,
-				String.valueOf(Consumable.DropType.values()[consumableIndex].getMarketValue()),
-				Gdx.graphics.getWidth()/2 - BUTTON_WIDTH/2*(Consumable.DropType.values().length*2-1)/2 + BUTTON_WIDTH*consumableIndex,
-				Gdx.graphics.getHeight()/1.5f - fonts[consumableIndex].getCapHeight());
-		batch.end();
+		
+		labels[consumableIndex].setText(String.valueOf(tutorialScreen.getWorld().getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[consumableIndex]).size) + " \n $" +
+						String.valueOf(Consumable.DropType.values()[consumableIndex].getMarketValue()) + " \n");
 	}
 
 	@Override
@@ -300,6 +390,26 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		buttonStage.addActor(playButton);
 		buttonStage.addActor(levelAnimalButton);
 		buttonStage.addActor(nextLevelAnimalButton);
+		
+		//Information Label
+		LabelStyle infoLabelStyle = new LabelStyle();
+		infoLabelStyle.font = font;
+		infoLabelStyle.fontColor = Color.WHITE;
+		infoLabelStyle.font.setScale(FONT_SCALE);
+		infoLabel = new Label("Money: $" + tutorialScreen.getWorld().getPlayer().getPlayerMoney(), infoLabelStyle);
+		infoLabel.pack();
+		infoLabel.setPosition(tutorialScreen.alexsPosition().x + 1.5f*EDGE_TOLERANCE,
+				tutorialScreen.alexsPosition().y - infoLabel.getHeight() - 1.7f*EDGE_TOLERANCE);
+		infoLabel.setAlignment(Align.left);
+		
+		//The label's background image
+		alexInfoImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
+		alexInfoImage.setSize(11f*EDGE_TOLERANCE, tutorialScreen.alexsPosition().y -infoLabel.getY() + .5f*EDGE_TOLERANCE);
+		alexInfoImage.setPosition(infoLabel.getX() - .5f*EDGE_TOLERANCE,
+				infoLabel.getY() - .5f*EDGE_TOLERANCE);
+		buttonStage.addActor(alexInfoImage);
+		buttonStage.addActor(infoLabel);
+		
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}
@@ -320,9 +430,11 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 	public void dispose() {
 		super.dispose();
 		font.dispose();
-		for (BitmapFont font : fonts) {
-			font.dispose();
-		}
+		
+		red.dispose();
+		green.dispose();
+		black.dispose();
+		yellow.dispose();
 	}
 
 	/**

@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.gameObjects.ABDrawable;
+import com.tgco.animalBook.gameObjects.Movable;
+import com.tgco.animalBook.gameObjects.RainDrop;
 import com.tgco.animalBook.gameObjects.Swipe;
 import com.tgco.animalBook.handlers.Weather.WeatherType;
 
@@ -28,6 +30,8 @@ public class WorldRenderer {
 	 * Stores all swipes to be drawn on screen
 	 */
 	private Array<Swipe> swipes;
+	
+	private Array<ABDrawable> rainDrops;
 
 	/**
 	 * Dimensions for the progress bar and slider
@@ -96,6 +100,7 @@ public class WorldRenderer {
 		//Draw all objects
 		for (Array<ABDrawable> a : drawables.values()){
 			for (ABDrawable drawable : a) {
+				if (!(drawable instanceof RainDrop))
 				drawable.draw(batch);
 				/*
 				// will render all object bounds for collision detection when uncommented
@@ -157,6 +162,9 @@ public class WorldRenderer {
 		//Progress bar
 		projectedBatch.draw(progressBar,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 		projectedBatch.draw(black,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth() + .0025f*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight() + progressPercentage*(PROGRESS_BAR_HEIGHT), PROGRESS_SLIDER_WIDTH, PROGRESS_SLIDER_HEIGHT);
+		for (ABDrawable a : drawables.get("WeatherDrop")){
+			a.draw(projectedBatch);
+		}
 		
 		projectedBatch.end();
 		projectedBatch.dispose();
@@ -188,10 +196,6 @@ public class WorldRenderer {
 			} else
 				swipe.draw(batch,delta);
 		}
-		if (rainy){
-			batch.begin();
-
-		}
 	}
 
 	/**
@@ -215,5 +219,4 @@ public class WorldRenderer {
 		}
 		rainy = incomingRain;
 	}
-
 }

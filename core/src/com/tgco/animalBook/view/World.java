@@ -18,6 +18,7 @@ import com.tgco.animalBook.gameObjects.Market;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Obstacle;
 import com.tgco.animalBook.gameObjects.Player;
+import com.tgco.animalBook.gameObjects.RainDrop;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.handlers.Weather;
 import com.tgco.animalBook.handlers.Weather.WeatherType;
@@ -108,7 +109,7 @@ public class World {
 	private float targetWeatherTime = 0f;
 	private final float WEATHER_DURATION = 4f;
 	private Vector2 windVector;
-	private static final float WEATHER_CLICK = .5f;
+	private static final float WEATHER_CLICK = .12f;
 	private float weatherClick;
 
 	/**
@@ -202,6 +203,11 @@ public class World {
 			drawMap.put("Obstacle",  gameInstance.getLevelHandler().addObstacles( gameInstance.getLevelHandler().getLevel(), market.getPosition()));
 
 		}
+
+		drawMap.put("WeatherDrop", new Array<ABDrawable>());
+		System.out.println("WEATHERDROP CREATED");
+		System.out.println(drawMap.get("WeatherDrop"));
+		
 		weather = new Weather();
 		weather.setWeatherType(WeatherType.CLEAR);
 		targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
@@ -263,7 +269,6 @@ public class World {
 
 	/**
 	 * Finds which drawables are dropped items, casts them to dropped and returns them in an array
-	 * 
 	 * @return		an array of all dropped items currently in the world
 	 */
 	public Array<Dropped> getDropped() {
@@ -479,7 +484,6 @@ public class World {
 					magnitude +=10.0;
 				double radian = (((double)rand.nextInt(360))*2.0*Math.PI/360.0);
 				windVector = new Vector2((float)(magnitude*Math.cos(radian)),(float)(magnitude*Math.sin(radian)));
-				Gdx.app.log("WEATHER:", windVector.toString());
 			}
 			weatherTime = 0f;
 			targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
@@ -487,18 +491,30 @@ public class World {
 		else{
 			weatherTime += delta;
 		}
-		if (weatherClick < WEATHER_CLICK){
-			weatherClick += delta;
+		if (weatherClick > WEATHER_CLICK){
+			weatherClick = 0f;
 			switch(weather.getWeather()){
-			case RAINY: {break;}
+			case RAINY: {
+				drawMap.get("WeatherDrop").add(new RainDrop("objectTextures/rainDrop.png",
+						new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))), Gdx.graphics.getHeight())));
+				break;}
 			case WINDY:	{break;}
 			case CLEAR: {break;}
 			default: {break;}
 			}
 		}
 		else{
-			weatherClick = 0f;
+			weatherClick += delta;
 		}
+		for (ABDrawable m : drawMap.get("WeatherDrop")){
+			((Movable) m).move(speed, delta);
+			Vector2 p = m.getPosition();
+			if (p.x < 1f || p.x > Gdx.graphics.getWidth() || p.y < 1f || p.y > Gdx.graphics.getHeight()){
+				drawMap.get("WeatherDrop").removeValue(m, false);
+				m.dispose();
+			}
+		}
+
 	}
 
 	/**

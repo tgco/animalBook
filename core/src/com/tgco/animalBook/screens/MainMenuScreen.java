@@ -13,14 +13,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
@@ -34,9 +32,6 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	private boolean hasConfirm = false;
 	private Stage popupStage;
 	private boolean toggleOn = false;
-
-	private static final double REGION_HEIGHT = BUTTON_HEIGHT*1.25f;
-	private static final double REGION_WIDTH = BUTTON_WIDTH*3.1f;
 
 	/**
 	 * Constructor for the main menu screen

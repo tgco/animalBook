@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Cow;
 import com.tgco.animalBook.gameObjects.Goat;
@@ -50,11 +49,6 @@ public class LevelHandler {
 	private int fruitfullMoneyP	= 0;
 	private int LongerMoneyP	= 0;
 	private int MoreMoneyP		= 0;
-
-	private int currentLevelWidth = 0;
-	private int currentLevelHeight = 0;
-	private int nextLevelWidth = 0;
-	private int nextLevelHeight = 0;
 	
 	/**
 	 * Boolean that stores if the user is retrying the level or not
@@ -484,7 +478,7 @@ public class LevelHandler {
 	}
 
 	public void setDoTutorial(boolean doTutorial) {
-		this.doTutorial = doTutorial;
+		LevelHandler.doTutorial = doTutorial;
 	}
 
 	public void setRetry(){

@@ -28,7 +28,7 @@ public class EndGameStory extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Buttons
 	 */
-	private Button 			skipButton, continueButton;
+	private Button continueButton;
 
 	private Stage popupStage;
 
@@ -79,7 +79,7 @@ public class EndGameStory extends ButtonScreenAdapter implements Screen {
 		SoundHandler.playStoryBackgroundMusic(true);
 		batch = new SpriteBatch();
 		pageNumber = 0;
-		storyMap.get(0).add("story/end.png");
+		storyMap.get(0).add("endGameStory/end.png");
 		backgroundTexture =  new Texture(Gdx.files.internal(storyMap.get(1-1).first()));
 		fadingSprite = new Sprite(backgroundTexture);
 		fadingSprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

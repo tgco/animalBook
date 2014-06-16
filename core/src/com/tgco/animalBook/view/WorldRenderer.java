@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Dog;
-import com.tgco.animalBook.gameObjects.RainDrop;
 import com.tgco.animalBook.gameObjects.Swipe;
 
 
@@ -293,6 +292,9 @@ public class WorldRenderer {
 		blue.dispose();
 		red.dispose();
 		progressBar.dispose();
+		compass.dispose();
+		windy1.dispose();
+		windy2.dispose();
 	}
 
 	public void setRainy(boolean incomingRain){

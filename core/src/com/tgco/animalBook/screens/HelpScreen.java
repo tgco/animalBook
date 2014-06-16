@@ -49,7 +49,7 @@ public class HelpScreen extends ButtonScreenAdapter implements Screen {
 		helpScreens.add("backgrounds/helpScreen0.png");
 		helpScreens.add("backgrounds/helpScreen1.png");
 		helpScreens.add("backgrounds/helpScreen2.png");
-		//helpScreens.add("backgrounds/helpScreen3.png");
+		helpScreens.add("backgrounds/helpScreen3.png");
 
 		currentScreen = 0;
 
@@ -71,7 +71,7 @@ public class HelpScreen extends ButtonScreenAdapter implements Screen {
 		helpScreens.add("backgrounds/helpScreen0.png");
 		helpScreens.add("backgrounds/helpScreen1.png");
 		helpScreens.add("backgrounds/helpScreen2.png");
-		//helpScreens.add("backgrounds/helpScreen3.png");
+		helpScreens.add("backgrounds/helpScreen3.png");
 
 		currentScreen = 0;
 
@@ -137,7 +137,7 @@ public class HelpScreen extends ButtonScreenAdapter implements Screen {
 		backButton = new Button(backButtonStyle);
 		backButton.setWidth(BUTTON_WIDTH);
 		backButton.setHeight(BUTTON_HEIGHT);
-		backButton.setX(EDGE_TOLERANCE);
+		backButton.setX(2*EDGE_TOLERANCE + BUTTON_WIDTH);
 		backButton.setY(EDGE_TOLERANCE);
 
 		//back BUTTON
@@ -153,7 +153,7 @@ public class HelpScreen extends ButtonScreenAdapter implements Screen {
 		nextButton = new Button(nextButtonStyle);
 		nextButton.setWidth(BUTTON_WIDTH);
 		nextButton.setHeight(BUTTON_HEIGHT);
-		nextButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 2*EDGE_TOLERANCE);
+		nextButton.setX(Gdx.graphics.getWidth() - 2*BUTTON_WIDTH - 2*EDGE_TOLERANCE);
 		nextButton.setY(EDGE_TOLERANCE);
 
 		//LISTENERS

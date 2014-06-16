@@ -106,7 +106,7 @@ public class World {
 	private Weather weather;
 	private float weatherTime = 0f;
 	private float targetWeatherTime = 0f;
-	private final float WEATHER_DURATION = 4f;
+	private final float WEATHER_DURATION = 7f;
 	private Vector2 windVector;
 	private static final float WEATHER_CLICK = .12f;
 	private float weatherClick;
@@ -490,17 +490,17 @@ public class World {
 			worldRender.setRainy(weather.getWeather() == WeatherType.RAINY);
 			
 			if (weather.getWeather() == WeatherType.WINDY){
-				double magnitude = (float)(rand.nextInt(40) - 20);
+				double magnitude = (float)(rand.nextInt(35) - 10);
 				if (magnitude < 0)
 					magnitude-=10.0;
 				else
 					magnitude +=10.0;
 				double radian = (((double)rand.nextInt(360))*2.0*Math.PI/360.0);
 				windVector = new Vector2((float)(magnitude*Math.cos(radian)),(float)(magnitude*Math.sin(radian)));
-				worldRender.setWindy(true, windVector.getAngleRad());
+				worldRender.setWindy(true, windVector.getAngleRad(), windVector.dst(new Vector2()));
 			}
 			else{
-				worldRender.setWindy(false, null);
+				worldRender.setWindy(false, null, null);
 			}
 			weatherTime = 0f;
 			targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;

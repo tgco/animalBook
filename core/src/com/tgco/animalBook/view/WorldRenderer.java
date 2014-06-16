@@ -118,6 +118,11 @@ public class WorldRenderer {
 				}
 			}
 			/*
+		for (Array<ABDrawable> a : drawables.values()){
+			for (ABDrawable drawable : a) {
+				if (!(drawable instanceof RainDrop))
+				drawable.draw(batch);
+				/*
 				// will render all object bounds for collision detection when uncommented
 				batch.end();
 				ShapeRenderer render = new ShapeRenderer();

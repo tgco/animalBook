@@ -53,13 +53,12 @@ public abstract class Movable extends ABDrawable {
 	 */
 	@Override
 	public void draw(SpriteBatch batch) {
-		if (this instanceof Dog) {
-			Gdx.app.log("Sanity2", "Wat2");
-			batch.draw(texture, position.x - width/2, position.y - height/2, width, height);
-		}else{
+//		if (this instanceof Dog) {
+//			batch.draw(texture, position.x - width/2, position.y - height/2, width, height);
+//		}else{
 			batch.draw(texture, position.x - width/2, position.y - height/2, width/2, height/2, width, height, 1, 1, rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
 
-		}
+//		}
 	}
 
 	/**
@@ -86,7 +85,6 @@ public abstract class Movable extends ABDrawable {
 		
 		//Find rotation
 		float targetRotation = this.position.cpy().sub(temp).angle() - 90f;
-		//float targetRotation = (this.previousTarget.cpy().sub(this.position).add(new Vector2(0,moveBias*cameraSpeed))).angle() - 90f;
 		float difference = targetRotation - rotation;
 		rotation += difference/rotationSpeed;
 	}

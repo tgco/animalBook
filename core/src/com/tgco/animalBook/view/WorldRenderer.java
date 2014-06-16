@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -68,10 +69,13 @@ public class WorldRenderer {
 	private boolean fadeToWind, steadyWind, fadeToClearW;
 
 	private float timeCounterR, timeCounterW, animationTimer;
+	private BitmapFont weatherFont;
 
 	private boolean windy;
 
 	private float compassAngle;
+
+	private Float magnitude;
 
 
 
@@ -104,8 +108,7 @@ public class WorldRenderer {
 				tArray,
 				PlayMode.LOOP);
 		animationTimer = 0f;
-		
-
+		weatherFont = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 	}
 
 	/**
@@ -208,7 +211,8 @@ public class WorldRenderer {
 				projectedBatch.setColor(1f, 1f, 1f, timeCounterW/TIME_TO_WIND);
 				projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
 				projectedBatch.draw(windyAnimation.getKeyFrame(animationTimer), ((float)(compassRegion.getRegionWidth())) + 30f, 0f);
-				
+				weatherFont.setColor(255f, 255f, 255f, timeCounterW/TIME_TO_WIND);
+				weatherFont.draw(projectedBatch, "Magnitude:" + magnitude, 0f ,0f);
 				projectedBatch.setColor(Color.WHITE);
 			}
 			else{
@@ -310,7 +314,7 @@ public class WorldRenderer {
 		rainy = incomingRain;
 	}
 
-	public void setWindy(boolean incomingWind, Float angRad){
+	public void setWindy(boolean incomingWind, Float angRad, Float mag){
 		if (incomingWind & !windy){
 			fadeToWind = true;
 		}
@@ -321,8 +325,9 @@ public class WorldRenderer {
 		}
 
 		windy = incomingWind;
-		if (angRad != null){
+		if (angRad != null && mag != null){
 			compassAngle = angRad;
+			magnitude = mag;
 			animationTimer = 0f;
 		}
 	}

@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -55,16 +57,18 @@ public class WorldRenderer {
 	private Texture progressBar = new Texture(Gdx.files.internal("objectTextures/progressBar.png"));
 
 	private Texture compass = new Texture(Gdx.files.internal("objectTextures/compass.png"));
-	private TextureRegion compassRegion;
+	private Texture windy1 = new Texture(Gdx.files.internal("objectTextures/wind1.png"));
+	private Texture windy2 = new Texture(Gdx.files.internal("objectTextures/wind2.png"));
+	private TextureRegion compassRegion, windyRegion1, windyRegion2;
+	private Animation windyAnimation;
 
 	private boolean rainy;
 	private Sprite rainySprite;
-	private Sprite compassSprite;
 
 	private boolean fadeToRain, steadyRain, fadeToClearR;
 	private boolean fadeToWind, steadyWind, fadeToClearW;
 
-	private float timeCounterR, timeCounterW;
+	private float timeCounterR, timeCounterW, animationTimer;
 
 	private boolean windy;
 
@@ -86,6 +90,22 @@ public class WorldRenderer {
 		compassRegion.setTexture(compass);
 		compassRegion.setRegionHeight(compass.getHeight());
 		compassRegion.setRegionWidth(compass.getWidth());
+		
+		windyRegion1 = new TextureRegion(windy1);
+		windyRegion1.setRegionHeight(windy1.getHeight());
+		windyRegion1.setRegionWidth(windy1.getWidth());
+		windyRegion2 = new TextureRegion(windy2);
+		windyRegion2.setRegionHeight(windy2.getHeight());
+		windyRegion2.setRegionWidth(windy2.getWidth());
+		Array<TextureRegion> tArray = new Array<TextureRegion>();
+		tArray.add(windyRegion1);
+		tArray.add(windyRegion2);
+		
+		windyAnimation = new Animation(.5f,
+				tArray,
+				PlayMode.LOOP);
+		animationTimer = 0f;
+		
 
 	}
 
@@ -183,10 +203,12 @@ public class WorldRenderer {
 		//if windy
 
 		if (windy){
+			animationTimer+=delta;
 			if (fadeToWind && timeCounterW < TIME_TO_WIND){
 				//fade to wind
 				projectedBatch.setColor(1f, 1f, 1f, timeCounterW/TIME_TO_WIND);
 				projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
+				projectedBatch.draw(windyAnimation.getKeyFrame(animationTimer), ((float)(compassRegion.getRegionWidth())) + 30f, 0f);
 				projectedBatch.setColor(Color.WHITE);
 			}
 			else{
@@ -199,6 +221,7 @@ public class WorldRenderer {
 			if (steadyWind)
 				//steady wind
 				projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
+			projectedBatch.draw(windyAnimation.getKeyFrame(animationTimer), ((float)(compassRegion.getRegionWidth())) + 30f, 0f);
 		}
 		else{
 			if (fadeToClearW && timeCounterW < TIME_TO_WIND){
@@ -208,6 +231,7 @@ public class WorldRenderer {
 				}
 				projectedBatch.setColor(1f, 1f, 1f, 1f - timeCounterW/TIME_TO_WIND);
 				projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
+				projectedBatch.draw(windyAnimation.getKeyFrame(animationTimer), ((float)(compassRegion.getRegionWidth())) + 30f, 0f);
 				projectedBatch.setColor(Color.WHITE);
 			}
 			else{
@@ -284,7 +308,7 @@ public class WorldRenderer {
 	}
 
 	public void setWindy(boolean incomingWind, Float angRad){
-		if (incomingWind & !rainy){
+		if (incomingWind & !windy){
 			fadeToWind = true;
 		}
 		else{
@@ -294,7 +318,9 @@ public class WorldRenderer {
 		}
 
 		windy = incomingWind;
-		if (angRad != null)
+		if (angRad != null){
 			compassAngle = angRad;
+			animationTimer = 0f;
+		}
 	}
 }

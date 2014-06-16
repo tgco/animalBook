@@ -436,7 +436,7 @@ public class World {
 					drawMap.get("Dropped").add(dropping);
 				}
 			}
-		}		
+		}
 
 		//check for and remove lost animals
 		for (ABDrawable drawable : drawMap.get("Movable")) {

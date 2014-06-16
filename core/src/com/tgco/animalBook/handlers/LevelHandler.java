@@ -316,13 +316,13 @@ public class LevelHandler {
 		case 1:
 			return 245/6;
 		case 2:
-			return 320/6;
+			return 522/6;
 		case 3:
 			return 329/6;
 		case 4:
 			return 401/6;
 		case 5:
-			return 333/6;
+			return 342/6;
 		}
 		return 0;
 	}
@@ -337,13 +337,13 @@ public class LevelHandler {
 		case 1:
 			return 465/6;
 		case 2:
-			return 664/6;
+			return 770/6;
 		case 3:
 			return 881/6;
 		case 4:
 			return 823/6;
 		case 5:
-			return 1036/6;
+			return 1038/6;
 		}
 		return 0;
 	}
@@ -356,13 +356,13 @@ public class LevelHandler {
 	public int getNextLevelWidth() {
 		switch(level) {
 		case 1:
-			return 320/6;
+			return 522/6;
 		case 2:
 			return 329/6;
 		case 3:
 			return 401/6;
 		case 4:
-			return 333/6;
+			return 342/6;
 		case 5:
 			return 512/4;
 		}
@@ -377,13 +377,13 @@ public class LevelHandler {
 	public int getNextLevelHeight() {
 		switch(level) {
 		case 1:
-			return 664/6;
+			return 770/6;
 		case 2:
 			return 881/6;
 		case 3:
 			return 823/6;
 		case 4:
-			return 1036/6;
+			return 1038/6;
 		case 5:
 			return 512/4;
 		}

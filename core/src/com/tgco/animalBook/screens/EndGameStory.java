@@ -79,8 +79,7 @@ public class EndGameStory extends ButtonScreenAdapter implements Screen {
 		SoundHandler.playStoryBackgroundMusic(true);
 		batch = new SpriteBatch();
 		pageNumber = 0;
-		storyMap.get(0).add("endGameStory/endGameStory1.png");
-		storyMap.get(0).add("endGameStory/endGameStory2.png");
+		storyMap.get(0).add("story/end.png");
 		backgroundTexture =  new Texture(Gdx.files.internal(storyMap.get(1-1).first()));
 		fadingSprite = new Sprite(backgroundTexture);
 		fadingSprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -180,7 +179,7 @@ public class EndGameStory extends ButtonScreenAdapter implements Screen {
 		continueButton = new Button(buttonStyle);
 		continueButton.setWidth(BUTTON_WIDTH);
 		continueButton.setHeight(BUTTON_HEIGHT);
-		continueButton.setPosition(EDGE_TOLERANCE, EDGE_TOLERANCE );
+		continueButton.setPosition(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE, EDGE_TOLERANCE );
 
 		continueButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {

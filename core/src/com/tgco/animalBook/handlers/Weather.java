@@ -36,7 +36,6 @@ public class Weather {
 	}
 	
 	public WeatherType getNewWeather(){
-		//return WeatherType.WINDY;
 		if (rand.nextBoolean())
 			return WeatherType.values()[rand.nextInt(WeatherType.values().length)];
 		else

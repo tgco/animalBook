@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
@@ -40,6 +41,7 @@ import com.tgco.animalBook.gameObjects.Dog;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.AnimalBookGame.state;
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
+import com.tgco.animalBook.handlers.MenuHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.view.World;
 
@@ -69,12 +71,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Each button used on the game screen user interface overlay
 	 */
-	private Button alexButton, inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, fruitfulButton, longerButton, moreButton, dogButton;
+	private Button alexButton, dogButton,fruitfulButton, longerButton, moreButton;
+	//private Button inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, fruitfulButton, longerButton, moreButton, dogButton;
 
-	private VerticalGroup menuGroup;
-	private Image alexInfoImage, menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
+	//private VerticalGroup menuGroup;
+	private Image alexInfoImage; 
+	//menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
 	private Label infoLabel;
-	private HorizontalGroup inventoryGroup, upgradesGroup1, upgradesGroup2, optionsGroup, upgradesStatusGroup;
+	//private HorizontalGroup inventoryGroup, upgradesGroup1, upgradesGroup2, optionsGroup, upgradesStatusGroup;
 
 	private DragAndDrop dnd;
 
@@ -117,6 +121,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	private boolean isMain = true;
 
+	private MenuHandler menuHandler;
+
 	/**
 	 * Constructor using the running game instance
 	 * 
@@ -146,6 +152,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		Gdx.input.setCatchBackKey(true);
 
+		
 		//initialize some DnD components and set drag actor based on first Consumable texture
 		dnd = new DragAndDrop();
 		if (Consumable.DropType.values().length > 0){
@@ -162,6 +169,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			//CRITICAL: tweak these values for niceness of dragging
 			dnd.setDragActorPosition(-test.getWidth()/2f, test.getHeight()/2f);
 		}
+		
 	}
 
 	/**
@@ -194,16 +202,25 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				}
 				
 				//Draw world over background
+				Gdx.app.log("My Tagg", "actors: " + buttonStage.getActors());
 				gameWorld.render(batch,alexButton.isChecked(),delta);
-				
+				if(buttonStage.getActors().size > 4){
+					((VerticalGroup) buttonStage.getActors().get(5)).act(delta);
+					
+					Gdx.app.log("my Tagg", "Vert Group is: " + ((VerticalGroup) buttonStage.getActors().get(5)).isVisible());
+					Gdx.app.log("my Tagg", "alex but is: " + ((Button) buttonStage.getActors().get(1)).getY());
+				}else{
+					Gdx.app.log("my Tagg", "alex but is: " + ((Button) buttonStage.getActors().get(0)).getY());
+				}
 				
 				batch.end();
 
 				//Draw buttons over the screen
 				buttonStage.draw();
+				
 
 				batch.begin();
-				
+				//Gdx.app.log("my Tagg", "Vert Group is: " + ((VerticalGroup) buttonStage.getActors().get(5)).getOriginX());
 				//Draw health bar (test)
 				Vector3 vectHealth = new Vector3(alexButton.getX() + alexButton.getWidth() + 1.4f*EDGE_TOLERANCE,
 						Gdx.graphics.getHeight() - (alexButton.getY() + alexButton.getHeight() - 1.5f*EDGE_TOLERANCE)
@@ -313,6 +330,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesMenuInitialized = false;
 		optionsMenuInitialized = false;
 		initializeButtons();
+		menuHandler = new MenuHandler(buttonStage, gameInstance, getWorld(), this );
 	}
 
 	/**
@@ -347,9 +365,13 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				else{
 					SoundHandler.changeBackgroundVolume((float) .5);
 				}
-				if (!mainMenuInitialized)
-					initializeMenuItems();
-				handleMainMenu(alexButton.isChecked());
+				if (!mainMenuInitialized){
+					Gdx.app.log("My Tagg", "the dnd is inilizinzed: " + (dnd != null));
+					menuHandler.initializeMenuItems();
+					//initializeMenuItems();
+				}
+				menuHandler.handleMainMenu(alexButton.isChecked());
+				//handleMainMenu(alexButton.isChecked());
 			}
 		});
 		buttonStage.addActor(alexButton);
@@ -375,14 +397,16 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.addActor(infoLabel);
 
 		inputMultiplexer.addProcessor(buttonStage);
+		Gdx.app.log("My Tagg", "The gsCreen aB is " + (alexButton != null));
 	}
 
 	public Vector2 alexsPosition(){
 		return new Vector2(alexButton.getX() + alexButton.getWidth(),alexButton.getY() + alexButton.getHeight());
 	}
-	/**
+	
+/*	*//**
 	 * Initialize main menu group items
-	 */
+	 *//*
 	public void initializeMenuItems(){
 		mainMenuInitialized = true;
 		dnd.addTarget(new Target(alexButton){
@@ -618,9 +642,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		menuGroupImage.setSize(menuGroup.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE);
 	}
 
-	/**
+	*//**
 	 * Initilize inventory group items
-	 */
+	 *//*
 	public void initializeInventoryItems(){
 		inventoryMenuInitialized = true;
 		for (int i = 0; i < Consumable.DropType.values().length; i++){
@@ -657,9 +681,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButton.setName(Consumable.DropType.values()[i].getName());
 			dnd.addSource(new Source(inventoryButton){
 
-				/**
+				*//**
 				 * Overriding dragStart to initialize drag and drop payload
-				 */
+				 *//*
 				@Override
 				public Payload dragStart(InputEvent event, float x, float y,int pointer) {
 					System.out.println("Drag started @ x:" + x + " y:" + y);
@@ -682,9 +706,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					return null;
 				}
 
-				/**
+				*//**
 				 * Overriding dragStop to determine if drag has stopped over a valid target
-				 */
+				 *//*
 				@Override
 				public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload, DragAndDrop.Target target){
 					System.out.println("Drag stopped @ x:" + x + " y:" + y);
@@ -704,9 +728,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryGroupImage.setSize(inventoryGroup.getWidth() + EDGE_TOLERANCE*2f, inventoryGroup.getHeight());
 	}
 
-	/**
+	*//**
 	 * Initialize upgrade group items
-	 */
+	 *//*
 	public void initializeUpgradeItems(){
 		upgradesMenuInitialized = true;
 		//initialize upgrade monies
@@ -1120,11 +1144,120 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
 				upgradesGroup2.getY() - EDGE_TOLERANCE);
 		//For single row
-		/*upgradesGroupImage.setSize(upgradesGroup1.getWidth() + 2f*EDGE_TOLERANCE, upgradesGroup1.getHeight());
+		upgradesGroupImage.setSize(upgradesGroup1.getWidth() + 2f*EDGE_TOLERANCE, upgradesGroup1.getHeight());
 		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
-				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);*/
+				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);
 	}
 
+	*//**
+	 * Toggles main menu group items
+	 * @param checked
+	 *//*
+	public void handleMainMenu(boolean checked) {
+		if (checked){
+			buttonStage.addActor(menuGroupImage);
+			buttonStage.addActor(menuBackgroundButton);
+			buttonStage.addActor(menuGroup);
+			menuBackgroundButton.toBack();
+		}
+		else{
+			menuGroupImage.remove();
+			menuGroup.remove();
+			menuBackgroundButton.remove();
+
+			//collapse children menus
+			handleInventoryMenu(false);
+			handleUpgradesMenu(false);
+			handleOptionsMenu(false);
+		}
+	}
+
+	*//**
+	 * Toggles inventory menu items
+	 * @param checked
+	 *//*
+	public void handleInventoryMenu(boolean checked){
+		if (checked){
+			buttonStage.addActor(inventoryGroupImage);
+			buttonStage.addActor(inventoryGroup);
+			for (Consumable.DropType d : Consumable.DropType.values()){
+				((ImageTextButton) inventoryGroup.findActor(d.getName())).setText("x" + getWorld().getPlayer().getInventory().getInventory().get(d).size);
+			}
+			//from here has to update on button visibility
+		}
+		else{
+			inventoryGroup.remove();
+			inventoryGroupImage.remove();
+			if (!alexButton.isChecked())
+				inventoryGroupButton.setChecked(false);
+		}
+	}
+
+	*//**
+	 * Toggles upgrades menu items
+	 * @param checked
+	 *//*
+	public void handleUpgradesMenu(boolean checked){
+		if (checked){
+			buttonStage.addActor(upgradesGroupImage);
+			buttonStage.addActor(upgradesGroup1);
+			buttonStage.addActor(upgradesStatusGroupImage);
+			buttonStage.addActor(upgradesStatusGroup);
+			buttonStage.addActor(upgradesGroup2);
+
+			if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
+				((Button) upgradesGroup1.findActor("fruitfulButton")).setDisabled(true);
+			else
+				((Button) upgradesGroup1.findActor("fruitfulButton")).setDisabled(false);
+
+			if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
+				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(true);
+			else
+				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(false);
+
+			if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
+				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(true);
+			else
+				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(false);
+
+			if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(true);
+			else
+				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(false);
+
+			System.out.println(((Button) upgradesGroup1.findActor("fruitfulButton")).isDisabled());
+		}
+		else{
+			upgradesGroup1.remove();
+			upgradesGroup2.remove();
+			upgradesGroupImage.remove();
+			if (upgradesStatusGroup!=null){
+				upgradesStatusGroup.remove();
+				upgradesStatusGroupImage.remove();
+			}
+			if (!alexButton.isChecked())
+				upgradesGroupButton.setChecked(false);
+		}
+	}
+
+	*//**
+	 * Toggles options menu items
+	 * @param checked
+	 *//*
+	public void handleOptionsMenu(boolean checked){
+		if (checked){
+			buttonStage.addActor(optionsGroupImage);
+			buttonStage.addActor(optionsGroup);
+		}
+		else{
+			optionsGroup.remove();
+			optionsGroupImage.remove();
+			if (!alexButton.isChecked())
+				optionsGroupButton.setChecked(false);
+		}
+	}
+
+*/
 	/**
 	 * Initialize option group items
 	 */
@@ -1287,122 +1420,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 
-		optionsGroup.addActor(mainMenuButton);
-		optionsGroup.addActor(soundButton);
-		optionsGroup.addActor(musicButton);
-		optionsGroup.addActor(helpButton);
+		menuHandler.getOptionsGroup().addActor(mainMenuButton);
+		menuHandler.getOptionsGroup().addActor(soundButton);
+		menuHandler.getOptionsGroup().addActor(musicButton);
+		menuHandler.getOptionsGroup().addActor(helpButton);
 
-		optionsGroup.pack();
-		optionsGroup.setHeight(BUTTON_HEIGHT);
-		optionsGroupImage.setSize(optionsGroup.getWidth() + EDGE_TOLERANCE*2f, optionsGroup.getHeight());
-	}
-
-	/**
-	 * Toggles main menu group items
-	 * @param checked
-	 */
-	public void handleMainMenu(boolean checked) {
-		if (checked){
-			buttonStage.addActor(menuGroupImage);
-			buttonStage.addActor(menuBackgroundButton);
-			buttonStage.addActor(menuGroup);
-			menuBackgroundButton.toBack();
-		}
-		else{
-			menuGroupImage.remove();
-			menuGroup.remove();
-			menuBackgroundButton.remove();
-
-			//collapse children menus
-			handleInventoryMenu(false);
-			handleUpgradesMenu(false);
-			handleOptionsMenu(false);
-		}
-	}
-
-	/**
-	 * Toggles inventory menu items
-	 * @param checked
-	 */
-	public void handleInventoryMenu(boolean checked){
-		if (checked){
-			buttonStage.addActor(inventoryGroupImage);
-			buttonStage.addActor(inventoryGroup);
-			for (Consumable.DropType d : Consumable.DropType.values()){
-				((ImageTextButton) inventoryGroup.findActor(d.getName())).setText("x" + getWorld().getPlayer().getInventory().getInventory().get(d).size);
-			}
-			//from here has to update on button visibility
-		}
-		else{
-			inventoryGroup.remove();
-			inventoryGroupImage.remove();
-			if (!alexButton.isChecked())
-				inventoryGroupButton.setChecked(false);
-		}
-	}
-
-	/**
-	 * Toggles upgrades menu items
-	 * @param checked
-	 */
-	public void handleUpgradesMenu(boolean checked){
-		if (checked){
-			buttonStage.addActor(upgradesGroupImage);
-			buttonStage.addActor(upgradesGroup1);
-			buttonStage.addActor(upgradesStatusGroupImage);
-			buttonStage.addActor(upgradesStatusGroup);
-			buttonStage.addActor(upgradesGroup2);
-
-			if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
-				((Button) upgradesGroup1.findActor("fruitfulButton")).setDisabled(true);
-			else
-				((Button) upgradesGroup1.findActor("fruitfulButton")).setDisabled(false);
-
-			if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
-				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(true);
-			else
-				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(false);
-
-			if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
-				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(true);
-			else
-				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(false);
-
-			if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
-				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(true);
-			else
-				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(false);
-
-			System.out.println(((Button) upgradesGroup1.findActor("fruitfulButton")).isDisabled());
-		}
-		else{
-			upgradesGroup1.remove();
-			upgradesGroup2.remove();
-			upgradesGroupImage.remove();
-			if (upgradesStatusGroup!=null){
-				upgradesStatusGroup.remove();
-				upgradesStatusGroupImage.remove();
-			}
-			if (!alexButton.isChecked())
-				upgradesGroupButton.setChecked(false);
-		}
-	}
-
-	/**
-	 * Toggles options menu items
-	 * @param checked
-	 */
-	public void handleOptionsMenu(boolean checked){
-		if (checked){
-			buttonStage.addActor(optionsGroupImage);
-			buttonStage.addActor(optionsGroup);
-		}
-		else{
-			optionsGroup.remove();
-			optionsGroupImage.remove();
-			if (!alexButton.isChecked())
-				optionsGroupButton.setChecked(false);
-		}
+		menuHandler.getOptionsGroup().pack();
+		menuHandler.getOptionsGroup().setHeight(BUTTON_HEIGHT);
+		menuHandler.getOptionsGroupImage().setSize(menuHandler.getOptionsGroup().getWidth() + EDGE_TOLERANCE*2f, menuHandler.getOptionsGroup().getHeight());
 	}
 
 	/**
@@ -1475,11 +1500,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void setAlexButton(boolean set) {
 		alexButton.setChecked(set);
 	}
+	
 	public void comingFromHelpScreen(boolean set) {
 		alexButton.setChecked(true);
-		handleMainMenu(true);
-		optionsGroupButton.setChecked(true);
-		handleOptionsMenu(true);
+		menuHandler.handleMainMenu(true);
+		//handleMainMenu(true);
+		menuHandler.getOptionsGroupButton().setChecked(true);
+		menuHandler.handleOptionsMenu(true);
+		//handleOptionsMenu(true);
 	}
 
 	@Override
@@ -1514,5 +1542,40 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 	}
+
+	
+	public void setMainMenuInitialized(boolean b) {
+		mainMenuInitialized = b;	
+	}
+	public boolean getMainMenuInitialized() {
+		return mainMenuInitialized;
+	}
+	public boolean getInventoryMenuInitialized() {
+		return inventoryMenuInitialized;
+	}
+	public void setInventoryMenuInitialized(boolean b) {
+	 inventoryMenuInitialized = b;
+	}
+
+	public boolean getUpgradesMenuInitialized() {
+		return upgradesMenuInitialized;
+	}
+
+	public boolean getOptionsMenuInitialized() {
+		return optionsMenuInitialized;
+	}
+
+	public void setUpgradesMenuInitialized(boolean b) {
+		upgradesMenuInitialized = b;
+	}
+
+	public DragAndDrop getDnd() {
+		return dnd;
+	}
+
+	public Button getAlexButton() {
+		return alexButton;
+	}
+
 
 }

@@ -208,6 +208,7 @@ public class WorldRenderer {
 				projectedBatch.setColor(1f, 1f, 1f, timeCounterW/TIME_TO_WIND);
 				projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
 				projectedBatch.draw(windyAnimation.getKeyFrame(animationTimer), ((float)(compassRegion.getRegionWidth())) + 30f, 0f);
+				
 				projectedBatch.setColor(Color.WHITE);
 			}
 			else{

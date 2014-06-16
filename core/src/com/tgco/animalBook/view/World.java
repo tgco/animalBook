@@ -486,6 +486,7 @@ public class World {
 					magnitude +=10.0;
 				double radian = (((double)rand.nextInt(360))*2.0*Math.PI/360.0);
 				windVector = new Vector2((float)(magnitude*Math.cos(radian)),(float)(magnitude*Math.sin(radian)));
+				worldRender.setWindy(true, windVector.getAngleRad());
 			}
 			weatherTime = 0f;
 			targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;

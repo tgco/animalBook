@@ -170,9 +170,9 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 			font.setColor(Color.WHITE);
-			font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
-			font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
-			font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE - font.getCapHeight());
+			font.draw(batch, String.valueOf(storedAnimal), Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2 - EDGE_TOLERANCE, Gdx.graphics.getHeight()/4 - EDGE_TOLERANCE + font.getCapHeight());
+			font.draw(batch, String.valueOf(nextLevel), Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2 - EDGE_TOLERANCE, Gdx.graphics.getHeight()/4 - EDGE_TOLERANCE + font.getCapHeight());
+			font.draw(batch, needAnimalsString, Gdx.graphics.getWidth()/2 - (needAnimalsString.length()*5f)/2, Gdx.graphics.getHeight()/4 - EDGE_TOLERANCE - font.getCapHeight());
 
 			infoLabel.setText("Money: $" + gameScreen.getWorld().getPlayer().getPlayerMoney());
 			
@@ -399,7 +399,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		levelAnimalButton.setWidth(gameInstance.getLevelHandler().getCurrentLevelWidth());
 		levelAnimalButton.setHeight(gameInstance.getLevelHandler().getCurrentLevelHeight());
 		levelAnimalButton.setX(Gdx.graphics.getWidth()/3 - BUTTON_WIDTH/2);
-		levelAnimalButton.setY(Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
+		levelAnimalButton.setY(Gdx.graphics.getHeight()/4 - EDGE_TOLERANCE);
 
 		//NEXT LEVEL ANIMAL BUTTON
 		atlas = new TextureAtlas(gameInstance.getLevelHandler().nextLevelTexture());
@@ -414,7 +414,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		nextLevelAnimalButton.setWidth(gameInstance.getLevelHandler().getNextLevelWidth());
 		nextLevelAnimalButton.setHeight(gameInstance.getLevelHandler().getNextLevelHeight());
 		nextLevelAnimalButton.setX(Gdx.graphics.getWidth()/1.5f - BUTTON_WIDTH/2);
-		nextLevelAnimalButton.setY(Gdx.graphics.getHeight()/3 - EDGE_TOLERANCE);
+		nextLevelAnimalButton.setY(Gdx.graphics.getHeight()/4 - EDGE_TOLERANCE);
 
 		//LISTENERS
 		nextLevelButton.addListener(new InputListener() {
@@ -425,7 +425,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!nextLevelButton.isDisabled()) {
 					if (gameInstance.getLevelHandler().getLevel() == 5) {
-						SoundHandler.pauseBackgroundMusic();
+						SoundHandler.pauseMarketBackgroundMusic();
 						gameInstance.setScreen(new EndGameStory(gameInstance));
 						dispose();
 					} else {

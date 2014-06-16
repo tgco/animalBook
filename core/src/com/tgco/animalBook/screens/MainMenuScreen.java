@@ -189,6 +189,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				toggleMusicOn();
+				SoundHandler.playBackgroundMusic(true);
 				//Change the screen when the button is let go
 				gameInstance.setData();
 				if(gameInstance.getLevelHandler().isDoTutorial()){

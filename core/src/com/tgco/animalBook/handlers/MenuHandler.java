@@ -86,6 +86,7 @@ public class MenuHandler{
 		this.gScreen = gScreen;
 		this.gWorld = world;
 		this.gameInstance = gameInstance;
+		this.infoLabel = gScreen.getInfoLabel();
 		//Initialize rendering objects
 		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
 		font.setScale(FONT_SCALE);
@@ -756,10 +757,9 @@ public class MenuHandler{
 									gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY(), gWorld.getCamera());
 						//Gdx.app.log("Doge", "Added new dog at " + newDog.getPosition().toString());
 						gWorld.getDrawMap().get("Boosts").add(newDog);
+						gWorld.setDog(true);
 						infoLabel.setText("Money: $" + gWorld.getPlayer().getPlayerMoney()
 								+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
-					} else {
-						gWorld.getDrawMap().get("Boosts").clear();
 					}
 				}
 				if(gWorld.getPlayer().getPlayerMoney() < fruitfulMoney)

@@ -1564,5 +1564,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		return alexButton;
 	}
 
+	public Label getInfoLabel() {
+		return infoLabel;
+	}
+
 
 }

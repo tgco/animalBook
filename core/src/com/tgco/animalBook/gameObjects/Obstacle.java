@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 //Instance of the obstacle drawn at random locations
 public class Obstacle extends ABDrawable {
 	
-	protected static final String texturePath = "objectTextures/obstacle.png";
+	protected static final String texturePath = "objectTextures/pond.png";
 	
 	/**
 	 * Constructs a new Obstacle.

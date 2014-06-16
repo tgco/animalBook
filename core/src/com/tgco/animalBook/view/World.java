@@ -205,7 +205,6 @@ public class World {
 			reinitTextureObstacle();
 		}else{
 			drawMap.put("Obstacle",  gameInstance.getLevelHandler().addObstacles( gameInstance.getLevelHandler().getLevel(), market.getPosition()));
-
 		}
 
 		drawMap.put("WeatherDrop", new Array<ABDrawable>());
@@ -494,6 +493,7 @@ public class World {
 		if (weatherTime > targetWeatherTime){
 			weather.setWeatherType(weather.getNewWeather());
 			worldRender.setRainy(weather.getWeather() == WeatherType.RAINY);
+			
 			if (weather.getWeather() == WeatherType.WINDY){
 				double magnitude = (float)(rand.nextInt(40) - 20);
 				if (magnitude < 0)
@@ -503,6 +503,9 @@ public class World {
 				double radian = (((double)rand.nextInt(360))*2.0*Math.PI/360.0);
 				windVector = new Vector2((float)(magnitude*Math.cos(radian)),(float)(magnitude*Math.sin(radian)));
 				worldRender.setWindy(true, windVector.getAngleRad());
+			}
+			else{
+				worldRender.setWindy(false, 0f);
 			}
 			weatherTime = 0f;
 			targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;

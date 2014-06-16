@@ -422,7 +422,7 @@ public class World {
 					((Movable) movable).addToCurrentTarget(windVector);
 			}
 			//Reduce upward bias if there's a dog
-			Gdx.app.log("Check", "Dog: " + hasDog());
+			//Gdx.app.log("Check", "Dog: " + hasDog());
 			if(hasDog()) {
 				((Movable) movable).adjustForwardBias(.5f, speed, delta);
 			} else {
@@ -505,7 +505,7 @@ public class World {
 				worldRender.setWindy(true, windVector.getAngleRad());
 			}
 			else{
-				worldRender.setWindy(false, 0f);
+				worldRender.setWindy(false, null);
 			}
 			weatherTime = 0f;
 			targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;

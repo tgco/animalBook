@@ -1,6 +1,7 @@
 package com.tgco.animalBook.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -38,7 +39,7 @@ public class WorldRenderer {
 	private static final float PROGRESS_SLIDER_HEIGHT = .01f*Gdx.graphics.getHeight();
 
 	private static final float TIME_TO_RAIN = 2f;
-
+	private static final float TIME_TO_WIND = .75f;
 	private static final float TIME_TO_CLEAR = 2f;
 
 	/**
@@ -63,7 +64,7 @@ public class WorldRenderer {
 	private boolean fadeToRain, steadyRain, fadeToClearR;
 	private boolean fadeToWind, steadyWind, fadeToClearW;
 
-	private float timeCounter;
+	private float timeCounterR, timeCounterW;
 
 	private boolean windy;
 
@@ -78,7 +79,8 @@ public class WorldRenderer {
 		swipes = new Array<Swipe>();
 		rainySprite = new Sprite(black);
 		rainySprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		timeCounter = 0;
+		timeCounterR = 0;
+		timeCounterW = 0;
 
 		compassRegion = new TextureRegion();
 		compassRegion.setTexture(compass);
@@ -149,69 +151,76 @@ public class WorldRenderer {
 		projectedBatch.begin();
 
 		if (rainy){
-			if (fadeToRain && timeCounter < TIME_TO_RAIN){
-				rainySprite.draw(projectedBatch, .5f*timeCounter/TIME_TO_RAIN);
+			if (fadeToRain && timeCounterR < TIME_TO_RAIN){
+				rainySprite.draw(projectedBatch, .5f*timeCounterR/TIME_TO_RAIN);
 			}
 			else{
 				if (fadeToRain){
 					fadeToRain = false;
 					steadyRain = true;
-					timeCounter = 0;
+					timeCounterR = 0;
 				}
 			}
 			if (steadyRain)
 				rainySprite.draw(projectedBatch, .5f);
 		}
 		else{
-			if (fadeToClearR && timeCounter < TIME_TO_CLEAR){
+			if (fadeToClearR && timeCounterR < TIME_TO_CLEAR){
 				if (steadyRain){
 					steadyRain = false;
 				}
-				rainySprite.draw(projectedBatch, .5f - .5f*timeCounter/TIME_TO_CLEAR);
+				rainySprite.draw(projectedBatch, .5f - .5f*timeCounterR/TIME_TO_CLEAR);
 			}
 			else{
 				if (fadeToClearR){
 					fadeToClearR = false;
-					timeCounter = 0;
+					timeCounterR = 0;
 				}
 			}
 		}
 		if (!steadyRain && (fadeToRain || fadeToClearR))
-			timeCounter+=delta;
+			timeCounterR+=delta;
 		//if windy
 
-		/*if (windy){
-			if (fadeToWind && timeCounter < TIME_TO_RAIN){
+		if (windy){
+			if (fadeToWind && timeCounterW < TIME_TO_WIND){
 				//fade to wind
+				projectedBatch.setColor(1f, 1f, 1f, timeCounterW/TIME_TO_WIND);
+				projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
+				projectedBatch.setColor(Color.WHITE);
 			}
 			else{
 				if (fadeToWind){
 					fadeToWind = false;
 					steadyWind = true;
-					timeCounter = 0;
+					timeCounterW = 0;
 				}
 			}
 			if (steadyWind)
 				//steady wind
-				projectedBatch.draw(compassRegion, 0f, 0f, 0f, 0f, compass.getWidth(), compass.getHeight(), 1f, 1f, compassAngle);
+				projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
 		}
 		else{
-			if (fadeToClearW && timeCounter < TIME_TO_CLEAR){
+			if (fadeToClearW && timeCounterW < TIME_TO_WIND){
 				//back to clear
 				if (steadyWind){
 					steadyWind = false;
 				}
-				compassSprite.draw(projectedBatch, .5f - .5f*timeCounter/TIME_TO_CLEAR);
+				projectedBatch.setColor(1f, 1f, 1f, 1f - timeCounterW/TIME_TO_WIND);
+				projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
+				projectedBatch.setColor(Color.WHITE);
 			}
 			else{
 				if (fadeToClearW){
 					fadeToClearW = false;
-					timeCounter = 0;
+					timeCounterW = 0;
 				}
 			}
-		}*/
-		if (windy)
-			projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
+		}
+		if (!steadyWind && (fadeToWind || fadeToClearW))
+			timeCounterW+=delta;
+
+
 
 		//Progress bar
 		projectedBatch.draw(progressBar,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
@@ -274,7 +283,7 @@ public class WorldRenderer {
 		rainy = incomingRain;
 	}
 
-	public void setWindy(boolean incomingWind, float angRad){
+	public void setWindy(boolean incomingWind, Float angRad){
 		if (incomingWind & !rainy){
 			fadeToWind = true;
 		}
@@ -285,6 +294,7 @@ public class WorldRenderer {
 		}
 
 		windy = incomingWind;
-		compassAngle = angRad;
+		if (angRad != null)
+			compassAngle = angRad;
 	}
 }

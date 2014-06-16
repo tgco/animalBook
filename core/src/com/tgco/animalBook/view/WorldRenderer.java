@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
@@ -27,8 +28,6 @@ public class WorldRenderer {
 	 * Stores all swipes to be drawn on screen
 	 */
 	private Array<Swipe> swipes;
-	
-	private Array<ABDrawable> rainDrops;
 
 	/**
 	 * Dimensions for the progress bar and slider
@@ -54,12 +53,21 @@ public class WorldRenderer {
 	 */
 	private Texture progressBar = new Texture(Gdx.files.internal("objectTextures/progressBar.png"));
 
+	private Texture compass = new Texture(Gdx.files.internal("objectTextures/compass.png"));
+	private TextureRegion compassRegion;
+
 	private boolean rainy;
 	private Sprite rainySprite;
+	private Sprite compassSprite;
 
-	private boolean fadeToRain, steadyRain, fadeToClear;
+	private boolean fadeToRain, steadyRain, fadeToClearR;
+	private boolean fadeToWind, steadyWind, fadeToClearW;
 
 	private float timeCounter;
+
+	private boolean windy;
+
+	private float compassAngle;
 
 
 
@@ -71,6 +79,12 @@ public class WorldRenderer {
 		rainySprite = new Sprite(black);
 		rainySprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		timeCounter = 0;
+
+		compassRegion = new TextureRegion();
+		compassRegion.setTexture(compass);
+		compassRegion.setRegionHeight(compass.getHeight());
+		compassRegion.setRegionWidth(compass.getWidth());
+
 	}
 
 	/**
@@ -95,6 +109,15 @@ public class WorldRenderer {
 	 */
 	public void render(SpriteBatch batch, ArrayMap<String, Array<ABDrawable>> drawables, float playerHealth, float progressPercentage,OrthographicCamera cam,float delta) {
 		//Draw all objects
+		for (Array<ABDrawable> drawable : drawables.values()){
+			for (ABDrawable d : drawable){
+				if (!(d.getClass().equals("RainDrop")))
+					d.draw(batch);
+				if (d instanceof Dog) {
+					Gdx.app.log("wat", d.getPosition().toString() + ", cam: " + cam.position.toString());
+				}
+			}
+			/*
 		for (Array<ABDrawable> a : drawables.values()){
 			for (ABDrawable drawable : a) {
 				if (!(drawable instanceof RainDrop))
@@ -109,10 +132,9 @@ public class WorldRenderer {
 				render.end();
 				render.dispose();
 				batch.begin();
-				 */
-			}
+			 */
 		}
-		
+
 		//Swipes on screen
 		for (Swipe swipe : swipes) {
 			if (swipe.getLifeTime() <= 1f) {
@@ -141,21 +163,55 @@ public class WorldRenderer {
 				rainySprite.draw(projectedBatch, .5f);
 		}
 		else{
-			if (fadeToClear && timeCounter < TIME_TO_CLEAR){
+			if (fadeToClearR && timeCounter < TIME_TO_CLEAR){
 				if (steadyRain){
 					steadyRain = false;
 				}
 				rainySprite.draw(projectedBatch, .5f - .5f*timeCounter/TIME_TO_CLEAR);
 			}
 			else{
-				if (fadeToClear){
-					fadeToClear = false;
+				if (fadeToClearR){
+					fadeToClearR = false;
 					timeCounter = 0;
 				}
 			}
 		}
-		if (!steadyRain && (fadeToRain || fadeToClear))
+		if (!steadyRain && (fadeToRain || fadeToClearR))
 			timeCounter+=delta;
+		//if windy
+
+		/*if (windy){
+			if (fadeToWind && timeCounter < TIME_TO_RAIN){
+				//fade to wind
+			}
+			else{
+				if (fadeToWind){
+					fadeToWind = false;
+					steadyWind = true;
+					timeCounter = 0;
+				}
+			}
+			if (steadyWind)
+				//steady wind
+				projectedBatch.draw(compassRegion, 0f, 0f, 0f, 0f, compass.getWidth(), compass.getHeight(), 1f, 1f, compassAngle);
+		}
+		else{
+			if (fadeToClearW && timeCounter < TIME_TO_CLEAR){
+				//back to clear
+				if (steadyWind){
+					steadyWind = false;
+				}
+				compassSprite.draw(projectedBatch, .5f - .5f*timeCounter/TIME_TO_CLEAR);
+			}
+			else{
+				if (fadeToClearW){
+					fadeToClearW = false;
+					timeCounter = 0;
+				}
+			}
+		}*/
+		if (windy)
+			projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
 
 		//Progress bar
 		projectedBatch.draw(progressBar,Gdx.graphics.getWidth() - 2f*(.019f)*Gdx.graphics.getWidth(), (.029f)*Gdx.graphics.getHeight(), PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
@@ -163,7 +219,7 @@ public class WorldRenderer {
 		for (ABDrawable a : drawables.get("WeatherDrop")){
 			a.draw(projectedBatch);
 		}
-		
+
 		projectedBatch.end();
 		projectedBatch.dispose();
 
@@ -212,9 +268,23 @@ public class WorldRenderer {
 		}
 		else{
 			if (!incomingRain & rainy){
-				fadeToClear = true;
+				fadeToClearR = true;
 			}
 		}
 		rainy = incomingRain;
+	}
+
+	public void setWindy(boolean incomingWind, float angRad){
+		if (incomingWind & !rainy){
+			fadeToWind = true;
+		}
+		else{
+			if (!incomingWind & windy){
+				fadeToClearW = true;
+			}
+		}
+
+		windy = incomingWind;
+		compassAngle = angRad;
 	}
 }

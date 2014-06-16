@@ -9,7 +9,6 @@ import com.tgco.animalBook.AnimalBookGame;
 
 public class RainDrop extends Movable {
 
-	private float rainTick = 0f;
 	public RainDrop(String texturePath) {
 		super(texturePath);
 		//default speed

@@ -405,7 +405,14 @@ public class World {
 		}
 		
 		for (ABDrawable boosts : drawMap.get("Boosts")) {
-			((Dog) boosts).move(speed, delta);
+			
+			if (((Dog) boosts).getTimeLeft() >= 0) {
+				((Dog) boosts).decreaseTimeLeft();
+				((Dog) boosts).move(speed, delta);
+			} else {
+				drawMap.get("Boosts").removeValue(boosts, true);
+				setDog(false);
+			}
 		}
 		
 		for (ABDrawable movable : drawMap.get("Movable")) {
@@ -416,8 +423,11 @@ public class World {
 					((Movable) movable).addToCurrentTarget(windVector);
 			}
 			//Reduce upward bias if there's a dog
+			Gdx.app.log("Check", "Dog: " + hasDog());
 			if(hasDog()) {
 				((Movable) movable).adjustForwardBias(.5f, speed, delta);
+			} else {
+				((Movable) movable).adjustForwardBias(0, speed, delta);
 			}
 
 			//Drop new items

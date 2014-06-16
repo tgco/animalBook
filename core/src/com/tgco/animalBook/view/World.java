@@ -490,7 +490,7 @@ public class World {
 			worldRender.setRainy(weather.getWeather() == WeatherType.RAINY);
 			
 			if (weather.getWeather() == WeatherType.WINDY){
-				double magnitude = (float)(rand.nextInt(25) - 10);
+				double magnitude = (float)(rand.nextInt(35) - 10);
 				if (magnitude < 0)
 					magnitude-=10.0;
 				else

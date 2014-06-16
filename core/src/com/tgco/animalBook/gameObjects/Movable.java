@@ -46,7 +46,7 @@ public abstract class Movable extends ABDrawable {
 		moveBias = 1.5f;
 		
 		rotation = 0;
-		rotationSpeed = 50f;
+		rotationSpeed = 40f;
 	}
 	/**
 	 * Overridden to draw with rotation so movables face the direction they are moving

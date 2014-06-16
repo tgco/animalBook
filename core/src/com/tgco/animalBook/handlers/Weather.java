@@ -6,10 +6,12 @@ import java.util.Random;
 public class Weather {
 	private Random rand;
 	private WeatherType weather;
+	private int numWeather;
 
 	public Weather(){
 		rand = new Random();
 		weather = WeatherType.CLEAR;
+		numWeather = 0;
 	}
 
 	public enum WeatherType{
@@ -36,10 +38,17 @@ public class Weather {
 	}
 	
 	public WeatherType getNewWeather(){
-		if (rand.nextBoolean())
+		/*if (rand.nextBoolean())
 			return WeatherType.values()[rand.nextInt(WeatherType.values().length)];
 		else
-			return WeatherType.CLEAR;
+			return WeatherType.CLEAR;*/
+		if (numWeather < Weather.WeatherType.values().length -1){
+			numWeather++;
+		}
+		else
+			numWeather=0;
+		return WeatherType.values()[numWeather];
+		
 	}
 	public WeatherType getWeather(){
 		return weather;

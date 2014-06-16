@@ -46,20 +46,19 @@ public abstract class Movable extends ABDrawable {
 		moveBias = 1.5f;
 		
 		rotation = 0;
-		rotationSpeed = 50f;
+		rotationSpeed = 40f;
 	}
 	/**
 	 * Overridden to draw with rotation so movables face the direction they are moving
 	 */
 	@Override
 	public void draw(SpriteBatch batch) {
-		if (this instanceof Dog) {
-			Gdx.app.log("Sanity2", "Wat2");
-			batch.draw(texture, position.x - width/2, position.y - height/2, width, height);
-		}else{
+//		if (this instanceof Dog) {
+//			batch.draw(texture, position.x - width/2, position.y - height/2, width, height);
+//		}else{
 			batch.draw(texture, position.x - width/2, position.y - height/2, width/2, height/2, width, height, 1, 1, rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
 
-		}
+//		}
 	}
 
 	/**
@@ -78,7 +77,7 @@ public abstract class Movable extends ABDrawable {
 		position.lerp(previousTarget, speed*Gdx.graphics.getDeltaTime());
 
 		//Lerp the previous target to the current
-		previousTarget.lerp(currentTarget,30*speed*Gdx.graphics.getDeltaTime());
+		previousTarget.lerp(currentTarget,15*speed*Gdx.graphics.getDeltaTime());
 
 		//update bounds
 		bounds.setX(position.x - width/2);
@@ -86,7 +85,6 @@ public abstract class Movable extends ABDrawable {
 		
 		//Find rotation
 		float targetRotation = this.position.cpy().sub(temp).angle() - 90f;
-		//float targetRotation = (this.previousTarget.cpy().sub(this.position).add(new Vector2(0,moveBias*cameraSpeed))).angle() - 90f;
 		float difference = targetRotation - rotation;
 		rotation += difference/rotationSpeed;
 	}

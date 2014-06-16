@@ -182,7 +182,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 					SoundHandler.playButtonClick();
 					SoundHandler.pauseStoryBackgroundMusic();
 					SoundHandler.playBackgroundMusic(true);
-					gameInstance.setScreen(new GameScreen(gameInstance));
+					gameInstance.setScreen(new TutorialScreen(gameInstance));
 					dispose();
 				}
 			}

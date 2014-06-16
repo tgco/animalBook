@@ -752,7 +752,8 @@ public class MenuHandler{
 					if(gWorld.getDrawMap().get("Boosts").size <= 0) {
 						SoundHandler.playButtonClick();
 						gWorld.getPlayer().subtractPlayerMoney(dogMoney);
-						Dog newDog = new Dog(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
+						Dog newDog = new Dog(new Vector2(EDGE_TOLERANCE, gWorld.getCamera().position.y +Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE), 
+									gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY(), gWorld.getCamera());
 						//Gdx.app.log("Doge", "Added new dog at " + newDog.getPosition().toString());
 						gWorld.getDrawMap().get("Boosts").add(newDog);
 						infoLabel.setText("Money: $" + gWorld.getPlayer().getPlayerMoney()

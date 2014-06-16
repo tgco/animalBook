@@ -740,8 +740,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		fruitfulButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		fruitfulButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
 		TextureRegion trFruitfulButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/fruitfullButtonDis.png")) );
-		//trFruitfulButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
-		//trFruitfulButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
 		trFruitfulButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
 		trFruitfulButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
 		
@@ -940,7 +938,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				else
 					moreButton.setDisabled(false);
 
-				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+				if(getWorld().getPlayer().getPlayerMoney() < dogMoney || getWorld().hasDog())
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
@@ -989,7 +987,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				else
 					moreButton.setDisabled(false);
 
-				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+				if(getWorld().getPlayer().getPlayerMoney() < dogMoney || getWorld().hasDog())
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
@@ -1038,7 +1036,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				else
 					moreButton.setDisabled(false);
 
-				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+				if(getWorld().getPlayer().getPlayerMoney() < dogMoney || getWorld().hasDog())
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
@@ -1051,16 +1049,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				if(!dogButton.isDisabled()) {
-					if(getWorld().getDrawMap().get("Boosts").size <= 0) {
+					if(!getWorld().hasDog()) {
 						SoundHandler.playButtonClick();
 						getWorld().getPlayer().subtractPlayerMoney(dogMoney);
-						Dog newDog = new Dog(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
-						Gdx.app.log("Doge", "Added new dog at " + newDog.getPosition().toString());
+						Dog newDog = new Dog(new Vector2(EDGE_TOLERANCE, getWorld().getCamera().position.y + Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY(), getWorld().getCamera());
 						getWorld().getDrawMap().get("Boosts").add(newDog);
+						getWorld().setDog(true);
 						infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 								+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
-					} else {
-						getWorld().getDrawMap().get("Boosts").clear();
 					}
 				}
 				if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
@@ -1078,7 +1074,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				else
 					moreButton.setDisabled(false);
 
-				if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+				if(getWorld().getPlayer().getPlayerMoney() < dogMoney || getWorld().hasDog())
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
@@ -1096,7 +1092,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		if(getWorld().getPlayer().getPlayerMoney() < 10){
 			moreButton.setDisabled(true);
 		}
-		if(getWorld().getPlayer().getPlayerMoney() < 100){
+		if(getWorld().getPlayer().getPlayerMoney() < 100 || getWorld().hasDog()){
 			dogButton.setDisabled(true);
 		}
 
@@ -1410,6 +1406,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 
+
 		menuHandler.getOptionsGroup().addActor(mainMenuButton);
 		menuHandler.getOptionsGroup().addActor(soundButton);
 		menuHandler.getOptionsGroup().addActor(musicButton);
@@ -1522,7 +1519,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		else
 			moreButton.setDisabled(false);
 
-		if(getWorld().getPlayer().getPlayerMoney() < dogMoney)
+		if(getWorld().getPlayer().getPlayerMoney() < dogMoney || getWorld().hasDog())
 			dogButton.setDisabled(true);
 		else
 			dogButton.setDisabled(false);

@@ -36,11 +36,6 @@ import com.tgco.animalBook.screens.MarketScreen;
 public class World {
 
 	/**
-	 * The number of animals the player has
-	 */
-	private static int numAnimals = 5;
-
-	/**
 	 * The camera used to view the world
 	 */
 	private OrthographicCamera camera;

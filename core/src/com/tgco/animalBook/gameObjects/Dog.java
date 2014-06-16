@@ -49,7 +49,6 @@ public class Dog extends Animal {
 		
 		//Find rotation
 		float targetRotation = this.position.cpy().sub(temp).angle() - 90f;
-		//float targetRotation = (this.previousTarget.cpy().sub(this.position).add(new Vector2(0,moveBias*cameraSpeed))).angle() - 90f;
 		float difference = targetRotation - rotation;
 		rotation += difference/rotationSpeed;
 	}

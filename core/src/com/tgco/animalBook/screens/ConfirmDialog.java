@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
+import com.tgco.animalBook.handlers.SoundHandler;
 
 public class ConfirmDialog extends Dialog{
 
@@ -69,6 +70,7 @@ public class ConfirmDialog extends Dialog{
 		}else if(object.equals("no2")){
 			((OptionsScreen) gameInstance.getScreen()).setExitDialog();
 		} else if (object.equals("yes3")) {
+			SoundHandler.pauseStoryBackgroundMusic();
 			gameInstance.resetData();
 			gameInstance.setScreen(new MainMenuScreen(gameInstance));
 		} else if (object.equals("no3")) {

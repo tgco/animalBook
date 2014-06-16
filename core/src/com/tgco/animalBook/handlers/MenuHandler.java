@@ -98,7 +98,7 @@ public class MenuHandler{
 	 */
 	public void initializeMenuItems(){
 		gScreen.setMainMenuInitialized(true);
-		Gdx.app.log("My Tagg", "DND is: " + (gScreen.getDnd() != null) + " Alex is " + (gScreen.getAlexButton()));
+		//Gdx.app.log("My Tagg", "DND is: " + (gScreen.getDnd() != null) + " Alex is " + (gScreen.getAlexButton()));
 		gScreen.getDnd().addTarget(new Target(gScreen.getAlexButton()){
 
 			@Override
@@ -753,7 +753,7 @@ public class MenuHandler{
 						SoundHandler.playButtonClick();
 						gWorld.getPlayer().subtractPlayerMoney(dogMoney);
 						Dog newDog = new Dog(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
-						Gdx.app.log("Doge", "Added new dog at " + newDog.getPosition().toString());
+						//Gdx.app.log("Doge", "Added new dog at " + newDog.getPosition().toString());
 						gWorld.getDrawMap().get("Boosts").add(newDog);
 						infoLabel.setText("Money: $" + gWorld.getPlayer().getPlayerMoney()
 								+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
@@ -843,7 +843,6 @@ public class MenuHandler{
 	 */
 	public void handleMainMenu(boolean checked) {
 		if (checked){
-			Gdx.app.log("My Tagg", "menuGroupImage is " + (menuGroupImage != null));
 			buttonStage.addActor(menuGroupImage);
 			buttonStage.addActor(menuBackgroundButton);
 			buttonStage.addActor(menuGroup);

@@ -202,16 +202,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				}
 				
 				//Draw world over background
-				Gdx.app.log("My Tagg", "actors: " + buttonStage.getActors());
 				gameWorld.render(batch,alexButton.isChecked(),delta);
-				if(buttonStage.getActors().size > 4){
-					((VerticalGroup) buttonStage.getActors().get(5)).act(delta);
-					
-					Gdx.app.log("my Tagg", "Vert Group is: " + ((VerticalGroup) buttonStage.getActors().get(5)).isVisible());
-					Gdx.app.log("my Tagg", "alex but is: " + ((Button) buttonStage.getActors().get(1)).getY());
-				}else{
-					Gdx.app.log("my Tagg", "alex but is: " + ((Button) buttonStage.getActors().get(0)).getY());
-				}
 				
 				batch.end();
 
@@ -330,7 +321,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		upgradesMenuInitialized = false;
 		optionsMenuInitialized = false;
 		initializeButtons();
-		menuHandler = new MenuHandler(buttonStage, gameInstance, getWorld(), this );
+		if(menuHandler == null)
+			menuHandler = new MenuHandler(buttonStage, gameInstance, getWorld(), this );
 	}
 
 	/**
@@ -366,7 +358,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					SoundHandler.changeBackgroundVolume((float) .5);
 				}
 				if (!mainMenuInitialized){
-					Gdx.app.log("My Tagg", "the dnd is inilizinzed: " + (dnd != null));
 					menuHandler.initializeMenuItems();
 					//initializeMenuItems();
 				}
@@ -397,7 +388,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		buttonStage.addActor(infoLabel);
 
 		inputMultiplexer.addProcessor(buttonStage);
-		Gdx.app.log("My Tagg", "The gsCreen aB is " + (alexButton != null));
 	}
 
 	public Vector2 alexsPosition(){

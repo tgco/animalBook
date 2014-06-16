@@ -423,7 +423,6 @@ public class World {
 					((Movable) movable).addToCurrentTarget(windVector);
 			}
 			//Reduce upward bias if there's a dog
-			Gdx.app.log("Check", "Dog: " + hasDog());
 			if(hasDog()) {
 				((Movable) movable).adjustForwardBias(.5f, speed, delta);
 			} else {

@@ -1037,11 +1037,14 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				if(!dogButton.isDisabled()) {
-					if(getWorld().getDrawMap().get("Boosts").size <= 0) {
+					for (ABDrawable boost : getWorld().getDrawMap().get("Boosts")) {
+						if (boost instanceof Dog)
+							getWorld().setDog(true);
+					}
+					if(!getWorld().hasDog()) {
 						SoundHandler.playButtonClick();
 						getWorld().getPlayer().subtractPlayerMoney(dogMoney);
-						Dog newDog = new Dog(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
-						Gdx.app.log("Doge", "Added new dog at " + newDog.getPosition().toString());
+						Dog newDog = new Dog(new Vector2(EDGE_TOLERANCE, Gdx.graphics.getHeight() - EDGE_TOLERANCE), gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY());
 						getWorld().getDrawMap().get("Boosts").add(newDog);
 						infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 								+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());

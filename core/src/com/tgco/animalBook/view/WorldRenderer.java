@@ -99,9 +99,6 @@ public class WorldRenderer {
 			for (ABDrawable drawable : a) {
 				if (!(drawable instanceof RainDrop))
 				drawable.draw(batch);
-				if (drawable instanceof Dog) {
-					Gdx.app.log("wat", drawable.getPosition().toString() + ", cam: " + cam.position.toString());
-				}
 				/*
 				// will render all object bounds for collision detection when uncommented
 				batch.end();

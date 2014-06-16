@@ -89,6 +89,8 @@ public class World {
 	 * The main player
 	 */
 	private Player player;
+	
+	private boolean hasDog = false;
 
 	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
 	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
@@ -402,6 +404,10 @@ public class World {
 
 		}
 		
+		for (ABDrawable boosts : drawMap.get("Boosts")) {
+			((Dog) boosts).move(speed, delta);
+		}
+		
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
@@ -410,7 +416,7 @@ public class World {
 					((Movable) movable).addToCurrentTarget(windVector);
 			}
 			//Reduce upward bias if there's a dog
-			if(drawMap.get("Boosts").size > 0) {
+			if(hasDog()) {
 				((Movable) movable).adjustForwardBias(.5f, speed, delta);
 			}
 
@@ -567,6 +573,14 @@ public class World {
 
 	public ArrayMap<String, Array<ABDrawable>> getDrawMap() {
 		return drawMap;
+	}
+	
+	public void setDog(boolean hasDog) {
+		this.hasDog = hasDog;
+	}
+	
+	public boolean hasDog() {
+		return hasDog;
 	}
 
 	public float getPrecentage(){

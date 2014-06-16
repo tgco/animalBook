@@ -45,9 +45,6 @@ public abstract class ABDrawable {
 	 */
 	public void draw(SpriteBatch batch) {
 		batch.draw(texture, position.x - width/2, position.y - height/2, width, height);
-		if (this instanceof Dog) {
-			Gdx.app.log("Sanity", "Wat");
-		}
 	}
 	
 	/**

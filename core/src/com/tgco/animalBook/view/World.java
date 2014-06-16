@@ -129,24 +129,27 @@ public class World {
 		worldRender = new WorldRenderer();
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
-		//spot 3 is storing movable array
-		if(levelSize && gameInstance.getLevelData().get(2) != null){
-			Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
-			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
-			reinitTextureMovable();
-		}else{
-			drawMap.put("Movable", gameInstance.getLevelHandler().addAnimals( gameInstance.getLevelHandler().getLevel()));
-		}
-
 
 		//Camera initialization
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
+		
+		Array<ABDrawable> movables;
+		
+		//spot 3 is storing movable array
+		if(levelSize && gameInstance.getLevelData().get(2) != null){
+			Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
+			movables = (Array<ABDrawable>) gameInstance.getLevelData().get(2);
+			//drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
+			reinitTextureMovable();
+		}else{
+			movables = gameInstance.getLevelHandler().addAnimals( gameInstance.getLevelHandler().getLevel());
+			//drawMap.put("Movable", gameInstance.getLevelHandler().addAnimals( gameInstance.getLevelHandler().getLevel()));
+		}
 
-		Gdx.app.log("My Tagg", "The movable: " + drawMap.get("Movable").size );
-		tolerance = drawMap.get("Movable").get(0).getWidth();
+		tolerance = movables.get(0).getWidth();
 
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
@@ -186,20 +189,22 @@ public class World {
 			player = new Player(cameraSpeed);
 			Gdx.app.log("My Tagg", "Health " + player.getHealth());
 		}
-
-		if(levelSize && gameInstance.getLevelData().get(3) != null){
-			drawMap.put("Dropped", (Array<ABDrawable>) gameInstance.getLevelData().get(3));
-			reinitTextureDropped();
-		}else{
-			drawMap.put("Dropped", new Array<ABDrawable>());
-		}
-
+		
 		//Make the obstacles
 		if(levelSize && gameInstance.getLevelData().get(4) !=null){
 			drawMap.put("Obstacle", (Array<ABDrawable>) gameInstance.getLevelData().get(4));
 			reinitTextureObstacle();
 		}else{
 			drawMap.put("Obstacle",  gameInstance.getLevelHandler().addObstacles( gameInstance.getLevelHandler().getLevel(), market.getPosition()));
+		}
+		
+		drawMap.put("Movable", movables);
+		
+		if(levelSize && gameInstance.getLevelData().get(3) != null){
+			drawMap.put("Dropped", (Array<ABDrawable>) gameInstance.getLevelData().get(3));
+			reinitTextureDropped();
+		}else{
+			drawMap.put("Dropped", new Array<ABDrawable>());
 		}
 
 		drawMap.put("WeatherDrop", new Array<ABDrawable>());

@@ -29,7 +29,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Buttons
 	 */
-	private Button 			skipButton, continueButton;
+	private Button 			 continueButton;
 	
 	/**
 	 * Holds story screen string paths

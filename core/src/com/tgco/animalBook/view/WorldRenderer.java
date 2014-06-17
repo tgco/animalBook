@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.tgco.animalBook.gameObjects.ABDrawable;
-import com.tgco.animalBook.gameObjects.Dog;
 import com.tgco.animalBook.gameObjects.Swipe;
 
 
@@ -44,6 +42,8 @@ public class WorldRenderer {
 	private static final float WEATHER_TIME = 1.75f;
 
 	private static final float ICON_FRAME_RATE = .5f;
+	
+	private static final float RENDER_UNIT = Gdx.graphics.getWidth()*1f/6f;
 
 	/**
 	 * Textures for drawing primitive rectangles
@@ -182,7 +182,7 @@ public class WorldRenderer {
 		if (rainy){
 			if (fadeToRain && timeCounterR < WEATHER_TIME){
 				projectedBatch.setColor(1f, 1f, 1f, timeCounterR/WEATHER_TIME);
-				projectedBatch.draw(rainyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
+				projectedBatch.draw(rainyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
 				rainySprite.draw(projectedBatch, .333f*timeCounterR/WEATHER_TIME);
 				projectedBatch.setColor(Color.WHITE);
 			}
@@ -194,7 +194,7 @@ public class WorldRenderer {
 				}
 			}
 			if (steadyRain){
-				projectedBatch.draw(rainyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
+				projectedBatch.draw(rainyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
 				rainySprite.draw(projectedBatch, .333f);
 			}
 		}
@@ -204,7 +204,7 @@ public class WorldRenderer {
 					steadyRain = false;
 				}
 				projectedBatch.setColor(1f, 1f, 1f, 1f - timeCounterR/WEATHER_TIME);
-				projectedBatch.draw(rainyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
+				projectedBatch.draw(rainyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
 				rainySprite.draw(projectedBatch, .333f - .333f*timeCounterR/WEATHER_TIME);
 				projectedBatch.setColor(Color.WHITE);
 			}
@@ -225,8 +225,8 @@ public class WorldRenderer {
 			if (fadeToWind && timeCounterW < WEATHER_TIME){
 				//fade to wind
 				projectedBatch.setColor(1f, 1f, 1f, timeCounterW/WEATHER_TIME);
-				projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
-				projectedBatch.draw(windyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
+				projectedBatch.draw(compassRegion, 0f, 0f, RENDER_UNIT/2f, RENDER_UNIT/2f, RENDER_UNIT, RENDER_UNIT, 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
+				projectedBatch.draw(windyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
 				projectedBatch.setColor(Color.WHITE);
 			}
 			else{
@@ -237,9 +237,9 @@ public class WorldRenderer {
 				}
 			}
 			if (steadyWind){
-				projectedBatch.draw(windyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
-				projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
-			}
+				projectedBatch.draw(compassRegion, 0f, 0f, RENDER_UNIT/2f, RENDER_UNIT/2f, RENDER_UNIT, RENDER_UNIT, 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
+				projectedBatch.draw(windyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
+				}
 		}
 		else{
 			if (fadeToReturnW && timeCounterW < WEATHER_TIME){
@@ -248,8 +248,8 @@ public class WorldRenderer {
 					steadyWind = false;
 				}
 				projectedBatch.setColor(1f, 1f, 1f, 1f - timeCounterW/WEATHER_TIME);
-				projectedBatch.draw(compassRegion, 0f, 0f, compass.getWidth()/2f, compass.getHeight()/2f, compass.getWidth(), compass.getHeight(), 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
-				projectedBatch.draw(windyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
+				projectedBatch.draw(compassRegion, 0f, 0f, RENDER_UNIT/2f, RENDER_UNIT/2f, RENDER_UNIT, RENDER_UNIT, 1f, 1f, -90f + compassAngle*360f/((float)(2f*Math.PI)));
+				projectedBatch.draw(windyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
 				projectedBatch.setColor(Color.WHITE);
 			}
 			else{
@@ -269,7 +269,7 @@ public class WorldRenderer {
 			if (fadeToClear && timeCounterC < WEATHER_TIME){
 				//fade to clear
 				projectedBatch.setColor(1f, 1f, 1f, timeCounterC/WEATHER_TIME);
-				projectedBatch.draw(clearAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
+				projectedBatch.draw(clearAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
 				projectedBatch.setColor(Color.WHITE);
 			}
 			else{
@@ -280,8 +280,8 @@ public class WorldRenderer {
 				}
 			}
 			if (steadyClear)
-				projectedBatch.draw(clearAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
-		}
+				projectedBatch.draw(clearAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
+			}
 		else{
 			if (fadeToReturnC && timeCounterC < WEATHER_TIME){
 				//back to clear
@@ -289,7 +289,7 @@ public class WorldRenderer {
 					steadyClear = false;
 				}
 				projectedBatch.setColor(1f, 1f, 1f, 1f - timeCounterC/WEATHER_TIME);
-				projectedBatch.draw(clearAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
+				projectedBatch.draw(clearAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
 				projectedBatch.setColor(Color.WHITE);
 			}
 			else{
@@ -309,7 +309,7 @@ public class WorldRenderer {
 			if (fadeToSnow && timeCounterS < WEATHER_TIME){
 				//fade to clear
 				projectedBatch.setColor(1f, 1f, 1f, timeCounterS/WEATHER_TIME);
-				projectedBatch.draw(snowyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
+				projectedBatch.draw(snowyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
 				projectedBatch.setColor(Color.WHITE);
 			}
 			else{
@@ -320,7 +320,7 @@ public class WorldRenderer {
 				}
 			}
 			if (steadySnow)
-				projectedBatch.draw(snowyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
+				projectedBatch.draw(snowyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
 			}
 		else{
 			if (fadeToReturnS && timeCounterS < WEATHER_TIME){
@@ -329,7 +329,7 @@ public class WorldRenderer {
 					steadySnow = false;
 				}
 				projectedBatch.setColor(1f, 1f, 1f, 1f - timeCounterS/WEATHER_TIME);
-				projectedBatch.draw(snowyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight());
+				projectedBatch.draw(snowyAnimation.getKeyFrame(animationTimer), Gdx.graphics.getWidth() - 1f/8f*Gdx.graphics.getWidth(), Gdx.graphics.getHeight() -2f/20f*Gdx.graphics.getHeight(), 1f/2f*RENDER_UNIT, 1f/4f*RENDER_UNIT);
 				projectedBatch.setColor(Color.WHITE);
 			}
 			else{

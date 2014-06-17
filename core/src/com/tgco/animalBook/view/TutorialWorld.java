@@ -1,7 +1,5 @@
 package com.tgco.animalBook.view;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,11 +21,6 @@ import com.tgco.animalBook.screens.TutorialMarketScreen;
 import com.tgco.animalBook.screens.TutorialScreen;
 
 public class TutorialWorld {
-
-	/**
-	 * The number of animals the player has
-	 */
-	private int numAnimals = 5;
 
 	/**
 	 * The camera used to view the world
@@ -74,12 +67,7 @@ public class TutorialWorld {
 	 * The main player
 	 */
 	private Player player;
-
-	/**
-	 * Generates random numbers for probability
-	 */
-	private Random rand = new Random();
-
+	
 	/**
 	 * Handles all of the game object rendering responsibility
 	 */

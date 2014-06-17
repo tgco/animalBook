@@ -118,6 +118,7 @@ public class World {
 	 * 
 	 * @param gameInstance reference to the running game instance
 	 */
+	@SuppressWarnings("unchecked")
 	public World(AnimalBookGame gameInstance) {
 
 		this.gameInstance = gameInstance;
@@ -144,9 +145,7 @@ public class World {
 
 		//spot 3 is storing movable array
 		if(levelSize && gameInstance.getLevelData().get(2) != null){
-			Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
-			movables = (Array<ABDrawable>) gameInstance.getLevelData().get(2);
-			//drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
+			movables = (Array<ABDrawable>) gameInstance.getLevelData().get(2);	
 			reinit = true;
 		}else{
 			movables = gameInstance.getLevelHandler().addAnimals( gameInstance.getLevelHandler().getLevel());

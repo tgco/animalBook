@@ -19,16 +19,6 @@ import com.tgco.animalBook.AnimalBookGame;
 public class Swipe {
 
 	/**
-	 * Where the swipe begins
-	 */
-	private Vector2 begin;
-
-	/**
-	 * Where the swipe ends
-	 */
-	private Vector2 end;
-
-	/**
 	 * The amount of time the swipe is drawn on screen
 	 */
 	private float lifeTime;
@@ -50,8 +40,6 @@ public class Swipe {
 	 * @param end	the ending point of the line
 	 */
 	public Swipe(Vector2 begin, Vector2 end) {
-		this.begin = begin;
-		this.end = end;
 		lifeTime = 100f;
 
 		//Find length of swipe and rotation setup sprite

@@ -250,6 +250,11 @@ public class SoundHandler {
 		buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonclick2.wav"));
 		whistle = Gdx.audio.newMusic(Gdx.files.internal("sounds/whistle.wav"));
 		pickup = Gdx.audio.newSound(Gdx.files.internal("sounds/pickup.wav"));
+		gooseHonk = Gdx.audio.newSound(Gdx.files.internal("sounds/gooseHonk.wav"));
+		pigOink = Gdx.audio.newSound(Gdx.files.internal("sounds/pigOink.wav"));
+		goatBleat = Gdx.audio.newSound(Gdx.files.internal("sounds/goat.wav"));
+		sheepBaa = Gdx.audio.newSound(Gdx.files.internal("sounds/sheepBaa.wav"));
+		cowMoo = Gdx.audio.newSound(Gdx.files.internal("sounds/moo.wav"));
 		//soundMuted = true;
 		//musicMuted = true;
 	}

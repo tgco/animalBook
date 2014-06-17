@@ -7,8 +7,6 @@
 package com.tgco.animalBook.gameObjects;
 
 import java.util.Random;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.AnimalBookGame;
@@ -33,14 +31,8 @@ public abstract class Animal extends Movable {
 	/** a counter to reflect the amount of frames before an animal will drop an item */
 	private int dropCount = 0;
 
-	/** every animal has a different item that is dropped */
-	private DropType dropType;
-
 	/** rand is used to created random movement of the animal */
 	protected Random rand;
-
-	/** the animal will have different target changes for different levels */
-	private int  animalLevel;
 
 	private int animalX;
 

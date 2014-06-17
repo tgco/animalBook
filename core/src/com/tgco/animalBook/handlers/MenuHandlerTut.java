@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -30,19 +29,16 @@ import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Animal;
 import com.tgco.animalBook.gameObjects.Consumable;
-import com.tgco.animalBook.gameObjects.Dog;
 import com.tgco.animalBook.gameObjects.Movable;
-import com.tgco.animalBook.screens.GameScreen;
 import com.tgco.animalBook.screens.TutorialScreen;
 import com.tgco.animalBook.view.TutorialWorld;
-import com.tgco.animalBook.view.World;
 
 public class MenuHandlerTut{
 	
 	private Stage buttonStage;
 	
 	private VerticalGroup menuGroup;
-	private Image alexInfoImage, menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
+	private Image menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
 	private Label infoLabel;
 	private HorizontalGroup inventoryGroup, upgradesGroup1, upgradesGroup2, optionsGroup, upgradesStatusGroup;
 	
@@ -65,7 +61,7 @@ public class MenuHandlerTut{
 	/**
 	 * Each button used on the game screen user interface overlay
 	 */
-	private Button inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, fruitfulButton, longerButton, moreButton, dogButton;
+	private Button inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, dogButton;
 
 	private TutorialWorld tWorld;
 	private TutorialScreen tScreen;
@@ -956,25 +952,4 @@ public class MenuHandlerTut{
 		return optionsGroupButton;
 	}
 	
-	private void updateCosts() {
-		if(tWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
-			fruitfulButton.setDisabled(true);
-		else
-			fruitfulButton.setDisabled(false);
-
-		if(tWorld.getPlayer().getPlayerMoney() < longerMoney)
-			longerButton.setDisabled(true);
-		else
-			longerButton.setDisabled(false);
-
-		if(tWorld.getPlayer().getPlayerMoney() < moreMoney)
-			moreButton.setDisabled(true);
-		else
-			moreButton.setDisabled(false);
-
-		if(tWorld.getPlayer().getPlayerMoney() < dogMoney)
-			dogButton.setDisabled(true);
-		else
-			dogButton.setDisabled(false);
-	}
 }

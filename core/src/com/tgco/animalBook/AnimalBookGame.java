@@ -484,8 +484,8 @@ public class AnimalBookGame extends Game {
 		return kidMode;
 	}
 	
-	public void setKidMode(boolean kidMode) {
-		this.kidMode = kidMode;
+	public static void setKidMode(boolean mode) {
+		kidMode = mode;
 	}
 
 	public float getProgPercentage() {

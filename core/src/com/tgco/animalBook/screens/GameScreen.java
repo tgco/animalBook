@@ -25,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.AnimalBookGame.state;
-import com.tgco.animalBook.gameObjects.ABDrawable;
 import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.MenuHandler;
@@ -44,8 +43,6 @@ import com.tgco.animalBook.view.World;
 public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	private static final float WEATHER_TIME = 3f;
-
-	private Array<ABDrawable> boostArray = new Array<ABDrawable>();
 
 	/**
 	 * Reference to the game world where all objects are located

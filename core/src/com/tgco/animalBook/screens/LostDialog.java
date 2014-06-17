@@ -3,7 +3,6 @@ package com.tgco.animalBook.screens;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tgco.animalBook.AnimalBookGame;
-import com.tgco.animalBook.handlers.SoundHandler;
 
 public class LostDialog extends Dialog{
 

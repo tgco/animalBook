@@ -368,7 +368,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		optionsMenuInitialized = false;
 		initializeButtons();
 		if(menuHandler == null)
-			menuHandler = new MenuHandler(buttonStage, gameInstance, getWorld(), this );
+			menuHandler = new MenuHandler(buttonStage, gameInstance, getWorld(), this);
 	}
 
 	/**

@@ -33,30 +33,28 @@ import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.gameObjects.Dog;
 import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.screens.GameScreen;
-import com.tgco.animalBook.screens.TutorialScreen;
-import com.tgco.animalBook.view.TutorialWorld;
 import com.tgco.animalBook.view.World;
 
 public class MenuHandler{
-	
+
 	private Stage buttonStage;
-	
+
 	private VerticalGroup menuGroup;
-	private Image alexInfoImage, menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
+	private Image menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
 	private Label infoLabel;
 	private HorizontalGroup inventoryGroup, upgradesGroup1, upgradesGroup2, optionsGroup, upgradesStatusGroup;
-	
+
 	//dimensions for buttons
-		protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
-		protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
-		//distance between buttons and between the edge and a button
-		protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
+	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
+	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
+	//distance between buttons and between the edge and a button
+	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
 
-		//Button texture initialization
-		protected TextureAtlas atlas;
+	//Button texture initialization
+	protected TextureAtlas atlas;
 
-	
-	 /** The font used when rendering strings
+
+	/** The font used when rendering strings
 	 */
 	private BitmapFont font;
 	private final float FONT_SCALE = Gdx.graphics.getHeight()/750f;
@@ -65,7 +63,7 @@ public class MenuHandler{
 	/**
 	 * Each button used on the game screen user interface overlay
 	 */
-	private Button inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, fruitfulButton, longerButton, moreButton, dogButton;
+	private Button inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, dogButton;
 
 	private World gWorld;
 	private GameScreen gScreen;
@@ -78,16 +76,16 @@ public class MenuHandler{
 	private int moreMoney;
 	private int dogMoney;
 
-	
+
 	private AnimalBookGame gameInstance;
 	private Skin buttonSkin;
-	
+
 	public MenuHandler(Stage bStage, AnimalBookGame gameInstance, World world, GameScreen gScreen) {
 		buttonStage = bStage;
-			this.gScreen = gScreen;
-			this.gWorld = world;
-			this.infoLabel = gScreen.getInfoLabel();
-		
+		this.gScreen = gScreen;
+		this.gWorld = world;
+		this.infoLabel = gScreen.getInfoLabel();
+
 		this.gameInstance = gameInstance;
 		//Initialize rendering objects
 		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
@@ -95,13 +93,13 @@ public class MenuHandler{
 
 	}
 
-	
+
 	/**
 	 * Initialize main menu group items
 	 */
 	public void initializeMenuItems(){
 		gScreen.setMainMenuInitialized(true);
-		
+
 		gScreen.getDnd().addTarget(new Target(gScreen.getAlexButton()){
 
 			@Override
@@ -445,7 +443,7 @@ public class MenuHandler{
 		TextureRegion trFruitfulButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/fruitfullButtonDis.png")) );
 		trFruitfulButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
 		trFruitfulButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-		
+
 		fruitfulButtonStyle.disabled = new TextureRegionDrawable(trFruitfulButton);
 
 		fruitfulButton = new Button(fruitfulButtonStyle){
@@ -472,7 +470,7 @@ public class MenuHandler{
 		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
 		trLongerButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
 		trLongerButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-		
+
 		longerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
 
 		longerButton = new Button(longerButtonStyle){
@@ -501,7 +499,7 @@ public class MenuHandler{
 		//trMoreButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
 		trMoreButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
 		trMoreButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-		
+
 		MoreButtonStyle.disabled = new TextureRegionDrawable(trMoreButton);
 
 		moreButton = new Button(MoreButtonStyle) {
@@ -755,7 +753,7 @@ public class MenuHandler{
 						SoundHandler.playButtonClick();
 						gWorld.getPlayer().subtractPlayerMoney(dogMoney);
 						Dog newDog = new Dog(new Vector2(EDGE_TOLERANCE, gWorld.getCamera().position.y +Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE), 
-									gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY(), gWorld.getCamera());
+								gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY(), gWorld.getCamera());
 						//Gdx.app.log("Doge", "Added new dog at " + newDog.getPosition().toString());
 						gWorld.getDrawMap().get("Boosts").add(newDog);
 						gWorld.setDog(true);
@@ -838,7 +836,7 @@ public class MenuHandler{
 		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
 				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);*/
 	}
-	
+
 	/**
 	 * Toggles main menu group items
 	 * @param checked
@@ -960,26 +958,5 @@ public class MenuHandler{
 	public Button getOptionsGroupButton() {
 		return optionsGroupButton;
 	}
-	
-	private void updateCosts() {
-		if(gWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
-			fruitfulButton.setDisabled(true);
-		else
-			fruitfulButton.setDisabled(false);
 
-		if(gWorld.getPlayer().getPlayerMoney() < longerMoney)
-			longerButton.setDisabled(true);
-		else
-			longerButton.setDisabled(false);
-
-		if(gWorld.getPlayer().getPlayerMoney() < moreMoney)
-			moreButton.setDisabled(true);
-		else
-			moreButton.setDisabled(false);
-
-		if(gWorld.getPlayer().getPlayerMoney() < dogMoney || gWorld.hasDog())
-			dogButton.setDisabled(true);
-		else
-			dogButton.setDisabled(false);
-	}
 }

@@ -24,7 +24,7 @@ public class AnimalBookGame extends Game {
 	public static final String version = "0.9.9";
 
 	/** debug variables */
-	public static final Boolean debugMode = true;
+	public static final Boolean debugMode = false;
 	private FPSLogger fpsLogger;
 
 	/** levelData array is used hold the data for the current level */
@@ -94,7 +94,6 @@ public class AnimalBookGame extends Game {
 		SoundHandler.setMusicMuted(prefs.getBoolean("music"));
 		SoundHandler.setSoundMuted(prefs.getBoolean("sound"));
 		
-		Gdx.app.log("My Tagg", "The music is " + prefs.getBoolean("music"));
 		//Set the initial screen
 		setScreen(new SplashScreen(this));
 
@@ -177,7 +176,6 @@ public class AnimalBookGame extends Game {
 	@Override
 	public void resume(){
 		super.resume();
-		Gdx.app.log("My tagg", "The app is resumeing");
 		currState = state.RESUME;
 		
 	}
@@ -297,7 +295,6 @@ public class AnimalBookGame extends Game {
 		if(continueable){
 			setDataCont();
 		}else{
-			Gdx.app.log("My Tagg", "This is doing play");
 			setDataPlay();
 		}
 		
@@ -484,8 +481,8 @@ public class AnimalBookGame extends Game {
 		return kidMode;
 	}
 	
-	public void setKidMode(boolean kidMode) {
-		this.kidMode = kidMode;
+	public static void setKidMode(boolean mode) {
+		kidMode = mode;
 	}
 
 	public float getProgPercentage() {

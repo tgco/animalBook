@@ -63,31 +63,31 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
-		
+
 		if(!hasConfirm){
-		//clear screen
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			//clear screen
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		//render background
-		batch.begin();
-		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		batch.end();
+			//render background
+			batch.begin();
+			batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			batch.end();
 
-		//process button input
-		buttonStage.act(delta);
+			//process button input
+			buttonStage.act(delta);
 
-		//draw button stage on top of images in the batch
-		buttonStage.draw();
-		
-		if(Gdx.input.isKeyPressed(Keys.BACK)){
-			setDialog();
-		}
+			//draw button stage on top of images in the batch
+			buttonStage.draw();
+
+			if(Gdx.input.isKeyPressed(Keys.BACK)){
+				setDialog();
+			}
 		}else{
 			popupStage.act(delta);
 			popupStage.draw();
 		}
-			
+
 
 	}
 
@@ -127,6 +127,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
+		popupStage.dispose();
 	}
 
 	/**
@@ -164,7 +165,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton.setHeight(MENU_BUTTON_HEIGHT);
 		optionsButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
 		optionsButton.setY(EDGE_TOLERANCE);
-		
+
 		//Create listeners
 		playButton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -209,7 +210,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}
-	
+
 	/**
 	 * Sets the game to the confirm dialog when back is pressed
 	 * 
@@ -231,7 +232,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer.addProcessor(buttonStage);
 		popupStage = new Stage();	
 	}
-	
+
 	public void toggleMusicOn(){
 		if(toggleOn){
 			SoundHandler.toggleMusic();

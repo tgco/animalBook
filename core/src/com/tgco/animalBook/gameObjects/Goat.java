@@ -35,7 +35,6 @@ public class Goat extends Animal{
 		
 		
 		speed = 1/14f;
-		//width = .272*height
 		width = .04f*Gdx.graphics.getWidth();
 		height = .147f*Gdx.graphics.getHeight();
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);

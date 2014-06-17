@@ -21,7 +21,7 @@ import com.tgco.animalBook.screens.SplashScreen;
 public class AnimalBookGame extends Game {
 
 	/**Version string  */
-	public static final String version = "0.7.0";
+	public static final String version = "0.9.9";
 
 	/** debug variables */
 	public static final Boolean debugMode = true;
@@ -29,6 +29,10 @@ public class AnimalBookGame extends Game {
 
 	/** levelData array is used hold the data for the current level */
 	private static Array<Object> levelData = new Array<Object>(5);
+	
+	/** Screen sizes in inches */
+	public static float SCREEN_WIDTH;
+	public static float SCREEN_HEIGHT;
 
 	/** the current state of the cycle*/
 	public enum state{
@@ -111,6 +115,9 @@ public class AnimalBookGame extends Game {
 		
 		currState = state.RESUME;
 		
+		//screen sizes in inch
+		SCREEN_WIDTH = Gdx.graphics.getWidth()/Gdx.graphics.getPpiX();
+		SCREEN_HEIGHT = Gdx.graphics.getHeight()/Gdx.graphics.getPpiY();
 		
 	}
 

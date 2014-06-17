@@ -615,7 +615,7 @@ public class MenuHandler{
 					gameInstance.getLevelHandler().addFruitfullMoneyP();
 
 					fruitfulLabel.setText(
-							"Fruitfulness\n" +
+							"More Animals \n" +
 									String.valueOf(gameInstance.getLevelHandler().getFruitfullMoneyP()) + "\n" +
 									"+" + String.valueOf(5) + "%\n" +
 									"$" + String.valueOf(fruitfulMoney) + "\n" +
@@ -777,7 +777,7 @@ public class MenuHandler{
 				else
 					moreButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < dogMoney)
+				if(gWorld.getPlayer().getPlayerMoney() < dogMoney || gWorld.hasDog())
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
@@ -960,5 +960,25 @@ public class MenuHandler{
 		return optionsGroupButton;
 	}
 	
+	private void updateCosts() {
+		if(gWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
+			fruitfulButton.setDisabled(true);
+		else
+			fruitfulButton.setDisabled(false);
 
+		if(gWorld.getPlayer().getPlayerMoney() < longerMoney)
+			longerButton.setDisabled(true);
+		else
+			longerButton.setDisabled(false);
+
+		if(gWorld.getPlayer().getPlayerMoney() < moreMoney)
+			moreButton.setDisabled(true);
+		else
+			moreButton.setDisabled(false);
+
+		if(gWorld.getPlayer().getPlayerMoney() < dogMoney || gWorld.hasDog())
+			dogButton.setDisabled(true);
+		else
+			dogButton.setDisabled(false);
+	}
 }

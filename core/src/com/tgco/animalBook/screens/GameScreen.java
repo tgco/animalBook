@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -17,29 +16,17 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.tgco.animalBook.AnimalBookGame;
-import com.tgco.animalBook.gameObjects.ABDrawable;
-import com.tgco.animalBook.gameObjects.Animal;
-import com.tgco.animalBook.gameObjects.Consumable;
-import com.tgco.animalBook.gameObjects.Dog;
-import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.AnimalBookGame.state;
+import com.tgco.animalBook.gameObjects.ABDrawable;
+import com.tgco.animalBook.gameObjects.Consumable;
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.MenuHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
@@ -74,24 +61,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Each button used on the game screen user interface overlay
 	 */
-	private Button alexButton, dogButton,fruitfulButton, longerButton, moreButton;
-	//private Button inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, fruitfulButton, longerButton, moreButton, dogButton;
-
-	//private VerticalGroup menuGroup;
+	private Button alexButton;
+	
 	private Image alexInfoImage; 
-	//menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
 	private Label infoLabel;
-	//private HorizontalGroup inventoryGroup, upgradesGroup1, upgradesGroup2, optionsGroup, upgradesStatusGroup;
 
 	private DragAndDrop dnd;
-
-	/**
-	 * Amounts of each upgrade
-	 */
-	private int fruitfulMoney;
-	private int longerMoney;
-	private int moreMoney;
-	private int dogMoney;
 
 	private static boolean mainMenuInitialized, inventoryMenuInitialized, upgradesMenuInitialized, optionsMenuInitialized;
 
@@ -1315,6 +1290,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	}
 
 	          */
+
 	/**
 	 * Initialize option group items
 	 */
@@ -1576,28 +1552,6 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	}
 
-	private void updateCosts() {
-		if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
-			fruitfulButton.setDisabled(true);
-		else
-			fruitfulButton.setDisabled(false);
-
-		if(getWorld().getPlayer().getPlayerMoney() < longerMoney)
-			longerButton.setDisabled(true);
-		else
-			longerButton.setDisabled(false);
-
-		if(getWorld().getPlayer().getPlayerMoney() < moreMoney)
-			moreButton.setDisabled(true);
-		else
-			moreButton.setDisabled(false);
-
-		if(getWorld().getPlayer().getPlayerMoney() < dogMoney || getWorld().hasDog())
-			dogButton.setDisabled(true);
-		else
-			dogButton.setDisabled(false);
-	}
-
 	public void setInfolabel(){
 		infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
@@ -1653,6 +1607,5 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		}
 		snowy = b;
 	}
-
 
 }

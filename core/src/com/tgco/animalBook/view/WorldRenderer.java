@@ -137,9 +137,6 @@ public class WorldRenderer {
 			for (ABDrawable d : drawable){
 				if (!(d.getClass().equals("RainDrop")))
 					d.draw(batch);
-				if (d instanceof Dog) {
-					Gdx.app.log("wat", d.getPosition().toString() + ", cam: " + cam.position.toString());
-				}
 			}
 			/*
 		for (Array<ABDrawable> a : drawables.values()){

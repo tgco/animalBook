@@ -738,6 +738,8 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		green.dispose();
 		red.dispose();
 		black.dispose();
+		menuHandler.dispose();
+		popupStage.dispose();
 	}
 
 	/**

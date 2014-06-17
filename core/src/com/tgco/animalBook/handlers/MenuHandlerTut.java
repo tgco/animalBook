@@ -951,5 +951,7 @@ public class MenuHandlerTut{
 	public Button getOptionsGroupButton() {
 		return optionsGroupButton;
 	}
-	
+	public void dispose(){
+		font.dispose();	
+	}
 }

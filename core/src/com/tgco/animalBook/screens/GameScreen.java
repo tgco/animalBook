@@ -633,6 +633,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		black.dispose();
 		backgroundTexture.dispose();
 		snowBackgroundTexture.dispose();
+		menuHandler.dispose();
 	}
 
 	/**

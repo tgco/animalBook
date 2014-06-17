@@ -956,5 +956,9 @@ public class MenuHandler{
 	public Button getOptionsGroupButton() {
 		return optionsGroupButton;
 	}
+	
+	public void dispose(){
+		
+	}
 
 }

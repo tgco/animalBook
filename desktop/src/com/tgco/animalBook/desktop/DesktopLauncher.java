@@ -7,7 +7,7 @@ import com.tgco.animalBook.AnimalBookGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "Aleksandra's Book - " + AnimalBookGame.version;
+		config.title = "Aleksandra - " + AnimalBookGame.version;
 		config.width = 1024;
 		config.height = 600;
 		

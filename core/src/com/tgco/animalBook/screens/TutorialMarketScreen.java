@@ -365,6 +365,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 				SoundHandler.pauseMarketBackgroundMusic();
 				SoundHandler.playBackgroundMusic(true);	
 				gameInstance.getLevelHandler().setDoTutorial(false);
+				gameInstance.getLevelHandler().resetStoredAmount();
 				tutorialScreen.dispose();
 				gameInstance.setScreen(new GameScreen(gameInstance));
 				dispose();

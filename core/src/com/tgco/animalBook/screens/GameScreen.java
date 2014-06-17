@@ -634,6 +634,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		backgroundTexture.dispose();
 		snowBackgroundTexture.dispose();
 		menuHandler.dispose();
+		popupStage.dispose();
 	}
 
 	/**

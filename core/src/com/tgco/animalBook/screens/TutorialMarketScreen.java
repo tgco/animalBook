@@ -434,6 +434,7 @@ public class TutorialMarketScreen extends ButtonScreenAdapter implements Screen 
 		green.dispose();
 		black.dispose();
 		yellow.dispose();
+		popupStage.dispose();
 	}
 
 	/**

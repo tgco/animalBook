@@ -34,25 +34,25 @@ import com.tgco.animalBook.screens.TutorialScreen;
 import com.tgco.animalBook.view.TutorialWorld;
 
 public class MenuHandlerTut{
-	
+
 	private Stage buttonStage;
-	
+
 	private VerticalGroup menuGroup;
 	private Image menuGroupImage, inventoryGroupImage, upgradesGroupImage, optionsGroupImage, upgradesStatusGroupImage;
 	private Label infoLabel;
 	private HorizontalGroup inventoryGroup, upgradesGroup1, upgradesGroup2, optionsGroup, upgradesStatusGroup;
-	
+
 	//dimensions for buttons
-		protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
-		protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
-		//distance between buttons and between the edge and a button
-		protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
+	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
+	protected static final float BUTTON_HEIGHT = (1f/10f)*Gdx.graphics.getWidth();
+	//distance between buttons and between the edge and a button
+	protected static final float EDGE_TOLERANCE = (.03f)*Gdx.graphics.getHeight();
 
-		//Button texture initialization
-		protected TextureAtlas atlas;
+	//Button texture initialization
+	protected TextureAtlas atlas;
 
-	
-	 /** The font used when rendering strings
+
+	/** The font used when rendering strings
 	 */
 	private BitmapFont font;
 	private final float FONT_SCALE = Gdx.graphics.getHeight()/750f;
@@ -73,15 +73,15 @@ public class MenuHandlerTut{
 	private int longerMoney;
 	private int moreMoney;
 	private int dogMoney;
-	
+
 	private AnimalBookGame gameInstance;
 	private Skin buttonSkin;
-	
+
 	public MenuHandlerTut(Stage bStage, AnimalBookGame gameInstance, TutorialWorld tWorld, TutorialScreen tScreen) {
 		buttonStage = bStage;
-			this.tScreen = tScreen;
-			this.tWorld = tWorld;
-			this.infoLabel = tScreen.getInfoLabel();
+		this.tScreen = tScreen;
+		this.tWorld = tWorld;
+		this.infoLabel = tScreen.getInfoLabel();
 		this.gameInstance = gameInstance;
 		//Initialize rendering objects
 		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
@@ -89,13 +89,13 @@ public class MenuHandlerTut{
 
 	}
 
-	
+
 	/**
 	 * Initialize main menu group items
 	 */
 	public void initializeMenuItems(){
 		tScreen.setMainMenuInitialized(true);
-		
+
 		tScreen.getDnd().addTarget(new Target(tScreen.getAlexButton()){
 
 			@Override
@@ -445,7 +445,7 @@ public class MenuHandlerTut{
 		TextureRegion trFruitfulButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/fruitfullButtonDis.png")) );
 		trFruitfulButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
 		trFruitfulButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-		
+
 		fruitfulButtonStyle.disabled = new TextureRegionDrawable(trFruitfulButton);
 
 		fruitfulButton = new Button(fruitfulButtonStyle){
@@ -472,7 +472,7 @@ public class MenuHandlerTut{
 		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
 		trLongerButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
 		trLongerButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-		
+
 		longerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
 
 		longerButton = new Button(longerButtonStyle){
@@ -501,7 +501,7 @@ public class MenuHandlerTut{
 		//trMoreButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
 		trMoreButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
 		trMoreButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-		
+
 		MoreButtonStyle.disabled = new TextureRegionDrawable(trMoreButton);
 
 		moreButton = new Button(MoreButtonStyle) {
@@ -829,7 +829,7 @@ public class MenuHandlerTut{
 		upgradesGroupImage.setPosition(alexButton.getX() + alexButton.getWidth() + EDGE_TOLERANCE,
 				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);*/
 	}
-	
+
 	/**
 	 * Toggles main menu group items
 	 * @param checked
@@ -954,4 +954,5 @@ public class MenuHandlerTut{
 	public void dispose(){
 		font.dispose();	
 	}
+
 }

@@ -7,9 +7,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.tgco.animalBook.AnimalBookGame;
 
-public class RainDrop extends Movable {
+public class SnowDrop extends Movable {
 
-	public RainDrop(String texturePath) {
+	public SnowDrop(String texturePath) {
 		super(texturePath);
 		//default speed
 		speed = 2f;
@@ -21,10 +21,10 @@ public class RainDrop extends Movable {
 		position = new Vector2(((float)(new Random().nextInt(Gdx.graphics.getWidth()))), Gdx.graphics.getHeight());
 	}
 
-	public RainDrop(String texturePath, Vector2 pos){
+	public SnowDrop(String texturePath, Vector2 pos){
 		super(texturePath);
 		//default speed
-		speed = 2f;
+		speed = .5f;
 
 		moveBias = 0f;
 

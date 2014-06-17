@@ -1,0 +1,67 @@
+weatherIconSprites.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+clear1
+  rotate: false
+  xy: 801, 0
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+rain1
+  rotate: false
+  xy: 201, 0
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+rain2
+  rotate: false
+  xy: 301, 0
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+rain3
+  rotate: false
+  xy: 401, 0
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+snow1
+  rotate: false
+  xy: 501, 0
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+snow2
+  rotate: false
+  xy: 601, 0
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+snow3
+  rotate: false
+  xy: 701, 0
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+wind1
+  rotate: false
+  xy: 0, 0
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+wind2
+  rotate: false
+  xy: 101, 0
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1

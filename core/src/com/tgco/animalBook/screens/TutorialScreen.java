@@ -596,7 +596,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 			public void drop(Source source, Payload payload, float x, float y, int pointer) {
 				if (payload.getObject() instanceof Consumable) {
 					getWorld().getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
-					if (swiped && tapped & pickedUp) {
+					if (swiped && tapped && pickedUp) {
 						ate = true;
 						alexButton.setChecked(false);
 						handleMainMenu(false);
@@ -1054,6 +1054,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 						alexButton.setChecked(false);
 						handleMainMenu(false);
 					}
+					
 					SoundHandler.playButtonClick();
 					//take away player money and add more to precentage of droppings
 					//Gdx.input.setCatchBackKey(true);

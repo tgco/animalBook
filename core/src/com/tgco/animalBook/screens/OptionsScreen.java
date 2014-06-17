@@ -344,6 +344,8 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
+		popupStage.dispose();
+		font.dispose();
 	}
 
 	/**

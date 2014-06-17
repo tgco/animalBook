@@ -21,6 +21,7 @@ import com.tgco.animalBook.gameObjects.Movable;
 import com.tgco.animalBook.gameObjects.Obstacle;
 import com.tgco.animalBook.gameObjects.Player;
 import com.tgco.animalBook.gameObjects.RainDrop;
+import com.tgco.animalBook.gameObjects.SnowDrop;
 import com.tgco.animalBook.handlers.SoundHandler;
 import com.tgco.animalBook.handlers.Weather;
 import com.tgco.animalBook.handlers.Weather.WeatherType;
@@ -106,10 +107,11 @@ public class World {
 	private Weather weather;
 	private float weatherTime = 0f;
 	private float targetWeatherTime = 0f;
-	private final float WEATHER_DURATION = 7f;
+	private final float WEATHER_DURATION = 3f;
 	private Vector2 windVector;
-	private static final float WEATHER_CLICK = .12f;
+	private static final float WEATHER_CLICK = .30f;
 	private float weatherClick;
+	private float weatherIterator;
 
 	/**
 	 * Constructor with game instance and pulls stored info from gameInstance if there is anything stored
@@ -212,14 +214,13 @@ public class World {
 		}
 
 		drawMap.put("WeatherDrop", new Array<ABDrawable>());
-		System.out.println("WEATHERDROP CREATED");
-		System.out.println(drawMap.get("WeatherDrop"));
 
 		weather = new Weather();
 		weather.setWeatherType(WeatherType.CLEAR);
 		targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
 		windVector = new Vector2();
 		weatherClick = 0;
+		worldRender.setClear(true);
 	}
 
 
@@ -347,7 +348,6 @@ public class World {
 
 
 		worldRender.render(batch, drawMap, player.getHealth(), 1f - (market.getPosition().y - camera.position.y)/(laneLength),camera,delta);
-
 	}
 
 	/**
@@ -367,7 +367,7 @@ public class World {
 		} else if (weather.getWeather() == WeatherType.RAINY) {
 			speed = (cameraSpeed*(player.getHealth()/100))/2f;
 		} else if (weather.getWeather() == WeatherType.SNOWY){
-			speed = 0;
+			speed = 0f;
 		}
 		else {
 			speed = (cameraSpeed*(player.getHealth()/100));
@@ -502,7 +502,7 @@ public class World {
 		//handle weather elements if its time for the weather to change
 		if (weatherTime > targetWeatherTime){
 			weather.setWeatherType(weather.getNewWeather());
-			
+
 			//set clear on/off
 			worldRender.setClear(weather.getWeather() == WeatherType.CLEAR);
 
@@ -531,6 +531,41 @@ public class World {
 		}
 		else{
 			weatherTime += delta;
+		}
+
+		if (weatherClick > WEATHER_CLICK){
+			weatherClick = 0f;
+			weatherIterator = ((int)(weatherIterator + 300f)%((int)(Gdx.graphics.getWidth())));
+			switch(weather.getWeather()){
+			case RAINY: {
+				drawMap.get("WeatherDrop").add(new RainDrop("weather/rain.png",
+						new Vector2(((float)(weatherIterator)), Gdx.graphics.getHeight())));
+			}
+			case WINDY: break;
+			case CLEAR: {weatherIterator = 0f; break;}
+			case SNOWY: {
+				if (rand.nextBoolean())
+					drawMap.get("WeatherDrop").add(new SnowDrop("weather/snow.png",
+							new Vector2(((float)(weatherIterator)), Gdx.graphics.getHeight())));
+			}
+			default: break;
+			}
+		}
+		else{
+			weatherClick += delta;
+		}
+		for (ABDrawable m : drawMap.get("WeatherDrop")){
+			if (weather.getWeather()==WeatherType.CLEAR || weather.getWeather() == WeatherType.WINDY){
+				((Movable) m).move(speed,  delta);
+				((Movable) m).move(speed,  delta);
+			}
+			else
+				((Movable) m).move(speed,  delta);
+			Vector2 p = m.getPosition();
+			if (p.y + m.getHeight() < 1f){
+				drawMap.get("WeatherDrop").removeValue(m, false);
+				m.dispose();
+			}
 		}
 	}
 
@@ -594,6 +629,10 @@ public class World {
 
 	public float getPrecentage(){
 		return (camera.position.y - Gdx.graphics.getHeight()/2f)/(laneLength);
+	}
+
+	public WeatherType getWeather(){
+		return weather.getWeather();
 	}
 
 

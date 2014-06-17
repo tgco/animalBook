@@ -43,6 +43,7 @@ import com.tgco.animalBook.AnimalBookGame.state;
 import com.tgco.animalBook.handlers.GameScreenInputHandler;
 import com.tgco.animalBook.handlers.MenuHandler;
 import com.tgco.animalBook.handlers.SoundHandler;
+import com.tgco.animalBook.handlers.Weather.WeatherType;
 import com.tgco.animalBook.view.World;
 
 /**
@@ -54,6 +55,8 @@ import com.tgco.animalBook.view.World;
  * 
  */
 public class GameScreen extends ButtonScreenAdapter implements Screen {
+
+	private static final float WEATHER_TIME = 3f;
 
 	private Array<ABDrawable> boostArray = new Array<ABDrawable>();
 
@@ -115,13 +118,21 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	private Texture red = new Texture(Gdx.files.internal("primitiveTextures/red.png"));
 	private Texture yellow = new Texture(Gdx.files.internal("primitiveTextures/yellow.png"));
 	private Texture green = new Texture(Gdx.files.internal("primitiveTextures/green.png"));
-	
-	
+
+
 	private Texture redOp = new Texture(Gdx.files.internal("primitiveTextures/redOp.png"));
 
 	private boolean isMain = true;
 
 	private MenuHandler menuHandler;
+
+	private Texture snowBackgroundTexture;
+
+	private boolean fadeToSnow, steadySnow, fadeToReturnS;
+
+	private float timeCounterS;
+
+	private boolean snowy, setOnce;
 
 	/**
 	 * Constructor using the running game instance
@@ -143,6 +154,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(gameWorld.getCamera().combined);
 		backgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass2.jpg"));
+		snowBackgroundTexture = new Texture(Gdx.files.internal("backgrounds/gameScreenGrass2Snow.jpg"));
 
 		//Setup input processing
 		inputMultiplexer = new InputMultiplexer();
@@ -152,7 +164,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 		Gdx.input.setCatchBackKey(true);
 
-		
+
 		//initialize some DnD components and set drag actor based on first Consumable texture
 		dnd = new DragAndDrop();
 		if (Consumable.DropType.values().length > 0){
@@ -169,7 +181,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			//CRITICAL: tweak these values for niceness of dragging
 			dnd.setDragActorPosition(-test.getWidth()/2f, test.getHeight()/2f);
 		}
-		
+
 	}
 
 	/**
@@ -192,23 +204,22 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 				batch.begin();
 
-				drawTiledBackground(batch);
-
+				drawTiledBackground(batch, delta);
 				//add in endline when market is on screen
 				if(gameWorld.getCamera().position.y > gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel())+ Gdx.graphics.getHeight()/4){
 					Vector3 vectEnd = new Vector3(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 					gameWorld.getCamera().unproject(vectEnd);
 					batch.draw(redOp, vectEnd.x - 75, vectEnd.y - .222f*Gdx.graphics.getHeight()/2, 150, 4);
 				}
-				
+
 				//Draw world over background
 				gameWorld.render(batch,alexButton.isChecked(),delta);
-				
+
 				batch.end();
 
 				//Draw buttons over the screen
 				buttonStage.draw();
-				
+
 
 				batch.begin();
 				//Gdx.app.log("my Tagg", "Vert Group is: " + ((VerticalGroup) buttonStage.getActors().get(5)).getOriginX());
@@ -225,8 +236,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				else
 					batch.draw(red,vectHealth.x + .1f*EDGE_TOLERANCE, vectHealth.y + .1f*EDGE_TOLERANCE, 10f*EDGE_TOLERANCE*(getWorld().getPlayer().getHealth()/100f), EDGE_TOLERANCE);
 
-				
-				
+
+
 				batch.end();
 
 			}
@@ -239,7 +250,15 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		}
 	}
 
-	public void drawTiledBackground(SpriteBatch batch) {
+	public void drawTiledBackground(SpriteBatch batch, float delta) {
+		if (gameWorld.getWeather() == WeatherType.SNOWY && !setOnce){
+			setOnce = true;
+			setSnowy(true);
+		}
+		if (gameWorld.getWeather() != WeatherType.SNOWY && setOnce){
+			setOnce = false;
+			setSnowy(false);
+		}
 
 		//Find the node on screen to draw grass around
 		Array<Vector2> tileNodes = findTileNodesOnScreen();
@@ -251,6 +270,58 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			batch.draw(backgroundTexture, tileNode.x*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
 			batch.draw(backgroundTexture, (tileNode.x-1)*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
 		}
+		if (snowy){
+			if (fadeToSnow && timeCounterS < WEATHER_TIME){
+				//fade to clear				
+				for(Vector2 tileNode : tileNodes) {
+					batch.setColor(1f, 1f, 1f, timeCounterS/WEATHER_TIME);
+					batch.draw(snowBackgroundTexture, tileNode.x*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
+					batch.draw(snowBackgroundTexture, (tileNode.x-1)*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
+					batch.draw(snowBackgroundTexture, tileNode.x*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
+					batch.draw(snowBackgroundTexture, (tileNode.x-1)*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
+					batch.setColor(Color.WHITE);
+				}
+			}
+			else{
+				if (fadeToSnow){
+					fadeToSnow = false;
+					steadySnow = true;
+					timeCounterS = 0;
+				}
+			}
+			if (steadySnow){
+				for(Vector2 tileNode : tileNodes) {
+					batch.draw(snowBackgroundTexture, tileNode.x*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
+					batch.draw(snowBackgroundTexture, (tileNode.x-1)*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
+					batch.draw(snowBackgroundTexture, tileNode.x*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
+					batch.draw(snowBackgroundTexture, (tileNode.x-1)*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
+				}
+			}
+		}
+		else{
+			if (fadeToReturnS && timeCounterS < WEATHER_TIME){
+				//back to clear
+				if (steadySnow){
+					steadySnow = false;
+				}
+				for(Vector2 tileNode : tileNodes) {
+					batch.setColor(1f, 1f, 1f, 1f - timeCounterS/WEATHER_TIME);
+					batch.draw(snowBackgroundTexture, tileNode.x*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
+					batch.draw(snowBackgroundTexture, (tileNode.x-1)*tileWidth, tileNode.y*tileHeight, tileWidth, tileHeight);
+					batch.draw(snowBackgroundTexture, tileNode.x*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
+					batch.draw(snowBackgroundTexture, (tileNode.x-1)*tileWidth, (tileNode.y-1)*tileHeight, tileWidth, tileHeight);
+					batch.setColor(Color.WHITE);
+				}
+			}
+			else{
+				if (fadeToReturnS){
+					fadeToReturnS = false;
+					timeCounterS = 0;
+				}
+			}
+		}
+		if (!steadySnow && (fadeToSnow || fadeToReturnS))
+			timeCounterS+=delta;
 	}
 
 	/**
@@ -378,7 +449,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
 				alexButton.getY() + alexButton.getHeight() - infoLabel.getHeight() - 1.7f*EDGE_TOLERANCE);
 		infoLabel.setAlignment(Align.left);
-		
+
 		//The label's background image
 		alexInfoImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
 		alexInfoImage.setSize(11f*EDGE_TOLERANCE, alexButton.getY() + alexButton.getHeight() - infoLabel.getY() + .5f*EDGE_TOLERANCE);
@@ -393,8 +464,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public Vector2 alexsPosition(){
 		return new Vector2(alexButton.getX() + alexButton.getWidth(),alexButton.getY() + alexButton.getHeight());
 	}
-	
-/*	*//**
+
+	/*	*//**
 	 * Initialize main menu group items
 	 *//*
 	public void initializeMenuItems(){
@@ -632,9 +703,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		menuGroupImage.setSize(menuGroup.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE);
 	}
 
-	*//**
-	 * Initilize inventory group items
-	 *//*
+	  *//**
+	  * Initilize inventory group items
+	  *//*
 	public void initializeInventoryItems(){
 		inventoryMenuInitialized = true;
 		for (int i = 0; i < Consumable.DropType.values().length; i++){
@@ -671,9 +742,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			inventoryButton.setName(Consumable.DropType.values()[i].getName());
 			dnd.addSource(new Source(inventoryButton){
 
-				*//**
-				 * Overriding dragStart to initialize drag and drop payload
-				 *//*
+	   *//**
+	   * Overriding dragStart to initialize drag and drop payload
+	   *//*
 				@Override
 				public Payload dragStart(InputEvent event, float x, float y,int pointer) {
 					System.out.println("Drag started @ x:" + x + " y:" + y);
@@ -696,9 +767,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 					return null;
 				}
 
-				*//**
-				 * Overriding dragStop to determine if drag has stopped over a valid target
-				 *//*
+	    *//**
+	    * Overriding dragStop to determine if drag has stopped over a valid target
+	    *//*
 				@Override
 				public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload, DragAndDrop.Target target){
 					System.out.println("Drag stopped @ x:" + x + " y:" + y);
@@ -718,9 +789,9 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		inventoryGroupImage.setSize(inventoryGroup.getWidth() + EDGE_TOLERANCE*2f, inventoryGroup.getHeight());
 	}
 
-	*//**
-	 * Initialize upgrade group items
-	 *//*
+	     *//**
+	     * Initialize upgrade group items
+	     *//*
 	public void initializeUpgradeItems(){
 		upgradesMenuInitialized = true;
 		//initialize upgrade monies
@@ -742,7 +813,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		TextureRegion trFruitfulButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/fruitfullButtonDis.png")) );
 		trFruitfulButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
 		trFruitfulButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-		
+
 		fruitfulButtonStyle.disabled = new TextureRegionDrawable(trFruitfulButton);
 
 		fruitfulButton = new Button(fruitfulButtonStyle){
@@ -769,7 +840,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
 		trLongerButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
 		trLongerButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-		
+
 		longerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
 
 		longerButton = new Button(longerButtonStyle){
@@ -798,7 +869,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		//trMoreButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
 		trMoreButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
 		trMoreButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-		
+
 		MoreButtonStyle.disabled = new TextureRegionDrawable(trMoreButton);
 
 		moreButton = new Button(MoreButtonStyle) {
@@ -1135,10 +1206,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 				alexButton.getY() - 2f*BUTTON_HEIGHT - 2f*EDGE_TOLERANCE);
 	}
 
-	*//**
-	 * Toggles main menu group items
-	 * @param checked
-	 *//*
+	      *//**
+	      * Toggles main menu group items
+	      * @param checked
+	      *//*
 	public void handleMainMenu(boolean checked) {
 		if (checked){
 			buttonStage.addActor(menuGroupImage);
@@ -1158,10 +1229,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		}
 	}
 
-	*//**
-	 * Toggles inventory menu items
-	 * @param checked
-	 *//*
+	       *//**
+	       * Toggles inventory menu items
+	       * @param checked
+	       *//*
 	public void handleInventoryMenu(boolean checked){
 		if (checked){
 			buttonStage.addActor(inventoryGroupImage);
@@ -1179,10 +1250,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		}
 	}
 
-	*//**
-	 * Toggles upgrades menu items
-	 * @param checked
-	 *//*
+	        *//**
+	        * Toggles upgrades menu items
+	        * @param checked
+	        *//*
 	public void handleUpgradesMenu(boolean checked){
 		if (checked){
 			buttonStage.addActor(upgradesGroupImage);
@@ -1226,10 +1297,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		}
 	}
 
-	*//**
-	 * Toggles options menu items
-	 * @param checked
-	 *//*
+	         *//**
+	         * Toggles options menu items
+	         * @param checked
+	         *//*
 	public void handleOptionsMenu(boolean checked){
 		if (checked){
 			buttonStage.addActor(optionsGroupImage);
@@ -1243,7 +1314,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		}
 	}
 
-*/
+	          */
 	/**
 	 * Initialize option group items
 	 */
@@ -1438,6 +1509,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		red.dispose();
 		redOp.dispose();
 		black.dispose();
+		backgroundTexture.dispose();
+		snowBackgroundTexture.dispose();
 	}
 
 	/**
@@ -1487,7 +1560,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	public void setAlexButton(boolean set) {
 		alexButton.setChecked(set);
 	}
-	
+
 	public void comingFromHelpScreen(boolean set) {
 		alexButton.setChecked(true);
 		menuHandler.handleMainMenu(true);
@@ -1502,7 +1575,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		Gdx.app.log("My Tagg", "This is screen pause");
 
 	}
-	
+
 	private void updateCosts() {
 		if(getWorld().getPlayer().getPlayerMoney() < fruitfulMoney)
 			fruitfulButton.setDisabled(true);
@@ -1524,13 +1597,13 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		else
 			dogButton.setDisabled(false);
 	}
-	
+
 	public void setInfolabel(){
 		infoLabel.setText("Money: $" + getWorld().getPlayer().getPlayerMoney()
 				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 	}
 
-	
+
 	public void setMainMenuInitialized(boolean b) {
 		mainMenuInitialized = b;	
 	}
@@ -1541,7 +1614,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		return inventoryMenuInitialized;
 	}
 	public void setInventoryMenuInitialized(boolean b) {
-	 inventoryMenuInitialized = b;
+		inventoryMenuInitialized = b;
 	}
 
 	public boolean getUpgradesMenuInitialized() {
@@ -1566,6 +1639,19 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	public Label getInfoLabel() {
 		return infoLabel;
+	}
+	
+	public void setSnowy(boolean b) {
+
+		if (b & !snowy){
+			fadeToSnow = true;
+		}
+		else{
+			if (!b & snowy){
+				fadeToReturnS = true;
+			}
+		}
+		snowy = b;
 	}
 
 

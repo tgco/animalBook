@@ -15,6 +15,7 @@ public class Inventory {
 	 * Creates a new inventory ArrayMap. Then stores Arrays of all consumable types
 	 * within the inventory.
 	 */
+	
 	public Inventory() {
 		inventory = new ArrayMap<Consumable.DropType, Array<Consumable>>(false, 5);
 		Consumable.DropType[] dropTypes = Consumable.DropType.values();

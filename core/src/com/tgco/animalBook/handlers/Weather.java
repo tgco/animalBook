@@ -15,26 +15,20 @@ public class Weather {
 	}
 
 	public enum WeatherType{
-		CLEAR ("Clear", ""),
-		RAINY ("Rainy", ""),
-		WINDY ("Windy", "");
+		CLEAR ("Clear"),
+		RAINY ("Rainy"),
+		WINDY ("Windy"), 
+		SNOWY ("Frances");
 
-		private WeatherType(String weatherName, String texturePath){
+		private WeatherType(String weatherName){
 			this.weatherName = weatherName;
-			this.texturePath = texturePath;
 		}
 
 		private final String weatherName;
-		private final String texturePath;
 
 		public final String getName(){
 			return weatherName;
 		}
-		
-		public final String getTexturePath(){
-			return texturePath;
-		}
-
 	}
 	
 	public WeatherType getNewWeather(){

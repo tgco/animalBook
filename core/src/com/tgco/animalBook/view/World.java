@@ -366,7 +366,10 @@ public class World {
 			speed = increasedCameraSpeed*(player.getHealth()/100);
 		} else if (weather.getWeather() == WeatherType.RAINY) {
 			speed = (cameraSpeed*(player.getHealth()/100))/2f;
-		} else {
+		} else if (weather.getWeather() == WeatherType.SNOWY){
+			speed = 0;
+		}
+		else {
 			speed = (cameraSpeed*(player.getHealth()/100));
 		}
 
@@ -424,6 +427,9 @@ public class World {
 			if (weather.getWeather() == WeatherType.WINDY){
 				if (rand.nextBoolean())
 					((Movable) movable).addToCurrentTarget(windVector);
+			}
+			else if (weather.getWeather() == WeatherType.SNOWY){
+				((Movable) movable).adjustForwardBias(speed, speed, delta);
 			}
 			//Reduce upward bias if there's a dog
 			//Gdx.app.log("Check", "Dog: " + hasDog());
@@ -493,11 +499,20 @@ public class World {
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 
-		//handle weather elements
+		//handle weather elements if its time for the weather to change
 		if (weatherTime > targetWeatherTime){
 			weather.setWeatherType(weather.getNewWeather());
+			
+			//set clear on/off
+			worldRender.setClear(weather.getWeather() == WeatherType.CLEAR);
+
+			//set rainy on/off
 			worldRender.setRainy(weather.getWeather() == WeatherType.RAINY);
 
+			//set snowy on/off
+			worldRender.setSnowy(weather.getWeather() == WeatherType.SNOWY);
+
+			//set windy on/off
 			if (weather.getWeather() == WeatherType.WINDY){
 				double magnitude = (float)(rand.nextInt(35) - 10);
 				if (magnitude < 0)
@@ -517,30 +532,6 @@ public class World {
 		else{
 			weatherTime += delta;
 		}
-		if (weatherClick > WEATHER_CLICK){
-			weatherClick = 0f;
-			switch(weather.getWeather()){
-			case RAINY: {
-				drawMap.get("WeatherDrop").add(new RainDrop("objectTextures/rainDrop.png",
-						new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))), Gdx.graphics.getHeight())));
-				break;}
-			case WINDY:	{break;}
-			case CLEAR: {break;}
-			default: {break;}
-			}
-		}
-		else{
-			weatherClick += delta;
-		}
-		for (ABDrawable m : drawMap.get("WeatherDrop")){
-			((Movable) m).move(speed, delta);
-			Vector2 p = m.getPosition();
-			if (p.x < 1f || p.x > Gdx.graphics.getWidth() || p.y < 1f || p.y > Gdx.graphics.getHeight()){
-				drawMap.get("WeatherDrop").removeValue(m, false);
-				m.dispose();
-			}
-		}
-
 	}
 
 	/**

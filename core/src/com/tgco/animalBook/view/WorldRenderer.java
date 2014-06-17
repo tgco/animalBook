@@ -331,4 +331,14 @@ public class WorldRenderer {
 			animationTimer = 0f;
 		}
 	}
+
+	public void setSnowy(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setClear(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
 }

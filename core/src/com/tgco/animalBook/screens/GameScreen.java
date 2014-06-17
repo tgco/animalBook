@@ -58,20 +58,12 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 	/**
 	 * Each button used on the game screen user interface overlay
 	 */
-	private Button alexButton, dogButton,fruitfulButton, longerButton, moreButton;
+	private Button alexButton;
 	
 	private Image alexInfoImage; 
 	private Label infoLabel;
 
 	private DragAndDrop dnd;
-
-	/**
-	 * Amounts of each upgrade
-	 */
-	private int fruitfulMoney;
-	private int longerMoney;
-	private int moreMoney;
-	private int dogMoney;
 
 	private static boolean mainMenuInitialized, inventoryMenuInitialized, upgradesMenuInitialized, optionsMenuInitialized;
 

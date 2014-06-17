@@ -37,7 +37,7 @@ import com.tgco.animalBook.screens.TutorialScreen;
 import com.tgco.animalBook.view.TutorialWorld;
 import com.tgco.animalBook.view.World;
 
-public class MenuHandler{
+public class MenuHandlerTut{
 	
 	private Stage buttonStage;
 	
@@ -67,8 +67,8 @@ public class MenuHandler{
 	 */
 	private Button inventoryGroupButton, optionsGroupButton, upgradesGroupButton, menuBackgroundButton, fruitfulButton, longerButton, moreButton, dogButton;
 
-	private World gWorld;
-	private GameScreen gScreen;
+	private TutorialWorld tWorld;
+	private TutorialScreen tScreen;
 
 	/**
 	 * Amounts of each upgrade
@@ -77,17 +77,15 @@ public class MenuHandler{
 	private int longerMoney;
 	private int moreMoney;
 	private int dogMoney;
-
 	
 	private AnimalBookGame gameInstance;
 	private Skin buttonSkin;
 	
-	public MenuHandler(Stage bStage, AnimalBookGame gameInstance, World world, GameScreen gScreen) {
+	public MenuHandlerTut(Stage bStage, AnimalBookGame gameInstance, TutorialWorld tWorld, TutorialScreen tScreen) {
 		buttonStage = bStage;
-			this.gScreen = gScreen;
-			this.gWorld = world;
-			this.infoLabel = gScreen.getInfoLabel();
-		
+			this.tScreen = tScreen;
+			this.tWorld = tWorld;
+			this.infoLabel = tScreen.getInfoLabel();
 		this.gameInstance = gameInstance;
 		//Initialize rendering objects
 		font = new BitmapFont(Gdx.files.internal("fonts/Dimbo2.fnt"));
@@ -100,14 +98,14 @@ public class MenuHandler{
 	 * Initialize main menu group items
 	 */
 	public void initializeMenuItems(){
-		gScreen.setMainMenuInitialized(true);
+		tScreen.setMainMenuInitialized(true);
 		
-		gScreen.getDnd().addTarget(new Target(gScreen.getAlexButton()){
+		tScreen.getDnd().addTarget(new Target(tScreen.getAlexButton()){
 
 			@Override
 			public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
 				if (payload.getObject() instanceof Consumable)
-					if (gWorld.getPlayer().getHealth() == 100f){
+					if (tWorld.getPlayer().getHealth() == 100f){
 						this.getActor().setColor(Color.RED);
 						return false;
 					}
@@ -122,8 +120,14 @@ public class MenuHandler{
 
 			@Override
 			public void drop(Source source, Payload payload, float x, float y, int pointer) {
-				if (payload.getObject() instanceof Consumable)
-					gWorld.getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
+				if (payload.getObject() instanceof Consumable){
+					tWorld.getPlayer().eat(((Consumable)payload.getObject()).getType().getHungerValue());
+					if(tScreen.isSwiped() && tScreen.isTapped() && tScreen.isPickedUp()){
+						tScreen.setAte(true);
+						tScreen.getAlexButton().setChecked(true);
+						handleMainMenu(false);
+					}
+				}
 			}
 		});
 
@@ -149,7 +153,7 @@ public class MenuHandler{
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .5);
 				handleMainMenu(false);
-				gScreen.getAlexButton().setChecked(false);
+				tScreen.getAlexButton().setChecked(false);
 				inventoryGroupButton.setChecked(false);
 				upgradesGroupButton.setChecked(false);
 				optionsGroupButton.setChecked(false);
@@ -193,7 +197,7 @@ public class MenuHandler{
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .1);
-				if (!gScreen.getInventoryMenuInitialized())
+				if (!tScreen.getInventoryMenuInitialized())
 					initializeInventoryItems();
 				handleInventoryMenu(inventoryGroupButton.isChecked());
 				handleUpgradesMenu(false);
@@ -234,10 +238,10 @@ public class MenuHandler{
 				return true;
 			}
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				if (gWorld.getMovables().size > 0){
+				if (tWorld.getMovables().size > 0){
 					SoundHandler.playButtonClick();
 					SoundHandler.changeBackgroundVolume((float) .1);
-					if (!gScreen.getUpgradesMenuInitialized())
+					if (!tScreen.getUpgradesMenuInitialized())
 						initializeUpgradeItems();
 					handleUpgradesMenu(upgradesGroupButton.isChecked());
 					handleInventoryMenu(false);
@@ -279,8 +283,8 @@ public class MenuHandler{
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				SoundHandler.changeBackgroundVolume((float) .1);
-				if (!gScreen.getOptionsMenuInitialized())
-					gScreen.initializeOptionItems();
+				if (!tScreen.getOptionsMenuInitialized())
+					tScreen.initializeOptionItems();
 				handleOptionsMenu(optionsGroupButton.isChecked());
 				handleInventoryMenu(false);
 				inventoryGroupButton.setChecked(false);
@@ -293,25 +297,25 @@ public class MenuHandler{
 		//Inventory Group
 		inventoryGroup = new HorizontalGroup();
 		inventoryGroup.center();
-		inventoryGroup.setPosition(gScreen.getAlexButton().getX() + gScreen.getAlexButton().getWidth() + EDGE_TOLERANCE*2f,
-				gScreen.getAlexButton().getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		inventoryGroup.setPosition(tScreen.getAlexButton().getX() + tScreen.getAlexButton().getWidth() + EDGE_TOLERANCE*2f,
+				tScreen.getAlexButton().getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 		inventoryGroup.space(EDGE_TOLERANCE);
 
 		inventoryGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
-		inventoryGroupImage.setPosition(gScreen.getAlexButton().getX() +gScreen.getAlexButton().getWidth() + EDGE_TOLERANCE,
-				gScreen.getAlexButton().getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
+		inventoryGroupImage.setPosition(tScreen.getAlexButton().getX() +tScreen.getAlexButton().getWidth() + EDGE_TOLERANCE,
+				tScreen.getAlexButton().getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 
 		//Upgrade Group 1
 		upgradesGroup1 = new HorizontalGroup();
 		upgradesGroup1.center();
-		upgradesGroup1.setPosition(gScreen.getAlexButton().getX() + gScreen.getAlexButton().getWidth() + EDGE_TOLERANCE*2f,
-				gScreen.getAlexButton().getY() - 1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE);
+		upgradesGroup1.setPosition(tScreen.getAlexButton().getX() + tScreen.getAlexButton().getWidth() + EDGE_TOLERANCE*2f,
+				tScreen.getAlexButton().getY() - 1.5f*BUTTON_HEIGHT - EDGE_TOLERANCE);
 		upgradesGroup1.space(EDGE_TOLERANCE);
 
 		//Upgrade Group 2
 		upgradesGroup2 = new HorizontalGroup();
 		upgradesGroup2.center();
-		upgradesGroup2.setPosition(gScreen.getAlexButton().getX() + gScreen.getAlexButton().getWidth() + EDGE_TOLERANCE*2f,
+		upgradesGroup2.setPosition(tScreen.getAlexButton().getX() + tScreen.getAlexButton().getWidth() + EDGE_TOLERANCE*2f,
 				upgradesGroup1.getY() - BUTTON_HEIGHT - EDGE_TOLERANCE);
 		upgradesGroup2.space(EDGE_TOLERANCE);
 
@@ -320,17 +324,17 @@ public class MenuHandler{
 		//Option Group
 		optionsGroup = new HorizontalGroup();
 		optionsGroup.center();
-		optionsGroup.setPosition(gScreen.getAlexButton().getX() + gScreen.getAlexButton().getWidth() + EDGE_TOLERANCE*2f,
-				gScreen.getAlexButton().getY() - 3f*BUTTON_HEIGHT - 3f*EDGE_TOLERANCE);
+		optionsGroup.setPosition(tScreen.getAlexButton().getX() + tScreen.getAlexButton().getWidth() + EDGE_TOLERANCE*2f,
+				tScreen.getAlexButton().getY() - 3f*BUTTON_HEIGHT - 3f*EDGE_TOLERANCE);
 		optionsGroup.space(EDGE_TOLERANCE);
 
 		optionsGroupImage = new Image(new Texture(Gdx.files.internal("backgrounds/menuBackground.png")));
-		optionsGroupImage.setPosition(gScreen.getAlexButton().getX() + gScreen.getAlexButton().getWidth() + EDGE_TOLERANCE,
-				gScreen.getAlexButton().getY() - 3f*BUTTON_HEIGHT - 3f*EDGE_TOLERANCE);
+		optionsGroupImage.setPosition(tScreen.getAlexButton().getX() + tScreen.getAlexButton().getWidth() + EDGE_TOLERANCE,
+				tScreen.getAlexButton().getY() - 3f*BUTTON_HEIGHT - 3f*EDGE_TOLERANCE);
 
 		//after all components are taken care of...
 		menuGroup.pack();
-		menuGroup.setPosition(gScreen.getAlexButton().getX(), gScreen.getAlexButton().getY() - menuGroup.getHeight() - EDGE_TOLERANCE);
+		menuGroup.setPosition(tScreen.getAlexButton().getX(), tScreen.getAlexButton().getY() - menuGroup.getHeight() - EDGE_TOLERANCE);
 		menuGroupImage.setPosition(menuGroup.getX() - .5f*EDGE_TOLERANCE, menuGroup.getY() - EDGE_TOLERANCE*.5f);
 		menuGroupImage.setSize(menuGroup.getWidth() + EDGE_TOLERANCE, menuGroup.getHeight() + EDGE_TOLERANCE);
 	}
@@ -339,7 +343,7 @@ public class MenuHandler{
 	 * Initilize inventory group items
 	 */
 	public void initializeInventoryItems(){
-		gScreen.setInventoryMenuInitialized(true);
+		tScreen.setInventoryMenuInitialized(true);
 		for (int i = 0; i < Consumable.DropType.values().length; i++){
 			final int index = i;
 
@@ -368,21 +372,21 @@ public class MenuHandler{
 			};
 			inventoryButton.getLabel().setColor(Color.RED);
 			inventoryButton.getStyle().font.setScale(FONT_SCALE);
-			inventoryButton.setText("x" + gWorld.getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
+			inventoryButton.setText("x" + tWorld.getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
 			inventoryButton.bottom();
 			inventoryButton.right();
 			inventoryButton.setName(Consumable.DropType.values()[i].getName());
-			gScreen.getDnd().addSource(new Source(inventoryButton){
+			tScreen.getDnd().addSource(new Source(inventoryButton){
 
 				/**
 				 * Overriding dragStart to initialize drag and drop payload
 				 */
 				@Override
 				public Payload dragStart(InputEvent event, float x, float y,int pointer) {
-					System.out.println("Drag started @ x:" + x + " y:" + y);
+					//System.out.println("Drag started @ x:" + x + " y:" + y);
 					Payload payload = new Payload();
-					if (gWorld.getPlayer().getInventory().removeItem(Consumable.DropType.values()[index])){
-						inventoryButton.setText("x" + gWorld.getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
+					if (tWorld.getPlayer().getInventory().removeItem(Consumable.DropType.values()[index])){
+						inventoryButton.setText("x" + tWorld.getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
 						payload.setObject(new Consumable(Consumable.DropType.values()[index]));
 						payload.setDragActor(new Image(inventoryButton.getBackground()){
 							@Override
@@ -406,8 +410,8 @@ public class MenuHandler{
 				public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload, DragAndDrop.Target target){
 					System.out.println("Drag stopped @ x:" + x + " y:" + y);
 					if (target == null){
-						gWorld.getPlayer().getInventory().addItem(new Consumable(Consumable.DropType.values()[index]));
-						inventoryButton.setText("x" + gWorld.getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
+						tWorld.getPlayer().getInventory().addItem(new Consumable(Consumable.DropType.values()[index]));
+						inventoryButton.setText("x" + tWorld.getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
 					}
 				}
 			}
@@ -425,7 +429,7 @@ public class MenuHandler{
 	 * Initialize upgrade group items
 	 */
 	public void initializeUpgradeItems(){
-		gScreen.setUpgradesMenuInitialized( true);
+		tScreen.setUpgradesMenuInitialized( true);
 		//initialize upgrade monies
 		fruitfulMoney = (int) (15*(Math.pow(2,gameInstance.getLevelHandler().getFruitfullMoneyP())));
 		longerMoney = (int) (5*(Math.pow(2,gameInstance.getLevelHandler().getLongerMoneyP())));
@@ -573,7 +577,7 @@ public class MenuHandler{
 						String.valueOf(gameInstance.getLevelHandler().getFruitfullMoneyP()) + "\n" +
 						"+" + String.valueOf(5) + "%\n" +
 						"$" + String.valueOf(fruitfulMoney) + "\n" +
-						String.format("%.1f",((Animal) gWorld.getMovables().get(0)).getFertilityRate())+ "%"			 
+						String.format("%.1f",((Animal) tWorld.getMovables().get(0)).getFertilityRate())+ "%"			 
 						, upgradeLabelStyle);
 		fruitfulLabel.setAlignment(Align.right);
 
@@ -582,7 +586,7 @@ public class MenuHandler{
 						String.valueOf(gameInstance.getLevelHandler().getLongerMoneyP()) + "\n" +
 						"+" + String.format("%.2f",5/60.0) + " s\n" +
 						"$" + String.valueOf(longerMoney) + "\n" +
-						String.format("%.2f",((Animal) gWorld.getMovables().get(0)).getTimeOnGround())+ "%"			 
+						String.format("%.2f",((Animal) tWorld.getMovables().get(0)).getTimeOnGround())+ "%"			 
 						, upgradeLabelStyle);
 		longerLabel.setAlignment(Align.right);
 
@@ -591,7 +595,7 @@ public class MenuHandler{
 						String.valueOf(gameInstance.getLevelHandler().getMoreMoneyP()) + "\n" +
 						"-" + String.format("%.2f",5/60.0) + " s\n" +
 						"$" + String.valueOf(moreMoney) + "\n" +
-						String.format("%.2f",((Animal) gWorld.getMovables().get(0)).getDropInterval())+ "%"	
+						String.format("%.2f",((Animal) tWorld.getMovables().get(0)).getDropInterval())+ "%"	
 						, upgradeLabelStyle);
 		moreLabel.setAlignment(Align.right);
 
@@ -603,16 +607,24 @@ public class MenuHandler{
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!fruitfulButton.isDisabled()){
+					if(tScreen.isAte()){
+						tScreen.setUpgraded(true);
+						tWorld.spawnObstacleAndMarket();
+						tScreen.getOverlay().dispose();
+						tScreen.setOverlay(null);
+						tScreen.getAlexButton().setChecked(false);
+						handleMainMenu(false);
+					}
 					SoundHandler.playButtonClick();
 					//take away player money and add more to percentage of droppings
 					//Gdx.input.setCatchBackKey(true);
 
-					Array<Movable> animals = gWorld.getMovables();
+					Array<Movable> animals = tWorld.getMovables();
 					for(Movable animal : animals){
 						((Animal) animal).upgradeFertilityRate(5);
 					}
-					gWorld.getPlayer().subtractPlayerMoney(fruitfulMoney);
-					System.out.println(fruitfulMoney +"  "+gWorld.getPlayer().getPlayerMoney());
+					tWorld.getPlayer().subtractPlayerMoney(fruitfulMoney);
+					System.out.println(fruitfulMoney +"  "+tWorld.getPlayer().getPlayerMoney());
 					fruitfulMoney += fruitfulMoney;
 					gameInstance.getLevelHandler().addFruitfullMoneyP();
 
@@ -621,27 +633,27 @@ public class MenuHandler{
 									String.valueOf(gameInstance.getLevelHandler().getFruitfullMoneyP()) + "\n" +
 									"+" + String.valueOf(5) + "%\n" +
 									"$" + String.valueOf(fruitfulMoney) + "\n" +
-									String.format("%.1f",((Animal) gWorld.getMovables().get(0)).getFertilityRate())+ "%"
+									String.format("%.1f",((Animal) tWorld.getMovables().get(0)).getFertilityRate())+ "%"
 							);
-					infoLabel.setText("Money: $" + gWorld.getPlayer().getPlayerMoney()
-							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
+					infoLabel.setText("Money: $" + tWorld.getPlayer().getPlayerMoney()
+							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + tWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 				}
-				if(gWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
 				else
 					fruitfulButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < longerMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < longerMoney)
 					longerButton.setDisabled(true);
 				else
 					longerButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < moreMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < moreMoney)
 					moreButton.setDisabled(true);
 				else
 					moreButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < dogMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < dogMoney)
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
@@ -654,14 +666,22 @@ public class MenuHandler{
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!longerButton.isDisabled()){
+					if(tScreen.isAte()){
+						tScreen.setUpgraded(true);
+						tWorld.spawnObstacleAndMarket();
+						tScreen.getOverlay().dispose();
+						tScreen.setOverlay(null);
+						tScreen.getAlexButton().setChecked(false);
+						handleMainMenu(false);
+					}
 					SoundHandler.playButtonClick();
 					//take away player money and add more to precentage of droppings
 
-					Array<Movable> animals = gWorld.getMovables();
+					Array<Movable> animals = tWorld.getMovables();
 					for(Movable animal : animals){
 						((Animal) animal).upgradeTimeOnGround(5);
 					}
-					gWorld.getPlayer().subtractPlayerMoney(longerMoney);
+					tWorld.getPlayer().subtractPlayerMoney(longerMoney);
 					longerMoney += longerMoney;
 					gameInstance.getLevelHandler().addLongerMoneyP();
 					longerLabel.setText(
@@ -669,27 +689,27 @@ public class MenuHandler{
 									String.valueOf(gameInstance.getLevelHandler().getLongerMoneyP()) + "\n" +
 									"+" + String.format("%.2f",5/60.0) + " s\n" +
 									"$" + String.valueOf(longerMoney) + "\n" +
-									String.format("%.2f",((Animal) gWorld.getMovables().get(0)).getTimeOnGround())+ "s"
+									String.format("%.2f",((Animal) tWorld.getMovables().get(0)).getTimeOnGround())+ "s"
 							);
-					infoLabel.setText("Money: $" + gWorld.getPlayer().getPlayerMoney()
-							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
+					infoLabel.setText("Money: $" + tWorld.getPlayer().getPlayerMoney()
+							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + tWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 				}
-				if(gWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
 				else
 					fruitfulButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < longerMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < longerMoney)
 					longerButton.setDisabled(true);
 				else
 					longerButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < moreMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < moreMoney)
 					moreButton.setDisabled(true);
 				else
 					moreButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < dogMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < dogMoney)
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
@@ -702,15 +722,23 @@ public class MenuHandler{
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				if(!moreButton.isDisabled()){
+					if(tScreen.isAte()){
+						tScreen.setUpgraded(true);
+						tWorld.spawnObstacleAndMarket();
+						tScreen.getOverlay().dispose();
+						tScreen.setOverlay(null);
+						tScreen.getAlexButton().setChecked(false);
+						handleMainMenu(false);
+					}
 					SoundHandler.playButtonClick();
 					//take away player money and add more to precentage of droppings
 					//Gdx.input.setCatchBackKey(true);
 
-					Array<Movable> animals = gWorld.getMovables();
+					Array<Movable> animals = tWorld.getMovables();
 					for(Movable animal : animals){
 						((Animal) animal).upgradeDropInterval(5);
 					}
-					gWorld.getPlayer().subtractPlayerMoney(moreMoney);
+					tWorld.getPlayer().subtractPlayerMoney(moreMoney);
 					gameInstance.getLevelHandler().addMoreMoneyP();
 					moreMoney += moreMoney;
 					moreLabel.setText(
@@ -718,27 +746,27 @@ public class MenuHandler{
 									String.valueOf(gameInstance.getLevelHandler().getMoreMoneyP()) + "\n" +
 									"-" + String.format("%.2f",5/60.0) + " s\n" +
 									"$" + String.valueOf(moreMoney) + "\n" +
-									String.format("%.2f",((Animal) gWorld.getMovables().get(0)).getDropInterval())+ "s"	
+									String.format("%.2f",((Animal) tWorld.getMovables().get(0)).getDropInterval())+ "s"	
 							);
-					infoLabel.setText("Money: $" + gWorld.getPlayer().getPlayerMoney()
-							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
+					infoLabel.setText("Money: $" + tWorld.getPlayer().getPlayerMoney()
+							+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + tWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
 				}
-				if(gWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
 					fruitfulButton.setDisabled(true);
 				else
 					fruitfulButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < longerMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < longerMoney)
 					longerButton.setDisabled(true);
 				else
 					longerButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < moreMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < moreMoney)
 					moreButton.setDisabled(true);
 				else
 					moreButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < dogMoney)
+				if(tWorld.getPlayer().getPlayerMoney() < dogMoney)
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
@@ -750,53 +778,20 @@ public class MenuHandler{
 				return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				if(!dogButton.isDisabled()) {
-					if(gWorld.getDrawMap().get("Boosts").size <= 0) {
-						SoundHandler.playButtonClick();
-						gWorld.getPlayer().subtractPlayerMoney(dogMoney);
-						Dog newDog = new Dog(new Vector2(EDGE_TOLERANCE, gWorld.getCamera().position.y +Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE), 
-									gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY(), gWorld.getCamera());
-						//Gdx.app.log("Doge", "Added new dog at " + newDog.getPosition().toString());
-						gWorld.getDrawMap().get("Boosts").add(newDog);
-						gWorld.setDog(true);
-						infoLabel.setText("Money: $" + gWorld.getPlayer().getPlayerMoney()
-								+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount());
-					}
-				}
-				if(gWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
-					fruitfulButton.setDisabled(true);
-				else
-					fruitfulButton.setDisabled(false);
-
-				if(gWorld.getPlayer().getPlayerMoney() < longerMoney)
-					longerButton.setDisabled(true);
-				else
-					longerButton.setDisabled(false);
-
-				if(gWorld.getPlayer().getPlayerMoney() < moreMoney)
-					moreButton.setDisabled(true);
-				else
-					moreButton.setDisabled(false);
-
-				if(gWorld.getPlayer().getPlayerMoney() < dogMoney || gWorld.hasDog())
-					dogButton.setDisabled(true);
-				else
-					dogButton.setDisabled(false);
 			}
-
 		});
 
 		//set disabled
-		if(gWorld.getPlayer().getPlayerMoney() < 15){
+		if(tWorld.getPlayer().getPlayerMoney() < 15){
 			fruitfulButton.setDisabled(true);
 		}
-		if(gWorld.getPlayer().getPlayerMoney() < 5){
+		if(tWorld.getPlayer().getPlayerMoney() < 5){
 			longerButton.setDisabled(true);
 		}
-		if(gWorld.getPlayer().getPlayerMoney() < 10){
+		if(tWorld.getPlayer().getPlayerMoney() < 10){
 			moreButton.setDisabled(true);
 		}
-		if(gWorld.getPlayer().getPlayerMoney() < 100){
+		if(tWorld.getPlayer().getPlayerMoney() < 100){
 			dogButton.setDisabled(true);
 		}
 
@@ -831,7 +826,7 @@ public class MenuHandler{
 		//For two rows
 		upgradesGroupImage.setSize(Math.max(upgradesGroup1.getWidth(), upgradesGroup2.getWidth()) + EDGE_TOLERANCE*2f,
 				upgradesGroup1.getHeight() + upgradesGroup2.getHeight() + 3f*EDGE_TOLERANCE);
-		upgradesGroupImage.setPosition(gScreen.getAlexButton().getX() + gScreen.getAlexButton().getWidth() + EDGE_TOLERANCE,
+		upgradesGroupImage.setPosition(tScreen.getAlexButton().getX() + tScreen.getAlexButton().getWidth() + EDGE_TOLERANCE,
 				upgradesGroup2.getY() - EDGE_TOLERANCE);
 		//For single row
 		/*upgradesGroupImage.setSize(upgradesGroup1.getWidth() + 2f*EDGE_TOLERANCE, upgradesGroup1.getHeight());
@@ -871,14 +866,14 @@ public class MenuHandler{
 			buttonStage.addActor(inventoryGroupImage);
 			buttonStage.addActor(inventoryGroup);
 			for (Consumable.DropType d : Consumable.DropType.values()){
-				((ImageTextButton) inventoryGroup.findActor(d.getName())).setText("x" + gWorld.getPlayer().getInventory().getInventory().get(d).size);
+				((ImageTextButton) inventoryGroup.findActor(d.getName())).setText("x" + tWorld.getPlayer().getInventory().getInventory().get(d).size);
 			}
 			//from here has to update on button visibility
 		}
 		else{
 			inventoryGroup.remove();
 			inventoryGroupImage.remove();
-			if (!gScreen.getAlexButton().isChecked())
+			if (!tScreen.getAlexButton().isChecked())
 				inventoryGroupButton.setChecked(false);
 		}
 	}
@@ -895,22 +890,22 @@ public class MenuHandler{
 			buttonStage.addActor(upgradesStatusGroup);
 			buttonStage.addActor(upgradesGroup2);
 
-			if(gWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
+			if(tWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
 				((Button) upgradesGroup1.findActor("fruitfulButton")).setDisabled(true);
 			else
 				((Button) upgradesGroup1.findActor("fruitfulButton")).setDisabled(false);
 
-			if(gWorld.getPlayer().getPlayerMoney() < longerMoney)
+			if(tWorld.getPlayer().getPlayerMoney() < longerMoney)
 				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(true);
 			else
 				((Button) upgradesGroup1.findActor("longerButton")).setDisabled(false);
 
-			if(gWorld.getPlayer().getPlayerMoney() < moreMoney)
+			if(tWorld.getPlayer().getPlayerMoney() < moreMoney)
 				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(true);
 			else
 				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(false);
 
-			if(gWorld.getPlayer().getPlayerMoney() < dogMoney)
+			if(tWorld.getPlayer().getPlayerMoney() < dogMoney)
 				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(true);
 			else
 				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(false);
@@ -925,7 +920,7 @@ public class MenuHandler{
 				upgradesStatusGroup.remove();
 				upgradesStatusGroupImage.remove();
 			}
-			if (!gScreen.getAlexButton().isChecked())
+			if (!tScreen.getAlexButton().isChecked())
 				upgradesGroupButton.setChecked(false);
 		}
 	}
@@ -941,7 +936,7 @@ public class MenuHandler{
 		else{
 			optionsGroup.remove();
 			optionsGroupImage.remove();
-			if (!gScreen.getAlexButton().isChecked())
+			if (!tScreen.getAlexButton().isChecked())
 				optionsGroupButton.setChecked(false);
 		}
 	}
@@ -962,22 +957,22 @@ public class MenuHandler{
 	}
 	
 	private void updateCosts() {
-		if(gWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
+		if(tWorld.getPlayer().getPlayerMoney() < fruitfulMoney)
 			fruitfulButton.setDisabled(true);
 		else
 			fruitfulButton.setDisabled(false);
 
-		if(gWorld.getPlayer().getPlayerMoney() < longerMoney)
+		if(tWorld.getPlayer().getPlayerMoney() < longerMoney)
 			longerButton.setDisabled(true);
 		else
 			longerButton.setDisabled(false);
 
-		if(gWorld.getPlayer().getPlayerMoney() < moreMoney)
+		if(tWorld.getPlayer().getPlayerMoney() < moreMoney)
 			moreButton.setDisabled(true);
 		else
 			moreButton.setDisabled(false);
 
-		if(gWorld.getPlayer().getPlayerMoney() < dogMoney || gWorld.hasDog())
+		if(tWorld.getPlayer().getPlayerMoney() < dogMoney)
 			dogButton.setDisabled(true);
 		else
 			dogButton.setDisabled(false);

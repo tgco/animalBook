@@ -596,4 +596,8 @@ public class LevelHandler {
 		}
 		return healthAmount;
 	}
+
+	public int getMaxLevel() {
+		return 5;
+	}
 }

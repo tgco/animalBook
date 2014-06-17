@@ -70,7 +70,6 @@ public class LevelHandler {
 	 * @param level the level that the handler will return values for
 	 */
 	public LevelHandler(int level, boolean kidMode) {
-		Gdx.app.log("My Tagg", "The initializing of the level Handler");
 		this.level = level;
 		this.kidMode = kidMode;
 		storedAmount = 0;
@@ -130,7 +129,6 @@ public class LevelHandler {
 
 		Array<ABDrawable> animals = new Array<ABDrawable>();
 
-		//Gdx.app.log("My tag", "start: " + startAnimals + " nextStart: " + nextLevelStart);
 		int x;
 		float animalWidth;
 		float animalHeight;
@@ -185,7 +183,7 @@ public class LevelHandler {
 
 			}
 		}
-		Gdx.app.log("My Tagg", "The animals is " + animals.size);
+
 		return animals;
 
 
@@ -565,7 +563,7 @@ public class LevelHandler {
 				if (rand.nextInt(level) > 0 && rand.nextInt(5) > 3){
 					o = new Obstacle();
 					o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
-					Gdx.app.log("Obstacle", "new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + returnLaneLength(level)/1000f*i);
+				
 					if (o.getPosition().dst(mPos) > 250f)
 						obstacles.add(o);
 					i += 400f;
@@ -577,7 +575,7 @@ public class LevelHandler {
 				if (rand.nextInt(level) > 0 && rand.nextInt(1) == 0){
 					o = new Obstacle();
 					o.setPosition(new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))- o.getWidth()/2), i));
-					Gdx.app.log("Obstacle", "new Obstacle @ x:" + rand.nextFloat()%((float)Gdx.graphics.getWidth() - o.getWidth()/2) + ", y:" + returnLaneLength(level)/1000f*i);
+					
 					if (o.getPosition().dst(mPos) > 250f)
 						obstacles.add(o);
 					i += 400f;

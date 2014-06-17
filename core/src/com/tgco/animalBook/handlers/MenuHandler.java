@@ -377,7 +377,6 @@ public class MenuHandler{
 				 */
 				@Override
 				public Payload dragStart(InputEvent event, float x, float y,int pointer) {
-					System.out.println("Drag started @ x:" + x + " y:" + y);
 					Payload payload = new Payload();
 					if (gWorld.getPlayer().getInventory().removeItem(Consumable.DropType.values()[index])){
 						inventoryButton.setText("x" + gWorld.getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
@@ -402,7 +401,6 @@ public class MenuHandler{
 				 */
 				@Override
 				public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload, DragAndDrop.Target target){
-					System.out.println("Drag stopped @ x:" + x + " y:" + y);
 					if (target == null){
 						gWorld.getPlayer().getInventory().addItem(new Consumable(Consumable.DropType.values()[index]));
 						inventoryButton.setText("x" + gWorld.getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
@@ -610,7 +608,7 @@ public class MenuHandler{
 						((Animal) animal).upgradeFertilityRate(5);
 					}
 					gWorld.getPlayer().subtractPlayerMoney(fruitfulMoney);
-					System.out.println(fruitfulMoney +"  "+gWorld.getPlayer().getPlayerMoney());
+					
 					fruitfulMoney += fruitfulMoney;
 					gameInstance.getLevelHandler().addFruitfullMoneyP();
 
@@ -754,7 +752,7 @@ public class MenuHandler{
 						gWorld.getPlayer().subtractPlayerMoney(dogMoney);
 						Dog newDog = new Dog(new Vector2(EDGE_TOLERANCE, gWorld.getCamera().position.y +Gdx.graphics.getHeight()/2 - EDGE_TOLERANCE), 
 								gameInstance.getLevelHandler().animalChangeX(), gameInstance.getLevelHandler().animalChangeY(), gWorld.getCamera());
-						//Gdx.app.log("Doge", "Added new dog at " + newDog.getPosition().toString());
+					
 						gWorld.getDrawMap().get("Boosts").add(newDog);
 						gWorld.setDog(true);
 						infoLabel.setText("Money: $" + gWorld.getPlayer().getPlayerMoney()
@@ -913,7 +911,7 @@ public class MenuHandler{
 			else
 				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(false);
 
-			System.out.println(((Button) upgradesGroup1.findActor("fruitfulButton")).isDisabled());
+			
 		}
 		else{
 			upgradesGroup1.remove();

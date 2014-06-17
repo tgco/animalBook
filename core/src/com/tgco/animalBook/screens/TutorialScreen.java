@@ -848,7 +848,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void pause() {
-		Gdx.app.log("My Tagg", "This is screen pause");
+		
 
 	}
 

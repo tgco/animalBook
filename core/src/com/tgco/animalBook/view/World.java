@@ -177,20 +177,20 @@ public class World {
 
 		if(levelSize && gameInstance.getLevelData().get(1) != null){
 			player = (Player) gameInstance.getLevelData().get(1);
-			Gdx.app.log("My Tagg", "The hit back is " + gameInstance.isHitBack());
+		
 			if (!gameInstance.isHitBack()) {
 				reinitTexturePlayer();
 				player.resetPlayerPosition();
 			} else {
-				//Gdx.app.log("My Tagg", "the player pos and prog Precen " + gameInstance.getProgPercentage()  + " laneLength: " + laneLength);
+				
 				camera.position.set(Gdx.graphics.getWidth()/2, gameInstance.getProgPercentage()*laneLength + Gdx.graphics.getHeight()/2, 0);
 				reinitTexturePlayer();
 				market.setPosition(new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2 + laneLength));
 			}
 		}else{
-			Gdx.app.log("My Tagg", "The player yo");
+			
 			player = new Player(cameraSpeed);
-			Gdx.app.log("My Tagg", "Health " + player.getHealth());
+		
 		}
 
 		//Make the obstacles
@@ -418,7 +418,7 @@ public class World {
 			}
 
 			if(buttonBounds.contains(((Dropped) dropped).getPosition())) {
-				Gdx.app.log("Inventory: ", "Added a dropped");
+				
 				removeFromABDrawable(dropped);
 				dropped.dispose();
 			}

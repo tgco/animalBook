@@ -379,7 +379,7 @@ public class MenuHandlerTut{
 				 */
 				@Override
 				public Payload dragStart(InputEvent event, float x, float y,int pointer) {
-					//System.out.println("Drag started @ x:" + x + " y:" + y);
+					
 					Payload payload = new Payload();
 					if (tWorld.getPlayer().getInventory().removeItem(Consumable.DropType.values()[index])){
 						inventoryButton.setText("x" + tWorld.getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
@@ -404,7 +404,7 @@ public class MenuHandlerTut{
 				 */
 				@Override
 				public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload, DragAndDrop.Target target){
-					System.out.println("Drag stopped @ x:" + x + " y:" + y);
+					
 					if (target == null){
 						tWorld.getPlayer().getInventory().addItem(new Consumable(Consumable.DropType.values()[index]));
 						inventoryButton.setText("x" + tWorld.getPlayer().getInventory().getInventory().get(Consumable.DropType.values()[index]).size);
@@ -620,7 +620,7 @@ public class MenuHandlerTut{
 						((Animal) animal).upgradeFertilityRate(5);
 					}
 					tWorld.getPlayer().subtractPlayerMoney(fruitfulMoney);
-					System.out.println(fruitfulMoney +"  "+tWorld.getPlayer().getPlayerMoney());
+			
 					fruitfulMoney += fruitfulMoney;
 					gameInstance.getLevelHandler().addFruitfullMoneyP();
 
@@ -906,7 +906,7 @@ public class MenuHandlerTut{
 			else
 				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(false);
 
-			System.out.println(((Button) upgradesGroup1.findActor("fruitfulButton")).isDisabled());
+		
 		}
 		else{
 			upgradesGroup1.remove();

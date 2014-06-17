@@ -161,7 +161,6 @@ public class AnimalBookGame extends Game {
 	public void pause() {
 		super.pause();
 		if(levelHandler != null && levelData.get(0) != null){
-			Gdx.app.log("My Tagg", "the level is " + level);
 			setPrefsToFile();
 		}
 		currState = state.PAUSE;
@@ -209,7 +208,6 @@ public class AnimalBookGame extends Game {
 
 			
 			
-			Gdx.app.log("My Tagg", "After flush of save");
 		}
 		
 		//app settings

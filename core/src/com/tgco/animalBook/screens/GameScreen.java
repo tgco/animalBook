@@ -194,7 +194,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 
 				batch.begin();
-				//Gdx.app.log("my Tagg", "Vert Group is: " + ((VerticalGroup) buttonStage.getActors().get(5)).getOriginX());
+			
 				//Draw health bar (test)
 				Vector3 vectHealth = new Vector3(alexButton.getX() + alexButton.getWidth() + 1.4f*EDGE_TOLERANCE,
 						Gdx.graphics.getHeight() - (alexButton.getY() + alexButton.getHeight() - 1.5f*EDGE_TOLERANCE)
@@ -694,7 +694,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	@Override
 	public void pause() {
-		Gdx.app.log("My Tagg", "This is screen pause");
+		
 
 	}
 

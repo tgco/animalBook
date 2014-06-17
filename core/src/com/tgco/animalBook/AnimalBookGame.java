@@ -21,7 +21,7 @@ import com.tgco.animalBook.screens.SplashScreen;
 public class AnimalBookGame extends Game {
 
 	/**Version string  */
-	public static final String version = "0.7.0";
+	public static final String version = "0.9.9";
 
 	/** debug variables */
 	public static final Boolean debugMode = true;

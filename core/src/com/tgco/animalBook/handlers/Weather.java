@@ -6,41 +6,43 @@ import java.util.Random;
 public class Weather {
 	private Random rand;
 	private WeatherType weather;
+	private int numWeather;
 
 	public Weather(){
 		rand = new Random();
 		weather = WeatherType.CLEAR;
+		numWeather = 0;
 	}
 
 	public enum WeatherType{
-		CLEAR ("Clear", ""),
-		RAINY ("Rainy", ""),
-		WINDY ("Windy", "");
+		CLEAR ("Clear"),
+		RAINY ("Rainy"),
+		WINDY ("Windy"), 
+		SNOWY ("Frances");
 
-		private WeatherType(String weatherName, String texturePath){
+		private WeatherType(String weatherName){
 			this.weatherName = weatherName;
-			this.texturePath = texturePath;
 		}
 
 		private final String weatherName;
-		private final String texturePath;
 
 		public final String getName(){
 			return weatherName;
 		}
-		
-		public final String getTexturePath(){
-			return texturePath;
-		}
-
 	}
 	
 	public WeatherType getNewWeather(){
-		//return WeatherType.WINDY;
-		if (rand.nextBoolean())
+		/*if (rand.nextBoolean())
 			return WeatherType.values()[rand.nextInt(WeatherType.values().length)];
 		else
-			return WeatherType.CLEAR;
+			return WeatherType.CLEAR;*/
+		if (numWeather < Weather.WeatherType.values().length -1){
+			numWeather++;
+		}
+		else
+			numWeather=0;
+		return WeatherType.values()[numWeather];
+		
 	}
 	public WeatherType getWeather(){
 		return weather;

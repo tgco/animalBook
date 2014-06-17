@@ -15,13 +15,15 @@ public class Inventory {
 	 * Creates a new inventory ArrayMap. Then stores Arrays of all consumable types
 	 * within the inventory.
 	 */
+	
 	public Inventory() {
 		inventory = new ArrayMap<Consumable.DropType, Array<Consumable>>(false, 5);
 		Consumable.DropType[] dropTypes = Consumable.DropType.values();
 		for (int i = 0; i < dropTypes.length; i++){
 			inventory.put(dropTypes[i], new Array<Consumable>(false, MAX_CAPACITY));
-			for (int j = 0; j < 2; j++)
+			/*for (int j = 0; j < 2; j++)
 				inventory.get(Consumable.DropType.values()[i]).add(new Consumable(Consumable.DropType.values()[i]));
+			*/ //for debugging purposes
 		}
 	}
 	

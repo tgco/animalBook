@@ -989,7 +989,6 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		moreButton.setName("moreButton");
 
 
-
 		//UpgradeStatusGroup
 		upgradesStatusGroup = new HorizontalGroup();
 		upgradesStatusGroup.center();

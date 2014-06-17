@@ -46,7 +46,7 @@ public abstract class Movable extends ABDrawable {
 		moveBias = 1.5f;
 		
 		rotation = 0;
-		rotationSpeed = 50f;
+		rotationSpeed = 40f;
 	}
 	/**
 	 * Overridden to draw with rotation so movables face the direction they are moving
@@ -77,7 +77,7 @@ public abstract class Movable extends ABDrawable {
 		position.lerp(previousTarget, speed*Gdx.graphics.getDeltaTime());
 
 		//Lerp the previous target to the current
-		previousTarget.lerp(currentTarget,30*speed*Gdx.graphics.getDeltaTime());
+		previousTarget.lerp(currentTarget,15*speed*Gdx.graphics.getDeltaTime());
 
 		//update bounds
 		bounds.setX(position.x - width/2);

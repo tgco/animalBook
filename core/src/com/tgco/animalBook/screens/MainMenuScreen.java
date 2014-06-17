@@ -13,14 +13,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.handlers.SoundHandler;
 
@@ -31,13 +29,9 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	private Button playButton;
 	private Button optionsButton;
-	private Button testButton;
 	private boolean hasConfirm = false;
 	private Stage popupStage;
 	private boolean toggleOn = false;
-
-	private static final double REGION_HEIGHT = BUTTON_HEIGHT*1.25f;
-	private static final double REGION_WIDTH = BUTTON_WIDTH*3.1f;
 
 	/**
 	 * Constructor for the main menu screen
@@ -155,7 +149,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		playButton.setWidth(MENU_BUTTON_WIDTH);
 		playButton.setHeight(MENU_BUTTON_HEIGHT);
 		playButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
-		playButton.setY(Gdx.graphics.getHeight()/2);
+		playButton.setY(2*EDGE_TOLERANCE + MENU_BUTTON_HEIGHT);
 
 		//create style for options button, must start over
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/mainMenu/buttonO.atlas"));
@@ -169,21 +163,7 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 		optionsButton.setWidth(MENU_BUTTON_WIDTH);
 		optionsButton.setHeight(MENU_BUTTON_HEIGHT);
 		optionsButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
-		optionsButton.setY( EDGE_TOLERANCE);
-
-		//This button is just to test the story screen
-		atlas = new TextureAtlas(Gdx.files.internal("buttons/button.atlas"));
-		buttonSkin = new Skin();
-		buttonSkin.addRegions(atlas);
-		style = new ButtonStyle();
-		style.up = buttonSkin.getDrawable("buttonUnpressed");
-		style.down = buttonSkin.getDrawable("buttonPressed");
-
-		testButton = new Button(style);
-		testButton.setWidth(MENU_BUTTON_WIDTH);
-		testButton.setHeight(MENU_BUTTON_HEIGHT);
-		testButton.setX(Gdx.graphics.getWidth() - MENU_BUTTON_WIDTH - EDGE_TOLERANCE);
-		testButton.setY(  Gdx.graphics.getHeight()/2 - MENU_BUTTON_HEIGHT - EDGE_TOLERANCE);
+		optionsButton.setY(EDGE_TOLERANCE);
 		
 		//Create listeners
 		playButton.addListener(new InputListener() {
@@ -194,10 +174,12 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 				SoundHandler.playButtonClick();
 				toggleMusicOn();
+				SoundHandler.playBackgroundMusic(true);
 				//Change the screen when the button is let go
 				gameInstance.setData();
 				if(gameInstance.getLevelHandler().isDoTutorial()){
-					gameInstance.setScreen(new TutorialScreen(gameInstance));
+					gameInstance.setScreen(new StoryScreen(gameInstance));
+					//gameInstance.setScreen(new TutorialScreen(gameInstance));
 					//gameInstance.setScreen(new EndGameStory(gameInstance));
 				}else{
 					gameInstance.setScreen(new GameScreen(gameInstance));
@@ -220,24 +202,10 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 			}
 		});
 
-		testButton.addListener(new InputListener() {
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
-
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				if(!testButton.isDisabled()){
-					SoundHandler.playButtonClick();
-					toggleMusicOn();
-					gameInstance.setScreen(new StoryScreen(gameInstance));
-				}
-			}
-		});
 
 		//Add to stage
 		buttonStage.addActor(playButton);
 		buttonStage.addActor(optionsButton);
-		buttonStage.addActor(testButton);
 
 		inputMultiplexer.addProcessor(buttonStage);
 	}

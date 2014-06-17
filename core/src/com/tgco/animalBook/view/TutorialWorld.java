@@ -114,10 +114,11 @@ public class TutorialWorld {
 
 		player = new Player(cameraSpeed);
 
-		drawMap.put("Movable", gameInstance.getLevelHandler().addAnimals(1));
-		drawMap.put("Dropped", new Array<ABDrawable>());
+		
 		drawMap.put("Market", new Array<ABDrawable>());
 		drawMap.put("Obstacle", new Array<ABDrawable>());
+		drawMap.put("Movable", gameInstance.getLevelHandler().addAnimals(1));
+		drawMap.put("Dropped", new Array<ABDrawable>());
 	}
 
 	/**

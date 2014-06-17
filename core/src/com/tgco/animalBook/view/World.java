@@ -36,11 +36,6 @@ import com.tgco.animalBook.screens.MarketScreen;
 public class World {
 
 	/**
-	 * The number of animals the player has
-	 */
-	private static int numAnimals = 5;
-
-	/**
 	 * The camera used to view the world
 	 */
 	private OrthographicCamera camera;
@@ -89,7 +84,7 @@ public class World {
 	 * The main player
 	 */
 	private Player player;
-	
+
 	private boolean hasDog = false;
 
 	protected static final float BUTTON_WIDTH = (1f/10f)*Gdx.graphics.getWidth();
@@ -111,7 +106,7 @@ public class World {
 	private Weather weather;
 	private float weatherTime = 0f;
 	private float targetWeatherTime = 0f;
-	private final float WEATHER_DURATION = 4f;
+	private final float WEATHER_DURATION = 7f;
 	private Vector2 windVector;
 	private static final float WEATHER_CLICK = .12f;
 	private float weatherClick;
@@ -134,15 +129,6 @@ public class World {
 		worldRender = new WorldRenderer();
 		laneLength =  gameInstance.getLevelHandler().returnLaneLength(gameInstance.getLevelHandler().getLevel());
 
-		//spot 3 is storing movable array
-		if(levelSize && gameInstance.getLevelData().get(2) != null){
-			Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
-			drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
-			reinitTextureMovable();
-		}else{
-			drawMap.put("Movable", gameInstance.getLevelHandler().addAnimals( gameInstance.getLevelHandler().getLevel()));
-		}
-
 
 		//Camera initialization
 		camera = new OrthographicCamera();
@@ -150,8 +136,22 @@ public class World {
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 
-		Gdx.app.log("My Tagg", "The movable: " + drawMap.get("Movable").size );
-		tolerance = drawMap.get("Movable").get(0).getWidth();
+		Array<ABDrawable> movables;
+		boolean reinit = false;
+
+
+		//spot 3 is storing movable array
+		if(levelSize && gameInstance.getLevelData().get(2) != null){
+			Gdx.app.log("My tag", "the size of the movable is " +((Array<ABDrawable>)gameInstance.getLevelData().get(2)).size);
+			movables = (Array<ABDrawable>) gameInstance.getLevelData().get(2);
+			//drawMap.put("Movable", (Array<ABDrawable>) gameInstance.getLevelData().get(2));	
+			reinit = true;
+		}else{
+			movables = gameInstance.getLevelHandler().addAnimals( gameInstance.getLevelHandler().getLevel());
+			//drawMap.put("Movable", gameInstance.getLevelHandler().addAnimals( gameInstance.getLevelHandler().getLevel()));
+		}
+
+		tolerance = movables.get(0).getWidth();
 
 		cameraBounds = new Rectangle(camera.position.x - Gdx.graphics.getWidth()/2 - tolerance, camera.position.y - Gdx.graphics.getHeight()/2 - tolerance, Gdx.graphics.getWidth() + 2f*tolerance, Gdx.graphics.getHeight() + 2f*tolerance);
 
@@ -192,13 +192,6 @@ public class World {
 			Gdx.app.log("My Tagg", "Health " + player.getHealth());
 		}
 
-		if(levelSize && gameInstance.getLevelData().get(3) != null){
-			drawMap.put("Dropped", (Array<ABDrawable>) gameInstance.getLevelData().get(3));
-			reinitTextureDropped();
-		}else{
-			drawMap.put("Dropped", new Array<ABDrawable>());
-		}
-
 		//Make the obstacles
 		if(levelSize && gameInstance.getLevelData().get(4) !=null){
 			drawMap.put("Obstacle", (Array<ABDrawable>) gameInstance.getLevelData().get(4));
@@ -207,10 +200,21 @@ public class World {
 			drawMap.put("Obstacle",  gameInstance.getLevelHandler().addObstacles( gameInstance.getLevelHandler().getLevel(), market.getPosition()));
 		}
 
+		drawMap.put("Movable", movables);
+		if (reinit)
+			reinitTextureMovable();
+
+		if(levelSize && gameInstance.getLevelData().get(3) != null){
+			drawMap.put("Dropped", (Array<ABDrawable>) gameInstance.getLevelData().get(3));
+			reinitTextureDropped();
+		}else{
+			drawMap.put("Dropped", new Array<ABDrawable>());
+		}
+
 		drawMap.put("WeatherDrop", new Array<ABDrawable>());
 		System.out.println("WEATHERDROP CREATED");
 		System.out.println(drawMap.get("WeatherDrop"));
-		
+
 		weather = new Weather();
 		weather.setWeatherType(WeatherType.CLEAR);
 		targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
@@ -362,7 +366,10 @@ public class World {
 			speed = increasedCameraSpeed*(player.getHealth()/100);
 		} else if (weather.getWeather() == WeatherType.RAINY) {
 			speed = (cameraSpeed*(player.getHealth()/100))/2f;
-		} else {
+		} else if (weather.getWeather() == WeatherType.SNOWY){
+			speed = 0;
+		}
+		else {
 			speed = (cameraSpeed*(player.getHealth()/100));
 		}
 
@@ -402,9 +409,9 @@ public class World {
 			}
 
 		}
-		
+
 		for (ABDrawable boosts : drawMap.get("Boosts")) {
-			
+
 			if (((Dog) boosts).getTimeLeft() >= 0) {
 				((Dog) boosts).decreaseTimeLeft();
 				((Dog) boosts).move(speed, delta);
@@ -413,7 +420,7 @@ public class World {
 				setDog(false);
 			}
 		}
-		
+
 		for (ABDrawable movable : drawMap.get("Movable")) {
 			//move animals if necessary
 			((Movable) movable).move(speed,delta);
@@ -421,7 +428,11 @@ public class World {
 				if (rand.nextBoolean())
 					((Movable) movable).addToCurrentTarget(windVector);
 			}
+			else if (weather.getWeather() == WeatherType.SNOWY){
+				((Movable) movable).adjustForwardBias(speed, speed, delta);
+			}
 			//Reduce upward bias if there's a dog
+			//Gdx.app.log("Check", "Dog: " + hasDog());
 			if(hasDog()) {
 				((Movable) movable).adjustForwardBias(.5f, speed, delta);
 			} else {
@@ -435,7 +446,7 @@ public class World {
 					drawMap.get("Dropped").add(dropping);
 				}
 			}
-		}		
+		}
 
 		//check for and remove lost animals
 		for (ABDrawable drawable : drawMap.get("Movable")) {
@@ -488,23 +499,32 @@ public class World {
 			gameInstance.setScreen(new MarketScreen(gameInstance, gameInstance.getGameScreen()));
 		}
 
-		//handle weather elements
+		//handle weather elements if its time for the weather to change
 		if (weatherTime > targetWeatherTime){
 			weather.setWeatherType(weather.getNewWeather());
-			worldRender.setRainy(weather.getWeather() == WeatherType.RAINY);
 			
+			//set clear on/off
+			worldRender.setClear(weather.getWeather() == WeatherType.CLEAR);
+
+			//set rainy on/off
+			worldRender.setRainy(weather.getWeather() == WeatherType.RAINY);
+
+			//set snowy on/off
+			worldRender.setSnowy(weather.getWeather() == WeatherType.SNOWY);
+
+			//set windy on/off
 			if (weather.getWeather() == WeatherType.WINDY){
-				double magnitude = (float)(rand.nextInt(40) - 20);
+				double magnitude = (float)(rand.nextInt(35) - 10);
 				if (magnitude < 0)
 					magnitude-=10.0;
 				else
 					magnitude +=10.0;
 				double radian = (((double)rand.nextInt(360))*2.0*Math.PI/360.0);
 				windVector = new Vector2((float)(magnitude*Math.cos(radian)),(float)(magnitude*Math.sin(radian)));
-				worldRender.setWindy(true, windVector.getAngleRad());
+				worldRender.setWindy(true, windVector.getAngleRad(), windVector.dst(new Vector2()));
 			}
 			else{
-				worldRender.setWindy(false, 0f);
+				worldRender.setWindy(false, null, null);
 			}
 			weatherTime = 0f;
 			targetWeatherTime = rand.nextFloat()%WEATHER_DURATION + WEATHER_DURATION;
@@ -512,30 +532,6 @@ public class World {
 		else{
 			weatherTime += delta;
 		}
-		if (weatherClick > WEATHER_CLICK){
-			weatherClick = 0f;
-			switch(weather.getWeather()){
-			case RAINY: {
-				drawMap.get("WeatherDrop").add(new RainDrop("objectTextures/rainDrop.png",
-						new Vector2(((float)(rand.nextInt(Gdx.graphics.getWidth()))), Gdx.graphics.getHeight())));
-				break;}
-			case WINDY:	{break;}
-			case CLEAR: {break;}
-			default: {break;}
-			}
-		}
-		else{
-			weatherClick += delta;
-		}
-		for (ABDrawable m : drawMap.get("WeatherDrop")){
-			((Movable) m).move(speed, delta);
-			Vector2 p = m.getPosition();
-			if (p.x < 1f || p.x > Gdx.graphics.getWidth() || p.y < 1f || p.y > Gdx.graphics.getHeight()){
-				drawMap.get("WeatherDrop").removeValue(m, false);
-				m.dispose();
-			}
-		}
-
 	}
 
 	/**
@@ -587,11 +583,11 @@ public class World {
 	public ArrayMap<String, Array<ABDrawable>> getDrawMap() {
 		return drawMap;
 	}
-	
+
 	public void setDog(boolean hasDog) {
 		this.hasDog = hasDog;
 	}
-	
+
 	public boolean hasDog() {
 		return hasDog;
 	}

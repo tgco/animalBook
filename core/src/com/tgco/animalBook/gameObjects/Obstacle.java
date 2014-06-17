@@ -1,12 +1,15 @@
 package com.tgco.animalBook.gameObjects;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 
 //Instance of the obstacle drawn at random locations
 public class Obstacle extends ABDrawable {
 	
-	protected static final String texturePath = "objectTextures/pond.png";
+	protected static String texturePath = "objectTextures/pond.png";
+	Random rand = new Random();
 	
 	/**
 	 * Constructs a new Obstacle.
@@ -17,6 +20,12 @@ public class Obstacle extends ABDrawable {
 	 */
 	public Obstacle() {
 		super(texturePath);
+		
+		int randIndex = rand.nextInt(101);
+		if (randIndex <= 50) {
+			texturePath = "objectTextures/boulder.png";
+		}
+		resetText();
 		
 		width = .123f*Gdx.graphics.getWidth();
 		height = .196f*Gdx.graphics.getHeight();

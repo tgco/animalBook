@@ -109,7 +109,7 @@ public class TutorialWorld {
 		camera.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		camera.update();
 
-		cameraSpeed =  gameInstance.getLevelHandler().returnCameraSpeed(gameInstance.getLevelHandler().getLevel());	
+		cameraSpeed =  .26f;
 		increasedCameraSpeed = 2f*cameraSpeed;
 
 		player = new Player(cameraSpeed);

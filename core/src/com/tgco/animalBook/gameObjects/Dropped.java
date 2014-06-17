@@ -9,20 +9,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.tgco.animalBook.AnimalBookGame;
 
 public class Dropped extends ABDrawable{
-	
+
 	/** consume is 1 item it may carry */
 	private Consumable consume = null;
 	/** animal is 1 item it may carry */
 	private Animal animal = null;
-	
+
 	/** how much time it has left before disappearing */
 	private double timeLeft;
-	
+
 	/** if the user has clicked on it*/
 	private boolean pickedUp;
-	
+
 	/**
 	 *  the constructor with Consumable exists if the dropped item should house a Consumable.
 	 * @param consume is passed in a new Consumable
@@ -33,19 +34,24 @@ public class Dropped extends ABDrawable{
 		super(consume.getType().getTexturePath());
 		this.consume = consume;
 		this.position = pos;
-		width = .028f*Gdx.graphics.getWidth();
-		height = .044f*Gdx.graphics.getHeight();
+		if (AnimalBookGame.SCREEN_HEIGHT < 3f) {
+			width = .028f*Gdx.graphics.getWidth() * 1.5f;
+			height = .044f*Gdx.graphics.getHeight() * 1.5f;
+		} else {
+			width = .028f*Gdx.graphics.getWidth();
+			height = .044f*Gdx.graphics.getHeight();
+		}
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 		this.timeLeft = timeLeft;
 		this.pickedUp = false;
 
 	}
-	 /**
-	  * the constructor with Animal exists if the dropped item should house an Animal
-	  * @param animal animal is passed as a new child of Animal
-	  * @param pos the starting position of the animal
-	  * @param timeLeft how much time is left
-	  */
+	/**
+	 * the constructor with Animal exists if the dropped item should house an Animal
+	 * @param animal animal is passed as a new child of Animal
+	 * @param pos the starting position of the animal
+	 * @param timeLeft how much time is left
+	 */
 	public Dropped(Animal animal, Vector2 pos, double timeLeft) {
 		super(animal.getDropType().getTexturePath());
 		this.animal = animal;
@@ -69,7 +75,7 @@ public class Dropped extends ABDrawable{
 			return consume;
 		}
 	}
-	
+
 	/**
 	 *  moves the dropped to the position on screen if it has been clicked on
 	 * @param pos the position to where it needs to go
@@ -82,14 +88,14 @@ public class Dropped extends ABDrawable{
 			return;
 		}
 	}
-	
+
 	/**
 	 * when clicked on, change to true from the input handler of the game
 	 */
 	public void pickUp() {
 		pickedUp = true;
 	}
-	
+
 	/**
 	 * getter for the picked up
 	 * @return
@@ -107,18 +113,18 @@ public class Dropped extends ABDrawable{
 		super.draw(batch);
 	}
 
- /**
-  * returns the time left for this object used in the world
-  * @return timeLeft
-  */
+	/**
+	 * returns the time left for this object used in the world
+	 * @return timeLeft
+	 */
 	public double getTimeLeft() {
 		return timeLeft;
 	}
-	
+
 	public void decreaseTimeLeft() {
 		timeLeft--;
 	}
-	
+
 	/**
 	 * overrides the variable in ABDrawables for the world to pick out all dropped objects.
 	 */
@@ -126,16 +132,16 @@ public class Dropped extends ABDrawable{
 	public boolean isDropping() {
 		return true;
 	}
-	
+
 	/**
 	 * resets the approprtatie texture when changing screens
 	 */
 	public void resetTexture() {
 		if(consume != null){
-		super.resetTexture(consume.getType().getTexturePath());
+			super.resetTexture(consume.getType().getTexturePath());
 		}else{
 			super.resetTexture(animal.getDropType().getTexturePath());
 		}
-		
+
 	}
 }

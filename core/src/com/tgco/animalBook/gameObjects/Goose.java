@@ -3,6 +3,7 @@ package com.tgco.animalBook.gameObjects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.tgco.animalBook.AnimalBookGame;
 import com.tgco.animalBook.gameObjects.Consumable.DropType;
 
 /**
@@ -34,9 +35,16 @@ public class Goose extends Animal {
 		super(texturePath, pos, aX, aY);
 		speed = 1/10f;
 
-		//width = .336*height
-		width = .037f*Gdx.graphics.getWidth();
-		height = .110f*Gdx.graphics.getHeight();
+		if (AnimalBookGame.SCREEN_HEIGHT < 3f) {
+			width = .037f*Gdx.graphics.getWidth() * 1.5f;
+			height = .110f*Gdx.graphics.getHeight() * 1.5f;
+		} else {
+			width = .037f*Gdx.graphics.getWidth();
+			height = .110f*Gdx.graphics.getHeight();
+		}
+		
+		
+		
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 	}
 

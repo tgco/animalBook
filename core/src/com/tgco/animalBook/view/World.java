@@ -106,7 +106,7 @@ public class World {
 	private Weather weather;
 	private float weatherTime = 0f;
 	private float targetWeatherTime = 0f;
-	private final float WEATHER_DURATION = 7f;
+	private final float WEATHER_DURATION;
 	private Vector2 windVector;
 	private static final float WEATHER_CLICK = .12f;
 	private float weatherClick;
@@ -212,8 +212,12 @@ public class World {
 		}
 
 		drawMap.put("WeatherDrop", new Array<ABDrawable>());
-		System.out.println("WEATHERDROP CREATED");
-		System.out.println(drawMap.get("WeatherDrop"));
+		
+		if (gameInstance.isKidMode()) {
+			WEATHER_DURATION = 10f;
+		} else {
+			WEATHER_DURATION = 7f;
+		}
 
 		weather = new Weather();
 		weather.setWeatherType(WeatherType.CLEAR);
@@ -365,9 +369,17 @@ public class World {
 		if(getMovables().size <=0 && gameInstance.getLevelHandler().getStoredAmount() > 0) {
 			speed = increasedCameraSpeed*(player.getHealth()/100);
 		} else if (weather.getWeather() == WeatherType.RAINY) {
-			speed = (cameraSpeed*(player.getHealth()/100))/2f;
+			if (gameInstance.isKidMode()) {
+				speed = (cameraSpeed*player.getHealth()/100)/(4f/3f);
+			} else {
+				speed = (cameraSpeed*(player.getHealth()/100))/2f;
+			}
 		} else if (weather.getWeather() == WeatherType.SNOWY){
-			speed = 0;
+			if (gameInstance.isKidMode()) {
+				speed = (cameraSpeed*(player.getHealth()/100))/(3f/2f);
+			} else {
+				speed = 0;
+			}
 		}
 		else {
 			speed = (cameraSpeed*(player.getHealth()/100));
@@ -429,10 +441,9 @@ public class World {
 					((Movable) movable).addToCurrentTarget(windVector);
 			}
 			else if (weather.getWeather() == WeatherType.SNOWY){
-				((Movable) movable).adjustForwardBias(speed, speed, delta);
+				((Movable) movable).adjustForwardBias(1, speed, delta);
 			}
 			//Reduce upward bias if there's a dog
-			//Gdx.app.log("Check", "Dog: " + hasDog());
 			if(hasDog()) {
 				((Movable) movable).adjustForwardBias(.5f, speed, delta);
 			} else {
@@ -514,7 +525,12 @@ public class World {
 
 			//set windy on/off
 			if (weather.getWeather() == WeatherType.WINDY){
-				double magnitude = (float)(rand.nextInt(35) - 10);
+				double magnitude;
+				if (gameInstance.isKidMode()) {
+					magnitude = (float)(rand.nextInt(15) - 10);
+				} else {
+					magnitude = (float)(rand.nextInt(35) - 10);
+				}
 				if (magnitude < 0)
 					magnitude-=10.0;
 				else

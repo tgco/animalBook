@@ -18,7 +18,7 @@ public class Weather {
 		CLEAR ("Clear"),
 		RAINY ("Rainy"),
 		WINDY ("Windy"), 
-		SNOWY ("Frances");
+		SNOWY ("Snowy");
 
 		private WeatherType(String weatherName){
 			this.weatherName = weatherName;
@@ -32,23 +32,22 @@ public class Weather {
 	}
 	
 	public WeatherType getNewWeather(){
-		/*if (rand.nextBoolean())
+		if (rand.nextBoolean())
 			return WeatherType.values()[rand.nextInt(WeatherType.values().length)];
 		else
-			return WeatherType.CLEAR;*/
-		if (numWeather < Weather.WeatherType.values().length -1){
-			numWeather++;
-		}
-		else
-			numWeather=0;
-		return WeatherType.values()[numWeather];
+			return WeatherType.CLEAR;
+//		if (numWeather < Weather.WeatherType.values().length -1){
+//			numWeather++;
+//		}
+//		else
+//			numWeather=0;
+//		return WeatherType.values()[numWeather];
 		
 	}
 	public WeatherType getWeather(){
 		return weather;
 	}
 	public void setWeatherType(WeatherType wt){
-		System.out.println(wt.getName());
 		weather = wt;
 	}
 

@@ -576,6 +576,7 @@ public class TutorialScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer.addProcessor(buttonStage);
 	}
 
+
 	public Vector2 alexsPosition(){
 		return new Vector2(alexButton.getX() + alexButton.getWidth(),alexButton.getY() + alexButton.getHeight());
 	}

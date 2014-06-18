@@ -250,6 +250,7 @@ public class EndGameStory extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
+		popupStage.dispose();
 	}
 
 }

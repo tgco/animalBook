@@ -224,7 +224,6 @@ public class TutorialScreenInputHandler implements InputProcessor {
 					if (reactionScale > 7000)
 						reactionScale = 7000;
 					
-					Gdx.app.log("Influence scale", String.valueOf(reactionScale));
 					movable.addToCurrentTarget(perpProjection.cpy().nor().scl(reactionScale));
 
 					//Add a line to draw the direction the goose was influenced

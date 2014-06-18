@@ -562,7 +562,7 @@ public class MenuHandlerTut{
 						String.valueOf(gameInstance.getLevelHandler().getLongerMoneyP()) + "\n" +
 						"+" + String.format("%.2f",5/60.0) + " s\n" +
 						"$" + String.valueOf(longerMoney) + "\n" +
-						String.format("%.2f",((Animal) tWorld.getMovables().get(0)).getTimeOnGround())+ "%"			 
+						String.format("%.2f",((Animal) tWorld.getMovables().get(0)).getTimeOnGround())+ "s"			 
 						, upgradeLabelStyle);
 		longerLabel.setAlignment(Align.right);
 
@@ -571,7 +571,7 @@ public class MenuHandlerTut{
 						String.valueOf(gameInstance.getLevelHandler().getMoreMoneyP()) + "\n" +
 						"-" + String.format("%.2f",5/60.0) + " s\n" +
 						"$" + String.valueOf(moreMoney) + "\n" +
-						String.format("%.2f",((Animal) tWorld.getMovables().get(0)).getDropInterval())+ "%"	
+						String.format("%.2f",((Animal) tWorld.getMovables().get(0)).getDropInterval())+ "s"	
 						, upgradeLabelStyle);
 		moreLabel.setAlignment(Align.right);
 

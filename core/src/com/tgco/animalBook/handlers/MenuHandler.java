@@ -558,7 +558,7 @@ public class MenuHandler{
 						String.valueOf(gameInstance.getLevelHandler().getLongerMoneyP()) + "\n" +
 						"+" + String.format("%.2f",5/60.0) + " s\n" +
 						"$" + String.valueOf(longerMoney) + "\n" +
-						String.format("%.2f",((Animal) gWorld.getMovables().get(0)).getTimeOnGround())+ "%"			 
+						String.format("%.2f",((Animal) gWorld.getMovables().get(0)).getTimeOnGround())+ "s"			 
 						, upgradeLabelStyle);
 		longerLabel.setAlignment(Align.right);
 
@@ -567,7 +567,7 @@ public class MenuHandler{
 						String.valueOf(gameInstance.getLevelHandler().getMoreMoneyP()) + "\n" +
 						"-" + String.format("%.2f",5/60.0) + " s\n" +
 						"$" + String.valueOf(moreMoney) + "\n" +
-						String.format("%.2f",((Animal) gWorld.getMovables().get(0)).getDropInterval())+ "%"	
+						String.format("%.2f",((Animal) gWorld.getMovables().get(0)).getDropInterval())+ "s"	
 						, upgradeLabelStyle);
 		moreLabel.setAlignment(Align.right);
 
@@ -617,7 +617,7 @@ public class MenuHandler{
 				else
 					moreButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < dogMoney)
+				if(gWorld.getPlayer().getPlayerMoney() < dogMoney || gWorld.hasDog())
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
@@ -665,7 +665,7 @@ public class MenuHandler{
 				else
 					moreButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < dogMoney)
+				if(gWorld.getPlayer().getPlayerMoney() < dogMoney || gWorld.hasDog())
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
@@ -714,7 +714,7 @@ public class MenuHandler{
 				else
 					moreButton.setDisabled(false);
 
-				if(gWorld.getPlayer().getPlayerMoney() < dogMoney)
+				if(gWorld.getPlayer().getPlayerMoney() < dogMoney || gWorld.hasDog())
 					dogButton.setDisabled(true);
 				else
 					dogButton.setDisabled(false);
@@ -772,7 +772,7 @@ public class MenuHandler{
 		if(gWorld.getPlayer().getPlayerMoney() < 10){
 			moreButton.setDisabled(true);
 		}
-		if(gWorld.getPlayer().getPlayerMoney() < 100){
+		if(gWorld.getPlayer().getPlayerMoney() < 100 || gWorld.hasDog()){
 			dogButton.setDisabled(true);
 		}
 
@@ -886,7 +886,7 @@ public class MenuHandler{
 			else
 				((Button) upgradesGroup1.findActor("moreButton")).setDisabled(false);
 
-			if(gWorld.getPlayer().getPlayerMoney() < dogMoney)
+			if(gWorld.getPlayer().getPlayerMoney() < dogMoney || gWorld.hasDog())
 				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(true);
 			else
 				((Button) upgradesGroup2.findActor("dogButton")).setDisabled(false);

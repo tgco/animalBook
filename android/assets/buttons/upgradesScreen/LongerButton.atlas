@@ -1,5 +1,5 @@
 
-LongerButton.png
+LongerButton2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -13,6 +13,13 @@ buttonUnpressed
 buttonPressed
   rotate: false
   xy: 94, 0
+  size: 94, 94
+  orig: 94, 94
+  offset: 0, 0
+  index: -1
+buttonDisabled
+  rotate: false
+  xy: 188, 0
   size: 94, 94
   orig: 94, 94
   offset: 0, 0

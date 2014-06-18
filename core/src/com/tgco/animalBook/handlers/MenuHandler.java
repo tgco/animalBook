@@ -440,11 +440,7 @@ public class MenuHandler{
 		ButtonStyle fruitfulButtonStyle = new ButtonStyle();
 		fruitfulButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		fruitfulButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		TextureRegion trFruitfulButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/fruitfullButtonDis.png")) );
-		trFruitfulButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
-		trFruitfulButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-
-		fruitfulButtonStyle.disabled = new TextureRegionDrawable(trFruitfulButton);
+		fruitfulButtonStyle.disabled = buttonSkin.getDrawable("buttonDisabled");
 
 		fruitfulButton = new Button(fruitfulButtonStyle){
 			@Override
@@ -467,11 +463,7 @@ public class MenuHandler{
 		ButtonStyle longerButtonStyle = new ButtonStyle();
 		longerButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		longerButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		TextureRegion trLongerButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/LongerButtonDis.png")) );
-		trLongerButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
-		trLongerButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-
-		longerButtonStyle.disabled = new TextureRegionDrawable(trLongerButton);
+		longerButtonStyle.disabled = buttonSkin.getDrawable("buttonDisabled");
 
 		longerButton = new Button(longerButtonStyle){
 			@Override
@@ -494,13 +486,7 @@ public class MenuHandler{
 		ButtonStyle MoreButtonStyle = new ButtonStyle();
 		MoreButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		MoreButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		TextureRegion trMoreButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/MoreButtonDis.png")) );
-		//trMoreButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
-		//trMoreButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
-		trMoreButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
-		trMoreButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-
-		MoreButtonStyle.disabled = new TextureRegionDrawable(trMoreButton);
+		MoreButtonStyle.disabled = buttonSkin.getDrawable("buttonDisabled");
 
 		moreButton = new Button(MoreButtonStyle) {
 			@Override
@@ -523,13 +509,7 @@ public class MenuHandler{
 		ButtonStyle dogButtonStyle = new ButtonStyle();
 		dogButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		dogButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		TextureRegion trDogButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/upgradesScreen/dogButtonDis.png")) );
-		//trDogButton.setRegionHeight((int) (BUTTON_HEIGHT*30/8));
-		//trDogButton.setRegionWidth((int) (BUTTON_HEIGHT*30/8));
-		trDogButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
-		trDogButton.setRegionWidth((int) (.92f*BUTTON_HEIGHT));
-
-		dogButtonStyle.disabled = new TextureRegionDrawable(trDogButton);
+		dogButtonStyle.disabled = buttonSkin.getDrawable("buttonDisabled");
 
 		dogButton = new Button(dogButtonStyle) {
 			@Override

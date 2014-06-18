@@ -351,13 +351,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 
 		nextLevelButtonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		nextLevelButtonStyle.down = buttonSkin.getDrawable("buttonPressed");
-
-		TextureRegion trNextLevelButton = new TextureRegion(new Texture(Gdx.files.internal("buttons/marketScreen/nextLevelButtonDis.png")));
-
-		trNextLevelButton.setRegionHeight((int) (.92f*BUTTON_HEIGHT));
-		trNextLevelButton.setRegionWidth((int) (.92f*BUTTON_WIDTH));
-
-		nextLevelButtonStyle.disabled = new TextureRegionDrawable(trNextLevelButton);
+		nextLevelButtonStyle.disabled = buttonSkin.getDrawable("buttonDisabled");
 
 		nextLevelButton = new Button(nextLevelButtonStyle);
 		nextLevelButton.setWidth(BUTTON_WIDTH);

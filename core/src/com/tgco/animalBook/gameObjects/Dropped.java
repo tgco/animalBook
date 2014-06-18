@@ -34,7 +34,7 @@ public class Dropped extends ABDrawable{
 		super(consume.getType().getTexturePath());
 		this.consume = consume;
 		this.position = pos;
-		if (AnimalBookGame.SCREEN_HEIGHT < 3f) {
+		if (AnimalBookGame.SCREEN_HEIGHT < 2f) {
 			width = .028f*Gdx.graphics.getWidth() * 1.5f;
 			height = .044f*Gdx.graphics.getHeight() * 1.5f;
 		} else {

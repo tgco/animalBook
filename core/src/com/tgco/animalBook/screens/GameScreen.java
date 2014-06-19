@@ -65,7 +65,8 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	private DragAndDrop dnd;
 
-	private static boolean mainMenuInitialized, inventoryMenuInitialized, upgradesMenuInitialized, optionsMenuInitialized;
+	private boolean mainMenuInitialized =false, inventoryMenuInitialized=false, 
+			upgradesMenuInitialized = false, optionsMenuInitialized = false;
 
 	/**
 	 * Stage to draw the screen once the player has lost
@@ -359,10 +360,10 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 			buttonStage = new Stage();
 		buttonStage.clear();
 		//reinit buttons
-		mainMenuInitialized = false;
-		inventoryMenuInitialized = false;
-		upgradesMenuInitialized = false;
-		optionsMenuInitialized = false;
+		//mainMenuInitialized = false;
+		//inventoryMenuInitialized = false;
+		//upgradesMenuInitialized = false;
+		//optionsMenuInitialized = false;
 		initializeButtons();
 		if(menuHandler == null)
 			menuHandler = new MenuHandler(buttonStage, gameInstance, getWorld(), this);
@@ -688,6 +689,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 
 	public void comingFromHelpScreen(boolean set) {
 		alexButton.setChecked(true);
+		
 		menuHandler.handleMainMenu(true);
 		//handleMainMenu(true);
 		menuHandler.getOptionsGroupButton().setChecked(true);

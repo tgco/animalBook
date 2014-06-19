@@ -35,9 +35,9 @@ public class Goose extends Animal {
 		super(texturePath, pos, aX, aY);
 		speed = 1/10f;
 
-		if (AnimalBookGame.SCREEN_HEIGHT < 2f) {
-			width = .037f*Gdx.graphics.getWidth() * 1.5f;
-			height = .110f*Gdx.graphics.getHeight() * 1.5f;
+		if (AnimalBookGame.SCREEN_HEIGHT < 3f) {
+			width = .037f*Gdx.graphics.getWidth() * 1.45f;
+			height = .110f*Gdx.graphics.getHeight() * 1.45f;
 		} else {
 			width = .037f*Gdx.graphics.getWidth();
 			height = .110f*Gdx.graphics.getHeight();

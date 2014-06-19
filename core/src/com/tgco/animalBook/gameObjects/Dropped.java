@@ -34,9 +34,9 @@ public class Dropped extends ABDrawable{
 		super(consume.getType().getTexturePath());
 		this.consume = consume;
 		this.position = pos;
-		if (AnimalBookGame.SCREEN_HEIGHT < 2f) {
-			width = .028f*Gdx.graphics.getWidth() * 1.5f;
-			height = .044f*Gdx.graphics.getHeight() * 1.5f;
+		if (AnimalBookGame.SCREEN_HEIGHT < 3f) {
+			width = .028f*Gdx.graphics.getWidth() * 1.4f;
+			height = .044f*Gdx.graphics.getHeight() * 1.4f;
 		} else {
 			width = .028f*Gdx.graphics.getWidth();
 			height = .044f*Gdx.graphics.getHeight();
@@ -56,8 +56,13 @@ public class Dropped extends ABDrawable{
 		super(animal.getDropType().getTexturePath());
 		this.animal = animal;
 		this.position = pos;
-		width = .028f*Gdx.graphics.getWidth();
-		height = .044f*Gdx.graphics.getHeight();
+		if (AnimalBookGame.SCREEN_HEIGHT < 3f) {
+			width = .028f*Gdx.graphics.getWidth() * 1.5f;
+			height = .044f*Gdx.graphics.getHeight() * 1.5f;
+		} else {
+			width = .028f*Gdx.graphics.getWidth();
+			height = .044f*Gdx.graphics.getHeight();
+		}
 		bounds = new Rectangle(position.x - width/2,position.y - height/2,width,height);
 		this.timeLeft = timeLeft;
 		this.pickedUp = false;

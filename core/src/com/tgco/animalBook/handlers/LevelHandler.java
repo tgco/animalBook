@@ -598,4 +598,9 @@ public class LevelHandler {
 	public int getMaxLevel() {
 		return 5;
 	}
+	
+	public void resetFromMarket(){
+		resetNextLevelStart();
+		storedAmount = 0;
+	}
 }

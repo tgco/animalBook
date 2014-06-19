@@ -564,4 +564,14 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 		inputMultiplexer.addProcessor(buttonStage);
 		popupStage = new Stage();	
 	}
+
+	public void setMainMenu() {
+		SoundHandler.pauseMarketBackgroundMusic();
+		SoundHandler.playBackgroundMusic(true);
+		gameInstance.getLevelHandler().resetFromMarket();
+		gameScreen.resetInputProcessors();
+		gameInstance.setScreen(new MainMenuScreen(gameInstance));
+		dispose();
+		
+	}
 }

@@ -53,8 +53,8 @@ public class ConfirmDialog extends Dialog{
 	@Override
 	public void result(Object object){
 		if(object.equals("Main Menu")){
-			gameInstance.getScreen().dispose();
-			gameInstance.setScreen(new MainMenuScreen(gameInstance));
+			((MarketScreen) gameInstance.getScreen()).setMainMenu();
+			
 			
 		}
 		else if(object.equals("Cancel")){

@@ -41,8 +41,6 @@ public class EndGameDialog extends Dialog{
 	 */
 	@Override
 	public void result(Object object){
-		//SoundHandler.toggleSounds();
-		//SoundHandler.toggleMusic();
 		if(object.equals("reset")){
 			hide();
 			story.setConfirmDialog();

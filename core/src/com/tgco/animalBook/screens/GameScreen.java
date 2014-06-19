@@ -418,6 +418,7 @@ public class GameScreen extends ButtonScreenAdapter implements Screen {
 		infoLabel = new Label("Money: $" + getWorld().getPlayer().getPlayerMoney()
 				+ "\nNeeded: " + (gameInstance.getLevelHandler().getStoredAmount() + gameWorld.getMovables().size) + " of " + gameInstance.getLevelHandler().getPassLevelAmount(), infoLabelStyle);
 		infoLabel.pack();
+		Gdx.app.log("My Tagg", "The label has for stored: " + gameInstance.getLevelHandler().getStoredAmount() + " and size is : " + gameWorld.getMovables().size);
 		infoLabel.setPosition(alexButton.getX() + alexButton.getWidth() + 1.5f*EDGE_TOLERANCE,
 				alexButton.getY() + alexButton.getHeight() - infoLabel.getHeight() - 1.7f*EDGE_TOLERANCE);
 		infoLabel.setAlignment(Align.left);

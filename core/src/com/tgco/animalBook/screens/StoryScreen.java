@@ -30,35 +30,35 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 	 * Buttons
 	 */
 	private Button 			 continueButton;
-	
+
 	/**
 	 * Holds story screen string paths
 	 */
 	private static final	ArrayMap<Integer, Array<String>> storyMap = new ArrayMap<Integer, Array<String>>();
-	
+
 	/**
 	 * Fading sprite for story screen transitions
 	 */
 	private Sprite			fadingSprite;
-	
+
 	/**
 	 * batch for rendering
 	 */
 	private SpriteBatch	batch;
-	
+
 	/**
 	 * simple page number for storyMap
 	 */
 	private int					pageNumber;
-	
+
 	/**
 	 * Fading screen constants
 	 */
-	private final float	FADE_IN_TIME = 1;
-	private final float	FADE_OUT_TIME = 1;
+	private final float	FADE_IN_TIME = 1f;
+	private final float	FADE_OUT_TIME = 1f;
 	private float				timeCounter;
 	private boolean		fadingIn, fadingOut, displaying;
-	
+
 	/**
 	 * StoryScreen constructor
 	 * 
@@ -66,17 +66,17 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	public StoryScreen(AnimalBookGame gameInstance) {
 		super(gameInstance);
-		
+
 		for (int i = 0; i < 5; i++){
 			storyMap.put(i, new Array<String>());
 		}
-		
+
 		SoundHandler.playStoryBackgroundMusic(true);
 		batch = new SpriteBatch();
 		pageNumber = 0;
 		storyMap.get(0).add("story/story1.png");
 		storyMap.get(0).add("story/story2.png");
-		backgroundTexture =  new Texture(Gdx.files.internal(storyMap.get(1-1).first()));
+		backgroundTexture =  new Texture(Gdx.files.internal(storyMap.get(0).first()));
 		fadingSprite = new Sprite(backgroundTexture);
 		fadingSprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		timeCounter = 0;
@@ -93,7 +93,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
 		batch.begin();
 		if ( fadingIn && timeCounter <= FADE_IN_TIME ) {
 			//draw with an increasing alpha
@@ -107,9 +107,9 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 				displaying = true;
 			}
 		}
-			if (displaying) {
-				fadingSprite.draw(batch, 1);
-			}
+		if (displaying) {
+			fadingSprite.draw(batch, 1);
+		}
 
 		if ( fadingOut && timeCounter <= FADE_OUT_TIME) {
 			//draw with decreasing alpha
@@ -129,7 +129,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 			}
 		}
 		batch.end();
-		
+
 		buttonStage.act(delta);
 		buttonStage.draw();
 		timeCounter += delta;
@@ -154,43 +154,53 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 		atlas = new TextureAtlas(Gdx.files.internal("buttons/storyScreen/continueButton.atlas"));
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(atlas);
-		
+
 		ButtonStyle buttonStyle = new ButtonStyle();
 		buttonStyle.up = buttonSkin.getDrawable("buttonUnpressed");
 		buttonStyle.down = buttonSkin.getDrawable("buttonPressed");
-		
+
 		continueButton = new Button(buttonStyle);
 		continueButton.setWidth(BUTTON_WIDTH);
 		continueButton.setHeight(BUTTON_HEIGHT);
 		continueButton.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - EDGE_TOLERANCE);
 		continueButton.setY(EDGE_TOLERANCE);
-		
+
 		continueButton.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				return true;
 			}
 
 			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				pageNumber++;
-				if (pageNumber < storyMap.get(1-1).size){
-					timeCounter = 0;
-					backgroundTexture =  new Texture(Gdx.files.internal(storyMap.get(1-1).get(pageNumber)));
-					displaying = false;
-					fadingOut = true;
-				}
-				else{
-					SoundHandler.playButtonClick();
-					SoundHandler.pauseStoryBackgroundMusic();
-					SoundHandler.playBackgroundMusic(true);
-					gameInstance.setScreen(new TutorialScreen(gameInstance));
-					dispose();
-				}
+					pageNumber++;
+					if (pageNumber < storyMap.get(0).size){
+						if (displaying) {
+							timeCounter = 0;
+							backgroundTexture =  new Texture(Gdx.files.internal(storyMap.get(0).get(pageNumber)));
+							displaying = false;
+							fadingOut = true;
+						} else if (fadingIn) {
+							timeCounter = 0;
+							backgroundTexture =  new Texture(Gdx.files.internal(storyMap.get(0).get(pageNumber)));
+							displaying = false;
+							fadingOut = false;
+							fadingIn = true;
+							fadingSprite = new Sprite(backgroundTexture);
+							fadingSprite.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+						}
+					}
+					else {
+						SoundHandler.playButtonClick();
+						SoundHandler.pauseStoryBackgroundMusic();
+						SoundHandler.playBackgroundMusic(true);
+						gameInstance.setScreen(new TutorialScreen(gameInstance));
+						dispose();
+					}
 			}
 		});
 		buttonStage.addActor(continueButton);
 		Gdx.input.setInputProcessor(buttonStage);
 	}
-	
+
 
 	@Override
 	public void show() {}
@@ -207,6 +217,7 @@ public class StoryScreen extends ButtonScreenAdapter implements Screen {
 	@Override
 	public void dispose() {
 		super.dispose();
+
 	}
 
 }

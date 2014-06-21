@@ -212,7 +212,7 @@ public class LevelHandler {
 		if (kidMode)
 			return 800 + 1000*(level - 1);
 		else
-			return 1000 + 1200*(level - 1);
+			return 300 + 1200*(level - 1);
 	}
 
 	/**

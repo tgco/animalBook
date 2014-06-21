@@ -84,6 +84,20 @@ public class MainMenuScreen extends ButtonScreenAdapter implements Screen {
 				setDialog();
 			}
 		}else{
+			//clear screen
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			//render background
+			batch.begin();
+			batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			batch.end();
+
+			//process button input
+			buttonStage.act(delta);
+
+			//draw button stage on top of images in the batch
+			buttonStage.draw();
+
 			popupStage.act(delta);
 			popupStage.draw();
 		}

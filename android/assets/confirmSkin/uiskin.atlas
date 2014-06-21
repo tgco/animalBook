@@ -60,11 +60,11 @@ default-round-down
 default-round
   rotate: false
   xy: 112, 29
-  size: 12, 20
+  size: 12, 20 
   split: 5, 5, 5, 4
   pad: 30, 30, 10, 10
-  orig: 20, 28
-  offset: 20, 20
+  orig: 12, 20
+  offset: 0, 0
   index: -1
 check-off
   rotate: false

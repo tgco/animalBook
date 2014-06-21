@@ -88,6 +88,16 @@ public class OptionsScreen extends ButtonScreenAdapter implements Screen {
 				dispose();
 			}
 		}else{
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+			//draw background
+			batch.begin();
+			batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			batch.end();
+
+			buttonStage.act(delta);
+			buttonStage.draw();
 			popupStage.act(delta);
 			popupStage.draw();
 		}

@@ -134,7 +134,7 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
-		if(!hasConfirm){
+		//if(!hasConfirm){
 			int storedAnimal = gameInstance.getLevelHandler().getStoredAmount();
 			int nextLevel ;
 			if(gameInstance.getLevelHandler().getLevel() == 5){
@@ -200,8 +200,8 @@ public class MarketScreen extends ButtonScreenAdapter implements Screen {
 			//Gdx.gl.glClearColor(1, 1, 1, 1);
 			//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		}
-		else{
+		//}
+		if(hasConfirm){
 			popupStage.act(delta);
 			popupStage.draw();
 		}
